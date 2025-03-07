@@ -53,38 +53,57 @@ const PrivacyModal = ({ isVisible, onAccept, onRefuse }: PrivacyModalProps) => {
               "w-[180px] md:w-[200px] lg:w-[220px] will-change-transform will-change-opacity gpu-accelerated"
             )}
           >
-            {/* Casserole rouge avec couvercle */}
+            {/* Nouveau logo marmite Eatly basé sur l'image fournie */}
             <svg 
-              viewBox="0 0 200 120" 
+              viewBox="0 0 360 300" 
               fill="none" 
               xmlns="http://www.w3.org/2000/svg"
               className="w-full h-auto"
             >
               {/* Couvercle */}
               <path 
-                d="M120 35C120 32.2386 117.761 30 115 30H85C82.2386 30 80 32.2386 80 35C80 37.7614 82.2386 40 85 40H115C117.761 40 120 37.7614 120 35Z" 
+                d="M320 160 L240 110 Q180 80 120 110 L40 160" 
+                stroke="#FFFFFF" 
+                strokeWidth="3" 
+                fill="#E32B2B" 
+              />
+              <path 
+                d="M320 160 L240 110 Q210 95 180 90 Q150 95 120 110 L40 160" 
+                stroke="#FFFFFF" 
+                strokeWidth="1" 
                 fill="#B22222" 
               />
-              <circle cx="100" cy="30" r="5" fill="#222222" />
-              
-              {/* Corps de la casserole */}
               <path 
-                d="M140 70C140 60 130 45 100 45C70 45 60 60 60 70V75H140V70Z" 
-                fill="#C92626" 
+                d="M185 90 Q190 70 180 60 Q170 55 160 65 Q155 75 165 90" 
+                fill="#000000" 
+              />
+              
+              {/* Corps de la marmite */}
+              <path 
+                d="M40 160 L40 190 Q40 210 60 215 L300 215 Q320 210 320 190 L320 160" 
+                fill="#E32B2B" 
+              />
+              <path 
+                d="M40 160 L40 190 Q40 210 60 215 L100 215 Q90 200 90 180 L75 160" 
+                fill="#B22222" 
               />
               
               {/* Poignées */}
               <path 
-                d="M60 70H50C45 70 45 64 50 64H60V70Z" 
-                fill="#C92626" 
+                d="M40 180 Q20 180 20 165 Q20 150 40 150" 
+                fill="#B22222" 
+                stroke="#FFFFFF" 
+                strokeWidth="1"
               />
               <path 
-                d="M140 70H150C155 70 155 64 150 64H140V70Z" 
-                fill="#C92626" 
+                d="M320 180 Q340 180 340 165 Q340 150 320 150" 
+                fill="#B22222" 
+                stroke="#FFFFFF" 
+                strokeWidth="1"
               />
               
               {/* Texte "eatly" */}
-              <text x="70" y="105" fontFamily="Arial" fontWeight="bold" fontSize="24" fill="#222222">eatly</text>
+              <text x="180" y="280" fontFamily="Arial" fontWeight="bold" fontSize="75" fill="#000000" textAnchor="middle">eatly</text>
             </svg>
           </motion.div>
         </div>
