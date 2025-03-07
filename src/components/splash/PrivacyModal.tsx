@@ -24,10 +24,10 @@ const PrivacyModal = ({ isVisible, onAccept, onRefuse }: PrivacyModalProps) => {
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
         className="bg-white rounded-xl w-[90%] max-w-[500px] p-9 shadow-lg flex flex-col items-center relative"
       >
-        <div className="h-16 mb-6 flex justify-center items-center">
-          {/* Logo Eatly remplaçant le texte */}
+        <div className="h-24 mb-6 flex justify-center items-center">
+          {/* Nouveau logo Eatly avec la marmite */}
           <img 
-            src="/lovable-uploads/0ea8101c-fd28-4780-aed6-0e9a2943a0f4.png" 
+            src="/lovable-uploads/e706ec0e-a8ca-4aaa-ae67-be497a1460ef.png" 
             alt="Eatly Logo" 
             className="h-full object-contain"
           />
