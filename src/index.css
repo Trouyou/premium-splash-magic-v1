@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -98,4 +99,30 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Fonts */
+@font-face {
+  font-family: 'AvantGarde Bk BT';
+  src: url('/fonts/AvantGardeBkBT.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&display=swap');
+
+/* Custom Styles */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.filter-blur {
+  filter: blur(5px);
+}
+
+.pot-shadow {
+  filter: drop-shadow(0px 25px 25px rgba(0, 0, 0, 0.15));
 }
