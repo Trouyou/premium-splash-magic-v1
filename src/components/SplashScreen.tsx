@@ -178,15 +178,8 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
                   className="bg-white rounded-xl w-[90%] max-w-[500px] p-9 shadow-lg flex flex-col items-center relative"
                 >
                   <div className="h-7 mb-6">
-                    {/* Logo SVG inlining pour éviter les problèmes de chargement */}
-                    <svg width="120" height="28" viewBox="0 0 120 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M26.4 14C26.4 20.6 21.3 26 15 26C8.7 26 3.6 20.6 3.6 14C3.6 7.4 8.7 2 15 2C21.3 2 26.4 7.4 26.4 14Z" fill="#D11B19"/>
-                      <path d="M15 2C21.3 2 26.4 7.4 26.4 14C26.4 20.6 21.3 26 15 26" stroke="white" strokeWidth="0.5"/>
-                      <path d="M45 12.7H48.4V13.9H45V18.5H49.2V19.7H43.6V6.3H49.2V7.5H45V12.7Z" fill="#9C1B1A"/>
-                      <path d="M54 15.1L50.7 6.3H52.2L54.8 13.8L57.4 6.3H58.9L55.6 15.1V19.7H54V15.1Z" fill="#9C1B1A"/>
-                      <path d="M61.1 6.3H62.5V19.7H61.1V6.3Z" fill="#9C1B1A"/>
-                      <path d="M69.1 6.3H70.5V19.7H69.3L64.5 8.2V19.7H63.1V6.3H64.3L69.1 17.8V6.3Z" fill="#9C1B1A"/>
-                    </svg>
+                    {/* Logo "eatly" remplacé par du texte au lieu du SVG qui affichait "EYIN" */}
+                    <span className="font-avantgarde text-2xl tracking-wide text-eatly-secondary">eatly</span>
                   </div>
                   
                   <h3 className="font-avantgarde text-xl text-eatly-secondary mb-4">Confidentialité</h3>
