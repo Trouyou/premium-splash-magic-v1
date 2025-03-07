@@ -44,7 +44,7 @@ const SteamAnimation = () => (
 
 const SplashContent = () => {
   return (
-    <div className="h-full w-full flex flex-col justify-center items-center relative">
+    <div className="h-full w-full flex flex-col justify-center items-center relative bg-white">
       {/* Ligne rouge supérieure */}
       <RedLine top={true} />
       
