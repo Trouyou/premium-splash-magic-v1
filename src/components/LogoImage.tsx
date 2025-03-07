@@ -11,26 +11,26 @@ interface LogoImageProps {
 const LOGO_ANIMATION = {
   initial: { 
     opacity: 0, 
-    scale: 0.8,
-    y: 20
+    scale: 0.95,
+    y: 10
   },
   animate: { 
     opacity: 1, 
     scale: 1,
     y: 0,
     transition: {
-      duration: 1.2,
-      ease: [0.6, 0.01, -0.05, 0.95],
-      delay: 0.2
+      duration: 0.8,
+      ease: [0.4, 0.0, 0.2, 1],
+      delay: 0.1
     }
   },
   exit: { 
     opacity: 0,
     scale: 0.95,
-    y: -10,
+    y: -5,
     transition: {
-      duration: 0.5,
-      ease: "easeInOut"
+      duration: 0.3,
+      ease: "easeOut"
     }
   }
 };
@@ -97,7 +97,7 @@ const LogoImage: FC<LogoImageProps> = ({ className = '', variant = 'default', lo
       case 'splash':
         return '/lovable-uploads/76f1327b-1b0e-40de-8959-98f93dad884d.png';
       default:
-        return '/lovable-uploads/0ea8101c-fd28-4780-aed6-0e9a2943a0f4.png';
+        return '/lovable-uploads/Logo_Eatly_Original_TraitTransparent_1.png';
     }
   }, [lovableId, variant]);
 
@@ -133,7 +133,7 @@ const LogoImage: FC<LogoImageProps> = ({ className = '', variant = 'default', lo
   const getContainerClasses = useCallback(() => {
     switch (variant) {
       case 'confidentiality':
-        return 'w-full flex justify-center items-center py-4';
+        return 'w-full flex justify-center items-center py-2';
       case 'splash':
         return `w-full h-full flex justify-center items-center ${className}`;
       default:
@@ -144,7 +144,7 @@ const LogoImage: FC<LogoImageProps> = ({ className = '', variant = 'default', lo
   const getImageContainerClasses = useCallback(() => {
     switch (variant) {
       case 'confidentiality':
-        return 'relative w-full max-w-[200px] sm:max-w-[240px] aspect-[1/1]';
+        return 'relative w-full max-w-[240px] sm:max-w-[280px] aspect-[1/1]';
       case 'splash':
         return 'relative w-full max-w-[400px] sm:max-w-[500px] aspect-[1/1] will-change-transform';
       default:
@@ -155,7 +155,7 @@ const LogoImage: FC<LogoImageProps> = ({ className = '', variant = 'default', lo
   const getImageSizes = useCallback(() => {
     switch (variant) {
       case 'confidentiality':
-        return "(max-width: 640px) 200px, 240px";
+        return "(max-width: 640px) 240px, 280px";
       case 'splash':
         return "(max-width: 640px) 400px, 500px";
       default:
