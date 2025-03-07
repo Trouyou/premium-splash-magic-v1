@@ -1,6 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import NetworkErrorMessage from './splash/NetworkErrorMessage';
 import PrivacyModal from './splash/PrivacyModal';
 import LoadingIndicator from './splash/LoadingIndicator';
@@ -16,6 +17,7 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [networkError, setNetworkError] = useState(false);
+  const navigate = useNavigate();
   
   // Vérification de connexion et chargement initial
   useEffect(() => {
@@ -52,7 +54,7 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
     // Redirection simulée
     setTimeout(() => {
       setShowSplash(false);
-      if (onComplete) onComplete();
+      navigate('/login'); // Rediriger vers la page de connexion
     }, 500);
   };
   
@@ -63,7 +65,7 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
     // Redirection simulée
     setTimeout(() => {
       setShowSplash(false);
-      if (onComplete) onComplete();
+      navigate('/login'); // Rediriger vers la page de connexion
     }, 500);
   };
   
