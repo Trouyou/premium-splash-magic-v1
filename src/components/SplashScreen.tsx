@@ -17,7 +17,27 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [networkError, setNetworkError] = useState(false);
+  const [assetsLoaded, setAssetsLoaded] = useState(false);
   const navigate = useNavigate();
+  
+  // Préchargement des assets
+  useEffect(() => {
+    // Précharger l'image de la marmite
+    const preloadImage = new Image();
+    preloadImage.src = '/lovable-uploads/4304d601-682c-472c-ace9-1149b80c6b24.png';
+    preloadImage.onload = () => {
+      setAssetsLoaded(true);
+    };
+    
+    // Fallback si l'image met trop de temps à charger
+    const timeout = setTimeout(() => {
+      if (!assetsLoaded) {
+        setAssetsLoaded(true);
+      }
+    }, 800); // Timeout après 800ms maximum
+    
+    return () => clearTimeout(timeout);
+  }, []);
   
   // Vérification de connexion et chargement initial
   useEffect(() => {
@@ -27,24 +47,17 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
       return;
     }
     
-    // Simuler un chargement prolongé après 3 secondes si nécessaire
-    const loadingTimer = setTimeout(() => {
-      if (!showModal) {
-        setLoading(true);
-      }
-    }, 3000);
-    
-    // Afficher la modal RGPD après 3 secondes
+    // Afficher la modal RGPD après 2 secondes pour permettre l'animation du splash
     const modalTimer = setTimeout(() => {
-      setShowModal(true);
-      setLoading(false); // Masquer le message de chargement si affiché
-    }, 3000);
+      if (assetsLoaded) {
+        setShowModal(true);
+      }
+    }, 2000);
     
     return () => {
-      clearTimeout(loadingTimer);
       clearTimeout(modalTimer);
     };
-  }, [showModal]);
+  }, [assetsLoaded]);
   
   // Gestionnaires d'événements pour les boutons
   const handleAccept = () => {
@@ -54,6 +67,7 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
     // Redirection simulée
     setTimeout(() => {
       setShowSplash(false);
+      if (onComplete) onComplete();
       navigate('/login'); // Rediriger vers la page de connexion
     }, 500);
   };
@@ -65,6 +79,7 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
     // Redirection simulée
     setTimeout(() => {
       setShowSplash(false);
+      if (onComplete) onComplete();
       navigate('/login'); // Rediriger vers la page de connexion
     }, 500);
   };
