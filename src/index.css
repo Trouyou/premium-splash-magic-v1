@@ -112,6 +112,26 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&display=swap');
 
+/* Performance classes */
+@layer utilities {
+  .will-change-transform {
+    will-change: transform;
+  }
+  
+  .will-change-opacity {
+    will-change: opacity;
+  }
+  
+  .gpu-accelerated {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+  
+  .no-reflow {
+    contain: layout;
+  }
+}
+
 /* Custom Styles */
 .glass-effect {
   background: rgba(255, 255, 255, 0.7);
