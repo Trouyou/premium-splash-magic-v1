@@ -13,12 +13,12 @@ const SplashContent = () => {
         className="absolute top-0 right-0 w-1/5 h-[30%] opacity-5"
       />
       
-      {/* Ligne horizontale subtile */}
+      {/* Ligne horizontale subtile en haut - symmétrique avec celle du bas */}
       <motion.div
         initial={{ scaleX: 0, opacity: 0 }}
         animate={{ scaleX: 1, opacity: 0.15 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
-        className="absolute top-[85%] left-0 w-full h-px bg-eatly-secondary opacity-15 origin-left"
+        className="absolute top-[15%] left-0 w-full h-px bg-eatly-secondary opacity-15 origin-left"
       />
       
       {/* Logo de la marmite */}
@@ -28,33 +28,13 @@ const SplashContent = () => {
         </Suspense>
       </div>
       
-      {/* Textes */}
-      <motion.h1
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.6, duration: 0.5 }}
-        className="font-avantgarde text-5xl tracking-wider text-eatly-secondary mt-6 md:text-4xl sm:text-3xl"
-      >
-        eatly
-      </motion.h1>
-      
-      <motion.h2
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.8, duration: 0.5 }}
-        className="font-playfair text-2xl leading-normal opacity-90 mt-5 md:text-xl sm:text-lg"
-      >
-        Vos repas sur mesure
-      </motion.h2>
-      
+      {/* Ligne horizontale subtile en bas */}
       <motion.div
         initial={{ scaleX: 0, opacity: 0 }}
-        animate={{ scaleX: 1, opacity: 1 }}
-        transition={{ delay: 1, duration: 0.5 }}
-        className="w-10 h-0.5 bg-gradient-to-r from-eatly-primary to-eatly-secondary mt-4 relative"
-      >
-        <div className="absolute inset-0 bg-radial-gradient-white opacity-30" />
-      </motion.div>
+        animate={{ scaleX: 1, opacity: 0.15 }}
+        transition={{ duration: 0.6, ease: 'easeOut' }}
+        className="absolute top-[85%] left-0 w-full h-px bg-eatly-secondary opacity-15 origin-left"
+      />
       
       {/* Indicateur de chargement */}
       <motion.div
