@@ -7,13 +7,13 @@ import LogoImage from '../LogoImage';
 const RedLine = ({ delay = 0, top = false }) => (
   <motion.div
     initial={{ width: 0 }}
-    animate={{ width: '100%' }}
+    animate={{ width: '60px' }}
     transition={{ 
       duration: 0.4, 
       ease: 'easeOut',
       delay: delay
     }}
-    className={`absolute ${top ? 'top-0' : 'bottom-0'} left-0 h-[3px] bg-[#D11B19] w-full`}
+    className={`absolute ${top ? 'top-[40px]' : 'bottom-[40px]'} left-1/2 transform -translate-x-1/2 h-[2px] bg-[#D11B19] w-[60px] sm:w-[40px]`}
   />
 );
 

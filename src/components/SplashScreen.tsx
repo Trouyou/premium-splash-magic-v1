@@ -21,28 +21,24 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
   
   // Vérification de connexion et chargement initial
   useEffect(() => {
-    // Préchargement de l'image pour éviter toute latence
-    const preloadImage = new Image();
-    preloadImage.src = "/lovable-uploads/4304d601-682c-472c-ace9-1149b80c6b24.png";
-    
     // Vérification de la connexion
     if (!navigator.onLine) {
       setNetworkError(true);
       return;
     }
     
-    // Simuler un chargement plus rapide
+    // Simuler un chargement prolongé après 3 secondes si nécessaire
     const loadingTimer = setTimeout(() => {
       if (!showModal) {
         setLoading(true);
       }
-    }, 2000); // Réduit à 2 secondes au lieu de 3
+    }, 3000);
     
-    // Afficher la modal RGPD plus rapidement
+    // Afficher la modal RGPD après 3 secondes
     const modalTimer = setTimeout(() => {
       setShowModal(true);
       setLoading(false); // Masquer le message de chargement si affiché
-    }, 2000); // Réduit à 2 secondes au lieu de 3
+    }, 3000);
     
     return () => {
       clearTimeout(loadingTimer);
@@ -55,22 +51,22 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
     localStorage.setItem('dataConsent', 'accepted');
     setShowModal(false);
     
-    // Redirection plus rapide
+    // Redirection simulée
     setTimeout(() => {
       setShowSplash(false);
       navigate('/login'); // Rediriger vers la page de connexion
-    }, 300); // Réduit à 300ms au lieu de 500ms
+    }, 500);
   };
   
   const handleRefuse = () => {
     localStorage.setItem('dataConsent', 'refused');
     setShowModal(false);
     
-    // Redirection plus rapide
+    // Redirection simulée
     setTimeout(() => {
       setShowSplash(false);
       navigate('/login'); // Rediriger vers la page de connexion
-    }, 300); // Réduit à 300ms au lieu de 500ms
+    }, 500);
   };
   
   const handleRefresh = () => {
