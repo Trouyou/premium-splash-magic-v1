@@ -5,7 +5,7 @@ import LogoImage from '../LogoImage';
 const LoginAnimation = () => {
   return (
     <div className="w-full h-full flex flex-col justify-center items-center relative overflow-hidden px-8">
-      {/* Fond avec dégradé beige premium */}
+      {/* Fond avec dégradé */}
       <motion.div 
         className="absolute inset-0 w-full h-full"
         initial={{ opacity: 0 }}
@@ -21,7 +21,7 @@ const LoginAnimation = () => {
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.8, delay: 0.3 }}
-        className="mb-12 relative z-10"
+        className="mb-8 relative z-10"
       >
         <LogoImage />
       </motion.div>

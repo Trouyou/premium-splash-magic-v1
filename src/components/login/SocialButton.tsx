@@ -14,10 +14,12 @@ const SocialButton = ({ icon, provider, onClick }: SocialButtonProps) => {
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       onClick={onClick}
-      className="w-full flex items-center justify-center space-x-3 py-3 px-4 bg-white border border-gray-300 rounded-lg hover:shadow-md transition-all h-12 mb-3"
+      className="w-full flex items-center py-3 px-4 bg-white border border-gray-300 rounded-lg hover:shadow-md transition-all h-12 mb-3"
     >
-      <span className="flex items-center justify-center w-5 h-5">{icon}</span>
-      <span className="font-avantgarde text-gray-700 text-sm">Continuer avec {provider}</span>
+      <div className="flex items-center w-full">
+        <span className="flex items-center justify-center w-5 h-5 mr-3">{icon}</span>
+        <span className="font-avantgarde text-gray-700 text-sm">Continuer avec {provider}</span>
+      </div>
     </motion.button>
   );
 };
