@@ -5,10 +5,10 @@ import { cn } from '@/lib/utils';
 interface PrivacyModalProps {
   isVisible: boolean;
   onAccept: () => void;
-  onRefuse: () => void;
+  onDecline: () => void;
 }
 
-const PrivacyModal = ({ isVisible, onAccept, onRefuse }: PrivacyModalProps) => {
+const PrivacyModal = ({ isVisible, onAccept, onDecline }: PrivacyModalProps) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   
   useEffect(() => {
@@ -72,7 +72,7 @@ const PrivacyModal = ({ isVisible, onAccept, onRefuse }: PrivacyModalProps) => {
             whileHover={{ opacity: 0.9, scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             transition={{ duration: 0.15 }}
-            onClick={onRefuse}
+            onClick={onDecline}
           >
             Refuser
           </motion.button>
