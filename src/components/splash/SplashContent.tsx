@@ -7,13 +7,13 @@ import LogoImage from '../LogoImage';
 const RedLine = ({ delay = 0, top = false }) => (
   <motion.div
     initial={{ width: 0 }}
-    animate={{ width: '60px' }}
+    animate={{ width: '100%' }}
     transition={{ 
       duration: 0.4, 
       ease: 'easeOut',
       delay: delay
     }}
-    className={`absolute ${top ? 'top-[40px]' : 'bottom-[40px]'} left-1/2 transform -translate-x-1/2 h-[2px] bg-[#D11B19] w-[60px] sm:w-[40px]`}
+    className={`absolute ${top ? 'top-0' : 'bottom-0'} left-0 h-[3px] bg-[#D11B19] w-full`}
   />
 );
 
@@ -44,7 +44,7 @@ const SteamAnimation = () => (
 
 const SplashContent = () => {
   return (
-    <div className="h-full w-full flex flex-col justify-center items-center relative bg-white">
+    <div className="h-full w-full flex flex-col justify-center items-center relative">
       {/* Ligne rouge supérieure */}
       <RedLine top={true} />
       
