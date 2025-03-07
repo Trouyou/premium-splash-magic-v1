@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -26,9 +25,9 @@ export default {
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
 				eatly: {
-					primary: '#D11B19',
-					secondary: '#9C1B1A',
-					light: '#EDE6D6'
+					primary: '#D11B19',    // Rouge vif
+					secondary: '#9C1B1A',  // Rouge foncé
+					light: '#EDE6D6'       // Beige premium
 				},
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',

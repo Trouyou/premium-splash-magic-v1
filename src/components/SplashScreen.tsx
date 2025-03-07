@@ -1,8 +1,7 @@
 
 import { useState, useEffect, Suspense } from 'react';
-import { Canvas } from '@react-three/fiber';
 import { motion, AnimatePresence } from 'framer-motion';
-import Logo3D from './Logo3D';
+import LogoImage from './LogoImage';
 
 // Types pour le composant
 interface SplashScreenProps {
@@ -111,13 +110,11 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
             className="absolute top-[85%] left-0 w-full h-px bg-eatly-secondary opacity-15 origin-left"
           />
           
-          {/* Container du logo 3D */}
-          <div className="w-full h-[40vh] relative">
-            <Canvas dpr={[1, 2]} shadows className="pot-shadow">
-              <Suspense fallback={null}>
-                <Logo3D />
-              </Suspense>
-            </Canvas>
+          {/* Logo de la marmite - utilise le composant d'image au lieu du 3D */}
+          <div className="w-full flex justify-center items-center">
+            <Suspense fallback={null}>
+              <LogoImage />
+            </Suspense>
           </div>
           
           {/* Textes */}
@@ -125,7 +122,7 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.5 }}
-            className="font-avantgarde text-5xl tracking-wider text-eatly-secondary mt-11 md:text-4xl sm:text-3xl"
+            className="font-avantgarde text-5xl tracking-wider text-eatly-secondary mt-6 md:text-4xl sm:text-3xl"
           >
             eatly
           </motion.h1>
