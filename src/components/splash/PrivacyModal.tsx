@@ -1,22 +1,35 @@
-
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
+import Link from 'next/link';
 
 interface PrivacyModalProps {
   isVisible: boolean;
   onAccept: () => void;
   onRefuse: () => void;
+  privacyPolicyUrl?: string;
 }
 
-const PrivacyModal = ({ isVisible, onAccept, onRefuse }: PrivacyModalProps) => {
+const PrivacyModal: React.FC<PrivacyModalProps> = ({ 
+  isVisible, 
+  onAccept, 
+  onRefuse,
+  privacyPolicyUrl = '/privacy-policy'
+}) => {
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
   
   useEffect(() => {
     if (isVisible) {
       setImageLoaded(true);
     }
   }, [isVisible]);
+
+  const handleImageError = () => {
+    console.error('Erreur de chargement du logo dans la modale de confidentialité');
+    setImageError(true);
+  };
 
   if (!isVisible) return null;
   
@@ -34,7 +47,7 @@ const PrivacyModal = ({ isVisible, onAccept, onRefuse }: PrivacyModalProps) => {
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
         className="bg-white rounded-xl w-[90%] max-w-[500px] p-9 shadow-lg flex flex-col items-center relative"
       >
-        <div className="flex justify-center mb-5 w-full">
+        <div className="flex justify-center mb-3 w-full">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ 
@@ -45,19 +58,29 @@ const PrivacyModal = ({ isVisible, onAccept, onRefuse }: PrivacyModalProps) => {
               opacity: { duration: 0.4, ease: "easeOut" },
               scale: { 
                 duration: 0.5, 
-                ease: [0.34, 1.56, 0.64, 1] // cubic-bezier pour le rebond élégant
+                ease: [0.34, 1.56, 0.64, 1]
               }
             }}
             className={cn(
-              "w-[180px] md:w-[200px] lg:w-[220px] will-change-transform will-change-opacity gpu-accelerated"
+              "w-[200px] md:w-[220px] lg:w-[240px] relative aspect-[4/3]",
+              "will-change-transform will-change-opacity gpu-accelerated"
             )}
           >
-            <img 
-              src="/lovable-uploads/76f1327b-1b0e-40de-8959-98f93dad884d.png" 
-              alt="Logo Eatly" 
-              className="w-full h-auto"
-              onLoad={() => setImageLoaded(true)}
-            />
+            {!imageError ? (
+              <Image 
+                src="/images/logo.webp"
+                alt="Logo Eatly"
+                fill
+                className="object-contain"
+                onLoad={() => setImageLoaded(true)}
+                onError={handleImageError}
+                priority
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-gray-400">
+                Logo non disponible
+              </div>
+            )}
           </motion.div>
         </div>
         
@@ -77,7 +100,7 @@ const PrivacyModal = ({ isVisible, onAccept, onRefuse }: PrivacyModalProps) => {
             Refuser
           </motion.button>
           <motion.button 
-            className="px-7 py-3.5 rounded-lg font-avantgarde text-base font-medium bg-[#C92626] text-white"
+            className="px-7 py-3.5 rounded-lg font-avantgarde text-base font-medium bg-[#B22222] text-white"
             whileHover={{ opacity: 0.9, scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             transition={{ duration: 0.15 }}
@@ -86,9 +109,12 @@ const PrivacyModal = ({ isVisible, onAccept, onRefuse }: PrivacyModalProps) => {
             Accepter
           </motion.button>
         </div>
-        <a href="#" className="font-playfair text-sm text-[#B22222] mt-5 no-underline hover:underline">
+        <Link 
+          href={privacyPolicyUrl}
+          className="font-playfair text-sm text-[#B22222] mt-5 no-underline hover:underline"
+        >
           En savoir plus sur notre politique de confidentialité
-        </a>
+        </Link>
       </motion.div>
     </motion.div>
   );

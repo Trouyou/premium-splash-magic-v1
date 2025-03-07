@@ -1,69 +1,70 @@
-# Welcome to your Lovable project
+# Premium Splash Magic
 
-## Project info
+Une application web moderne pour Eatly, offrant une expérience utilisateur premium avec des animations fluides et un design élégant.
 
-**URL**: https://lovable.dev/projects/7f6caf73-ad04-4429-b383-54b3cdf23e54
+## 🚀 Fonctionnalités
 
-## How can I edit this code?
+- Écran de démarrage animé avec logo 3D
+- Système de connexion sécurisé
+- Gestion des préférences de confidentialité
+- Interface utilisateur responsive et moderne
+- Animations fluides avec Framer Motion
+- Support multilingue (Français)
 
-There are several ways of editing your application.
+## 🛠️ Technologies Utilisées
 
-**Use Lovable**
+- React
+- TypeScript
+- Framer Motion
+- Three.js / React Three Fiber
+- Tailwind CSS
+- Vite
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/7f6caf73-ad04-4429-b383-54b3cdf23e54) and start prompting.
+## 📦 Installation
 
-Changes made via Lovable will be committed automatically to this repo.
+1. Clonez le dépôt :
+```bash
+git clone https://github.com/votre-username/premium-splash-magic.git
+cd premium-splash-magic
+```
 
-**Use your preferred IDE**
+2. Installez les dépendances :
+```bash
+npm install
+```
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+3. Lancez le serveur de développement :
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## 🔧 Configuration
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+1. Créez un fichier `.env` à la racine du projet
+2. Ajoutez les variables d'environnement nécessaires (voir `.env.example`)
 
-**Use GitHub Codespaces**
+## 📝 Scripts Disponibles
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+- `npm run dev` : Lance le serveur de développement
+- `npm run build` : Crée une version de production
+- `npm run preview` : Prévisualise la version de production
+- `npm run lint` : Vérifie le code avec ESLint
+- `npm run test` : Lance les tests
 
-## What technologies are used for this project?
+## 🤝 Contribution
 
-This project is built with .
+Les contributions sont les bienvenues ! N'hésitez pas à :
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+1. Fork le projet
+2. Créer une branche (`git checkout -b feature/AmazingFeature`)
+3. Commit vos changements (`git commit -m 'Add some AmazingFeature'`)
+4. Push sur la branche (`git push origin feature/AmazingFeature`)
+5. Ouvrir une Pull Request
 
-## How can I deploy this project?
+## 📄 Licence
 
-Simply open [Lovable](https://lovable.dev/projects/7f6caf73-ad04-4429-b383-54b3cdf23e54) and click on Share -> Publish.
+Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
 
-## I want to use a custom domain - is that possible?
+## 👥 Auteurs
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+- Votre nom - [@votre-github](https://github.com/votre-github)

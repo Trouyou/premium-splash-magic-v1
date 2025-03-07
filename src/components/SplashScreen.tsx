@@ -1,6 +1,5 @@
-
-import { useState, useEffect } from 'react';
-import { AnimatePresence } from 'framer-motion';
+import { useState, useEffect, FC } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import NetworkErrorMessage from './splash/NetworkErrorMessage';
 import PrivacyModal from './splash/PrivacyModal';
@@ -10,63 +9,66 @@ import SplashContent from './splash/SplashContent';
 // Types pour le composant
 interface SplashScreenProps {
   onComplete?: () => void;
+  initialDelay?: number;
+  modalDelay?: number;
 }
 
-const SplashScreen = ({ onComplete }: SplashScreenProps) => {
+const SplashScreen: FC<SplashScreenProps> = ({ 
+  onComplete,
+  initialDelay = 3000,
+  modalDelay = 3000
+}) => {
   const [showSplash, setShowSplash] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [networkError, setNetworkError] = useState(false);
   const navigate = useNavigate();
   
-  // Vérification de connexion et chargement initial
   useEffect(() => {
     // Vérification de la connexion
-    if (!navigator.onLine) {
-      setNetworkError(true);
-      return;
-    }
+    const checkConnection = () => {
+      const isOnline = navigator.onLine;
+      setNetworkError(!isOnline);
+      return isOnline;
+    };
+
+    // Gestionnaire d'événements pour la connexion
+    window.addEventListener('online', () => setNetworkError(false));
+    window.addEventListener('offline', () => setNetworkError(true));
+
+    if (!checkConnection()) return;
     
-    // Simuler un chargement prolongé après 3 secondes si nécessaire
+    // Gestion du chargement et de l'affichage de la modale
     const loadingTimer = setTimeout(() => {
       if (!showModal) {
         setLoading(true);
       }
-    }, 3000);
+    }, initialDelay);
     
-    // Afficher la modal RGPD après 3 secondes
     const modalTimer = setTimeout(() => {
       setShowModal(true);
-      setLoading(false); // Masquer le message de chargement si affiché
-    }, 3000);
+      setLoading(false);
+    }, modalDelay);
     
     return () => {
       clearTimeout(loadingTimer);
       clearTimeout(modalTimer);
+      window.removeEventListener('online', () => setNetworkError(false));
+      window.removeEventListener('offline', () => setNetworkError(true));
     };
-  }, [showModal]);
+  }, [showModal, initialDelay, modalDelay]);
   
-  // Gestionnaires d'événements pour les boutons
-  const handleAccept = () => {
-    localStorage.setItem('dataConsent', 'accepted');
+  const handlePrivacyChoice = (accepted: boolean) => {
+    localStorage.setItem('dataConsent', accepted ? 'accepted' : 'refused');
     setShowModal(false);
     
-    // Redirection simulée
-    setTimeout(() => {
+    const redirectDelay = setTimeout(() => {
       setShowSplash(false);
-      navigate('/login'); // Rediriger vers la page de connexion
+      onComplete?.();
+      navigate('/login');
     }, 500);
-  };
-  
-  const handleRefuse = () => {
-    localStorage.setItem('dataConsent', 'refused');
-    setShowModal(false);
-    
-    // Redirection simulée
-    setTimeout(() => {
-      setShowSplash(false);
-      navigate('/login'); // Rediriger vers la page de connexion
-    }, 500);
+
+    return () => clearTimeout(redirectDelay);
   };
   
   const handleRefresh = () => {
@@ -81,25 +83,29 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
   return (
     <AnimatePresence>
       {showSplash && (
-        <div className="fixed inset-0 bg-white flex flex-col justify-center items-center z-50 overflow-hidden">
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-white flex flex-col justify-center items-center z-50 overflow-hidden"
+        >
           <SplashContent />
           
-          {/* Modal RGPD */}
           <AnimatePresence>
             {showModal && (
               <PrivacyModal 
                 isVisible={showModal}
-                onAccept={handleAccept}
-                onRefuse={handleRefuse}
+                onAccept={() => handlePrivacyChoice(true)}
+                onRefuse={() => handlePrivacyChoice(false)}
+                privacyPolicyUrl="/privacy-policy"
               />
             )}
           </AnimatePresence>
           
-          {/* Message d'attente si le chargement prend trop de temps */}
           <AnimatePresence>
             {loading && <LoadingIndicator isVisible={loading} />}
           </AnimatePresence>
-        </div>
+        </motion.div>
       )}
     </AnimatePresence>
   );
