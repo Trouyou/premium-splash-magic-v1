@@ -53,7 +53,7 @@ const PrivacyModal = ({ isVisible, onAccept, onRefuse }: PrivacyModalProps) => {
               "w-[180px] md:w-[200px] lg:w-[220px] will-change-transform will-change-opacity gpu-accelerated"
             )}
           >
-            {/* Nouveau logo marmite Eatly basé sur l'image fournie */}
+            {/* Marmite Eatly - Logo correct basé sur l'image fournie */}
             <svg 
               viewBox="0 0 360 300" 
               fill="none" 
@@ -61,49 +61,48 @@ const PrivacyModal = ({ isVisible, onAccept, onRefuse }: PrivacyModalProps) => {
               className="w-full h-auto"
             >
               {/* Couvercle */}
-              <path 
-                d="M320 160 L240 110 Q180 80 120 110 L40 160" 
-                stroke="#FFFFFF" 
-                strokeWidth="3" 
-                fill="#E32B2B" 
-              />
-              <path 
-                d="M320 160 L240 110 Q210 95 180 90 Q150 95 120 110 L40 160" 
-                stroke="#FFFFFF" 
-                strokeWidth="1" 
-                fill="#B22222" 
-              />
-              <path 
-                d="M185 90 Q190 70 180 60 Q170 55 160 65 Q155 75 165 90" 
-                fill="#000000" 
-              />
+              <ellipse cx="180" cy="90" rx="140" ry="30" fill="#B22222" />
+              <ellipse cx="180" cy="90" rx="130" ry="25" fill="#E32B2B" />
+              <ellipse cx="180" cy="90" rx="120" ry="20" fill="#D32F2F" />
+              
+              {/* Poignée du couvercle */}
+              <circle cx="180" cy="70" r="15" fill="#222222" />
+              <ellipse cx="180" cy="65" rx="12" ry="5" fill="#444444" />
               
               {/* Corps de la marmite */}
               <path 
-                d="M40 160 L40 190 Q40 210 60 215 L300 215 Q320 210 320 190 L320 160" 
+                d="M40 90 L40 190 Q40 230 80 230 L280 230 Q320 230 320 190 L320 90" 
                 fill="#E32B2B" 
               />
               <path 
-                d="M40 160 L40 190 Q40 210 60 215 L100 215 Q90 200 90 180 L75 160" 
-                fill="#B22222" 
+                d="M40 90 L40 190 Q40 230 80 230 L280 230 Q320 230 320 190 L320 90" 
+                stroke="#FFFFFF" 
+                strokeWidth="2" 
+                strokeOpacity="0.3"
               />
               
-              {/* Poignées */}
+              {/* Reflet sur la marmite */}
               <path 
-                d="M40 180 Q20 180 20 165 Q20 150 40 150" 
+                d="M80 110 Q180 140 280 110 L280 200 Q180 180 80 200 Z" 
+                fill="#D32F2F" 
+              />
+              
+              {/* Poignées latérales */}
+              <path 
+                d="M40 140 Q10 140 10 160 Q10 180 40 180" 
                 fill="#B22222" 
                 stroke="#FFFFFF" 
-                strokeWidth="1"
+                strokeWidth="2"
               />
               <path 
-                d="M320 180 Q340 180 340 165 Q340 150 320 150" 
+                d="M320 140 Q350 140 350 160 Q350 180 320 180" 
                 fill="#B22222" 
                 stroke="#FFFFFF" 
-                strokeWidth="1"
+                strokeWidth="2"
               />
               
               {/* Texte "eatly" */}
-              <text x="180" y="280" fontFamily="Arial" fontWeight="bold" fontSize="75" fill="#000000" textAnchor="middle">eatly</text>
+              <text x="180" y="280" fontFamily="Arial" fontWeight="bold" fontSize="75" fill="#222222" textAnchor="middle">eatly</text>
             </svg>
           </motion.div>
         </div>
