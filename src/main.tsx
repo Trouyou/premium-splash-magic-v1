@@ -33,7 +33,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           colorBackground: '#FFFFFF',
         }
       }}
-      navigate={(to) => window.location.href = to}
     >
       <App />
     </ClerkProvider>
