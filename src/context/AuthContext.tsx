@@ -9,7 +9,7 @@ type AuthContextType = {
   isLoading: boolean;
   user: any;
   signInWithEmail: (email: string, password: string) => Promise<void>;
-  signInWithSocial: (provider: 'oauth_google' | 'oauth_facebook' | 'oauth_apple') => Promise<void>;
+  signInWithSocial: (provider: 'google' | 'facebook') => Promise<void>;
   signUp: (email: string, password: string, firstName?: string, lastName?: string) => Promise<void>;
   signOut: () => Promise<void>;
   error: string | null;
@@ -75,7 +75,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   // Implémentation de connexion sociale
-  const signInWithSocial = async (provider: 'oauth_google' | 'oauth_facebook' | 'oauth_apple') => {
+  const signInWithSocial = async (provider: 'google' | 'facebook') => {
     try {
       setError(null);
       setIsLoading(true);
@@ -84,8 +84,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         throw new Error("Le service d'authentification n'est pas disponible");
       }
       
+      // Mapper les providers aux stratégies Clerk
+      const strategyMap: Record<string, string> = {
+        'google': 'oauth_google',
+        'facebook': 'oauth_facebook'
+      };
+      
+      const strategy = strategyMap[provider];
+      
       await signIn.authenticateWithRedirect({
-        strategy: provider,
+        strategy: strategy as any,
         redirectUrl: window.location.origin + "/auth/callback",
         redirectUrlComplete: window.location.origin,
       });
@@ -95,7 +103,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       toast({
         variant: "destructive",
         title: "Échec de la connexion",
-        description: err.message || `La connexion avec ${provider.replace('oauth_', '')} a échoué.`,
+        description: err.message || `La connexion avec ${provider} a échoué.`,
       });
       setIsLoading(false);
     }
