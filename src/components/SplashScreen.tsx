@@ -1,9 +1,10 @@
 
 import { useState, useEffect } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import NetworkErrorMessage from './splash/NetworkErrorMessage';
 import PrivacyModal from './splash/PrivacyModal';
+import LoadingIndicator from './splash/LoadingIndicator';
 import SplashContent from './splash/SplashContent';
 
 // Types pour le composant
@@ -14,6 +15,7 @@ interface SplashScreenProps {
 const SplashScreen = ({ onComplete }: SplashScreenProps) => {
   const [showSplash, setShowSplash] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [networkError, setNetworkError] = useState(false);
   const navigate = useNavigate();
   
@@ -43,20 +45,29 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
     // Vérifier si c'est la première visite
     const hasVisited = localStorage.getItem('hasVisitedBefore');
     
-    // Display the RGPD modal or redirect after a shorter delay (2.5s total)
+    // Simuler un chargement prolongé après 2 secondes si nécessaire
+    const loadingTimer = setTimeout(() => {
+      if (!showModal) {
+        setLoading(true);
+      }
+    }, 2000);
+    
+    // Afficher la modal RGPD après 2.5 secondes
     const modalTimer = setTimeout(() => {
       if (!hasVisited) {
         setShowModal(true);
+        setLoading(false); // Masquer le message de chargement si affiché
       } else {
         // Si l'utilisateur a déjà visité, rediriger après un délai
         setTimeout(() => {
           setShowSplash(false);
           navigate('/login');
-        }, 1000); // Reduced delay for returning users
+        }, 2000);
       }
-    }, 2000); // Reduced from 2500ms
+    }, 2500);
     
     return () => {
+      clearTimeout(loadingTimer);
       clearTimeout(modalTimer);
     };
   }, [showModal, navigate]);
@@ -98,13 +109,10 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
   return (
     <AnimatePresence>
       {showSplash && (
-        <motion.div 
-          className="fixed inset-0 bg-white flex flex-col justify-center items-center z-50 overflow-hidden"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.5 }}
-        >
+        <div className="fixed inset-0 bg-white flex flex-col justify-center items-center z-50 overflow-hidden" 
+             style={{
+               background: 'linear-gradient(to bottom right, #EDE6D6, #D11B19)'
+             }}>
           <SplashContent />
           
           {/* Modal RGPD */}
@@ -117,7 +125,12 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
               />
             )}
           </AnimatePresence>
-        </motion.div>
+          
+          {/* Message d'attente si le chargement prend trop de temps */}
+          <AnimatePresence>
+            {loading && <LoadingIndicator isVisible={loading} />}
+          </AnimatePresence>
+        </div>
       )}
     </AnimatePresence>
   );
