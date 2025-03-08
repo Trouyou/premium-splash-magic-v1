@@ -1,80 +1,57 @@
 
 import { motion } from 'framer-motion';
-import { Suspense, useState } from 'react';
-import { cn } from '@/lib/utils';
+import { Suspense } from 'react';
+import LogoImage from '../LogoImage';
 
 const SplashContent = () => {
-  const [imageLoaded, setImageLoaded] = useState(false);
-  const [imageError, setImageError] = useState(false);
-
-  // Logo animation variants
-  const logoVariants = {
-    initial: { scale: 0.9, opacity: 0 },
-    animate: { 
-      scale: 1, 
-      opacity: 1,
-      transition: { 
-        duration: 0.8,
-        ease: "easeOut" 
-      }
-    }
-  };
-
-  // Subtle pulse animation for the logo
-  const pulsate = {
-    animate: {
-      scale: [1, 1.05, 1],
-      transition: {
-        duration: 2,
-        ease: "easeInOut",
-        times: [0, 0.5, 1],
-        repeat: Infinity,
-        repeatDelay: 0.5
-      }
-    }
-  };
-
   return (
-    <div className="flex items-center justify-center w-full h-full">
-      {imageError ? (
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          className="text-eatly-primary font-avantgarde text-6xl"
-        >
-          eatly
-        </motion.div>
-      ) : (
-        <motion.div
-          initial="initial"
-          animate="animate"
-          variants={logoVariants}
-        >
-          <motion.img 
-            animate="animate"
-            variants={pulsate}
-            src="/lovable-uploads/ba204c1d-73b7-42d1-94db-5a7b94ae3ff8.png" 
-            alt="Eatly Logo" 
-            className={cn(
-              "w-auto h-[280px] md:h-[320px] will-change-transform will-change-opacity gpu-accelerated",
-              !imageLoaded && "invisible"
-            )}
-            onLoad={() => setImageLoaded(true)}
-            onError={() => setImageError(true)}
-          />
-        </motion.div>
-      )}
-      
-      {/* Simple, subtle loading spinner */}
+    <>
+      {/* Élément graphique subtil */}
       <motion.div
         initial={{ opacity: 0 }}
-        animate={{ opacity: 0.7 }}
-        transition={{ delay: 1, duration: 0.5 }}
-        className="w-8 h-8 border-2 border-eatly-primary/10 border-t-eatly-primary/60 rounded-full absolute bottom-12 left-1/2 -translate-x-1/2"
-        style={{ animation: 'spin 1.2s linear infinite' }}
+        animate={{ opacity: 0.05 }}
+        className="absolute top-0 right-0 w-1/5 h-[30%] opacity-5"
       />
-    </div>
+      
+      {/* Ligne horizontale subtile en haut - symmétrique avec celle du bas */}
+      <motion.div
+        initial={{ scaleX: 0, opacity: 0 }}
+        animate={{ scaleX: 1, opacity: 0.15 }}
+        transition={{ duration: 0.6, ease: 'easeOut' }}
+        className="absolute top-[15%] left-0 w-full h-px bg-eatly-secondary opacity-15 origin-left"
+      />
+      
+      {/* Logo de la marmite */}
+      <div className="w-full flex justify-center items-center">
+        <Suspense fallback={null}>
+          <LogoImage />
+        </Suspense>
+      </div>
+      
+      {/* Ligne horizontale subtile en bas */}
+      <motion.div
+        initial={{ scaleX: 0, opacity: 0 }}
+        animate={{ scaleX: 1, opacity: 0.15 }}
+        transition={{ duration: 0.6, ease: 'easeOut' }}
+        className="absolute top-[85%] left-0 w-full h-px bg-eatly-secondary opacity-15 origin-left"
+      />
+      
+      {/* Indicateur de chargement */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1, rotate: 360 }}
+        transition={{ 
+          delay: 1.2, 
+          duration: 0.5, 
+          rotate: { 
+            repeat: Infinity, 
+            duration: 1.5, 
+            ease: 'linear' 
+          } 
+        }}
+        className="w-9 h-9 border-2 border-eatly-primary/10 border-t-eatly-primary/90 rounded-full absolute bottom-[60px] left-1/2 -translate-x-1/2"
+      />
+    </>
   );
 };
 
