@@ -6,7 +6,10 @@ import App from './App';
 import './index.css';
 
 // Utiliser la clé publique de Clerk fournie
-const CLERK_PUBLISHABLE_KEY = "pk_test_aW5mb3JtZWQtaGFtc3Rlci04LmNsZXJrLmFjY291bnRzLmRldiQ";
+// La clé est directement définie ici en attendant que l'utilisateur 
+// la configure correctement dans un fichier .env
+const CLERK_PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY 
+  || "pk_test_aW5mb3JtZWQtaGFtc3Rlci04LmNsZXJrLmFjY291bnRzLmRldiQ";
 
 // Vérifier que la clé est définie
 if (!CLERK_PUBLISHABLE_KEY) {
