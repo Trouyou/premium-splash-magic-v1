@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useState } from 'react';
 import { SocialProvider, useSocialSignIn } from '@/hooks/auth/use-social-sign-in';
 import { useEmailSignIn } from '@/hooks/auth/use-email-sign-in';
-import { useSignUp } from '@/hooks/auth/use-sign-up';
+import { useSignUp as useUserSignUp } from '@/hooks/auth/use-sign-up';
 import { useSignOut } from '@/hooks/auth/use-sign-out';
 import { useAuthState } from '@/hooks/auth/use-auth-state';
 
@@ -26,7 +26,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const { isAuthenticated, isLoading: authStateLoading, user } = useAuthState();
   const { signInWithEmail, isLoading: emailSignInLoading, error: emailSignInError } = useEmailSignIn();
   const { signInWithSocial, isLoading: socialSignInLoading, error: socialSignInError } = useSocialSignIn();
-  const { signUpWithEmailPassword, isLoading: signUpLoading, error: signUpError } = useSignUp();
+  const { signUpWithEmailPassword, isLoading: signUpLoading, error: signUpError } = useUserSignUp();
   const { signOut, isLoading: signOutLoading } = useSignOut();
 
   // Déterminer l'état global de chargement
