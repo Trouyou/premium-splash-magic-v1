@@ -1,10 +1,10 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, FC, useEffect, useCallback } from 'react';
-import { CONTAINER_ANIMATION } from '@/hooks/logoAnimations';
-import { useLogoSrc } from '@/hooks/logoUtils';
-import LogoError from './LogoError';
-import LogoImageContent from './LogoImageContent';
+import { CONTAINER_ANIMATION } from './logo/logoAnimations';
+import { getContainerClasses, useLogoSource } from './logo/logoUtils';
+import LogoError from './logo/LogoError';
+import LogoImageContent from './logo/LogoImageContent';
 
 interface LogoImageProps {
   className?: string;
@@ -12,45 +12,33 @@ interface LogoImageProps {
   lovableId?: string;
 }
 
-const LogoImage: FC<LogoImageProps> = ({ className = '', variant = 'default', lovableId }) => {
+const LogoImage: FC<LogoImageProps> = ({ 
+  className = '', 
+  variant = 'default', 
+  lovableId 
+}) => {
   const [imageError, setImageError] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [retryCount, setRetryCount] = useState(0);
   
-  // Get the logo source with the specified ID or variant
-  const logoSrc = useLogoSrc(lovableId, variant);
-  const fallbackLogoSrc = useLogoSrc(undefined, variant); // Default fallback if ID-specific logo fails
-
-  // Reset error state when source changes
-  useEffect(() => {
-    setImageError(false);
-    setIsLoaded(false);
-    setRetryCount(0);
-  }, [logoSrc]);
+  const getLogoSrc = useLogoSource(lovableId, variant);
+  const logoSrc = getLogoSrc();
+  const containerClasses = getContainerClasses(variant, className);
 
   const handleImageError = useCallback(() => {
-    console.error(`Erreur de chargement du logo: ${logoSrc}`);
-    
-    // Try one more time with a short delay (network glitch recovery)
-    if (retryCount < 1) {
-      setTimeout(() => {
-        setRetryCount(prev => prev + 1);
-        // Force re-render with the same source to retry
-        setIsLoaded(false);
-      }, 500);
-      return;
-    }
-    
-    // If we've already retried, mark as error
+    console.error('Erreur de chargement du logo:', logoSrc);
     setImageError(true);
-  }, [logoSrc, retryCount]);
+  }, [logoSrc]);
 
   const handleImageLoad = useCallback(() => {
+    console.log('Logo chargé avec succès:', logoSrc);
     setIsLoaded(true);
-  }, []);
+  }, [logoSrc]);
 
-  // Preload the image
   useEffect(() => {
+    // Reset states when logoSrc changes
+    setIsLoaded(false);
+    setImageError(false);
+    
     const img = new Image();
     img.src = logoSrc;
     
@@ -65,29 +53,18 @@ const LogoImage: FC<LogoImageProps> = ({ className = '', variant = 'default', lo
       img.onload = null;
       img.onerror = null;
     };
-  }, [logoSrc, handleImageLoad, handleImageError, retryCount]);
-
-  const getContainerClasses = useCallback(() => {
-    switch (variant) {
-      case 'confidentiality':
-        return 'w-full flex justify-center items-center py-2';
-      case 'splash':
-        return `w-full h-full flex justify-center items-center ${className}`;
-      default:
-        return `w-full flex justify-center items-center py-8 sm:py-12 md:py-16 ${className}`;
-    }
-  }, [variant, className]);
+  }, [logoSrc, handleImageLoad, handleImageError]);
 
   return (
     <motion.div
       variants={CONTAINER_ANIMATION}
       initial="initial"
       animate="animate"
-      className={getContainerClasses()}
+      className={containerClasses}
     >
       <AnimatePresence mode="wait">
         {imageError ? (
-          <LogoError variant={variant} />
+          <LogoError />
         ) : (
           <LogoImageContent
             logoSrc={logoSrc}

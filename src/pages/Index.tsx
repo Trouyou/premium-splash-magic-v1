@@ -1,101 +1,33 @@
-import { useState, useEffect, Suspense, lazy } from 'react';
+
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-
-// Import des composants avec types
-interface SplashScreenProps {
-  duration?: number;
-  onComplete?: () => void;
-}
-
-interface PrivacyModalProps {
-  isVisible: boolean;
-  onAccept: () => void;
-  onDecline: () => void;
-}
-
-const SplashScreen = lazy<React.ComponentType<SplashScreenProps>>(() => 
-  import('../components/splash/SplashScreen')
-);
-
-const PrivacyModal = lazy<React.ComponentType<PrivacyModalProps>>(() => 
-  import('../components/splash/PrivacyModal')
-);
-
-// Composant de fallback pendant le chargement
-const LoadingFallback = () => (
-  <div className="w-full h-screen flex items-center justify-center">
-    <div className="animate-pulse">
-      <div className="w-12 h-12 rounded-full bg-eatly-primary/20" />
-    </div>
-  </div>
-);
+import SplashScreen from '@/components/SplashScreen';
 
 const Index = () => {
   const [showSplash, setShowSplash] = useState(true);
-  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Vérifier si l'utilisateur est connecté et a accepté la politique de confidentialité
+    // Vérifier si l'utilisateur est connecté
     const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-    const hasAcceptedPrivacy = localStorage.getItem('privacyAccepted') === 'true';
     
     // Si on n'est plus dans le splash screen et pas connecté, rediriger vers login
-    if (!showSplash && !isLoggedIn && hasAcceptedPrivacy) {
+    if (!showSplash && !isLoggedIn) {
       navigate('/login');
     }
   }, [showSplash, navigate]);
 
   const handleSplashComplete = () => {
     setShowSplash(false);
-    // Afficher le modal de confidentialité seulement si pas encore accepté
-    const hasAcceptedPrivacy = localStorage.getItem('privacyAccepted') === 'true';
-    if (!hasAcceptedPrivacy) {
-      setShowPrivacyModal(true);
-    }
-  };
-
-  const handlePrivacyAccept = () => {
-    localStorage.setItem('privacyAccepted', 'true');
-    setShowPrivacyModal(false);
-    // Rediriger vers login si pas connecté
-    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-    if (!isLoggedIn) {
-      navigate('/login');
-    }
-  };
-
-  const handlePrivacyDecline = () => {
-    setShowPrivacyModal(false);
-    // Rediriger vers une page d'information ou externe
-    window.location.href = 'https://www.eatly.com';
   };
 
   if (showSplash) {
-    return (
-      <Suspense fallback={<LoadingFallback />}>
-        <SplashScreen duration={3000} onComplete={handleSplashComplete} />
-      </Suspense>
-    );
+    return <SplashScreen onComplete={handleSplashComplete} />;
   }
 
   // Si l'utilisateur est connecté, afficher le contenu principal
   const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-  const hasAcceptedPrivacy = localStorage.getItem('privacyAccepted') === 'true';
-
-  if (!hasAcceptedPrivacy) {
-    return (
-      <Suspense fallback={<LoadingFallback />}>
-        <PrivacyModal
-          isVisible={showPrivacyModal}
-          onAccept={handlePrivacyAccept}
-          onDecline={handlePrivacyDecline}
-        />
-      </Suspense>
-    );
-  }
-
   if (!isLoggedIn) {
     return null; // Ne rien afficher pendant la redirection
   }

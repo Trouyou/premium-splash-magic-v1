@@ -1,6 +1,5 @@
 
-// Animation configurations for different logo variants
-
+// Animation configurations for logo components
 export const LOGO_ANIMATION = {
   initial: { 
     opacity: 0, 

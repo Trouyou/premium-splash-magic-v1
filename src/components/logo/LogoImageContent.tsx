@@ -1,8 +1,9 @@
 
-import { FC, useCallback } from 'react';
-import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { LOGO_ANIMATION, SPLASH_ANIMATION } from '@/hooks/logoAnimations';
+import Image from 'next/image';
+import { FC } from 'react';
+import { LOGO_ANIMATION, SPLASH_ANIMATION } from './logoAnimations';
+import { getImageContainerClasses, getImageSizes } from './logoUtils';
 
 interface LogoImageContentProps {
   logoSrc: string;
@@ -19,28 +20,9 @@ const LogoImageContent: FC<LogoImageContentProps> = ({
   onError,
   onLoad
 }) => {
-  const getImageContainerClasses = useCallback(() => {
-    switch (variant) {
-      case 'confidentiality':
-        return 'relative w-full max-w-[240px] sm:max-w-[280px] aspect-[1/1]';
-      case 'splash':
-        return 'relative w-full max-w-[400px] sm:max-w-[500px] aspect-[1/1] will-change-transform';
-      default:
-        return 'relative w-full max-w-[320px] sm:max-w-[400px] aspect-[1/1]';
-    }
-  }, [variant]);
-
-  const getImageSizes = useCallback(() => {
-    switch (variant) {
-      case 'confidentiality':
-        return "(max-width: 640px) 240px, 280px";
-      case 'splash':
-        return "(max-width: 640px) 400px, 500px";
-      default:
-        return "(max-width: 640px) 320px, 400px";
-    }
-  }, [variant]);
-
+  const imageContainerClasses = getImageContainerClasses(variant);
+  const imageSizes = getImageSizes(variant);
+  
   return (
     <motion.div
       key="logo"
@@ -48,13 +30,13 @@ const LogoImageContent: FC<LogoImageContentProps> = ({
       initial="initial"
       animate={isLoaded ? "animate" : "initial"}
       exit="exit"
-      className={getImageContainerClasses()}
+      className={imageContainerClasses}
     >
       <Image
         src={logoSrc}
         alt="Logo Eatly - Une expérience culinaire unique"
         fill
-        sizes={getImageSizes()}
+        sizes={imageSizes}
         priority
         quality={100}
         loading="eager"
