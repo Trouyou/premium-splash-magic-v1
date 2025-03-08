@@ -33,9 +33,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           colorBackground: '#FFFFFF',
         }
       }}
-      // Utiliser la propriété correcte pour les environnements de prévisualisation comme Lovable
-      // selon la documentation Clerk la plus récente
-      isSatellite={isPreviewEnvironment()}
+      navigate={(to) => window.location.href = to}
     >
       <App />
     </ClerkProvider>

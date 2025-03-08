@@ -27,9 +27,9 @@ const AuthCallback = () => {
           });
         }
 
-        // Mettre à jour pour utiliser l'option fallbackRedirectUrl au lieu de redirectUrl (déprécié)
+        // Utiliser signInFallbackRedirectUrl au lieu de fallbackRedirectUrl
         await handleRedirectCallback({
-          fallbackRedirectUrl: window.location.origin
+          signInFallbackRedirectUrl: window.location.origin
         });
         
         navigate('/');
