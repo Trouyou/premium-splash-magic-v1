@@ -1,15 +1,17 @@
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useToast } from '@/hooks/use-toast';
-import { useUser, useSignIn, useSignUp, useClerk } from '@clerk/clerk-react';
+import React, { createContext, useContext, useState } from 'react';
+import { SocialProvider, useSocialSignIn } from '@/hooks/auth/use-social-sign-in';
+import { useEmailSignIn } from '@/hooks/auth/use-email-sign-in';
+import { useSignUp as useUserSignUp } from '@/hooks/auth/use-sign-up';
+import { useSignOut } from '@/hooks/auth/use-sign-out';
+import { useAuthState } from '@/hooks/auth/use-auth-state';
 
 type AuthContextType = {
   isAuthenticated: boolean;
   isLoading: boolean;
   user: any;
   signInWithEmail: (email: string, password: string) => Promise<void>;
-  signInWithSocial: (provider: 'oauth_google' | 'oauth_facebook' | 'oauth_apple') => Promise<void>;
+  signInWithSocial: (provider: SocialProvider) => Promise<void>;
   signUp: (email: string, password: string, firstName?: string, lastName?: string) => Promise<void>;
   signOut: () => Promise<void>;
   error: string | null;
@@ -18,156 +20,36 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { toast } = useToast();
   
-  // Utiliser les hooks Clerk
-  const { isLoaded: clerkLoaded, user: clerkUser } = useUser();
-  const { signIn, setActive: setSignInActive } = useSignIn();
-  const { signUp, setActive: setSignUpActive } = useSignUp();
-  const { signOut: clerkSignOut } = useClerk();
+  // Utiliser les hooks d'authentification
+  const { isAuthenticated, isLoading: authStateLoading, user } = useAuthState();
+  const { signInWithEmail, isLoading: emailSignInLoading, error: emailSignInError } = useEmailSignIn();
+  const { signInWithSocial, isLoading: socialSignInLoading, error: socialSignInError } = useSocialSignIn();
+  const { signUpWithEmailPassword, isLoading: signUpLoading, error: signUpError } = useUserSignUp();
+  const { signOut, isLoading: signOutLoading } = useSignOut();
 
-  // Mettre à jour l'état de chargement quand Clerk est prêt
-  useEffect(() => {
-    if (clerkLoaded) {
-      setIsLoading(false);
-    }
-  }, [clerkLoaded]);
+  // Déterminer l'état global de chargement
+  const isLoading = authStateLoading || emailSignInLoading || socialSignInLoading || signUpLoading || signOutLoading;
 
-  // Implémentation de connexion par email
-  const signInWithEmail = async (email: string, password: string) => {
-    try {
+  // Mettre à jour l'erreur globale en fonction des erreurs spécifiques
+  React.useEffect(() => {
+    const currentError = emailSignInError || socialSignInError || signUpError;
+    if (currentError) {
+      setError(currentError);
+    } else {
       setError(null);
-      setIsLoading(true);
-      
-      if (!signIn) {
-        throw new Error("Le service d'authentification n'est pas disponible");
-      }
-      
-      const result = await signIn.create({
-        identifier: email,
-        password,
-      });
-      
-      if (result.status === "complete") {
-        await setSignInActive({ session: result.createdSessionId });
-        toast({
-          title: "Connexion réussie",
-          description: "Bienvenue sur votre espace Eatly",
-        });
-        navigate("/");
-      } else {
-        throw new Error("Une erreur s'est produite lors de la connexion.");
-      }
-    } catch (err: any) {
-      console.error("Erreur de connexion:", err);
-      setError(err.message || "Une erreur s'est produite pendant la connexion.");
-      toast({
-        variant: "destructive",
-        title: "Échec de la connexion",
-        description: err.message || "Veuillez vérifier vos identifiants et réessayer",
-      });
-    } finally {
-      setIsLoading(false);
     }
-  };
-
-  // Implémentation de connexion sociale
-  const signInWithSocial = async (provider: 'oauth_google' | 'oauth_facebook' | 'oauth_apple') => {
-    try {
-      setError(null);
-      setIsLoading(true);
-      
-      if (!signIn) {
-        throw new Error("Le service d'authentification n'est pas disponible");
-      }
-      
-      await signIn.authenticateWithRedirect({
-        strategy: provider,
-        redirectUrl: window.location.origin + "/auth/callback",
-        redirectUrlComplete: window.location.origin,
-      });
-    } catch (err: any) {
-      console.error(`Erreur de connexion avec ${provider}:`, err);
-      setError(err.message || `La connexion avec ${provider} a échoué.`);
-      toast({
-        variant: "destructive",
-        title: "Échec de la connexion",
-        description: err.message || `La connexion avec ${provider.replace('oauth_', '')} a échoué.`,
-      });
-      setIsLoading(false);
-    }
-  };
-
-  // Implémentation d'inscription
-  const signUpWithEmailPassword = async (email: string, password: string, firstName?: string, lastName?: string) => {
-    try {
-      setError(null);
-      setIsLoading(true);
-      
-      if (!signUp) {
-        throw new Error("Le service d'inscription n'est pas disponible");
-      }
-      
-      const result = await signUp.create({
-        emailAddress: email,
-        password,
-        firstName,
-        lastName,
-      });
-
-      if (result.status === "complete") {
-        await setSignUpActive({ session: result.createdSessionId });
-        toast({
-          title: "Inscription réussie",
-          description: "Bienvenue sur Eatly !",
-        });
-        navigate("/");
-      } else {
-        throw new Error("Une erreur s'est produite lors de l'inscription.");
-      }
-    } catch (err: any) {
-      console.error("Erreur d'inscription:", err);
-      setError(err.message || "Une erreur s'est produite pendant l'inscription.");
-      toast({
-        variant: "destructive",
-        title: "Échec de l'inscription",
-        description: err.message || "Veuillez vérifier vos informations et réessayer",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Implémentation de déconnexion
-  const handleSignOut = async () => {
-    try {
-      await clerkSignOut();
-      navigate("/login");
-      toast({
-        title: "Déconnexion réussie",
-        description: "À bientôt !",
-      });
-    } catch (err: any) {
-      console.error("Erreur de déconnexion:", err);
-      toast({
-        variant: "destructive",
-        title: "Erreur de déconnexion",
-        description: "Une erreur est survenue lors de la déconnexion",
-      });
-    }
-  };
+  }, [emailSignInError, socialSignInError, signUpError]);
 
   const value = {
-    isAuthenticated: !!clerkUser,
+    isAuthenticated,
     isLoading,
-    user: clerkUser,
+    user,
     signInWithEmail,
     signInWithSocial,
     signUp: signUpWithEmailPassword,
-    signOut: handleSignOut,
+    signOut,
     error,
   };
 
