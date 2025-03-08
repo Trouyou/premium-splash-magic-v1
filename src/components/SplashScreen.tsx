@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import NetworkErrorMessage from './splash/NetworkErrorMessage';
 import PrivacyModal from './splash/PrivacyModal';
@@ -45,32 +45,21 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
     // Vérifier si c'est la première visite
     const hasVisited = localStorage.getItem('hasVisitedBefore');
     
-    // Simuler un chargement prolongé après 2 secondes si nécessaire
-    const loadingTimer = setTimeout(() => {
-      if (!showModal) {
-        setLoading(true);
-      }
-    }, 2000);
-    
-    // Afficher la modal RGPD après 2.5 secondes
-    const modalTimer = setTimeout(() => {
+    // Définir un délai pour l'animation du splash screen (2.5 secondes)
+    const splashTimer = setTimeout(() => {
       if (!hasVisited) {
         setShowModal(true);
-        setLoading(false); // Masquer le message de chargement si affiché
       } else {
-        // Si l'utilisateur a déjà visité, rediriger après un délai
-        setTimeout(() => {
-          setShowSplash(false);
-          navigate('/login');
-        }, 2000);
+        // Si l'utilisateur a déjà visité, rediriger après le délai
+        setShowSplash(false);
+        navigate('/login');
       }
     }, 2500);
     
     return () => {
-      clearTimeout(loadingTimer);
-      clearTimeout(modalTimer);
+      clearTimeout(splashTimer);
     };
-  }, [showModal, navigate]);
+  }, [navigate]);
   
   // Gestionnaires d'événements pour les boutons
   const handleAccept = () => {
@@ -81,7 +70,7 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
     // Redirection simulée
     setTimeout(() => {
       setShowSplash(false);
-      navigate('/login'); // Rediriger vers la page de connexion
+      navigate('/login');
     }, 500);
   };
   
@@ -93,7 +82,7 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
     // Redirection simulée
     setTimeout(() => {
       setShowSplash(false);
-      navigate('/login'); // Rediriger vers la page de connexion
+      navigate('/login');
     }, 500);
   };
   
@@ -109,10 +98,13 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
   return (
     <AnimatePresence>
       {showSplash && (
-        <div className="fixed inset-0 bg-white flex flex-col justify-center items-center z-50 overflow-hidden" 
-             style={{
-               background: 'linear-gradient(to bottom right, #EDE6D6, #D11B19)'
-             }}>
+        <motion.div 
+          initial={{ opacity: 0 }} 
+          animate={{ opacity: 1 }} 
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5 }}
+          className="fixed inset-0 bg-white flex flex-col justify-center items-center z-50 overflow-hidden"
+        >
           <SplashContent />
           
           {/* Modal RGPD */}
@@ -126,11 +118,11 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
             )}
           </AnimatePresence>
           
-          {/* Message d'attente si le chargement prend trop de temps */}
+          {/* Indicateur de chargement (version simplifiée) */}
           <AnimatePresence>
             {loading && <LoadingIndicator isVisible={loading} />}
           </AnimatePresence>
-        </div>
+        </motion.div>
       )}
     </AnimatePresence>
   );
