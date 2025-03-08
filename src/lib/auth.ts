@@ -1,3 +1,4 @@
+
 import { SignInResource, SignUpResource } from "@clerk/types";
 
 // Fonction pour normaliser les données utilisateur venant de différents fournisseurs
@@ -24,7 +25,7 @@ export const socialLoginOptions = {
 };
 
 // Configuration pour le formulaire de connexion
-export const signInConfig: Partial<SignInResource> = {
+export const signInConfig: Record<string, any> = {
   appearance: {
     elements: {
       formButtonPrimary: "hidden",
@@ -35,7 +36,7 @@ export const signInConfig: Partial<SignInResource> = {
 };
 
 // Configuration pour le formulaire d'inscription
-export const signUpConfig: Partial<SignUpResource> = {
+export const signUpConfig: Record<string, any> = {
   appearance: {
     elements: {
       formButtonPrimary: "hidden",
