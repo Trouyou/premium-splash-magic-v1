@@ -1,11 +1,28 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import SocialButton from './SocialButton';
 import { useAuth } from '@/context/AuthContext';
 
 const SocialLoginSection = () => {
   const [error, setError] = useState('');
   const { signInWithSocial, isLoading } = useAuth();
+  
+  // Déterminer si nous sommes dans un environnement preview
+  const isPreviewEnvironment = () => {
+    return typeof window !== 'undefined' && 
+           (window.location.hostname.includes('lovableproject.com') || 
+            window.top !== window.self);
+  };
+  
+  // Effet pour le débogage dans l'environnement Lovable
+  useEffect(() => {
+    if (isPreviewEnvironment()) {
+      console.log('SocialLoginSection chargé, environnement Lovable détecté:', {
+        origin: window.location.origin,
+        hostname: window.location.hostname
+      });
+    }
+  }, []);
 
   // Composants SVG pour les logos sociaux
   const AppleLogo = () => (
@@ -32,6 +49,14 @@ const SocialLoginSection = () => {
   const handleSocialLogin = async (provider: 'oauth_google' | 'oauth_facebook' | 'oauth_apple') => {
     setError('');
     try {
+      // Log pour le débogage dans l'environnement Lovable
+      if (isPreviewEnvironment()) {
+        console.log(`Tentative de connexion avec ${provider} depuis SocialLoginSection:`, {
+          provider,
+          origin: window.location.origin
+        });
+      }
+      
       await signInWithSocial(provider);
     } catch (err: any) {
       setError(err.message || `Connexion avec ${provider.replace('oauth_', '')} non disponible pour le moment`);

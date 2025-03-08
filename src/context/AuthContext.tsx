@@ -29,6 +29,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const { signUp, setActive: setSignUpActive } = useSignUp();
   const { signOut: clerkSignOut } = useClerk();
 
+  // Déterminer si nous sommes dans un environnement preview/iframe
+  const isPreviewEnvironment = () => {
+    return typeof window !== 'undefined' && 
+           (window.location.hostname.includes('lovableproject.com') || 
+            window.top !== window.self);
+  };
+
+  // Log pour déboguer dans l'environnement Lovable
+  useEffect(() => {
+    if (isPreviewEnvironment()) {
+      console.log('Environnement Lovable détecté. Configuration Clerk:', {
+        origin: window.location.origin,
+        publishableKey: !!import.meta.env.VITE_CLERK_PUBLISHABLE_KEY,
+        hostname: window.location.hostname
+      });
+    }
+  }, []);
+
   // Mettre à jour l'état de chargement quand Clerk est prêt
   useEffect(() => {
     if (clerkLoaded) {
@@ -82,6 +100,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       if (!signIn) {
         throw new Error("Le service d'authentification n'est pas disponible");
+      }
+      
+      // Log de débogage pour l'environnement Lovable
+      if (isPreviewEnvironment()) {
+        console.log(`Tentative de connexion avec ${provider}:`, {
+          redirectUrl: window.location.origin + "/auth/callback",
+          redirectUrlComplete: window.location.origin,
+          origin: window.location.origin
+        });
       }
       
       await signIn.authenticateWithRedirect({

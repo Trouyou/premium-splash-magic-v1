@@ -33,8 +33,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           colorBackground: '#FFFFFF',
         }
       }}
-      // Nécessaire pour les environnements de prévisualisation comme Lovable
-      allowCrossSiteCookies={isPreviewEnvironment()}
+      // Utiliser la propriété correcte pour les environnements de prévisualisation comme Lovable
+      // selon la documentation Clerk la plus récente
+      isSatellite={isPreviewEnvironment()}
     >
       <App />
     </ClerkProvider>
