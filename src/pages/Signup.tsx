@@ -6,6 +6,8 @@ import { useAuth } from '@/context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import AnimatedBackground from '@/components/login/AnimatedBackground';
 import LoginAnimation from '@/components/login/LoginAnimation';
+import SocialLoginSection from '@/components/login/SocialLoginSection';
+import LoginSeparator from '@/components/login/LoginSeparator';
 
 const Signup = () => {
   const [email, setEmail] = useState('');
@@ -61,6 +63,12 @@ const Signup = () => {
             <h1 className="font-avantgarde text-3xl text-black mb-2">Inscription</h1>
             <p className="font-playfair text-base text-eatly-secondary">Créez votre compte Eatly</p>
           </div>
+          
+          {/* Boutons de connexion sociale */}
+          <SocialLoginSection />
+          
+          {/* Séparateur OU */}
+          <LoginSeparator />
           
           {/* Message d'erreur */}
           {(error || formError) && (
