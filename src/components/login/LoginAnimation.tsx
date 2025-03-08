@@ -12,30 +12,14 @@ const LoginAnimation = () => {
       {/* Background with gradient */}
       <AnimatedBackground />
 
-      {/* Logo avec meilleure résolution et taille */}
+      {/* Logo */}
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ 
-          opacity: 1, 
-          scale: 1,
-          filter: "drop-shadow(0px 15px 30px rgba(209, 27, 25, 0.2))"
-        }}
-        whileHover={{ 
-          scale: 1.03, 
-          filter: "drop-shadow(0px 20px 40px rgba(209, 27, 25, 0.25))"
-        }}
-        transition={{ 
-          duration: 0.8, 
-          delay: 0.3,
-          scale: {
-            type: "spring",
-            stiffness: 300,
-            damping: 20
-          }
-        }}
-        className="mb-6 relative z-10 w-full max-w-[260px]"
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.8, delay: 0.3 }}
+        className="mb-8 relative z-10"
       >
-        <LogoImage className="transform-gpu" />
+        <LogoImage />
       </motion.div>
 
       {/* Main heading with transition effect */}

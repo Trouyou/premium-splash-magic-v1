@@ -1,80 +1,27 @@
 
-import { motion, AnimatePresence } from 'framer-motion';
-import { useState, FC, useEffect, useCallback } from 'react';
-import { CONTAINER_ANIMATION } from './logo/logoAnimations';
-import { getContainerClasses, useLogoSource } from './logo/logoUtils';
-import LogoError from './logo/LogoError';
-import LogoImageContent from './logo/LogoImageContent';
+import { motion } from 'framer-motion';
 
-interface LogoImageProps {
-  className?: string;
-  variant?: 'default' | 'confidentiality' | 'splash';
-  lovableId?: string;
-}
-
-const LogoImage: FC<LogoImageProps> = ({ 
-  className = '', 
-  variant = 'default', 
-  lovableId 
-}) => {
-  const [imageError, setImageError] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
-  
-  const getLogoSrc = useLogoSource(lovableId, variant);
-  const logoSrc = getLogoSrc();
-  const containerClasses = getContainerClasses(variant, className);
-
-  const handleImageError = useCallback(() => {
-    console.error('Erreur de chargement du logo:', logoSrc);
-    setImageError(true);
-  }, [logoSrc]);
-
-  const handleImageLoad = useCallback(() => {
-    console.log('Logo chargé avec succès:', logoSrc);
-    setIsLoaded(true);
-  }, [logoSrc]);
-
-  useEffect(() => {
-    // Reset states when logoSrc changes
-    setIsLoaded(false);
-    setImageError(false);
-    
-    const img = new Image();
-    img.src = logoSrc;
-    
-    if (img.complete) {
-      handleImageLoad();
-    } else {
-      img.onload = handleImageLoad;
-      img.onerror = handleImageError;
-    }
-
-    return () => {
-      img.onload = null;
-      img.onerror = null;
-    };
-  }, [logoSrc, handleImageLoad, handleImageError]);
-
+const LogoImage = () => {
   return (
     <motion.div
-      variants={CONTAINER_ANIMATION}
-      initial="initial"
-      animate="animate"
-      className={containerClasses}
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+      className="w-full flex flex-col justify-center items-center py-10"
     >
-      <AnimatePresence mode="wait">
-        {imageError ? (
-          <LogoError />
-        ) : (
-          <LogoImageContent
-            logoSrc={logoSrc}
-            variant={variant}
-            isLoaded={isLoaded}
-            onError={handleImageError}
-            onLoad={handleImageLoad}
-          />
-        )}
-      </AnimatePresence>
+      <img 
+        src="/lovable-uploads/9a9f2d6c-ba85-40b4-aab2-b8d6fb42dd43.png" 
+        alt="Eatly Logo avec texte" 
+        className="w-auto h-[220px] md:h-[260px] pot-shadow"
+      />
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3, duration: 0.5 }}
+        className="font-avantgarde text-2xl text-black mt-2"
+      >
+        eatly
+      </motion.p>
     </motion.div>
   );
 };
