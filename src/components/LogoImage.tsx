@@ -25,17 +25,21 @@ const LogoImage: FC<LogoImageProps> = ({
   const containerClasses = getContainerClasses(variant, className);
 
   const handleImageError = useCallback(() => {
-    console.error('Erreur de chargement du logo');
+    console.error('Erreur de chargement du logo:', logoSrc);
     setImageError(true);
-  }, []);
+  }, [logoSrc]);
 
   const handleImageLoad = useCallback(() => {
+    console.log('Logo chargé avec succès:', logoSrc);
     setIsLoaded(true);
-  }, []);
+  }, [logoSrc]);
 
   useEffect(() => {
+    // Reset states when logoSrc changes
     setIsLoaded(false);
-    const img = document.createElement('img');
+    setImageError(false);
+    
+    const img = new Image();
     img.src = logoSrc;
     
     if (img.complete) {
