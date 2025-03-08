@@ -12,7 +12,8 @@ const AuthCallback = () => {
     // Gérer le callback de redirection après l'authentification sociale
     const processCallback = async () => {
       try {
-        await handleRedirectCallback();
+        // Passer l'URL actuelle comme paramètre à handleRedirectCallback
+        await handleRedirectCallback({ redirectUrl: window.location.href });
         navigate('/');
       } catch (error) {
         console.error('Erreur lors du traitement du callback:', error);

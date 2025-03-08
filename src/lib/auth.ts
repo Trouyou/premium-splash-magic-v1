@@ -1,4 +1,3 @@
-
 import { SignInResource, SignUpResource } from "@clerk/types";
 
 // Fonction pour normaliser les données utilisateur venant de différents fournisseurs
