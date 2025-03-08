@@ -1,9 +1,12 @@
 
 import { motion } from 'framer-motion';
-import { Suspense } from 'react';
-import LogoImage from '../LogoImage';
+import { Suspense, useState } from 'react';
+import { cn } from '@/lib/utils';
 
 const SplashContent = () => {
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
+
   return (
     <>
       {/* Élément graphique subtil */}
@@ -22,9 +25,42 @@ const SplashContent = () => {
       />
       
       {/* Logo de la marmite */}
-      <div className="w-full flex justify-center items-center">
-        <Suspense fallback={null}>
-          <LogoImage />
+      <div className="w-full flex justify-center items-center relative">
+        <Suspense fallback={
+          <div className="w-full h-[280px] flex items-center justify-center">
+            <div className="w-12 h-12 border-4 border-eatly-primary/20 border-t-eatly-primary animate-spin rounded-full"></div>
+          </div>
+        }>
+          {imageError ? (
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
+              className="text-eatly-primary font-avantgarde text-6xl py-16"
+            >
+              eatly
+            </motion.div>
+          ) : (
+            <motion.img 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ 
+                opacity: imageLoaded ? 1 : 0, 
+                scale: imageLoaded ? 1 : 0.95 
+              }}
+              transition={{ 
+                duration: 0.8, 
+                ease: "easeOut" 
+              }}
+              src="/lovable-uploads/ba204c1d-73b7-42d1-94db-5a7b94ae3ff8.png" 
+              alt="Eatly Cocotte Rouge Logo" 
+              className={cn(
+                "w-auto h-[280px] md:h-[320px] pot-shadow will-change-transform will-change-opacity gpu-accelerated py-16",
+                !imageLoaded && "invisible"
+              )}
+              onLoad={() => setImageLoaded(true)}
+              onError={() => setImageError(true)}
+            />
+          )}
         </Suspense>
       </div>
       

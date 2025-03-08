@@ -21,34 +21,61 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
   
   // Vérification de connexion et chargement initial
   useEffect(() => {
+    // Préchargement des images de logo
+    const preloadImages = () => {
+      const imageUrls = [
+        '/lovable-uploads/ba204c1d-73b7-42d1-94db-5a7b94ae3ff8.png',
+        '/lovable-uploads/6347b2be-e52a-437f-9bdd-adcafab9cde1.png'
+      ];
+      
+      imageUrls.forEach(url => {
+        const img = new Image();
+        img.src = url;
+      });
+    };
+    
+    preloadImages();
+    
     // Vérification de la connexion
     if (!navigator.onLine) {
       setNetworkError(true);
       return;
     }
     
-    // Simuler un chargement prolongé après 3 secondes si nécessaire
+    // Vérifier si c'est la première visite
+    const hasVisited = localStorage.getItem('hasVisitedBefore');
+    
+    // Simuler un chargement prolongé après 2 secondes si nécessaire
     const loadingTimer = setTimeout(() => {
       if (!showModal) {
         setLoading(true);
       }
-    }, 3000);
+    }, 2000);
     
-    // Afficher la modal RGPD après 3 secondes
+    // Afficher la modal RGPD après 2.5 secondes
     const modalTimer = setTimeout(() => {
-      setShowModal(true);
-      setLoading(false); // Masquer le message de chargement si affiché
-    }, 3000);
+      if (!hasVisited) {
+        setShowModal(true);
+        setLoading(false); // Masquer le message de chargement si affiché
+      } else {
+        // Si l'utilisateur a déjà visité, rediriger après un délai
+        setTimeout(() => {
+          setShowSplash(false);
+          navigate('/login');
+        }, 2000);
+      }
+    }, 2500);
     
     return () => {
       clearTimeout(loadingTimer);
       clearTimeout(modalTimer);
     };
-  }, [showModal]);
+  }, [showModal, navigate]);
   
   // Gestionnaires d'événements pour les boutons
   const handleAccept = () => {
     localStorage.setItem('dataConsent', 'accepted');
+    localStorage.setItem('hasVisitedBefore', 'true');
     setShowModal(false);
     
     // Redirection simulée
@@ -60,6 +87,7 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
   
   const handleRefuse = () => {
     localStorage.setItem('dataConsent', 'refused');
+    localStorage.setItem('hasVisitedBefore', 'true');
     setShowModal(false);
     
     // Redirection simulée
@@ -81,7 +109,10 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
   return (
     <AnimatePresence>
       {showSplash && (
-        <div className="fixed inset-0 bg-white flex flex-col justify-center items-center z-50 overflow-hidden">
+        <div className="fixed inset-0 bg-white flex flex-col justify-center items-center z-50 overflow-hidden" 
+             style={{
+               background: 'linear-gradient(to bottom right, #EDE6D6, #D11B19)'
+             }}>
           <SplashContent />
           
           {/* Modal RGPD */}
