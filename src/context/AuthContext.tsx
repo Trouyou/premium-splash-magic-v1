@@ -2,25 +2,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
-
-// Vérifier si Clerk est configuré
-const isClerkConfigured = !!import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
-
-// Importer les hooks de Clerk seulement si configuré
-let useClerkUser: any = () => ({ isLoaded: true, user: null });
-let useClerkSignIn: any = () => ({ signIn: null, setActive: null });
-let useClerkSignUp: any = () => ({ signUp: null, setActive: null });
-let useClerkInstance: any = () => ({ signOut: async () => {} });
-
-// Import dynamique conditionnel pour éviter les erreurs
-if (isClerkConfigured) {
-  import('@clerk/clerk-react').then((clerk) => {
-    useClerkUser = clerk.useUser;
-    useClerkSignIn = clerk.useSignIn;
-    useClerkSignUp = clerk.useSignUp;
-    useClerkInstance = clerk.useClerk;
-  }).catch(e => console.error("Erreur lors du chargement de Clerk:", e));
-}
+import { useUser, useSignIn, useSignUp, useClerk } from '@clerk/clerk-react';
 
 type AuthContextType = {
   isAuthenticated: boolean;
@@ -40,31 +22,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
-  const [mockUser, setMockUser] = useState<any>(null);
+  
+  // Utiliser les hooks Clerk
+  const { isLoaded: clerkLoaded, user: clerkUser } = useUser();
+  const { signIn, setActive: setSignInActive } = useSignIn();
+  const { signUp, setActive: setSignUpActive } = useSignUp();
+  const { signOut: clerkSignOut } = useClerk();
 
-  // Utiliser Clerk si configuré, sinon utiliser une implémentation fictive
-  const { isLoaded: clerkLoaded, user: clerkUser } = isClerkConfigured ? useClerkUser() : { isLoaded: true, user: null };
-  const { signIn, setActive: setSignInActive } = isClerkConfigured ? useClerkSignIn() : { signIn: null, setActive: null };
-  const { signUp, setActive: setSignUpActive } = isClerkConfigured ? useClerkSignUp() : { signUp: null, setActive: null };
-  const { signOut: clerkSignOut } = isClerkConfigured ? useClerkInstance() : { signOut: async () => {} };
-
-  // Vérifier si l'utilisateur est déjà connecté via localStorage (pour le mode démo)
+  // Mettre à jour l'état de chargement quand Clerk est prêt
   useEffect(() => {
-    if (!isClerkConfigured) {
-      const savedUser = localStorage.getItem('mockUser');
-      if (savedUser) {
-        setMockUser(JSON.parse(savedUser));
-      }
+    if (clerkLoaded) {
       setIsLoading(false);
     }
-  }, []);
-
-  // Si Clerk est configuré, utiliser son état de chargement
-  useEffect(() => {
-    if (isClerkConfigured && clerkLoaded) {
-      setIsLoading(false);
-    }
-  }, [clerkLoaded, isClerkConfigured]);
+  }, [clerkLoaded]);
 
   // Implémentation de connexion par email
   const signInWithEmail = async (email: string, password: string) => {
@@ -72,52 +42,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setError(null);
       setIsLoading(true);
       
-      if (isClerkConfigured) {
-        // Utiliser Clerk si configuré
-        if (!signIn) {
-          throw new Error("Le service d'authentification n'est pas disponible");
-        }
-        
-        const result = await signIn.create({
-          identifier: email,
-          password,
+      if (!signIn) {
+        throw new Error("Le service d'authentification n'est pas disponible");
+      }
+      
+      const result = await signIn.create({
+        identifier: email,
+        password,
+      });
+      
+      if (result.status === "complete") {
+        await setSignInActive({ session: result.createdSessionId });
+        toast({
+          title: "Connexion réussie",
+          description: "Bienvenue sur votre espace Eatly",
         });
-        
-        if (result.status === "complete") {
-          await setSignInActive({ session: result.createdSessionId });
-          toast({
-            title: "Connexion réussie",
-            description: "Bienvenue sur votre espace Eatly",
-          });
-          navigate("/");
-        } else {
-          throw new Error("Une erreur s'est produite lors de la connexion.");
-        }
+        navigate("/");
       } else {
-        // Mode démo - simulation de connexion
-        await new Promise(resolve => setTimeout(resolve, 1000)); // Simuler un délai réseau
-        
-        if (email && password) {
-          const userProfile = {
-            id: "mock-user-id",
-            firstName: "Utilisateur",
-            lastName: "Test",
-            email: email,
-            imageUrl: "https://via.placeholder.com/150",
-          };
-          
-          setMockUser(userProfile);
-          localStorage.setItem('mockUser', JSON.stringify(userProfile));
-          localStorage.setItem('isLoggedIn', 'true');
-          
-          toast({
-            title: "Connexion réussie (Mode Démo)",
-            description: "Bienvenue sur votre espace Eatly",
-          });
-          navigate("/");
-        } else {
-          throw new Error("Veuillez remplir tous les champs");
-        }
+        throw new Error("Une erreur s'est produite lors de la connexion.");
       }
     } catch (err: any) {
       console.error("Erreur de connexion:", err);
@@ -138,40 +80,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setError(null);
       setIsLoading(true);
       
-      if (isClerkConfigured) {
-        // Utiliser Clerk si configuré
-        if (!signIn) {
-          throw new Error("Le service d'authentification n'est pas disponible");
-        }
-        
-        await signIn.authenticateWithRedirect({
-          strategy: provider,
-          redirectUrl: window.location.origin + "/auth/callback",
-          redirectUrlComplete: window.location.origin,
-        });
-      } else {
-        // Mode démo - simulation de connexion sociale
-        await new Promise(resolve => setTimeout(resolve, 1000)); // Simuler un délai réseau
-        
-        const providerName = provider.replace('oauth_', '');
-        const userProfile = {
-          id: `mock-${providerName}-user-id`,
-          firstName: "Utilisateur",
-          lastName: provider.charAt(0).toUpperCase() + provider.slice(1),
-          email: `utilisateur.${providerName}@exemple.com`,
-          imageUrl: "https://via.placeholder.com/150",
-        };
-        
-        setMockUser(userProfile);
-        localStorage.setItem('mockUser', JSON.stringify(userProfile));
-        localStorage.setItem('isLoggedIn', 'true');
-        
-        toast({
-          title: `Connexion avec ${providerName.charAt(0).toUpperCase() + providerName.slice(1)} (Mode Démo)`,
-          description: "Bienvenue sur votre espace Eatly",
-        });
-        navigate("/");
+      if (!signIn) {
+        throw new Error("Le service d'authentification n'est pas disponible");
       }
+      
+      await signIn.authenticateWithRedirect({
+        strategy: provider,
+        redirectUrl: window.location.origin + "/auth/callback",
+        redirectUrlComplete: window.location.origin,
+      });
     } catch (err: any) {
       console.error(`Erreur de connexion avec ${provider}:`, err);
       setError(err.message || `La connexion avec ${provider} a échoué.`);
@@ -190,50 +107,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setError(null);
       setIsLoading(true);
       
-      if (isClerkConfigured) {
-        // Utiliser Clerk si configuré
-        if (!signUp) {
-          throw new Error("Le service d'inscription n'est pas disponible");
-        }
-        
-        const result = await signUp.create({
-          emailAddress: email,
-          password,
-          firstName,
-          lastName,
-        });
+      if (!signUp) {
+        throw new Error("Le service d'inscription n'est pas disponible");
+      }
+      
+      const result = await signUp.create({
+        emailAddress: email,
+        password,
+        firstName,
+        lastName,
+      });
 
-        if (result.status === "complete") {
-          await setSignUpActive({ session: result.createdSessionId });
-          toast({
-            title: "Inscription réussie",
-            description: "Bienvenue sur Eatly !",
-          });
-          navigate("/");
-        } else {
-          throw new Error("Une erreur s'est produite lors de l'inscription.");
-        }
-      } else {
-        // Mode démo - simulation d'inscription
-        await new Promise(resolve => setTimeout(resolve, 1000)); // Simuler un délai réseau
-        
-        const userProfile = {
-          id: "mock-new-user-id",
-          firstName: firstName || "Nouvel",
-          lastName: lastName || "Utilisateur",
-          email: email,
-          imageUrl: "https://via.placeholder.com/150",
-        };
-        
-        setMockUser(userProfile);
-        localStorage.setItem('mockUser', JSON.stringify(userProfile));
-        localStorage.setItem('isLoggedIn', 'true');
-        
+      if (result.status === "complete") {
+        await setSignUpActive({ session: result.createdSessionId });
         toast({
-          title: "Inscription réussie (Mode Démo)",
+          title: "Inscription réussie",
           description: "Bienvenue sur Eatly !",
         });
         navigate("/");
+      } else {
+        throw new Error("Une erreur s'est produite lors de l'inscription.");
       }
     } catch (err: any) {
       console.error("Erreur d'inscription:", err);
@@ -251,15 +144,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Implémentation de déconnexion
   const handleSignOut = async () => {
     try {
-      if (isClerkConfigured) {
-        // Utiliser Clerk si configuré
-        await clerkSignOut();
-      } else {
-        // Mode démo - simulation de déconnexion
-        setMockUser(null);
-        localStorage.removeItem('mockUser');
-        localStorage.removeItem('isLoggedIn');
-      }
+      await clerkSignOut();
       navigate("/login");
       toast({
         title: "Déconnexion réussie",
@@ -276,9 +161,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const value = {
-    isAuthenticated: isClerkConfigured ? !!clerkUser : !!mockUser,
+    isAuthenticated: !!clerkUser,
     isLoading,
-    user: isClerkConfigured ? clerkUser : mockUser,
+    user: clerkUser,
     signInWithEmail,
     signInWithSocial,
     signUp: signUpWithEmailPassword,

@@ -3,20 +3,19 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import SplashScreen from '@/components/SplashScreen';
+import { useAuth } from '@/context/AuthContext';
 
 const Index = () => {
   const [showSplash, setShowSplash] = useState(true);
   const navigate = useNavigate();
+  const { isAuthenticated, isLoading } = useAuth();
 
   useEffect(() => {
-    // Vérifier si l'utilisateur est connecté
-    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-    
     // Si on n'est plus dans le splash screen et pas connecté, rediriger vers login
-    if (!showSplash && !isLoggedIn) {
+    if (!showSplash && !isAuthenticated && !isLoading) {
       navigate('/login');
     }
-  }, [showSplash, navigate]);
+  }, [showSplash, isAuthenticated, isLoading, navigate]);
 
   const handleSplashComplete = () => {
     setShowSplash(false);
@@ -26,10 +25,9 @@ const Index = () => {
     return <SplashScreen onComplete={handleSplashComplete} />;
   }
 
-  // Si l'utilisateur est connecté, afficher le contenu principal
-  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-  if (!isLoggedIn) {
-    return null; // Ne rien afficher pendant la redirection
+  // Si l'utilisateur n'est pas connecté ou chargement en cours, ne rien afficher pendant la redirection
+  if (!isAuthenticated && !isLoading) {
+    return null;
   }
 
   return (
