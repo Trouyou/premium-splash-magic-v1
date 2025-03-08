@@ -11,7 +11,7 @@ const LogoImage = () => {
     >
       <img 
         src="/lovable-uploads/9a9f2d6c-ba85-40b4-aab2-b8d6fb42dd43.png" 
-        alt="Eatly Logo avec texte" 
+        alt="Eatly Logo" 
         className="w-auto h-[220px] md:h-[260px] pot-shadow"
       />
       <motion.p
