@@ -14,9 +14,28 @@ if (!CLERK_PUBLISHABLE_KEY) {
   console.info("L'application fonctionnera en mode de démonstration limité.");
 }
 
+// Déterminer si nous sommes dans un environnement preview/iframe
+const isPreviewEnvironment = () => {
+  return typeof window !== 'undefined' && 
+         (window.location.hostname.includes('lovableproject.com') || 
+          window.top !== window.self);
+};
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY}>
+    <ClerkProvider 
+      publishableKey={CLERK_PUBLISHABLE_KEY}
+      appearance={{
+        variables: {
+          colorPrimary: '#9C1B1A',
+          colorText: '#000000',
+          colorTextSecondary: '#4A5568',
+          colorBackground: '#FFFFFF',
+        }
+      }}
+      // Nécessaire pour les environnements de prévisualisation comme Lovable
+      allowCrossSiteCookies={isPreviewEnvironment()}
+    >
       <App />
     </ClerkProvider>
   </React.StrictMode>,
