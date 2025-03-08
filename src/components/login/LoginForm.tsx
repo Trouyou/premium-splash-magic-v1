@@ -2,8 +2,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/context/AuthContext';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
@@ -11,35 +10,16 @@ const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [newsletter, setNewsletter] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState('');
-  const navigate = useNavigate();
-  const { toast } = useToast();
+  const { signInWithEmail, isLoading, error } = useAuth();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
-    setIsSubmitting(true);
-
-    // Simuler un délai de connexion
-    await new Promise(resolve => setTimeout(resolve, 1200));
-
     if (email && password) {
-      // Simuler une connexion réussie
-      localStorage.setItem('isLoggedIn', 'true');
+      await signInWithEmail(email, password);
       if (rememberMe) {
         localStorage.setItem('rememberedEmail', email);
       }
-      toast({
-        title: "Connexion réussie",
-        description: "Bienvenue sur votre espace Eatly",
-      });
-      navigate('/');
-    } else {
-      setError('Une erreur s\'est produite pendant la connexion. Merci de vérifier vos identifiants.');
     }
-
-    setIsSubmitting(false);
   };
 
   return (
@@ -111,18 +91,18 @@ const LoginForm = () => {
 
         <button
           type="submit"
-          disabled={isSubmitting}
+          disabled={isLoading}
           className={`w-full py-3 px-4 bg-eatly-primary text-white rounded-lg font-avantgarde tracking-wide transition-all ${
-            isSubmitting ? "opacity-80" : "hover:bg-eatly-secondary"
+            isLoading ? "opacity-80" : "hover:bg-eatly-secondary"
           } flex justify-center items-center`}
         >
-          {isSubmitting ? (
+          {isLoading ? (
             <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
           ) : null}
-          {isSubmitting ? "Connexion en cours..." : "Se connecter"}
+          {isLoading ? "Connexion en cours..." : "Se connecter"}
         </button>
 
         <div className="flex items-center mt-4">

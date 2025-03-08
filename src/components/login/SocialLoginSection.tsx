@@ -1,9 +1,11 @@
 
 import { useState } from 'react';
 import SocialButton from './SocialButton';
+import { useAuth } from '@/context/AuthContext';
 
 const SocialLoginSection = () => {
   const [error, setError] = useState('');
+  const { signInWithSocial, isLoading } = useAuth();
 
   // Composants SVG pour les logos sociaux
   const AppleLogo = () => (
@@ -27,11 +29,40 @@ const SocialLoginSection = () => {
     </svg>
   );
 
+  const handleSocialLogin = async (provider: 'oauth_google' | 'oauth_facebook' | 'oauth_apple') => {
+    setError('');
+    try {
+      await signInWithSocial(provider);
+    } catch (err: any) {
+      setError(err.message || `Connexion avec ${provider.replace('oauth_', '')} non disponible pour le moment`);
+    }
+  };
+
   return (
     <div className="space-y-3 mb-6">
-      <SocialButton icon={<AppleLogo />} provider="Apple" onClick={() => setError('Connexion avec Apple non disponible pour le moment')} />
-      <SocialButton icon={<GoogleLogo />} provider="Google" onClick={() => setError('Connexion avec Google non disponible pour le moment')} />
-      <SocialButton icon={<FacebookLogo />} provider="Facebook" onClick={() => setError('Connexion avec Facebook non disponible pour le moment')} />
+      <SocialButton 
+        icon={<AppleLogo />} 
+        provider="Apple" 
+        onClick={() => handleSocialLogin('oauth_apple')} 
+        disabled={isLoading}
+      />
+      <SocialButton 
+        icon={<GoogleLogo />} 
+        provider="Google" 
+        onClick={() => handleSocialLogin('oauth_google')} 
+        disabled={isLoading}
+      />
+      <SocialButton 
+        icon={<FacebookLogo />} 
+        provider="Facebook" 
+        onClick={() => handleSocialLogin('oauth_facebook')} 
+        disabled={isLoading}
+      />
+      {error && (
+        <div className="text-eatly-primary text-sm mt-2">
+          {error}
+        </div>
+      )}
     </div>
   );
 };
