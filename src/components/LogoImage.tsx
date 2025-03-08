@@ -10,8 +10,8 @@ const LogoImage = () => {
       className="w-full flex justify-center items-center py-16"
     >
       <img 
-        src="/lovable-uploads/4304d601-682c-472c-ace9-1149b80c6b24.png" 
-        alt="Eatly Marmite Logo" 
+        src="/lovable-uploads/7257e899-3ccd-4193-ba39-8cac6845527a.png" 
+        alt="Eatly Cocotte Rouge Logo" 
         className="w-auto h-[280px] md:h-[320px] pot-shadow"
       />
     </motion.div>
