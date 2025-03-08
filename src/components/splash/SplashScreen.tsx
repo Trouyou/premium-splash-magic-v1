@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import LogoImage from '../LogoImage';
@@ -22,8 +23,14 @@ const LOGO_ANIMATION = {
 
 const SplashScreen: React.FC<SplashScreenProps> = ({ duration = 3000, onComplete }) => {
   const [isVisible, setIsVisible] = useState(true);
+  const [logoLoaded, setLogoLoaded] = useState(false);
 
   useEffect(() => {
+    // Preload the logo image to avoid flashes
+    const img = new Image();
+    img.src = '/lovable-uploads/Logo_Eatly_Original_TraitTransparent_1.png';
+    img.onload = () => setLogoLoaded(true);
+    
     const timer = setTimeout(() => {
       setIsVisible(false);
       onComplete?.();
@@ -44,7 +51,11 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ duration = 3000, onComplete
               {...LOGO_ANIMATION}
               className="relative z-10"
             >
-              <LogoImage variant="splash" className="w-full h-auto" />
+              <LogoImage 
+                variant="splash" 
+                className="w-full h-auto"
+                lovableId="76f1327b-1b0e-40de-8959-98f93dad884d" 
+              />
             </motion.div>
 
             {/* Effet de lumière radiale */}
@@ -59,7 +70,12 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ duration = 3000, onComplete
               transition={{ duration: 1.5, ease: "easeOut" }}
               className="absolute inset-0 blur-xl"
             >
-              <LogoImage variant="splash" className="w-full h-auto" />
+              <div className="w-full h-auto">
+                {/* Shadow version of the logo */}
+                <div className="w-full aspect-square relative">
+                  <div className="absolute inset-0 bg-eatly-primary/10 rounded-full filter blur-xl" />
+                </div>
+              </div>
             </motion.div>
 
             {/* Particules subtiles */}

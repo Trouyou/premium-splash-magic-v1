@@ -15,21 +15,43 @@ interface LogoImageProps {
 const LogoImage: FC<LogoImageProps> = ({ className = '', variant = 'default', lovableId }) => {
   const [imageError, setImageError] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
   
+  // Get the logo source with the specified ID or variant
   const logoSrc = useLogoSrc(lovableId, variant);
+  const fallbackLogoSrc = useLogoSrc(undefined, variant); // Default fallback if ID-specific logo fails
+
+  // Reset error state when source changes
+  useEffect(() => {
+    setImageError(false);
+    setIsLoaded(false);
+    setRetryCount(0);
+  }, [logoSrc]);
 
   const handleImageError = useCallback(() => {
-    console.error('Erreur de chargement du logo');
+    console.error(`Erreur de chargement du logo: ${logoSrc}`);
+    
+    // Try one more time with a short delay (network glitch recovery)
+    if (retryCount < 1) {
+      setTimeout(() => {
+        setRetryCount(prev => prev + 1);
+        // Force re-render with the same source to retry
+        setIsLoaded(false);
+      }, 500);
+      return;
+    }
+    
+    // If we've already retried, mark as error
     setImageError(true);
-  }, []);
+  }, [logoSrc, retryCount]);
 
   const handleImageLoad = useCallback(() => {
     setIsLoaded(true);
   }, []);
 
+  // Preload the image
   useEffect(() => {
-    setIsLoaded(false);
-    const img = document.createElement('img');
+    const img = new Image();
     img.src = logoSrc;
     
     if (img.complete) {
@@ -43,7 +65,7 @@ const LogoImage: FC<LogoImageProps> = ({ className = '', variant = 'default', lo
       img.onload = null;
       img.onerror = null;
     };
-  }, [logoSrc, handleImageLoad, handleImageError]);
+  }, [logoSrc, handleImageLoad, handleImageError, retryCount]);
 
   const getContainerClasses = useCallback(() => {
     switch (variant) {
@@ -65,7 +87,7 @@ const LogoImage: FC<LogoImageProps> = ({ className = '', variant = 'default', lo
     >
       <AnimatePresence mode="wait">
         {imageError ? (
-          <LogoError />
+          <LogoError variant={variant} />
         ) : (
           <LogoImageContent
             logoSrc={logoSrc}
