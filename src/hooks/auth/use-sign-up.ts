@@ -1,13 +1,13 @@
 
 import { useState } from 'react';
-import { useSignUp } from '@clerk/clerk-react';
+import { useSignUp as useClerkSignUp } from '@clerk/clerk-react';
 import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
 
 export const useSignUp = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { signUp, setActive } = useSignUp();
+  const { signUp, setActive } = useClerkSignUp();
   const { toast } = useToast();
   const navigate = useNavigate();
 
