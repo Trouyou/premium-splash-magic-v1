@@ -9,7 +9,7 @@ const AnimatedBackground = () => {
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }}
       style={{
-        background: '#FFFFFF' // Fond blanc uni au lieu du dégradé
+        background: 'linear-gradient(to bottom right, #EDE6D6, #D11B19)'
       }}
     />
   );
