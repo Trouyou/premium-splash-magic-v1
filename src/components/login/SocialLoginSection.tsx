@@ -2,17 +2,12 @@
 import { useState, useEffect } from 'react';
 import SocialButton from './SocialButton';
 import { useAuth } from '@/context/AuthContext';
+import { isPreviewEnvironment } from '@/utils/auth-simulator';
+import { SimulatedSocialButton } from '@/components/auth/AuthSimulator';
 
 const SocialLoginSection = () => {
   const [error, setError] = useState('');
   const { signInWithSocial, isLoading } = useAuth();
-  
-  // Déterminer si nous sommes dans un environnement preview
-  const isPreviewEnvironment = () => {
-    return typeof window !== 'undefined' && 
-           (window.location.hostname.includes('lovableproject.com') || 
-            window.top !== window.self);
-  };
   
   // Effet pour le débogage dans l'environnement Lovable
   useEffect(() => {
@@ -63,26 +58,61 @@ const SocialLoginSection = () => {
     }
   };
 
+  // Détermine s'il faut utiliser le mode simulation ou réel
+  const inPreviewMode = isPreviewEnvironment();
+
   return (
     <div className="space-y-3 mb-6">
-      <SocialButton 
-        icon={<AppleLogo />} 
-        provider="Apple" 
-        onClick={() => handleSocialLogin('oauth_apple')} 
-        disabled={isLoading}
-      />
-      <SocialButton 
-        icon={<GoogleLogo />} 
-        provider="Google" 
-        onClick={() => handleSocialLogin('oauth_google')} 
-        disabled={isLoading}
-      />
-      <SocialButton 
-        icon={<FacebookLogo />} 
-        provider="Facebook" 
-        onClick={() => handleSocialLogin('oauth_facebook')} 
-        disabled={isLoading}
-      />
+      {inPreviewMode ? (
+        // Mode simulation pour Lovable
+        <>
+          <SimulatedSocialButton 
+            icon={<AppleLogo />} 
+            provider="oauth_apple"
+            providerName="Apple"
+            disabled={isLoading}
+          />
+          
+          <SimulatedSocialButton 
+            icon={<GoogleLogo />} 
+            provider="oauth_google"
+            providerName="Google"
+            disabled={isLoading}
+          />
+          
+          <SimulatedSocialButton 
+            icon={<FacebookLogo />} 
+            provider="oauth_facebook"
+            providerName="Facebook"
+            disabled={isLoading}
+          />
+        </>
+      ) : (
+        // Mode réel pour la production
+        <>
+          <SocialButton 
+            icon={<AppleLogo />} 
+            provider="Apple" 
+            onClick={() => handleSocialLogin('oauth_apple')} 
+            disabled={isLoading}
+          />
+          
+          <SocialButton 
+            icon={<GoogleLogo />} 
+            provider="Google" 
+            onClick={() => handleSocialLogin('oauth_google')} 
+            disabled={isLoading}
+          />
+          
+          <SocialButton 
+            icon={<FacebookLogo />} 
+            provider="Facebook" 
+            onClick={() => handleSocialLogin('oauth_facebook')} 
+            disabled={isLoading}
+          />
+        </>
+      )}
+      
       {error && (
         <div className="text-eatly-primary text-sm mt-2">
           {error}

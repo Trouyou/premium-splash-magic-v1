@@ -3,6 +3,9 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
+import { isPreviewEnvironment } from '@/utils/auth-simulator';
+import { SimulatedEmailAuth } from '@/components/auth/AuthSimulator';
+import { PreviewModeBanner } from '@/components/auth/AuthSimulator';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
@@ -11,6 +14,9 @@ const LoginForm = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [newsletter, setNewsletter] = useState(false);
   const { signInWithEmail, isLoading, error } = useAuth();
+
+  // Déterminer si nous sommes dans un environnement preview/iframe
+  const inPreviewMode = isPreviewEnvironment();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,6 +27,30 @@ const LoginForm = () => {
       }
     }
   };
+
+  // Si nous sommes en mode preview, utiliser SimulatedEmailAuth
+  if (inPreviewMode) {
+    return (
+      <>
+        <PreviewModeBanner />
+        
+        <SimulatedEmailAuth />
+        
+        <div className="flex items-center mt-4">
+          <input
+            type="checkbox"
+            id="newsletter"
+            checked={newsletter}
+            onChange={() => setNewsletter(!newsletter)}
+            className="h-4 w-4 text-eatly-primary border-gray-300 rounded focus:ring-eatly-primary"
+          />
+          <label htmlFor="newsletter" className="ml-2 block text-sm text-gray-700">
+            Oui, je souhaite recevoir des offres personnalisées et des conseils nutritionnels.
+          </label>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>

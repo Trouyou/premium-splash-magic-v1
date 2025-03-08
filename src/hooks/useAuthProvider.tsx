@@ -3,13 +3,14 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { useUser, useSignIn, useSignUp, useClerk } from '@clerk/clerk-react';
-
-// Utility function to check if we're in a preview environment
-export const isPreviewEnvironment = () => {
-  return typeof window !== 'undefined' && 
-         (window.location.hostname.includes('lovableproject.com') || 
-          window.top !== window.self);
-};
+import { 
+  isPreviewEnvironment, 
+  simulateEmailSignIn, 
+  simulateSignUp,
+  simulateSignOut,
+  isAuthenticated as isSimulatedAuthenticated,
+  getAuthenticatedUser
+} from '@/utils/auth-simulator';
 
 export const useAuthProvider = () => {
   const navigate = useNavigate();
@@ -23,23 +24,27 @@ export const useAuthProvider = () => {
   const { signUp, setActive: setSignUpActive } = useSignUp();
   const { signOut: clerkSignOut } = useClerk();
 
+  // Check if we're in preview environment
+  const inPreviewMode = isPreviewEnvironment();
+  
   // Log for debugging in the Lovable environment
   useEffect(() => {
-    if (isPreviewEnvironment()) {
+    if (inPreviewMode) {
       console.log('Environnement Lovable détecté. Configuration Clerk:', {
         origin: window.location.origin,
         publishableKey: !!import.meta.env.VITE_CLERK_PUBLISHABLE_KEY,
-        hostname: window.location.hostname
+        hostname: window.location.hostname,
+        usingSimulation: true
       });
     }
   }, []);
 
-  // Update loading state when Clerk is ready
+  // Update loading state when Clerk is ready or if we're in preview mode
   useEffect(() => {
-    if (clerkLoaded) {
+    if (inPreviewMode || clerkLoaded) {
       setIsLoading(false);
     }
-  }, [clerkLoaded]);
+  }, [clerkLoaded, inPreviewMode]);
 
   // Email sign-in implementation
   const signInWithEmail = async (email: string, password: string) => {
@@ -47,6 +52,18 @@ export const useAuthProvider = () => {
       setError(null);
       setIsLoading(true);
       
+      // Si nous sommes en mode prévisualisation, utiliser la simulation
+      if (inPreviewMode) {
+        const user = await simulateEmailSignIn(email, password);
+        toast({
+          title: "Connexion réussie",
+          description: `Bienvenue ${user.firstName} (simulation)`,
+        });
+        navigate("/");
+        return;
+      }
+      
+      // Sinon, utiliser l'authentification Clerk
       if (!signIn) {
         throw new Error("Le service d'authentification n'est pas disponible");
       }
@@ -85,12 +102,18 @@ export const useAuthProvider = () => {
       setError(null);
       setIsLoading(true);
       
+      // Si nous sommes en mode prévisualisation, la redirection sera gérée par SocialLoginSection
+      if (inPreviewMode) {
+        console.log(`[AUTH PROVIDER] Connexion sociale gérée par le simulateur pour ${provider}`);
+        return;
+      }
+      
       if (!signIn) {
         throw new Error("Le service d'authentification n'est pas disponible");
       }
       
       // Debug log for Lovable environment
-      if (isPreviewEnvironment()) {
+      if (inPreviewMode) {
         console.log(`Tentative de connexion avec ${provider}:`, {
           redirectUrl: window.location.origin + "/auth/callback",
           redirectUrlComplete: window.location.origin,
@@ -120,6 +143,17 @@ export const useAuthProvider = () => {
     try {
       setError(null);
       setIsLoading(true);
+      
+      // Si nous sommes en mode prévisualisation, utiliser la simulation
+      if (inPreviewMode) {
+        const user = await simulateSignUp(email, password, firstName, lastName);
+        toast({
+          title: "Inscription réussie",
+          description: `Bienvenue ${user.firstName} (simulation)`,
+        });
+        navigate("/");
+        return;
+      }
       
       if (!signUp) {
         throw new Error("Le service d'inscription n'est pas disponible");
@@ -158,6 +192,18 @@ export const useAuthProvider = () => {
   // Sign-out implementation
   const handleSignOut = async () => {
     try {
+      // Si nous sommes en mode prévisualisation, utiliser la simulation
+      if (inPreviewMode) {
+        simulateSignOut(() => {
+          navigate("/login");
+          toast({
+            title: "Déconnexion réussie",
+            description: "À bientôt ! (simulation)",
+          });
+        });
+        return;
+      }
+      
       await clerkSignOut();
       navigate("/login");
       toast({
@@ -174,10 +220,20 @@ export const useAuthProvider = () => {
     }
   };
 
+  // Déterminer si l'utilisateur est authentifié (réel ou simulé)
+  const isUserAuthenticated = inPreviewMode 
+    ? isSimulatedAuthenticated() 
+    : !!clerkUser;
+
+  // Obtenir l'utilisateur (réel ou simulé)
+  const currentUser = inPreviewMode 
+    ? getAuthenticatedUser() 
+    : clerkUser;
+
   return {
-    isAuthenticated: !!clerkUser,
+    isAuthenticated: isUserAuthenticated,
     isLoading,
-    user: clerkUser,
+    user: currentUser,
     signInWithEmail,
     signInWithSocial,
     signUp: signUpWithEmailPassword,
