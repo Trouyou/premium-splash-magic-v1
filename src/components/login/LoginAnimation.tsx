@@ -1,3 +1,4 @@
+
 import { motion } from 'framer-motion';
 import LogoImage from '../LogoImage';
 import AnimatedBackground from './AnimatedBackground';
@@ -11,18 +12,30 @@ const LoginAnimation = () => {
       {/* Background with gradient */}
       <AnimatedBackground />
 
-      {/* Logo - Ajustement de la taille via props ou style */}
+      {/* Logo avec meilleure résolution et taille */}
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.8, delay: 0.3 }}
-        className="mb-4 relative z-10" // Réduit la marge inférieure de mb-8 à mb-4
-        style={{ maxWidth: '240px' }} // Limite la largeur maximale à 240px
+        animate={{ 
+          opacity: 1, 
+          scale: 1,
+          filter: "drop-shadow(0px 15px 30px rgba(209, 27, 25, 0.2))"
+        }}
+        whileHover={{ 
+          scale: 1.03, 
+          filter: "drop-shadow(0px 20px 40px rgba(209, 27, 25, 0.25))"
+        }}
+        transition={{ 
+          duration: 0.8, 
+          delay: 0.3,
+          scale: {
+            type: "spring",
+            stiffness: 300,
+            damping: 20
+          }
+        }}
+        className="mb-6 relative z-10 w-full max-w-[260px]"
       >
-        {/* Vous pouvez soit créer un wrapper autour de LogoImage */}
-        <div className="transform scale-90"> {/* Réduit la taille à 90% */}
-          <LogoImage />
-        </div>
+        <LogoImage className="transform-gpu" />
       </motion.div>
 
       {/* Main heading with transition effect */}

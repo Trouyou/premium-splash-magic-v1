@@ -1,3 +1,4 @@
+
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import LogoImage from './LogoImage';
@@ -70,16 +71,16 @@ const SplashScreen = ({ onComplete, duration = 3000 }: SplashScreenProps) => {
             style={{ mixBlendMode: 'soft-light' }}
           />
 
-          {/* Container du logo avec effet de profondeur */}
+          {/* Container du logo avec effet de profondeur amélioré */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ 
               opacity: 1, 
               y: 0,
               filter: [
-                'drop-shadow(0px 20px 40px rgba(209, 27, 25, 0.15))',
-                'drop-shadow(0px 25px 50px rgba(209, 27, 25, 0.2))',
-                'drop-shadow(0px 20px 40px rgba(209, 27, 25, 0.15))'
+                'drop-shadow(0px 20px 40px rgba(209, 27, 25, 0.2))',
+                'drop-shadow(0px 30px 60px rgba(209, 27, 25, 0.25))',
+                'drop-shadow(0px 20px 40px rgba(209, 27, 25, 0.2))'
               ]
             }}
             transition={{
@@ -91,9 +92,12 @@ const SplashScreen = ({ onComplete, duration = 3000 }: SplashScreenProps) => {
                 ease: "easeInOut"
               }
             }}
-            className="relative z-10 w-full max-w-[500px] aspect-square p-8"
+            className="relative z-10 w-full max-w-[550px] aspect-square p-8"
           >
-            <LogoImage variant="splash" />
+            <LogoImage 
+              variant="splash" 
+              className="transform-gpu"
+            />
           </motion.div>
 
           {/* Effet de particules subtiles */}
