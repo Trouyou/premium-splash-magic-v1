@@ -53,7 +53,7 @@ const PrivacyModal = ({ isVisible, onAccept, onRefuse }: PrivacyModalProps) => {
             )}
           >
             <img 
-              src="/lovable-uploads/546dd7a2-1435-4836-b5aa-4a15b189d947.png" 
+              src="/lovable-uploads/76f1327b-1b0e-40de-8959-98f93dad884d.png" 
               alt="Logo Eatly" 
               className="w-full h-auto"
               onLoad={() => setImageLoaded(true)}
