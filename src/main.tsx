@@ -5,8 +5,8 @@ import { ClerkProvider } from '@clerk/clerk-react';
 import App from './App';
 import './index.css';
 
-// Utiliser la clé publique de Clerk fournie
-const CLERK_PUBLISHABLE_KEY = "pk_test_aW5mb3JtZWQtaGFtc3Rlci04LmNsZXJrLmFjY291bnRzLmRldiQ";
+// Utiliser la clé publique de Clerk depuis les variables d'environnement
+const CLERK_PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || "pk_test_aW5mb3JtZWQtaGFtc3Rlci04LmNsZXJrLmFjY291bnRzLmRldiQ";
 
 // Vérifier que la clé est définie
 if (!CLERK_PUBLISHABLE_KEY) {
