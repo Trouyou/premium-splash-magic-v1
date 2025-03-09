@@ -1,4 +1,3 @@
-
 /**
  * Utilitaire pour empêcher l'interface de geler lors de validations intensives
  */
@@ -10,7 +9,7 @@ export const setupAntiFreezeProtection = () => {
   }
   
   // Marquer comme installé
-  (window as any).antiFreezeProtectionInstalled = true;
+  window.antiFreezeProtectionInstalled = true;
   
   // Observer les événements de soumission de formulaires
   document.addEventListener('submit', function(event) {
