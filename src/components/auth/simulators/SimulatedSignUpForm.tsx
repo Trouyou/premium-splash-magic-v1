@@ -1,11 +1,12 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   isPreviewEnvironment, 
   simulateSignUp
 } from '@/utils/auth-simulator';
 import { useToast } from '@/hooks/use-toast';
+import { translateErrorMessage, setupFormValidation, defaultErrorMessages, getSignupFormError } from '@/utils/error-translator';
 
 export const SimulatedSignUpForm = ({ 
   onSuccess,
@@ -16,19 +17,38 @@ export const SimulatedSignUpForm = ({
 }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [acceptTerms, setAcceptTerms] = useState(false);
+  const [newsletter, setNewsletter] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
+  
+  useEffect(() => {
+    setupFormValidation();
+  }, []);
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isPreviewEnvironment()) return;
     
-    setError(null);
+    // Valider le formulaire
+    const validationError = getSignupFormError({
+      password,
+      confirmPassword,
+      acceptTerms
+    });
+    
+    if (validationError) {
+      setFormError(validationError);
+      return;
+    }
+    
+    setFormError(null);
     setIsLoading(true);
     
     try {
@@ -46,11 +66,12 @@ export const SimulatedSignUpForm = ({
         navigate("/");
       }
     } catch (error: any) {
-      setError(error.message || "Erreur lors de l'inscription");
+      const translatedError = translateErrorMessage(error.message || "Erreur lors de l'inscription");
+      setFormError(translatedError);
       toast({
         variant: "destructive",
         title: "Échec de l'inscription",
-        description: error.message || "Veuillez vérifier vos informations et réessayer",
+        description: translatedError,
       });
     } finally {
       setIsLoading(false);
@@ -58,10 +79,11 @@ export const SimulatedSignUpForm = ({
   };
   
   return (
-    <form onSubmit={handleSubmit} className={className}>
-      {error && (
-        <div className="bg-red-50 text-red-700 p-3 rounded-md mb-4 text-sm">
-          {error}
+    <form onSubmit={handleSubmit} className={className} noValidate>
+      {formError && (
+        <div className="bg-red-50 text-eatly-primary p-3 rounded-md mb-4 text-sm flex items-start">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 mt-0.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+          {formError}
         </div>
       )}
       
@@ -73,6 +95,16 @@ export const SimulatedSignUpForm = ({
             onChange={(e) => setFirstName(e.target.value)}
             placeholder="Prénom"
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-eatly-primary/20 focus:border-eatly-primary outline-none transition-all"
+            required
+            onInvalid={(e) => {
+              e.preventDefault();
+              const input = e.target as HTMLInputElement;
+              input.setCustomValidity(defaultErrorMessages.required);
+            }}
+            onInput={(e) => {
+              const input = e.target as HTMLInputElement;
+              input.setCustomValidity('');
+            }}
           />
           
           <input
@@ -81,6 +113,16 @@ export const SimulatedSignUpForm = ({
             onChange={(e) => setLastName(e.target.value)}
             placeholder="Nom"
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-eatly-primary/20 focus:border-eatly-primary outline-none transition-all"
+            required
+            onInvalid={(e) => {
+              e.preventDefault();
+              const input = e.target as HTMLInputElement;
+              input.setCustomValidity(defaultErrorMessages.required);
+            }}
+            onInput={(e) => {
+              const input = e.target as HTMLInputElement;
+              input.setCustomValidity('');
+            }}
           />
         </div>
         
@@ -92,6 +134,15 @@ export const SimulatedSignUpForm = ({
             placeholder="Email"
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-eatly-primary/20 focus:border-eatly-primary outline-none transition-all"
             required
+            onInvalid={(e) => {
+              e.preventDefault();
+              const input = e.target as HTMLInputElement;
+              input.setCustomValidity(defaultErrorMessages.email);
+            }}
+            onInput={(e) => {
+              const input = e.target as HTMLInputElement;
+              input.setCustomValidity('');
+            }}
           />
         </div>
         
@@ -103,6 +154,15 @@ export const SimulatedSignUpForm = ({
             placeholder="Mot de passe"
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-eatly-primary/20 focus:border-eatly-primary outline-none transition-all"
             required
+            onInvalid={(e) => {
+              e.preventDefault();
+              const input = e.target as HTMLInputElement;
+              input.setCustomValidity(defaultErrorMessages.password);
+            }}
+            onInput={(e) => {
+              const input = e.target as HTMLInputElement;
+              input.setCustomValidity('');
+            }}
           />
           <button
             type="button"
@@ -121,6 +181,84 @@ export const SimulatedSignUpForm = ({
               </svg>
             )}
           </button>
+        </div>
+        
+        <div className="relative">
+          <input
+            type={showPassword ? "text" : "password"}
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            placeholder="Confirmer le mot de passe"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-eatly-primary/20 focus:border-eatly-primary outline-none transition-all"
+            required
+            onInvalid={(e) => {
+              e.preventDefault();
+              const input = e.target as HTMLInputElement;
+              input.setCustomValidity(defaultErrorMessages.passwordMatch);
+            }}
+            onInput={(e) => {
+              const input = e.target as HTMLInputElement;
+              input.setCustomValidity('');
+            }}
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+          >
+            {showPassword ? (
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                <line x1="1" y1="1" x2="23" y2="23"></line>
+              </svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            )}
+          </button>
+        </div>
+        
+        <div className="terms-checkbox-container flex items-start my-5 w-full">
+          <input
+            type="checkbox"
+            id="terms-accept"
+            checked={acceptTerms}
+            onChange={() => setAcceptTerms(!acceptTerms)}
+            className="mt-[3px] mr-[10px] min-w-[18px] h-[18px] text-eatly-primary border-gray-300 rounded focus:ring-eatly-primary flex-shrink-0"
+            required
+            onInvalid={(e) => {
+              e.preventDefault();
+              const input = e.target as HTMLInputElement;
+              input.setCustomValidity(defaultErrorMessages.terms);
+            }}
+            onInput={(e) => {
+              const input = e.target as HTMLInputElement;
+              input.setCustomValidity('');
+            }}
+          />
+          <label htmlFor="terms-accept" className="font-avantgarde text-sm leading-relaxed text-[#333333] flex-1 text-left">
+            J'accepte les <a href="#terms" className="text-eatly-primary hover:underline font-medium">conditions d'utilisation</a> et la <a href="#privacy" className="text-eatly-primary hover:underline font-medium">politique de confidentialité</a>
+          </label>
+        </div>
+        
+        {/* Ajout de la case newsletter */}
+        <div className="newsletter-container flex items-start my-5 w-full">
+          <input
+            type="checkbox"
+            id="newsletter-signup"
+            name="newsletter-signup"
+            checked={newsletter}
+            onChange={() => setNewsletter(!newsletter)}
+            className="newsletter-checkbox mt-[3px] mr-[10px] min-w-[18px] h-[18px] text-eatly-primary border-gray-300 rounded focus:ring-eatly-primary flex-shrink-0 cursor-pointer"
+          />
+          <label
+            htmlFor="newsletter-signup"
+            className="newsletter-text font-avantgarde text-sm leading-relaxed text-[#333333] flex-1 text-left cursor-pointer"
+          >
+            Oui, je souhaite recevoir des offres personnalisées et des conseils nutritionnels
+          </label>
         </div>
         
         <button

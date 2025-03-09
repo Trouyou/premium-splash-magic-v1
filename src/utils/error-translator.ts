@@ -1,6 +1,6 @@
 
 /**
- * Utility pour traduire les messages d'erreur d'authentification et de validation de formulaire
+ * Utilitaire pour traduire les messages d'erreur d'authentification et de validation de formulaire
  */
 
 // Dictionnaire de traduction des messages d'erreur
@@ -18,6 +18,8 @@ const errorDictionary = {
   'not found': 'Compte non trouvé. Veuillez vérifier vos informations ou créer un compte.',
   'does not exist': 'Compte non trouvé. Veuillez vérifier vos informations ou créer un compte.',
   'invalid email': 'Adresse email invalide.',
+  'contains 6 characters': 'Le mot de passe doit contenir au moins 6 caractères.',
+  'at least 6 characters': 'Le mot de passe doit contenir au moins 6 caractères.',
   
   // Messages d'erreur de formulaire
   'Please fill out this field': 'Ce champ est requis',
@@ -29,12 +31,23 @@ const errorDictionary = {
   'Email already registered': 'Cette adresse email est déjà enregistrée',
   'Please accept the terms': 'Veuillez accepter les conditions d\'utilisation',
   'Invalid input': 'Saisie invalide',
-  'Required field': 'Champ obligatoire'
+  'Required field': 'Champ obligatoire',
+  'L\'email et le mot de passe sont requis': 'L\'email et le mot de passe sont requis',
+  'Le mot de passe doit contenir au moins 6 caractères': 'Le mot de passe doit contenir au moins 6 caractères',
+  'Erreur de connexion simulée': 'Erreur de connexion simulée',
+  'Erreur lors de la connexion': 'Erreur lors de la connexion',
+  'Erreur d\'inscription simulée': 'Erreur d\'inscription simulée',
+  'Erreur lors de l\'inscription': 'Erreur lors de l\'inscription'
 };
 
 // Traduction des messages d'erreur
 export const translateErrorMessage = (errorMsg: string) => {
   if (!errorMsg) return 'Une erreur inattendue s\'est produite. Veuillez réessayer.';
+  
+  // Si le message est déjà en français, le retourner tel quel
+  if (Object.values(errorDictionary).includes(errorMsg)) {
+    return errorMsg;
+  }
   
   // Parcourir le dictionnaire pour trouver une correspondance
   for (const [englishMsg, frenchMsg] of Object.entries(errorDictionary)) {
@@ -44,6 +57,7 @@ export const translateErrorMessage = (errorMsg: string) => {
   }
   
   // Si aucune correspondance n'est trouvée, retourner le message original
+  console.warn('Message d\'erreur non traduit:', errorMsg);
   return errorMsg;
 };
 
@@ -70,16 +84,20 @@ export const getSignupFormError = (formState: {
 
 // Personnaliser les messages d'erreur de validation HTML5
 export const setupFormValidation = () => {
-  // Cette fonction sera appelée au chargement des composants
-  document.addEventListener('DOMContentLoaded', () => {
+  console.log("Initialisation de la validation de formulaire personnalisée");
+  
+  // Fonction pour appliquer les gestionnaires d'événements aux éléments de formulaire
+  const applyValidationHandlers = () => {
     const inputs = document.querySelectorAll('input, select, textarea');
+    console.log(`Ajout des gestionnaires de validation pour ${inputs.length} éléments`);
     
     inputs.forEach(input => {
       // S'assurer que c'est un élément input
-      if (input instanceof HTMLInputElement) {
+      if (input instanceof HTMLInputElement || input instanceof HTMLSelectElement || input instanceof HTMLTextAreaElement) {
         // Désactiver la validation native et ajouter la nôtre
         input.addEventListener('invalid', (e) => {
           e.preventDefault();
+          console.log(`Validation de l'élément: ${input.name || input.id}`);
           
           // Déterminer le message d'erreur approprié
           let message = 'Ce champ est requis';
@@ -104,6 +122,7 @@ export const setupFormValidation = () => {
             input.parentElement?.appendChild(errorElement);
           }
           errorElement.textContent = message;
+          console.log(`Message d'erreur ajouté: ${message}`);
         });
         
         // Réinitialiser l'erreur lors de la modification
@@ -117,7 +136,84 @@ export const setupFormValidation = () => {
         });
       }
     });
-  });
+  };
+  
+  // Appliquer les gestionnaires immédiatement pour les éléments existants
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    applyValidationHandlers();
+  } else {
+    // Sinon, attendre que le DOM soit chargé
+    document.addEventListener('DOMContentLoaded', applyValidationHandlers);
+  }
+  
+  // Observer les changements DOM pour intercepter les nouveaux éléments
+  if (typeof MutationObserver !== 'undefined') {
+    const observer = new MutationObserver((mutations) => {
+      let shouldApply = false;
+      
+      mutations.forEach(mutation => {
+        if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+          mutation.addedNodes.forEach(node => {
+            if (node.nodeType === 1) {
+              // Vérifier si le nœud ajouté contient des éléments de formulaire
+              if (
+                (node as Element).querySelectorAll &&
+                (node as Element).querySelectorAll('input, select, textarea').length > 0
+              ) {
+                shouldApply = true;
+              }
+            }
+          });
+        }
+      });
+      
+      if (shouldApply) {
+        console.log("Nouveaux éléments de formulaire détectés, application de la validation");
+        applyValidationHandlers();
+      }
+    });
+    
+    // Observer tout le document
+    observer.observe(document.body, { 
+      childList: true, 
+      subtree: true 
+    });
+    
+    console.log("Observateur MutationObserver configuré pour les nouveaux éléments de formulaire");
+  } else {
+    console.warn("MutationObserver n'est pas supporté dans ce navigateur");
+  }
+  
+  // Ajouter des styles CSS pour les erreurs
+  const style = document.createElement('style');
+  style.textContent = `
+    .input-error {
+      border: 1px solid #D11B19 !important;
+      background-color: rgba(209, 27, 25, 0.05) !important;
+      transition: all 0.3s ease !important;
+    }
+    
+    .form-error-message {
+      color: #D11B19 !important;
+      font-size: 12px !important;
+      margin-top: 4px !important;
+      font-family: 'AvantGarde Bk BT', sans-serif !important;
+      animation: fadeInError 0.3s ease !important;
+      display: block !important;
+    }
+    
+    @keyframes fadeInError {
+      from { opacity: 0; transform: translateY(-5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  `;
+  
+  // Ajouter les styles au head s'ils n'existent pas déjà
+  if (!document.querySelector('style[data-error-styles]')) {
+    style.setAttribute('data-error-styles', 'true');
+    document.head.appendChild(style);
+    console.log("Styles CSS pour les erreurs ajoutés au document");
+  }
 };
 
 // Exporter les messages par défaut pour réutilisation

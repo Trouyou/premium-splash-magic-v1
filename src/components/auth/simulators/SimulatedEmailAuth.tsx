@@ -1,11 +1,12 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   isPreviewEnvironment, 
   simulateEmailSignIn
 } from '@/utils/auth-simulator';
 import { useToast } from '@/hooks/use-toast';
+import { translateErrorMessage, setupFormValidation, defaultErrorMessages } from '@/utils/error-translator';
 
 export const SimulatedEmailAuth = ({ 
   onSuccess,
@@ -21,6 +22,10 @@ export const SimulatedEmailAuth = ({
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
+  
+  useEffect(() => {
+    setupFormValidation();
+  }, []);
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,11 +49,12 @@ export const SimulatedEmailAuth = ({
         navigate("/");
       }
     } catch (error: any) {
-      setError(error.message || "Erreur lors de la connexion");
+      const translatedError = translateErrorMessage(error.message || "Erreur lors de la connexion");
+      setError(translatedError);
       toast({
         variant: "destructive",
         title: "Échec de la connexion",
-        description: error.message || "Veuillez vérifier vos identifiants et réessayer",
+        description: translatedError,
       });
     } finally {
       setIsLoading(false);
@@ -56,7 +62,7 @@ export const SimulatedEmailAuth = ({
   };
   
   return (
-    <form onSubmit={handleSubmit} className={className}>
+    <form onSubmit={handleSubmit} className={className} noValidate>
       {error && (
         <div className="bg-red-50 text-red-700 p-3 rounded-md mb-4 text-sm">
           {error}
@@ -72,6 +78,15 @@ export const SimulatedEmailAuth = ({
             placeholder="Email"
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-eatly-primary/20 focus:border-eatly-primary outline-none transition-all"
             required
+            onInvalid={(e) => {
+              e.preventDefault();
+              const input = e.target as HTMLInputElement;
+              input.setCustomValidity(defaultErrorMessages.email);
+            }}
+            onInput={(e) => {
+              const input = e.target as HTMLInputElement;
+              input.setCustomValidity('');
+            }}
           />
         </div>
         
@@ -83,6 +98,15 @@ export const SimulatedEmailAuth = ({
             placeholder="Mot de passe"
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-eatly-primary/20 focus:border-eatly-primary outline-none transition-all"
             required
+            onInvalid={(e) => {
+              e.preventDefault();
+              const input = e.target as HTMLInputElement;
+              input.setCustomValidity(defaultErrorMessages.password);
+            }}
+            onInput={(e) => {
+              const input = e.target as HTMLInputElement;
+              input.setCustomValidity('');
+            }}
           />
           <button
             type="button"
