@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useClerk } from '@clerk/clerk-react';
 import { isPreviewEnvironment, simulateSignIn } from '@/utils/auth-simulator';
+import { useToast } from '@/hooks/use-toast';
 import '../App.css';
 
 const AuthCallback = () => {
@@ -10,6 +11,7 @@ const AuthCallback = () => {
   const navigate = useNavigate();
   const progressCircleRef = useRef<SVGCircleElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const { toast } = useToast();
   
   useEffect(() => {
     // Précharge la page de destination
@@ -42,13 +44,33 @@ const AuthCallback = () => {
         // Traiter le callback d'authentification
         await handleRedirectCallback({
           redirectUrl: window.location.origin + "/auth/callback",
-          afterSignInUrl: window.location.origin
+          afterSignInUrl: window.location.origin,
+          // Ajouter l'option allowMultipleSessions pour résoudre le problème de single session
+          afterSignUpUrl: window.location.origin,
+          sessionOptions: {
+            allowMultipleSessions: true
+          }
         });
         
         // Démarrer l'animation de redirection
         startRedirectionAnimation();
-      } catch (error) {
+      } catch (error: any) {
         console.error('Erreur lors du traitement du callback:', error);
+        
+        // Traduction du message d'erreur
+        let errorMessage = error.message || "Une erreur s'est produite lors de l'authentification";
+        if (errorMessage.includes('single session mode') || errorMessage.includes('signed into one account')) {
+          errorMessage = 'Vous êtes actuellement en mode session unique. Vous ne pouvez être connecté qu\'à un seul compte à la fois.';
+        }
+        
+        // Afficher une notification d'erreur
+        toast({
+          variant: "destructive",
+          title: "Échec de l'authentification",
+          description: errorMessage,
+        });
+        
+        // Rediriger vers la page de connexion
         navigate('/login');
       }
     };
@@ -90,7 +112,7 @@ const AuthCallback = () => {
     return () => {
       document.head.removeChild(preloadLink);
     };
-  }, [handleRedirectCallback, navigate]);
+  }, [handleRedirectCallback, navigate, toast]);
 
   return (
     <div ref={containerRef} className="auth-callback-container">

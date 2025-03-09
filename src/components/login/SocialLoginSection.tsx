@@ -4,10 +4,12 @@ import SocialButton from './SocialButton';
 import { useAuth } from '@/context/AuthContext';
 import { isPreviewEnvironment } from '@/utils/auth-simulator';
 import { SimulatedSocialButton } from '@/components/auth/AuthSimulator';
+import { useToast } from '@/hooks/use-toast';
 
 const SocialLoginSection = () => {
   const [error, setError] = useState('');
   const { signInWithSocial, isLoading } = useAuth();
+  const { toast } = useToast();
   
   // Effet pour le débogage dans l'environnement Lovable
   useEffect(() => {
@@ -41,6 +43,20 @@ const SocialLoginSection = () => {
     </svg>
   );
 
+  // Traduction des messages d'erreur
+  const translateErrorMessage = (errorMsg: string) => {
+    if (errorMsg.includes('single session mode') || errorMsg.includes('signed into one account')) {
+      return 'Vous êtes actuellement en mode session unique. Vous ne pouvez être connecté qu\'à un seul compte à la fois.';
+    } else if (errorMsg.includes('connection failed') || errorMsg.includes('Failed to connect')) {
+      return 'Échec de la connexion au fournisseur d\'authentification.';
+    } else if (errorMsg.includes('popup closed') || errorMsg.includes('window closed')) {
+      return 'La fenêtre d\'authentification a été fermée. Veuillez réessayer.';
+    } else if (errorMsg.includes('network error')) {
+      return 'Erreur réseau. Veuillez vérifier votre connexion internet.';
+    }
+    return errorMsg || 'Une erreur inattendue s\'est produite. Veuillez réessayer.';
+  };
+
   const handleSocialLogin = async (provider: 'oauth_google' | 'oauth_facebook' | 'oauth_apple') => {
     setError('');
     try {
@@ -54,7 +70,15 @@ const SocialLoginSection = () => {
       
       await signInWithSocial(provider);
     } catch (err: any) {
-      setError(err.message || `Connexion avec ${provider.replace('oauth_', '')} non disponible pour le moment`);
+      const translatedError = translateErrorMessage(err.message);
+      setError(translatedError);
+      
+      // Afficher le toast pour une meilleure visibilité
+      toast({
+        variant: "destructive",
+        title: "Échec de la connexion",
+        description: translatedError,
+      });
     }
   };
 

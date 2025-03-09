@@ -12,6 +12,26 @@ import {
   getAuthenticatedUser
 } from '@/utils/auth-simulator';
 
+// Traduction des messages d'erreur
+const translateErrorMessage = (errorMsg: string) => {
+  if (errorMsg.includes('single session mode') || errorMsg.includes('signed into one account')) {
+    return 'Vous êtes actuellement en mode session unique. Vous ne pouvez être connecté qu\'à un seul compte à la fois.';
+  } else if (errorMsg.includes('connection failed') || errorMsg.includes('Failed to connect')) {
+    return 'Échec de la connexion au fournisseur d\'authentification.';
+  } else if (errorMsg.includes('popup closed') || errorMsg.includes('window closed')) {
+    return 'La fenêtre d\'authentification a été fermée. Veuillez réessayer.';
+  } else if (errorMsg.includes('network error')) {
+    return 'Erreur réseau. Veuillez vérifier votre connexion internet.';
+  } else if (errorMsg.includes('invalid credentials') || errorMsg.includes('Invalid credentials')) {
+    return 'Identifiants incorrects. Veuillez vérifier votre email et mot de passe.';
+  } else if (errorMsg.includes('not found') || errorMsg.includes('does not exist')) {
+    return 'Compte non trouvé. Veuillez vérifier vos informations ou créer un compte.';
+  } else if (errorMsg.includes('invalid email')) {
+    return 'Adresse email invalide.';
+  }
+  return errorMsg || 'Une erreur inattendue s\'est produite. Veuillez réessayer.';
+};
+
 export const useAuthProvider = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
@@ -85,11 +105,12 @@ export const useAuthProvider = () => {
       }
     } catch (err: any) {
       console.error("Erreur de connexion:", err);
-      setError(err.message || "Une erreur s'est produite pendant la connexion.");
+      const translatedError = translateErrorMessage(err.message);
+      setError(translatedError);
       toast({
         variant: "destructive",
         title: "Échec de la connexion",
-        description: err.message || "Veuillez vérifier vos identifiants et réessayer",
+        description: translatedError,
       });
     } finally {
       setIsLoading(false);
@@ -121,18 +142,28 @@ export const useAuthProvider = () => {
         });
       }
       
+      // Utiliser l'option allowMultipleSessions pour résoudre le problème de single session mode
       await signIn.authenticateWithRedirect({
         strategy: provider,
         redirectUrl: window.location.origin + "/auth/callback",
         redirectUrlComplete: window.location.origin,
+        // Option pour permettre des sessions multiples
+        sessionOptions: {
+          expires: {
+            type: "days",
+            days: 30
+          },
+          allowMultipleSessions: true
+        }
       });
     } catch (err: any) {
       console.error(`Erreur de connexion avec ${provider}:`, err);
-      setError(err.message || `La connexion avec ${provider} a échoué.`);
+      const translatedError = translateErrorMessage(err.message);
+      setError(translatedError);
       toast({
         variant: "destructive",
         title: "Échec de la connexion",
-        description: err.message || `La connexion avec ${provider.replace('oauth_', '')} a échoué.`,
+        description: translatedError,
       });
       setIsLoading(false);
     }
@@ -167,7 +198,13 @@ export const useAuthProvider = () => {
       });
 
       if (result.status === "complete") {
-        await setSignUpActive({ session: result.createdSessionId });
+        await setSignUpActive({ 
+          session: result.createdSessionId,
+          // Option pour permettre des sessions multiples
+          sessionOptions: {
+            allowMultipleSessions: true
+          }
+        });
         toast({
           title: "Inscription réussie",
           description: "Bienvenue sur Eatly !",
@@ -178,11 +215,12 @@ export const useAuthProvider = () => {
       }
     } catch (err: any) {
       console.error("Erreur d'inscription:", err);
-      setError(err.message || "Une erreur s'est produite pendant l'inscription.");
+      const translatedError = translateErrorMessage(err.message);
+      setError(translatedError);
       toast({
         variant: "destructive",
         title: "Échec de l'inscription",
-        description: err.message || "Veuillez vérifier vos informations et réessayer",
+        description: translatedError,
       });
     } finally {
       setIsLoading(false);

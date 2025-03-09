@@ -52,6 +52,12 @@ const LoginForm = () => {
     );
   }
 
+  // Vérifie si le message d'erreur contient "single session mode"
+  const isSessionModeError = error && (
+    error.includes('single session mode') || 
+    error.includes('signed into one account')
+  );
+
   return (
     <>
       {/* Message d'erreur */}
@@ -63,6 +69,13 @@ const LoginForm = () => {
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 mt-0.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
           {error}
+          
+          {/* Affiche un message supplémentaire pour l'erreur de session */}
+          {isSessionModeError && (
+            <div className="mt-2 text-xs">
+              Pour résoudre ce problème, veuillez vous déconnecter d'abord de votre compte actuel.
+            </div>
+          )}
         </motion.div>
       )}
 
