@@ -1,5 +1,5 @@
 
-import { MockUser, SocialProvider } from './types';
+import { MockUser } from './types';
 import { MOCK_USERS } from './mock-users';
 import { showAuthConfirmationToast } from './ui-utils';
 

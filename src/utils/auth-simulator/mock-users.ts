@@ -10,7 +10,8 @@ export const MOCK_USERS: Record<string, MockUser> = {
     lastName: 'Google',
     fullName: 'Utilisateur Google',
     imageUrl: 'https://lh3.googleusercontent.com/a/default-user=s128',
-    provider: 'google'
+    provider: 'google',
+    loggedInAt: new Date().toISOString() // Ajout de la propriété manquante
   },
   apple: {
     id: 'mock-apple-456',
@@ -19,7 +20,8 @@ export const MOCK_USERS: Record<string, MockUser> = {
     lastName: 'Apple',
     fullName: 'Utilisateur Apple',
     imageUrl: 'https://ui-avatars.com/api/?name=Utilisateur+Apple&background=0D8ABC&color=fff',
-    provider: 'apple'
+    provider: 'apple',
+    loggedInAt: new Date().toISOString() // Ajout de la propriété manquante
   },
   facebook: {
     id: 'mock-facebook-789',
@@ -28,7 +30,8 @@ export const MOCK_USERS: Record<string, MockUser> = {
     lastName: 'Facebook',
     fullName: 'Utilisateur Facebook',
     imageUrl: 'https://ui-avatars.com/api/?name=Utilisateur+Facebook&background=3b5998&color=fff',
-    provider: 'facebook'
+    provider: 'facebook',
+    loggedInAt: new Date().toISOString() // Ajout de la propriété manquante
   },
   email: {
     id: 'mock-email-101',
@@ -37,6 +40,7 @@ export const MOCK_USERS: Record<string, MockUser> = {
     lastName: 'Eatly',
     fullName: 'Utilisateur Eatly',
     imageUrl: 'https://ui-avatars.com/api/?name=Utilisateur+Eatly&background=9C1B1A&color=fff',
-    provider: 'email'
+    provider: 'email',
+    loggedInAt: new Date().toISOString() // Ajout de la propriété manquante
   }
 };

@@ -21,11 +21,16 @@ export const simulateSignIn = (
     lastName: providerKey.charAt(0).toUpperCase() + providerKey.slice(1),
     fullName: `Utilisateur ${providerKey.charAt(0).toUpperCase() + providerKey.slice(1)}`,
     imageUrl: `https://ui-avatars.com/api/?name=Utilisateur+${providerKey.charAt(0).toUpperCase() + providerKey.slice(1)}&background=9C1B1A&color=fff`,
-    provider: providerKey
+    provider: providerKey,
+    loggedInAt: new Date().toISOString() // Ajouter l'horodatage pour les nouveaux utilisateurs
   };
   
-  // Ajouter l'horodatage et sauvegarder
-  user.loggedInAt = new Date().toISOString();
+  // Mise à jour de l'horodatage pour les utilisateurs existants
+  if (MOCK_USERS[providerKey]) {
+    user.loggedInAt = new Date().toISOString();
+  }
+  
+  // Sauvegarder
   localStorage.setItem('mockAuthUser', JSON.stringify(user));
   
   // Afficher un message de confirmation

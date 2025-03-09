@@ -22,3 +22,9 @@ export interface SocialLoginConfig {
   redirectUrl: string;
   mockUser?: MockUser;
 }
+
+/**
+ * Types de fournisseurs d'authentification sociale
+ */
+export type SocialProvider = 'oauth_google' | 'oauth_facebook' | 'oauth_apple';
+
