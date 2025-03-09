@@ -1,9 +1,28 @@
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Check, X, Blend, Thermometer } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { 
+  CookingPot, 
+  Utensils, 
+  Thermometer, 
+  Blend, 
+  Microwave, 
+  WhiskIcon, 
+  Knife, 
+  Scale, 
+  Gauge, 
+  Spoon, 
+  ChefHat, 
+  ScrollText 
+} from 'lucide-react';
+import { DndContext, DragEndEvent, closestCenter } from '@dnd-kit/core';
+import { SortableContext, rectSortingStrategy } from '@dnd-kit/sortable';
+
 import ProgressBar from '../ProgressBar';
 import NavigationButtons from '../NavigationButtons';
+import EquipmentItem from '../EquipmentItem';
+import EquipmentDropZone from '../EquipmentDropZone';
+import EquipmentCategory from '../EquipmentCategory';
 
 interface KitchenEquipmentScreenProps {
   currentStep: number;
@@ -18,6 +37,7 @@ interface Equipment {
   id: string;
   name: string;
   icon: React.ReactNode;
+  category: string;
 }
 
 const KitchenEquipmentScreen: React.FC<KitchenEquipmentScreenProps> = ({
@@ -28,48 +48,81 @@ const KitchenEquipmentScreen: React.FC<KitchenEquipmentScreenProps> = ({
   onNext,
   onPrev,
 }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [direction, setDirection] = useState(0);
-  const [swiping, setSwiping] = useState(false);
+  const [selectedEquipment, setSelectedEquipment] = useState<string[]>(equipment || []);
   
   const kitchenEquipment: Equipment[] = [
-    { id: 'thermomix', name: 'Thermomix', icon: <Thermometer /> },
-    { id: 'blender', name: 'Blender / Mixeur', icon: <Blend /> },
-    { id: 'robot', name: 'Robot pâtissier', icon: <Thermometer /> },
-    { id: 'airfryer', name: 'Air Fryer', icon: <Thermometer /> },
-    { id: 'steamer', name: 'Cuiseur vapeur', icon: <Thermometer /> },
-    { id: 'convection', name: 'Four à convection', icon: <Thermometer /> },
-    { id: 'induction', name: 'Plaques à induction', icon: <Thermometer /> },
-    { id: 'oven', name: 'Four traditionnel', icon: <Thermometer /> },
-    { id: 'basic', name: 'Ustensiles de base', icon: <Thermometer /> },
+    // Appareils électriques
+    { id: 'thermomix', name: 'Thermomix', icon: <CookingPot />, category: 'Appareils électriques' },
+    { id: 'blender', name: 'Blender / Mixeur', icon: <Blend />, category: 'Appareils électriques' },
+    { id: 'robot', name: 'Robot pâtissier', icon: <ChefHat />, category: 'Appareils électriques' },
+    { id: 'airfryer', name: 'Air Fryer', icon: <CookingPot />, category: 'Appareils électriques' },
+    { id: 'steamer', name: 'Cuiseur vapeur', icon: <CookingPot />, category: 'Appareils électriques' },
+    { id: 'microwave', name: 'Four à micro-ondes', icon: <Microwave />, category: 'Appareils électriques' },
+    
+    // Ustensiles essentiels
+    { id: 'knife', name: 'Couteau de chef', icon: <Knife />, category: 'Ustensiles essentiels' },
+    { id: 'cuttingboard', name: 'Planche à découper', icon: <ScrollText />, category: 'Ustensiles essentiels' },
+    { id: 'whisk', name: 'Fouet', icon: <WhiskIcon />, category: 'Ustensiles essentiels' },
+    { id: 'spatula', name: 'Spatule', icon: <Spoon />, category: 'Ustensiles essentiels' },
+    { id: 'woodenspoons', name: 'Cuillères en bois', icon: <Spoon />, category: 'Ustensiles essentiels' },
+    { id: 'strainer', name: 'Passoire', icon: <Utensils />, category: 'Ustensiles essentiels' },
+    
+    // Équipements de cuisson
+    { id: 'pan', name: 'Poêle antiadhésive', icon: <CookingPot />, category: 'Équipements de cuisson' },
+    { id: 'saucepan', name: 'Casserole', icon: <CookingPot />, category: 'Équipements de cuisson' },
+    { id: 'pot', name: 'Faitout/marmite', icon: <CookingPot />, category: 'Équipements de cuisson' },
+    { id: 'wok', name: 'Wok', icon: <CookingPot />, category: 'Équipements de cuisson' },
+    { id: 'bakingdish', name: 'Plat à gratin', icon: <CookingPot />, category: 'Équipements de cuisson' },
+    { id: 'caketin', name: 'Moule à gâteau', icon: <CookingPot />, category: 'Équipements de cuisson' },
+    
+    // Outils de mesure et préparation
+    { id: 'scale', name: 'Balance de cuisine', icon: <Scale />, category: 'Outils de mesure et préparation' },
+    { id: 'measuringcup', name: 'Verre doseur', icon: <Gauge />, category: 'Outils de mesure et préparation' },
+    { id: 'mixingbowls', name: 'Bols de préparation', icon: <CookingPot />, category: 'Outils de mesure et préparation' },
+    { id: 'grater', name: 'Râpe', icon: <Utensils />, category: 'Outils de mesure et préparation' },
+    { id: 'rollingpin', name: 'Rouleau à pâtisserie', icon: <ScrollText />, category: 'Outils de mesure et préparation' },
+    { id: 'thermometer', name: 'Thermomètre de cuisine', icon: <Thermometer />, category: 'Outils de mesure et préparation' },
   ];
   
-  const handleSwipe = (dir: number) => {
-    if (swiping) return;
-    
-    setSwiping(true);
-    setDirection(dir);
-    
-    // Process swipe action
-    if (dir > 0) {
-      // Swipe right - has equipment
-      toggleEquipment(kitchenEquipment[currentIndex].id);
+  // Group equipment by category
+  const groupedEquipment = kitchenEquipment.reduce<Record<string, Equipment[]>>((acc, item) => {
+    if (!acc[item.category]) {
+      acc[item.category] = [];
     }
+    acc[item.category].push(item);
+    return acc;
+  }, {});
+  
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
     
-    // Move to next card
-    setTimeout(() => {
-      setCurrentIndex(prev => {
-        if (prev < kitchenEquipment.length - 1) {
-          return prev + 1;
-        }
-        return prev;
-      });
-      setSwiping(false);
-    }, 300);
+    if (over && over.id === 'your-equipment') {
+      // Add to selected equipment if not already there
+      if (!selectedEquipment.includes(active.id as string)) {
+        const newSelectedEquipment = [...selectedEquipment, active.id as string];
+        setSelectedEquipment(newSelectedEquipment);
+        
+        // Update parent component state
+        toggleEquipment(active.id as string);
+      }
+    } else if (over && over.id === 'available-equipment') {
+      // Remove from selected equipment
+      const newSelectedEquipment = selectedEquipment.filter(id => id !== active.id);
+      setSelectedEquipment(newSelectedEquipment);
+      
+      // Update parent component state
+      toggleEquipment(active.id as string);
+    }
   };
   
-  const progressPercentage = ((currentIndex + 1) / kitchenEquipment.length) * 100;
-  const isLastCard = currentIndex === kitchenEquipment.length - 1;
+  // Get equipment items that are selected and not selected
+  const selectedEquipmentItems = kitchenEquipment.filter(item => 
+    selectedEquipment.includes(item.id)
+  );
+  
+  const availableEquipmentItems = kitchenEquipment.filter(item => 
+    !selectedEquipment.includes(item.id)
+  );
   
   return (
     <div className="w-full max-w-2xl mx-auto px-4">
@@ -89,106 +142,71 @@ const KitchenEquipmentScreen: React.FC<KitchenEquipmentScreenProps> = ({
         </p>
       </motion.div>
       
-      <div className="flex justify-center items-center mb-3">
-        <span className="font-['AvantGarde_Bk_BT'] text-[#4A5568]">
-          {currentIndex + 1} / {kitchenEquipment.length}
-        </span>
-      </div>
-      
-      <div className="relative h-[340px] w-full flex justify-center items-center mb-6">
-        {!isLastCard ? (
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div className="flex gap-32 opacity-30 text-[#4A5568]">
-              <motion.div
-                initial={{ x: -10, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                className="flex flex-col items-center"
-              >
-                <X size={30} />
-                <span>Non</span>
-              </motion.div>
-              <motion.div
-                initial={{ x: 10, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                className="flex flex-col items-center"
-              >
-                <Check size={30} />
-                <span>Oui</span>
-              </motion.div>
+      <DndContext
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        {/* Selected equipment dropzone */}
+        <EquipmentDropZone 
+          id="your-equipment" 
+          title="Vos équipements" 
+          equipmentCount={selectedEquipmentItems.length}
+        >
+          {selectedEquipmentItems.length === 0 ? (
+            <div className="flex items-center justify-center h-[100px] text-[#4A5568] text-sm opacity-50">
+              Faites glisser vos équipements ici
             </div>
-          </div>
-        ) : null}
-        
-        <AnimatePresence mode="wait">
-          {currentIndex < kitchenEquipment.length && (
-            <motion.div
-              key={kitchenEquipment[currentIndex].id}
-              className="bg-white rounded-xl shadow-lg p-8 w-[280px] h-[280px] flex flex-col items-center justify-center"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ 
-                opacity: 0, 
-                x: direction > 0 ? 300 : -300, 
-                rotate: direction > 0 ? 15 : -15 
-              }}
-              transition={{ 
-                exit: { duration: 0.3 },
-                default: { duration: 0.4 }
-              }}
-              drag="x"
-              dragConstraints={{ left: 0, right: 0 }}
-              dragElastic={0.7}
-              onDragEnd={(e, { offset, velocity }) => {
-                const swipe = offset.x;
-                if (swipe < -80) {
-                  handleSwipe(-1);
-                } else if (swipe > 80) {
-                  handleSwipe(1);
-                }
-              }}
-            >
-              <div className="text-[#2A5D50] text-5xl mb-6">
-                {kitchenEquipment[currentIndex].icon}
+          ) : (
+            <SortableContext items={selectedEquipmentItems.map(item => item.id)} strategy={rectSortingStrategy}>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                {selectedEquipmentItems.map(item => (
+                  <EquipmentItem
+                    key={item.id}
+                    id={item.id}
+                    name={item.name}
+                    icon={item.icon}
+                    selected={true}
+                    category={item.category}
+                    onClick={() => toggleEquipment(item.id)}
+                  />
+                ))}
               </div>
-              <h3 className="font-['AvantGarde_Bk_BT'] text-xl text-black mb-4">
-                {kitchenEquipment[currentIndex].name}
-              </h3>
-              
-              <div className="flex gap-4 mt-6">
-                <motion.button
-                  whileTap={{ scale: 0.95 }}
-                  className="bg-gray-100 rounded-full p-3 text-gray-500"
-                  onClick={() => handleSwipe(-1)}
-                >
-                  <X size={24} />
-                </motion.button>
-                <motion.button
-                  whileTap={{ scale: 0.95 }}
-                  className="bg-[#D11B19] rounded-full p-3 text-white"
-                  onClick={() => handleSwipe(1)}
-                >
-                  <Check size={24} />
-                </motion.button>
-              </div>
-            </motion.div>
+            </SortableContext>
           )}
-        </AnimatePresence>
-      </div>
-      
-      <div className="w-full bg-gray-200 h-1 rounded-full overflow-hidden mb-8">
-        <motion.div
-          className="h-full bg-[#D11B19]"
-          initial={{ width: 0 }}
-          animate={{ width: `${progressPercentage}%` }}
-        />
-      </div>
+        </EquipmentDropZone>
+        
+        {/* Available equipment */}
+        <EquipmentDropZone
+          id="available-equipment"
+          title="Équipements disponibles"
+        >
+          {Object.entries(groupedEquipment).map(([category, items]) => (
+            <EquipmentCategory key={category} title={category}>
+              {items
+                .filter(item => !selectedEquipment.includes(item.id))
+                .map(item => (
+                  <EquipmentItem
+                    key={item.id}
+                    id={item.id}
+                    name={item.name}
+                    icon={item.icon}
+                    selected={false}
+                    category={item.category}
+                    onClick={() => toggleEquipment(item.id)}
+                  />
+                ))
+              }
+            </EquipmentCategory>
+          ))}
+        </EquipmentDropZone>
+      </DndContext>
       
       <NavigationButtons
         onNext={onNext}
         onPrev={onPrev}
         isFirstStep={false}
         isLastStep={false}
-        nextLabel={isLastCard ? "Continuer" : "Passer"}
+        nextLabel="Continuer"
       />
     </div>
   );
