@@ -1,136 +1,131 @@
 
 /**
- * Safety mechanisms to prevent UI freezes
+ * Safety mechanisms for error message harmonization
  */
 
 /**
- * Sets up safety mechanisms to prevent and recover from UI freezes
+ * Sets up safety mechanisms to ensure forms don't get stuck
  */
 export const setupSafetyMechanisms = () => {
-  // Add emergency unblocking script for the form
-  const unblockingScript = document.createElement('script');
-  unblockingScript.textContent = `
-    // Emergency unblocking system to avoid page freezes
-    (function() {
-      const MAX_BUTTON_DISABLED_TIME = 5000; // 5 seconds max
-      
-      // Check every second for stuck buttons
-      const safetyInterval = setInterval(() => {
-        // Find all disabled buttons and inputs
-        const blockedElements = document.querySelectorAll('button[disabled], input[disabled], button.submitting, button.loading');
-        
-        if (blockedElements.length > 0) {
-          console.log('Performing safety check on disabled elements:', blockedElements.length);
-          
-          // Re-enable each element
-          blockedElements.forEach(element => {
-            element.disabled = false;
-            
-            // Remove any loading classes
-            ['submitting', 'loading', 'spinning'].forEach(cls => {
-              if (element.classList.contains(cls)) {
-                element.classList.remove(cls);
-              }
-            });
-            
-            // Hide any spinner elements
-            const spinner = element.querySelector('.animate-spin, .spinner');
-            if (spinner) {
-              spinner.style.display = 'none';
-            }
-          });
-        }
-      }, 1000);
-      
-      // Stop checking when user leaves the page
-      window.addEventListener('beforeunload', () => {
-        clearInterval(safetyInterval);
+  console.log("Setting up safety mechanisms for form submission");
+  
+  try {
+    // Set up a periodic check for stuck form states
+    const safetyInterval = setInterval(() => {
+      checkForStuckForms();
+    }, 3000); // Check every 3 seconds
+    
+    // Monitor for user activity to detect if page is actually frozen
+    setupActivityMonitor();
+    
+    // Clean up on page unload
+    window.addEventListener('beforeunload', () => {
+      clearInterval(safetyInterval);
+    });
+    
+    console.log("Safety mechanisms setup complete");
+  } catch (err) {
+    console.error("Error setting up safety mechanisms:", err);
+  }
+};
+
+/**
+ * Checks for stuck form states and fixes them
+ */
+const checkForStuckForms = () => {
+  try {
+    // Find all disabled buttons and inputs
+    const disabledElements = document.querySelectorAll('button[disabled], input[disabled]');
+    const loadingButtons = document.querySelectorAll('.loading, .submitting, button.processing');
+    
+    // Check how many elements are disabled
+    if (disabledElements.length > 0 || loadingButtons.length > 0) {
+      console.log("Found potentially stuck form elements:", {
+        disabledElements: disabledElements.length,
+        loadingButtons: loadingButtons.length
       });
       
-      // Monitor for page freezes by checking script execution
-      let lastCheck = Date.now();
-      const freezeDetector = setInterval(() => {
-        const now = Date.now();
-        const timeSinceLastCheck = now - lastCheck;
+      // Check if elements have been disabled for too long
+      checkDisabledDuration(disabledElements);
+      checkDisabledDuration(loadingButtons);
+    }
+  } catch (err) {
+    console.error("Error checking for stuck forms:", err);
+  }
+};
+
+/**
+ * Checks how long elements have been disabled and fixes if necessary
+ */
+const checkDisabledDuration = (elements: NodeListOf<Element>) => {
+  const MAX_DISABLED_TIME = 5000; // Maximum time an element should remain disabled (5 seconds)
+  
+  elements.forEach(element => {
+    // Check if the element has our timestamp attribute
+    let timestampAttr = element.getAttribute('data-disabled-since');
+    const currentTime = Date.now();
+    
+    if (!timestampAttr) {
+      // First time seeing this element disabled, add timestamp
+      element.setAttribute('data-disabled-since', currentTime.toString());
+    } else {
+      // Element was already disabled before, check duration
+      const disabledSince = parseInt(timestampAttr, 10);
+      const disabledDuration = currentTime - disabledSince;
+      
+      // If disabled for too long, force enable
+      if (disabledDuration > MAX_DISABLED_TIME) {
+        console.log("Found element disabled for too long, enabling:", element);
         
-        // If more than 2 seconds between checks, the page might have frozen
-        if (timeSinceLastCheck > 2000) {
-          console.warn('Possible page freeze detected, elapsed time:', timeSinceLastCheck);
-          
-          // Re-enable all form controls as emergency measure
-          document.querySelectorAll('button, input').forEach(el => {
-            if (el instanceof HTMLElement) {
-              el.disabled = false;
-            }
-          });
+        // Type guard: Check if element has the disabled property
+        if (element instanceof HTMLButtonElement || element instanceof HTMLInputElement) {
+          element.disabled = false;
         }
         
-        lastCheck = now;
-      }, 1000);
-      
-      // Clear on unload
-      window.addEventListener('beforeunload', () => {
-        clearInterval(freezeDetector);
-      });
-    })();
-  `;
-  document.body.appendChild(unblockingScript);
-  
-  // Set up system to detect and recover from stuck UI state
-  let lastInteraction = Date.now();
-  
-  // Record user interactions
-  document.addEventListener('mousemove', () => { lastInteraction = Date.now(); });
-  document.addEventListener('keydown', () => { lastInteraction = Date.now(); });
-  document.addEventListener('click', () => { lastInteraction = Date.now(); });
-  
-  // Check periodically for stuck states
-  const stuckDetector = setInterval(() => {
-    // If no activity for 10 seconds, check for potentially stuck UI elements
-    if (Date.now() - lastInteraction > 10000) {
-      const stuckButtons = document.querySelectorAll('button[disabled], .loading, .submitting, [aria-busy="true"]');
-      if (stuckButtons.length > 0) {
-        console.log('Recovering from potentially stuck UI state:', stuckButtons.length, 'elements');
+        // Remove any loading classes
+        element.classList.remove('loading', 'submitting', 'processing');
         
-        // Force enable
-        stuckButtons.forEach(el => {
-          if (el instanceof HTMLElement) {
-            el.disabled = false;
-            
-            // Remove loading classes
-            ['loading', 'submitting', 'spinning', 'processing'].forEach(cls => {
-              el.classList.remove(cls);
-            });
-            
-            // Reset aria attributes
-            el.setAttribute('aria-busy', 'false');
-          }
-        });
+        // Clean up our tracking attribute
+        element.removeAttribute('data-disabled-since');
       }
+    }
+  });
+};
+
+/**
+ * Sets up a monitor for user activity to detect if page is frozen
+ */
+const setupActivityMonitor = () => {
+  let lastInteractionTime = Date.now();
+  
+  // Record when the user interacts with the page
+  const recordActivity = () => {
+    lastInteractionTime = Date.now();
+  };
+  
+  // Add listeners for common interaction events
+  document.addEventListener('click', recordActivity);
+  document.addEventListener('keydown', recordActivity);
+  document.addEventListener('mousemove', recordActivity);
+  document.addEventListener('touchstart', recordActivity);
+  
+  // Periodically check if the UI thread is responsive
+  const checkInterval = setInterval(() => {
+    const currentTime = Date.now();
+    
+    // If no user activity but the check is running, UI thread is responsive
+    // Just update the timestamp to avoid false positives
+    if (currentTime - lastInteractionTime > 10000) {
+      console.log("No user activity for 10 seconds, but UI is responsive");
     }
   }, 2000);
   
-  // Stop checking when user leaves the page
+  // Clean up when page unloads
   window.addEventListener('beforeunload', () => {
-    clearInterval(stuckDetector);
-    
-    // Remove the script if added
-    if (unblockingScript.parentNode) {
-      unblockingScript.parentNode.removeChild(unblockingScript);
-    }
+    clearInterval(checkInterval);
+    document.removeEventListener('click', recordActivity);
+    document.removeEventListener('keydown', recordActivity);
+    document.removeEventListener('mousemove', recordActivity);
+    document.removeEventListener('touchstart', recordActivity);
   });
-  
-  console.log("Safety mechanisms initialized");
-  
-  // Return a cleanup function
-  return () => {
-    clearInterval(stuckDetector);
-    
-    // Remove the script if added
-    if (unblockingScript.parentNode) {
-      unblockingScript.parentNode.removeChild(unblockingScript);
-    }
-    
-    console.log("Safety mechanisms removed");
-  };
 };
