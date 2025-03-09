@@ -8,9 +8,9 @@ import LoginFooter from '@/components/login/LoginFooter';
 
 const Login = () => {
   return (
-    <div className="flex flex-col md:flex-row min-h-screen w-screen bg-white m-0 p-0 overflow-hidden">
+    <div className="flex flex-col md:flex-row min-h-screen w-screen bg-white m-0 p-0 overflow-hidden" style={{ margin: 0, padding: 0, maxWidth: '100vw', width: '100vw', height: '100vh', boxSizing: 'border-box' }}>
       {/* Left section - Animation */}
-      <div className="hidden md:block md:w-3/5 h-screen m-0 p-0 overflow-hidden relative">
+      <div className="hidden md:block md:w-3/5 h-screen m-0 p-0 overflow-hidden relative" style={{ margin: 0, padding: 0, height: '100vh', overflow: 'hidden', position: 'relative', border: 'none', boxShadow: 'none' }}>
         <LoginAnimation />
       </div>
 
