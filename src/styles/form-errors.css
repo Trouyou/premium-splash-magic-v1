@@ -1,0 +1,85 @@
+
+/* Styles pour harmoniser les messages d'erreur */
+.signup-page .error-message,
+.signup-page .form-field-error,
+.signup-page .validation-message {
+  color: #D11B19 !important;
+  font-family: 'AvantGarde Bk BT', sans-serif !important;
+  font-size: 14px !important;
+  margin-top: 6px !important;
+  margin-bottom: 10px !important;
+  display: block !important;
+  text-align: left !important;
+  padding-left: 2px !important;
+  opacity: 1 !important;
+  transition: opacity 0.3s ease !important;
+  line-height: 1.4 !important;
+}
+
+/* Espacement cohérent entre les champs de formulaire */
+.signup-page .form-group,
+.signup-page .form-field-container {
+  margin-bottom: 20px !important;
+  position: relative !important;
+}
+
+/* Style pour la case à cocher des conditions */
+.signup-page .checkbox-container,
+.signup-page .terms-checkbox-container,
+.signup-page .newsletter-container {
+  display: flex !important;
+  align-items: flex-start !important;
+  margin-bottom: 15px !important;
+  margin-top: 15px !important;
+  position: relative !important;
+}
+
+.signup-page .checkbox-container input[type="checkbox"],
+.signup-page .terms-checkbox-container input[type="checkbox"],
+.signup-page .newsletter-container input[type="checkbox"] {
+  margin-right: 10px !important;
+  margin-top: 3px !important;
+}
+
+/* Message d'erreur spécifique pour les conditions */
+.signup-page .checkbox-container .error-message,
+.signup-page .terms-checkbox-container .error-message {
+  position: absolute !important;
+  left: 0 !important;
+  top: 100% !important;
+  margin-top: 3px !important;
+}
+
+/* Harmonisation de tous les messages d'erreur */
+.signup-page input:invalid + .error-message,
+.signup-page input:invalid ~ .error-message,
+.signup-page .invalid-feedback,
+.signup-page .text-danger {
+  color: #D11B19 !important;
+  font-size: 14px !important;
+  margin-top: 6px !important;
+  font-family: 'AvantGarde Bk BT', sans-serif !important;
+}
+
+/* Espacement spécifique pour le champ date de naissance */
+.signup-page .birthdate-field-container {
+  margin-bottom: 25px !important;
+}
+
+/* Style pour le message d'erreur des mots de passe */
+.signup-page .password-mismatch,
+.signup-page .password-requirements {
+  margin-top: 6px !important;
+  color: #D11B19 !important;
+}
+
+/* Animation subtile pour l'apparition des messages d'erreur */
+@keyframes fadeInError {
+  from { opacity: 0; transform: translateY(-3px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.signup-page .error-message.visible,
+.signup-page .form-field-error.visible {
+  animation: fadeInError 0.3s ease forwards;
+}

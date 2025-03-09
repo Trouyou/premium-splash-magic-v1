@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { translateErrorMessage, getSignupFormError, setupFormValidation } from '@/utils/error-messages';
+import { setupErrorMessageHarmonization } from '@/utils/error-messages/harmonize-errors';
 import BirthdateSelector from './BirthdateSelector';
 import FormErrorDisplay from './FormErrorDisplay';
 import PasswordInput from './PasswordInput';
@@ -11,6 +12,7 @@ import TermsAndNewsletter from './TermsAndNewsletter';
 import SignupButton from './SignupButton';
 import InputField from './InputField';
 import { useToast } from '@/hooks/use-toast';
+import '@/styles/form-errors.css';
 
 const SignupForm = () => {
   const [email, setEmail] = useState('');
@@ -31,6 +33,12 @@ const SignupForm = () => {
 
   useEffect(() => {
     setupFormValidation();
+    
+    // Setup error message harmonization
+    const cleanup = setupErrorMessageHarmonization();
+    
+    // Clean up on unmount
+    return cleanup;
   }, []);
 
   useEffect(() => {
@@ -124,7 +132,7 @@ const SignupForm = () => {
           name="email"
         />
 
-        <div className="mt-4">
+        <div className="mt-4 birthdate-field-container">
           <BirthdateSelector 
             onChange={handleBirthdateChange} 
             onValidate={handleBirthdateValidation} 

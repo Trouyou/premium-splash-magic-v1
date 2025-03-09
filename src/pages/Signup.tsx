@@ -22,11 +22,16 @@ const Signup = () => {
     script.async = true;
     document.body.appendChild(script);
     
+    // Add signup-page class to body for CSS targeting
+    document.body.classList.add('signup-page');
+    
     return () => {
       // Clean up on unmount
       if (script.parentNode) {
         document.body.removeChild(script);
       }
+      // Remove signup-page class when component unmounts
+      document.body.classList.remove('signup-page');
     };
   }, []);
 
