@@ -1,9 +1,12 @@
+
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import LoginAnimation from '@/components/login/LoginAnimation';
+import SocialLoginSection from '@/components/login/SocialLoginSection';
+import LoginSeparator from '@/components/login/LoginSeparator';
 
 const Signup = () => {
   const [email, setEmail] = useState('');
