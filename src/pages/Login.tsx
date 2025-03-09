@@ -5,8 +5,44 @@ import LoginForm from '@/components/login/LoginForm';
 import SocialLoginSection from '@/components/login/SocialLoginSection';
 import LoginSeparator from '@/components/login/LoginSeparator';
 import LoginFooter from '@/components/login/LoginFooter';
+import { useEffect } from 'react';
 
 const Login = () => {
+  useEffect(() => {
+    // Script pour forcer la suppression des bordures blanches
+    const style = document.createElement('style');
+    style.innerHTML = `
+      /* Reset complet des marges et bordures */
+      html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+        box-sizing: border-box !important;
+        overflow-x: hidden !important;
+      }
+      
+      /* Force le conteneur principal à couvrir tout l'écran sans marges */
+      body > div, #root, .app-container {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        overflow: hidden !important;
+        box-sizing: border-box !important;
+      }
+      
+      /* Force le panneau gauche à couvrir la moitié gauche sans marges ni bordures */
+      .hidden.md\\:block.md\\:w-3\\/5 {
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        overflow: hidden !important;
+      }
+    `;
+    document.head.appendChild(style);
+  }, []);
+
   return (
     <div className="flex flex-col md:flex-row min-h-screen w-screen bg-white m-0 p-0 overflow-hidden" style={{ margin: 0, padding: 0, maxWidth: '100vw', width: '100vw', height: '100vh', boxSizing: 'border-box' }}>
       {/* Left section - Animation */}

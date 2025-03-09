@@ -1,5 +1,4 @@
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
@@ -20,11 +19,41 @@ const Signup = () => {
   const { signUp, isLoading, error } = useAuth();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const style = document.createElement('style');
+    style.innerHTML = `
+      html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+        box-sizing: border-box !important;
+        overflow-x: hidden !important;
+      }
+      
+      body > div, #root, .app-container {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        overflow: hidden !important;
+        box-sizing: border-box !important;
+      }
+      
+      .hidden.md\\:block.md\\:w-3\\/5 {
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        overflow: hidden !important;
+      }
+    `;
+    document.head.appendChild(style);
+  }, []);
+
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormError('');
     
-    // Validation basique
     if (password !== confirmPassword) {
       setFormError('Les mots de passe ne correspondent pas');
       return;
@@ -45,12 +74,10 @@ const Signup = () => {
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen w-screen bg-white m-0 p-0 overflow-hidden" style={{ margin: 0, padding: 0, maxWidth: '100vw', width: '100vw', height: '100vh', boxSizing: 'border-box' }}>
-      {/* Left section - Animation */}
       <div className="hidden md:block md:w-3/5 h-screen m-0 p-0 overflow-hidden relative" style={{ margin: 0, padding: 0, height: '100vh', overflow: 'hidden', position: 'relative', border: 'none', boxShadow: 'none' }}>
         <LoginAnimation />
       </div>
 
-      {/* Right section - Signup form */}
       <div className="w-full md:w-2/5 flex flex-col justify-center items-center px-6 py-12 md:px-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -63,13 +90,10 @@ const Signup = () => {
             <p className="font-playfair text-base text-eatly-secondary">Créez votre compte Eatly</p>
           </div>
           
-          {/* Boutons de connexion sociale */}
           <SocialLoginSection />
           
-          {/* Séparateur OU */}
           <LoginSeparator />
           
-          {/* Message d'erreur */}
           {(error || formError) && (
             <motion.div
               initial={{ opacity: 0, y: -10 }}
@@ -81,7 +105,6 @@ const Signup = () => {
             </motion.div>
           )}
 
-          {/* Formulaire */}
           <form onSubmit={handleSignup} className="space-y-4">
             <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
               <div className="w-full">
