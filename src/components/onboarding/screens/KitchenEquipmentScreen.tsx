@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { Check } from 'lucide-react';
 
 import ProgressBar from '../ProgressBar';
 import NavigationButtons from '../NavigationButtons';
