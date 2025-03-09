@@ -7,7 +7,7 @@
     <title>Politique de Confidentialité - Eatly</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: -apple-system, system-ui, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
@@ -44,39 +44,49 @@
             border-top: 1px solid #ddd;
             color: #777;
         }
-        .back-button {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 10px 30px;
+        .retour-button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             background-color: #9C1B1A;
             color: white;
             border: none;
-            border-radius: 5px;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
             cursor: pointer;
-            font-size: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            text-decoration: none;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin: 0 auto 20px;
         }
-        .back-button svg {
-            margin-right: 10px;
+        .retour-button:hover {
+            background-color: #D11B19;
         }
-        .back-button:hover {
-            background-color: #B22222;
+        .retour-button:active {
+            transform: translateY(1px);
+        }
+        .icon-left {
+            margin-right: 4px;
+        }
+        @media (max-width: 768px) {
+            .retour-button {
+                padding: 10px 16px;
+                font-size: 14px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <button id="backButton" class="back-button">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+            <a href="javascript:void(0);" class="retour-button" id="back-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-left">
+                    <path d="M19 12H5M12 19l-7-7 7-7"></path>
                 </svg>
                 Retour
-            </button>
+            </a>
             <img src="/lovable-uploads/bae62a19-a42c-4047-8b4c-c9ce60746ff3.png" alt="Logo Eatly" class="logo">
             <h1>Politique de Confidentialité</h1>
         </div>
@@ -121,7 +131,7 @@
         const returnTo = urlParams.get('returnTo');
         
         // Get the back button
-        const backButton = document.getElementById('backButton');
+        const backButton = document.getElementById('back-button');
         
         // Add click event to back button
         backButton.addEventListener('click', function(event) {
