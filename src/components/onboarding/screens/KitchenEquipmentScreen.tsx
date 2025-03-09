@@ -83,6 +83,14 @@ const KitchenEquipmentScreen: React.FC<KitchenEquipmentScreenProps> = ({
           />
         </div>
       </div>
+      
+      <style jsx global>{`
+        @keyframes selectPop {
+          0% { transform: scale(1); }
+          50% { transform: scale(1.12); }
+          100% { transform: scale(1.08); }
+        }
+      `}</style>
     </div>
   );
 };

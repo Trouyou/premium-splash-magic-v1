@@ -49,6 +49,7 @@ const EquipmentBubble: React.FC<EquipmentBubbleProps> = ({
         justSelected && "animate-[selectPop_0.3s_forwards]"
       )}
       style={selected ? { boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1), 0 0 0 2px rgba(209, 27, 25, 0.2)" } : {}}
+      data-name={name}
     >
       <div className="text-[#2A5D50] mb-2">
         <div dangerouslySetInnerHTML={{ __html: svg }} />
