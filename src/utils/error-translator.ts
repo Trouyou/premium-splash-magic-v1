@@ -25,6 +25,8 @@ const errorDictionary = {
   'Please fill out this field': 'Ce champ est requis',
   'Please fill out this field.': 'Ce champ est requis',
   'Invalid email address': 'Adresse email invalide',
+  'Email not provided': 'Adresse email requise',
+  'Password not provided': 'Mot de passe requis',
   'Password is too short': 'Le mot de passe doit contenir au moins 8 caractères',
   'Passwords do not match': 'Les mots de passe ne correspondent pas',
   'Username already taken': 'Ce nom d\'utilisateur est déjà utilisé',
@@ -44,14 +46,18 @@ const errorDictionary = {
 export const translateErrorMessage = (errorMsg: string) => {
   if (!errorMsg) return 'Une erreur inattendue s\'est produite. Veuillez réessayer.';
   
+  console.log("Translating error message:", errorMsg);
+  
   // Si le message est déjà en français, le retourner tel quel
   if (Object.values(errorDictionary).includes(errorMsg)) {
+    console.log("Message already in French:", errorMsg);
     return errorMsg;
   }
   
   // Parcourir le dictionnaire pour trouver une correspondance
   for (const [englishMsg, frenchMsg] of Object.entries(errorDictionary)) {
     if (errorMsg.toLowerCase().includes(englishMsg.toLowerCase())) {
+      console.log(`Translated "${englishMsg}" to "${frenchMsg}"`);
       return frenchMsg;
     }
   }
@@ -86,6 +92,9 @@ export const getSignupFormError = (formState: {
 export const setupFormValidation = () => {
   console.log("Initialisation de la validation de formulaire personnalisée");
   
+  // Ajouter des styles CSS pour les erreurs
+  addErrorStyles();
+  
   // Fonction pour appliquer les gestionnaires d'événements aux éléments de formulaire
   const applyValidationHandlers = () => {
     const inputs = document.querySelectorAll('input, select, textarea');
@@ -97,15 +106,28 @@ export const setupFormValidation = () => {
         // Désactiver la validation native et ajouter la nôtre
         input.addEventListener('invalid', (e) => {
           e.preventDefault();
-          console.log(`Validation de l'élément: ${input.name || input.id}`);
+          console.log(`Validation de l'élément: ${input.name || input.id || 'sans nom'}`);
           
           // Déterminer le message d'erreur approprié
           let message = 'Ce champ est requis';
           
           if (input.validity.typeMismatch && input.type === 'email') {
             message = 'Adresse email invalide';
+          } else if (input.validity.patternMismatch && input.type === 'email') {
+            message = 'Adresse email invalide';
           } else if (input.type === 'password') {
             message = 'Veuillez entrer un mot de passe valide';
+          }
+          
+          // Messages spécifiques pour certains champs
+          if (input.id === 'email' || input.name === 'email') {
+            message = 'Adresse email invalide';
+          } else if (input.id === 'password' || input.name === 'password') {
+            message = 'Mot de passe requis';
+          } else if (input.id && input.id.includes('confirm')) {
+            message = 'Les mots de passe ne correspondent pas';
+          } else if (input.id === 'terms-accept' || input.id === 'terms') {
+            message = 'Veuillez accepter les conditions d\'utilisation';
           }
           
           // Appliquer le message personnalisé
@@ -115,10 +137,10 @@ export const setupFormValidation = () => {
           input.classList.add('input-error');
           
           // Créer ou mettre à jour le message d'erreur
-          let errorElement = input.parentElement?.querySelector('.form-error-message');
+          let errorElement = input.parentElement?.querySelector('.error-message');
           if (!errorElement) {
             errorElement = document.createElement('div');
-            errorElement.className = 'form-error-message text-eatly-primary text-sm mt-1';
+            errorElement.className = 'error-message text-red-600 text-sm mt-1';
             input.parentElement?.appendChild(errorElement);
           }
           errorElement.textContent = message;
@@ -129,9 +151,10 @@ export const setupFormValidation = () => {
         input.addEventListener('input', () => {
           input.setCustomValidity('');
           input.classList.remove('input-error');
-          const errorElement = input.parentElement?.querySelector('.form-error-message');
+          const errorElement = input.parentElement?.querySelector('.error-message');
           if (errorElement) {
             errorElement.textContent = '';
+            errorElement.style.display = 'none';
           }
         });
       }
@@ -147,6 +170,47 @@ export const setupFormValidation = () => {
   }
   
   // Observer les changements DOM pour intercepter les nouveaux éléments
+  setupDOMObserver(applyValidationHandlers);
+  
+  // Intercepter les messages d'erreur natifs et les remplacer
+  interceptNativeBrowserMessages();
+};
+
+// Ajouter des styles CSS pour les erreurs
+const addErrorStyles = () => {
+  const style = document.createElement('style');
+  style.textContent = `
+    .input-error {
+      border: 1px solid #D11B19 !important;
+      background-color: rgba(209, 27, 25, 0.05) !important;
+      transition: all 0.3s ease !important;
+    }
+    
+    .error-message {
+      color: #D11B19 !important;
+      font-size: 12px !important;
+      margin-top: 4px !important;
+      font-family: 'AvantGarde Bk BT', sans-serif !important;
+      animation: fadeInError 0.3s ease !important;
+      display: block !important;
+    }
+    
+    @keyframes fadeInError {
+      from { opacity: 0; transform: translateY(-5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  `;
+  
+  // Ajouter les styles au head s'ils n'existent pas déjà
+  if (!document.querySelector('style[data-error-styles]')) {
+    style.setAttribute('data-error-styles', 'true');
+    document.head.appendChild(style);
+    console.log("Styles CSS pour les erreurs ajoutés au document");
+  }
+};
+
+// Observer les changements DOM pour appliquer la validation aux nouveaux éléments
+const setupDOMObserver = (callback: () => void) => {
   if (typeof MutationObserver !== 'undefined') {
     const observer = new MutationObserver((mutations) => {
       let shouldApply = false;
@@ -169,7 +233,7 @@ export const setupFormValidation = () => {
       
       if (shouldApply) {
         console.log("Nouveaux éléments de formulaire détectés, application de la validation");
-        applyValidationHandlers();
+        callback();
       }
     });
     
@@ -183,36 +247,28 @@ export const setupFormValidation = () => {
   } else {
     console.warn("MutationObserver n'est pas supporté dans ce navigateur");
   }
+};
+
+// Intercepter les messages d'erreur natifs du navigateur
+const interceptNativeBrowserMessages = () => {
+  // Remplacer les messages d'erreur natifs
+  const originalValidityGetter = Object.getOwnPropertyDescriptor(
+    HTMLInputElement.prototype, 'validationMessage'
+  )?.get;
   
-  // Ajouter des styles CSS pour les erreurs
-  const style = document.createElement('style');
-  style.textContent = `
-    .input-error {
-      border: 1px solid #D11B19 !important;
-      background-color: rgba(209, 27, 25, 0.05) !important;
-      transition: all 0.3s ease !important;
-    }
+  if (originalValidityGetter) {
+    Object.defineProperty(HTMLInputElement.prototype, 'validationMessage', {
+      get: function() {
+        const originalMessage = originalValidityGetter.call(this);
+        
+        if (!originalMessage) return '';
+        
+        // Traduire le message d'erreur
+        return translateErrorMessage(originalMessage);
+      }
+    });
     
-    .form-error-message {
-      color: #D11B19 !important;
-      font-size: 12px !important;
-      margin-top: 4px !important;
-      font-family: 'AvantGarde Bk BT', sans-serif !important;
-      animation: fadeInError 0.3s ease !important;
-      display: block !important;
-    }
-    
-    @keyframes fadeInError {
-      from { opacity: 0; transform: translateY(-5px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  `;
-  
-  // Ajouter les styles au head s'ils n'existent pas déjà
-  if (!document.querySelector('style[data-error-styles]')) {
-    style.setAttribute('data-error-styles', 'true');
-    document.head.appendChild(style);
-    console.log("Styles CSS pour les erreurs ajoutés au document");
+    console.log("Interception des messages de validation natifs configurée");
   }
 };
 
