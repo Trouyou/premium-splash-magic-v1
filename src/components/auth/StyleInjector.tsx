@@ -31,8 +31,9 @@ const StyleInjector = () => {
           
           const currentIndex = inputs.indexOf(document.activeElement);
           if (currentIndex !== -1 && currentIndex < inputs.length - 1) {
-            // Move to next field
-            inputs[currentIndex + 1].focus();
+            // Move to next field - need to cast to HTMLElement to use focus()
+            const nextElement = inputs[currentIndex + 1] as HTMLElement;
+            nextElement.focus();
           } else {
             // If it's the last field, submit the form safely
             const submitButton = form.querySelector('button[type="submit"], input[type="submit"]');
