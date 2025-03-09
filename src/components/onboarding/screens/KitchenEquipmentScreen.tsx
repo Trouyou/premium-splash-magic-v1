@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
@@ -207,18 +206,14 @@ const KitchenEquipmentScreen: React.FC<KitchenEquipmentScreenProps> = ({
   }, {});
   
   const handleToggleEquipment = (equipmentId: string) => {
-    // Si l'équipement est déjà sélectionné, on le retire
-    if (selectedEquipment.includes(equipmentId)) {
-      const newSelectedEquipment = selectedEquipment.filter(id => id !== equipmentId);
-      setSelectedEquipment(newSelectedEquipment);
-      toggleEquipment(equipmentId); // On indique au contexte parent qu'il y a changement
-    } 
-    // Sinon, on l'ajoute
-    else {
-      const newSelectedEquipment = [...selectedEquipment, equipmentId];
-      setSelectedEquipment(newSelectedEquipment);
-      toggleEquipment(equipmentId); // On indique au contexte parent qu'il y a changement
-    }
+    setSelectedEquipment(prev => {
+      const isSelected = prev.includes(equipmentId);
+      const newSelection = isSelected
+        ? prev.filter(id => id !== equipmentId)
+        : [...prev, equipmentId];
+      toggleEquipment(equipmentId);
+      return newSelection;
+    });
   };
   
   const selectedCount = selectedEquipment.length;
@@ -246,7 +241,7 @@ const KitchenEquipmentScreen: React.FC<KitchenEquipmentScreenProps> = ({
           <h3 className="font-['AvantGarde_Bk_BT'] text-lg text-[#4A5568] mb-4">
             {category}
           </h3>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-3 md:grid-cols-4 gap-4">
             {items.map(item => (
               <EquipmentBubble
                 key={item.id}
