@@ -61,6 +61,12 @@ const InputField = ({
       }
     }
     
+    // Password validation
+    if (type === 'password' && value.trim() && value.length < 8) {
+      setError('Le mot de passe doit contenir au moins 8 caractères');
+      return false;
+    }
+    
     // Custom validation
     if (validate) {
       const customError = validate(value);
@@ -82,11 +88,11 @@ const InputField = ({
   };
 
   const inputClasses = `w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-eatly-primary/20 focus:border-eatly-primary outline-none transition-all ${
-    error ? 'border-eatly-primary bg-red-50' : 'border-gray-300'
+    error ? 'border-[#D11B19] bg-[rgba(209,27,25,0.05)] error' : 'border-gray-300'
   } ${className}`;
 
   return (
-    <div className="w-full">
+    <div className="w-full form-group">
       <input
         type={type}
         name={name}
@@ -100,7 +106,7 @@ const InputField = ({
         pattern={pattern}
         aria-invalid={!!error}
       />
-      <FormErrorDisplay error={error} className="mt-1" />
+      <FormErrorDisplay error={error} />
     </div>
   );
 };

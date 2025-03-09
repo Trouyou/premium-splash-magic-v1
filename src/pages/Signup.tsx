@@ -1,4 +1,5 @@
 
+import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import LoginAnimation from '@/components/login/LoginAnimation';
 import SocialLoginSection from '@/components/login/SocialLoginSection';
@@ -8,8 +9,14 @@ import SignupHeader from '@/components/signup/SignupHeader';
 import SignupForm from '@/components/signup/SignupForm';
 import SignupFooter from '@/components/signup/SignupFooter';
 import { Toaster } from '@/components/ui/toaster';
+import { setupFormValidation } from '@/utils/error-messages';
 
 const Signup = () => {
+  useEffect(() => {
+    // Initialiser la validation de formulaire personnalisée
+    setupFormValidation();
+  }, []);
+
   return (
     <div className="flex flex-col md:flex-row min-h-screen w-screen bg-white m-0 p-0 overflow-hidden" style={{ margin: 0, padding: 0, maxWidth: '100vw', width: '100vw', height: '100vh', maxHeight: '100vh', boxSizing: 'border-box', overflow: 'hidden' }}>
       <StyleInjector />
