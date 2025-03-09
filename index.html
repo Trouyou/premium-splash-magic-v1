@@ -12,10 +12,31 @@
     <meta property="og:image" content="/og-image.png" />
     <meta property="og:url" content="https://eatly-app.com" />
     <meta name="twitter:card" content="summary_large_image" />
+    
+    <!-- Optimization: DNS prefetch -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+    
+    <!-- Performance optimization styles -->
+    <style>
+      /* Optimisations CSS critiques */
+      @media screen {
+        img, video, iframe {
+          content-visibility: auto;
+        }
+        .layout-container, .grid, .flex-container {
+          contain: layout;
+        }
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
+    
+    <!-- Performance optimization script -->
+    <script src="/js/performance-optimization.js" defer></script>
+    
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
