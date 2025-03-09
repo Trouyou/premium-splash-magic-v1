@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, X, Blender, Thermometer } from 'lucide-react';
+import { Check, X, Blend, Thermometer } from 'lucide-react';
 import ProgressBar from '../ProgressBar';
 import NavigationButtons from '../NavigationButtons';
 
@@ -34,7 +34,7 @@ const KitchenEquipmentScreen: React.FC<KitchenEquipmentScreenProps> = ({
   
   const kitchenEquipment: Equipment[] = [
     { id: 'thermomix', name: 'Thermomix', icon: <Thermometer /> },
-    { id: 'blender', name: 'Blender / Mixeur', icon: <Blender /> },
+    { id: 'blender', name: 'Blender / Mixeur', icon: <Blend /> },
     { id: 'robot', name: 'Robot pâtissier', icon: <Thermometer /> },
     { id: 'airfryer', name: 'Air Fryer', icon: <Thermometer /> },
     { id: 'steamer', name: 'Cuiseur vapeur', icon: <Thermometer /> },

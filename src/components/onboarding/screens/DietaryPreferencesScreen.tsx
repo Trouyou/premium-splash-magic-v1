@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { UtensilsCrossed, Leaf, Plant, WheatOff, Weight, Fire } from 'lucide-react';
+import { UtensilsCrossed, Leaf, Salad, WheatOff, Weight, Flame } from 'lucide-react';
 import ProgressBar from '../ProgressBar';
 import NavigationButtons from '../NavigationButtons';
 import SelectionCard from '../SelectionCard';
@@ -26,10 +26,10 @@ const DietaryPreferencesScreen: React.FC<DietaryPreferencesScreenProps> = ({
   const dietaryOptions = [
     { id: 'omnivore', title: 'Omnivore', icon: <UtensilsCrossed /> },
     { id: 'vegetarian', title: 'Végétarien', icon: <Leaf /> },
-    { id: 'vegan', title: 'Végan', icon: <Plant /> },
+    { id: 'vegan', title: 'Végan', icon: <Salad /> },
     { id: 'gluten-free', title: 'Sans gluten', icon: <WheatOff /> },
     { id: 'keto', title: 'Keto', icon: <Weight /> },
-    { id: 'paleo', title: 'Paléo', icon: <Fire /> },
+    { id: 'paleo', title: 'Paléo', icon: <Flame /> },
   ];
   
   const containerVariants = {
