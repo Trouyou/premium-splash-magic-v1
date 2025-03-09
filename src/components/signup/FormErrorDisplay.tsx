@@ -1,0 +1,23 @@
+
+import { motion } from 'framer-motion';
+
+interface FormErrorDisplayProps {
+  error: string;
+}
+
+const FormErrorDisplay = ({ error }: FormErrorDisplayProps) => {
+  if (!error) return null;
+  
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="bg-red-50 text-eatly-primary p-3 rounded-md mb-4 text-sm flex items-start"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 mt-0.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+      {error}
+    </motion.div>
+  );
+};
+
+export default FormErrorDisplay;
