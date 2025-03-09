@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   isPreviewEnvironment, 
@@ -39,49 +38,11 @@ export const SimulatedSignUpForm = ({
   
   const navigate = useNavigate();
   const { toast } = useToast();
-  const safetyTimeoutRef = useRef<number | null>(null);
   
   useEffect(() => {
     setupFormValidation();
     console.log("SimulatedSignUpForm: Form validation setup complete");
   }, []);
-
-  // Safety mechanism to prevent the UI from getting stuck
-  useEffect(() => {
-    return () => {
-      // Clean up any pending timeouts when component unmounts
-      if (safetyTimeoutRef.current) {
-        window.clearTimeout(safetyTimeoutRef.current);
-      }
-    };
-  }, []);
-  
-  // Additional safety mechanism - reset button state if stuck
-  useEffect(() => {
-    let lastActivity = Date.now();
-    const recordActivity = () => { lastActivity = Date.now(); };
-    
-    // Record user interactions
-    document.addEventListener('mousemove', recordActivity);
-    document.addEventListener('keydown', recordActivity);
-    document.addEventListener('click', recordActivity);
-    
-    // Check for stuck states periodically
-    const intervalId = setInterval(() => {
-      // If no activity for 10 seconds and button is still in loading state
-      if (Date.now() - lastActivity > 10000 && isLoading) {
-        console.log('Potential stuck state detected - resetting form state');
-        setIsLoading(false);
-      }
-    }, 2000);
-    
-    return () => {
-      document.removeEventListener('mousemove', recordActivity);
-      document.removeEventListener('keydown', recordActivity);
-      document.removeEventListener('click', recordActivity);
-      clearInterval(intervalId);
-    };
-  }, [isLoading]);
   
   const handleInputChange = (field: string, value: string | boolean) => {
     switch (field) {
@@ -159,9 +120,6 @@ export const SimulatedSignUpForm = ({
     e.preventDefault();
     if (!isPreviewEnvironment()) return;
     
-    // Prevent multiple submissions
-    if (isLoading) return;
-    
     console.log("Form submitted, validating...");
     if (!validateForm()) {
       console.log("Form validation failed:", fieldErrors);
@@ -171,12 +129,6 @@ export const SimulatedSignUpForm = ({
     setFormError(null);
     setIsLoading(true);
     
-    // Safety timeout - reset form after 5 seconds max to prevent UI from getting stuck
-    safetyTimeoutRef.current = window.setTimeout(() => {
-      console.log('Safety timeout triggered - resetting form state');
-      setIsLoading(false);
-    }, 5000);
-    
     try {
       const user = await simulateSignUp(
         email, 
@@ -185,11 +137,6 @@ export const SimulatedSignUpForm = ({
         lastName, 
         birthdate || undefined
       );
-      
-      // Clear safety timeout as signup was successful
-      if (safetyTimeoutRef.current) {
-        window.clearTimeout(safetyTimeoutRef.current);
-      }
       
       toast({
         title: "Inscription réussie",
@@ -212,12 +159,6 @@ export const SimulatedSignUpForm = ({
       });
     } finally {
       setIsLoading(false);
-      
-      // Clear safety timeout
-      if (safetyTimeoutRef.current) {
-        window.clearTimeout(safetyTimeoutRef.current);
-        safetyTimeoutRef.current = null;
-      }
     }
   };
   

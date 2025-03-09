@@ -1,73 +1,256 @@
 
-/* Form error styles for consistent error presentation */
-
-/* Basic error message styling */
-.error-message,
-.field-error,
-.invalid-feedback,
-.text-danger,
-[role="alert"] {
+/* Styles pour harmoniser les messages d'erreur */
+.signup-page .error-message,
+.signup-page .form-field-error,
+.signup-page .validation-message {
+  color: #D11B19 !important;
+  font-family: 'AvantGarde Bk BT', sans-serif !important;
+  font-size: 14px !important;
+  margin-top: 6px !important;
+  margin-bottom: 10px !important;
   display: flex !important;
   align-items: center !important;
-  margin-top: 5px !important;
+  text-align: left !important;
+  padding-left: 2px !important;
+  opacity: 1 !important;
+  transition: opacity 0.3s ease !important;
+  line-height: 1.4 !important;
+  /* Performance: reduce reflow impact */
+  contain: content !important;
+}
+
+/* Espacement cohérent entre les champs de formulaire */
+.signup-page .form-group,
+.signup-page .form-field-container {
+  margin-bottom: 20px !important;
+  position: relative !important;
+  /* Performance: optimize layout containment */
+  contain: layout !important;
+}
+
+/* Style pour la case à cocher des conditions */
+.signup-page .checkbox-container,
+.signup-page .terms-checkbox-container,
+.signup-page .newsletter-container {
+  display: flex !important;
+  align-items: flex-start !important;
+  margin-bottom: 15px !important;
+  margin-top: 15px !important;
+  position: relative !important;
+}
+
+.signup-page .checkbox-container input[type="checkbox"],
+.signup-page .terms-checkbox-container input[type="checkbox"],
+.signup-page .newsletter-container input[type="checkbox"] {
+  margin-right: 10px !important;
+  margin-top: 3px !important;
+}
+
+/* Message d'erreur spécifique pour les conditions */
+.signup-page .checkbox-container .error-message,
+.signup-page .terms-checkbox-container .error-message {
+  position: absolute !important;
+  left: 0 !important;
+  top: 100% !important;
+  margin-top: 3px !important;
+}
+
+/* Harmonisation de tous les messages d'erreur */
+.signup-page input:invalid + .error-message,
+.signup-page input:invalid ~ .error-message,
+.signup-page .invalid-feedback,
+.signup-page .text-danger {
   color: #D11B19 !important;
   font-size: 14px !important;
-  line-height: 1.4 !important;
+  margin-top: 6px !important;
+  font-family: 'AvantGarde Bk BT', sans-serif !important;
+  display: flex !important;
+  align-items: center !important;
 }
 
-/* Ensure icons in error messages are aligned */
-.error-message svg,
-.field-error svg,
-.invalid-feedback svg,
-.text-danger svg,
-[role="alert"] svg {
-  flex-shrink: 0 !important;
-  margin-right: 6px !important;
-  vertical-align: middle !important;
+/* Espacement spécifique pour le champ date de naissance */
+.signup-page .birthdate-field-container {
+  margin-bottom: 25px !important;
 }
 
-/* Style for invalid form fields */
-input.error,
-select.error,
-textarea.error,
-input.has-error,
-select.has-error,
-textarea.has-error,
-input:invalid,
-select:invalid,
-textarea:invalid {
+/* Style pour le message d'erreur des mots de passe */
+.signup-page .password-mismatch,
+.signup-page .password-requirements {
+  margin-top: 6px !important;
+  color: #D11B19 !important;
+}
+
+/* Animation subtile pour l'apparition des messages d'erreur - optimized for performance */
+@keyframes fadeInError {
+  from { opacity: 0; transform: translateY(-3px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.signup-page .error-message.visible,
+.signup-page .form-field-error.visible {
+  animation: fadeInError 0.3s ease forwards;
+  will-change: opacity, transform;
+}
+
+/* Style spécifique pour les champs avec erreur */
+.signup-page input.has-error,
+.signup-page select.has-error,
+.signup-page textarea.has-error {
   border-color: #D11B19 !important;
   background-color: rgba(209, 27, 25, 0.05) !important;
 }
 
-/* Animation for error messages appearing */
-@keyframes fadeInError {
-  from { opacity: 0; transform: translateY(-5px); }
-  to { opacity: 1; transform: translateY(0); }
+/* Indication visuelle de focus sur les champs */
+.signup-page input:focus, 
+.signup-page select:focus, 
+.signup-page textarea:focus {
+  outline: none !important;
+  border-color: #80bdff !important;
+  box-shadow: 0 0 0 2px rgba(0,123,255,.25) !important;
 }
 
-.error-message.visible,
-.field-error.visible,
-.invalid-feedback.visible {
-  animation: fadeInError 0.3s ease forwards !important;
+/* Performance optimizations */
+.performance-optimized .signup-page form {
+  contain: content !important;
 }
 
-/* Ensure form error banners have consistent styling */
-.form-error-banner,
-.alert-danger,
-.bg-red-50 {
+.performance-optimized .signup-page input,
+.performance-optimized .signup-page select,
+.performance-optimized .signup-page textarea {
+  will-change: auto !important;
+}
+
+/* Disable expensive CSS operations for offscreen elements */
+.performance-optimized .signup-page *:not(:visible) {
+  content-visibility: auto !important;
+}
+
+/* Style pour afficher correctement les noms d'équipements */
+.equipment-name {
+  font-family: 'AvantGarde Bk BT', sans-serif;
+  font-size: 14px;
+  line-height: 16px;
+  height: 36px; /* Augmenter pour s'assurer qu'il y a assez d'espace */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  white-space: pre-line; /* Préserve les sauts de ligne */
+  width: 100%;
+  overflow: visible; /* Évite la troncature */
+  margin-top: 6px;
+}
+
+/* Style pour l'animation de sélection des équipements */
+@keyframes selectPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+  100% { transform: scale(1.08); }
+}
+
+/* Styles pour améliorer l'alignement des messages d'erreur */
+/* Style pour le conteneur du message d'erreur - styles globaux */
+.error-message, 
+.form-error, 
+.invalid-feedback,
+.field-error,
+[class*="error"],
+[id*="error"] {
   display: flex !important;
   align-items: center !important;
-  padding: 0.75rem !important;
-  border-radius: 0.375rem !important;
-  margin-bottom: 1rem !important;
+  margin-top: 5px !important;
+  color: #9C1B1A !important;
+  font-size: 14px !important;
 }
 
-/* Fix specifically for the icon alignment issue */
-.error-message svg,
-[role="alert"] svg,
-.text-[#D11B19] svg {
+/* Style pour l'icône d'erreur (point d'exclamation) */
+.error-message::before, 
+.form-error::before, 
+.invalid-feedback::before,
+.field-error::before,
+[class*="error"]::before,
+[id*="error"]::before,
+.error-icon {
   display: inline-flex !important;
   align-items: center !important;
-  justify-content: center !important;
+  margin-right: 6px !important;
+  vertical-align: middle !important;
+}
+
+/* Sélecteur générique pour tous les messages d'erreur possibles */
+[class*="error-message"], 
+[class*="form-error"], 
+[class*="invalid-feedback"],
+[class*="field-error"],
+[class*="error"] {
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* Correction spécifique pour les erreurs avec point d'exclamation */
+.error-with-icon,
+.error-text,
+label + .text-danger,
+.required-message,
+.validation-error {
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* Appliquer à tous les conteneurs d'erreurs possibles */
+form .text-danger,
+form .alert-danger,
+form .text-error,
+form [role="alert"] {
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* Cibler directement les éléments */
+form .text-danger,
+form [role="alert"]:has(svg),
+form label + div:has(svg) {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+/* Alignement de l'icône d'exclamation */
+svg[fill="red"],
+svg[stroke="red"],
+svg[color="red"],
+.text-danger svg,
+[role="alert"] svg {
+  vertical-align: middle !important;
+  margin-right: 6px !important;
+  display: inline-block !important;
+  flex-shrink: 0 !important;
+}
+
+/* CSS plus spécifique pour cibler le cas exact */
+.error-message .exclamation-circle,
+svg circle + path,
+svg[viewBox*="0 0 24 24"] {
+  display: inline-flex !important;
+  vertical-align: middle !important;
+  margin-right: 6px !important;
+}
+
+/* Solution pour gérer les messages d'erreur qui utilisent des éléments div séparés */
+div > svg + span,
+div > svg + div {
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+/* Correction générale pour tous les textes d'erreur */
+.ce-champ-est-requis {
+  display: flex !important;
+  align-items: center !important;
+  color: #9C1B1A !important;
+}
+
+/* Styles spécifiques pour le composant FormErrorDisplay */
+.text-\[\#D11B19\].text-sm.flex.items-start {
+  align-items: center !important;
 }
