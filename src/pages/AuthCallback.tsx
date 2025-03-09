@@ -3,17 +3,11 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useClerk } from '@clerk/clerk-react';
 import LoadingIndicator from '@/components/splash/LoadingIndicator';
+import { isPreviewEnvironment } from '@/utils/auth-simulator';
 
 const AuthCallback = () => {
   const { handleRedirectCallback } = useClerk();
   const navigate = useNavigate();
-
-  // Fonction pour déterminer si nous sommes dans un environnement preview/iframe
-  const isPreviewEnvironment = () => {
-    return typeof window !== 'undefined' && 
-           (window.location.hostname.includes('lovableproject.com') || 
-            window.top !== window.self);
-  };
 
   useEffect(() => {
     // Gérer le callback de redirection après l'authentification sociale
