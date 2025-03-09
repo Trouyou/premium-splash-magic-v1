@@ -6,9 +6,9 @@
 // Déclaration du type pour window pour éviter les erreurs TypeScript
 declare global {
   interface Window {
-    antiFreezeProtectionInstalled: boolean;
-    lastInteractionTime: number;
-    freezeCheckInterval: number | null;
+    antiFreezeProtectionInstalled?: boolean;
+    lastInteractionTime?: number;
+    freezeCheckInterval?: number | NodeJS.Timeout;
   }
 }
 
@@ -32,6 +32,27 @@ export const setupAntiFreezeProtection = () => {
       window.lastInteractionTime = Date.now();
     }, { passive: true });
   });
+  
+  // Fonction pour afficher une erreur de champ
+  const showFieldError = (field: HTMLElement, message: string) => {
+    // Trouver le parent approprié pour ajouter le message d'erreur
+    const parent = field.closest('.form-group') || field.parentElement;
+    if (!parent) return;
+    
+    // Vérifier si un message d'erreur existe déjà
+    let errorElement = parent.querySelector('.error-message');
+    
+    // Créer un nouvel élément si nécessaire
+    if (!errorElement) {
+      errorElement = document.createElement('div');
+      errorElement.className = 'error-message text-[#D11B19] text-sm mt-1';
+      parent.appendChild(errorElement);
+    }
+    
+    // Définir le message et s'assurer qu'il est visible
+    errorElement.textContent = message;
+    (errorElement as HTMLElement).style.display = 'block';
+  };
   
   // Observer les événements de soumission de formulaires
   document.addEventListener('submit', function(event) {
@@ -196,27 +217,6 @@ export const setupAntiFreezeProtection = () => {
     subtree: true
   });
   
-  // Fonction pour afficher une erreur de champ
-  const showFieldError = (field: HTMLElement, message: string) => {
-    // Trouver le parent approprié pour ajouter le message d'erreur
-    const parent = field.closest('.form-group') || field.parentElement;
-    if (!parent) return;
-    
-    // Vérifier si un message d'erreur existe déjà
-    let errorElement = parent.querySelector('.error-message');
-    
-    // Créer un nouvel élément si nécessaire
-    if (!errorElement) {
-      errorElement = document.createElement('div');
-      errorElement.className = 'error-message text-[#D11B19] text-sm mt-1';
-      parent.appendChild(errorElement);
-    }
-    
-    // Définir le message et s'assurer qu'il est visible
-    errorElement.textContent = message;
-    (errorElement as HTMLElement).style.display = 'block';
-  };
-  
   // Fonction de vérification périodique pour détecter les gels d'interface
   const setupFreezeDetection = () => {
     let lastTimestamp = Date.now();
@@ -250,7 +250,7 @@ export const setupAntiFreezeProtection = () => {
     window.freezeCheckInterval = setInterval(() => {
       const now = Date.now();
       const elapsed = now - lastTimestamp;
-      const inactivityTime = now - window.lastInteractionTime;
+      const inactivityTime = now - (window.lastInteractionTime || 0);
       
       // Si plus de 3 secondes se sont écoulées depuis la dernière frame, et l'utilisateur était actif récemment,
       // l'interface pourrait être gelée
@@ -302,7 +302,7 @@ export const setupAntiFreezeProtection = () => {
     // Nettoyage lors de la décharge de la page
     window.addEventListener('beforeunload', () => {
       if (window.freezeCheckInterval) {
-        clearInterval(window.freezeCheckInterval);
+        clearInterval(window.freezeCheckInterval as NodeJS.Timeout);
       }
     });
     
@@ -393,27 +393,6 @@ export const setupAntiFreezeProtection = () => {
       }, 5000); // 5 secondes maximum
     }
   }, true); // Capture phase
-  
-  // Fonction pour afficher une erreur de champ (définie pour être utilisée dans différents contextes)
-  function showFieldError(field: HTMLElement, message: string) {
-    // Trouver le parent approprié
-    const parent = field.closest('.form-group') || field.parentElement;
-    if (!parent) return;
-    
-    // Vérifier si un message d'erreur existe déjà
-    let errorElement = parent.querySelector('.error-message');
-    
-    // Si aucun message d'erreur n'existe, en créer un nouveau
-    if (!errorElement) {
-      errorElement = document.createElement('div');
-      errorElement.className = 'error-message text-[#D11B19] text-sm mt-1';
-      parent.appendChild(errorElement);
-    }
-    
-    // Définir le message
-    errorElement.textContent = message;
-    (errorElement as HTMLElement).style.display = 'block';
-  }
   
   console.log("Protection anti-freeze renforcée installée avec succès");
 };
