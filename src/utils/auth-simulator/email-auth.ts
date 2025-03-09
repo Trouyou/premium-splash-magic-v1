@@ -1,4 +1,3 @@
-
 import { MockUser } from './types';
 import { showAuthConfirmationToast } from './ui-utils';
 
@@ -72,14 +71,29 @@ export const simulateEmailSignIn = (
  * Simule une inscription
  */
 export const simulateSignUp = (
-  email: string, 
-  password: string, 
-  firstName?: string, 
+  userData: { email: string, firstName?: string, lastName?: string, birthdate?: string } | string,
+  password?: string,
+  firstName?: string,
   lastName?: string,
   birthdate?: string,
   callback?: (user: MockUser) => void
 ): Promise<MockUser> => {
   return new Promise((resolve, reject) => {
+    // Handle both old and new calling conventions
+    let email: string;
+    
+    if (typeof userData === 'object') {
+      // New style: single object parameter
+      email = userData.email;
+      firstName = userData.firstName;
+      lastName = userData.lastName;
+      birthdate = userData.birthdate;
+    } else {
+      // Old style: separate parameters
+      email = userData;
+      // Other parameters (password, firstName, lastName, birthdate) come from the function parameters
+    }
+    
     console.log("Simulating sign up with:", { email, passwordLength: password?.length, firstName, lastName, birthdate });
     
     // Vérification basique du mot de passe (pour simulation uniquement)

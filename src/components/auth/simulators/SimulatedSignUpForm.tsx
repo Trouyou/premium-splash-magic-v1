@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
@@ -131,7 +130,13 @@ export const SimulatedSignUpForm = ({
     setIsLoading(true);
     
     try {
-      const user = await simulateSignUp(email, password, firstName, lastName);
+      const user = await simulateSignUp(
+        email, 
+        password, 
+        firstName, 
+        lastName, 
+        birthdate || undefined
+      );
       
       toast({
         title: "Inscription réussie",

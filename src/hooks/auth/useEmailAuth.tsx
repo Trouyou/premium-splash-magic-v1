@@ -26,7 +26,7 @@ export const useEmailAuth = () => {
     }
   };
 
-  // Wrap the signUp function
+  // Wrap the signUp function with the correct parameters
   const signUp = async (
     email: string, 
     password: string, 

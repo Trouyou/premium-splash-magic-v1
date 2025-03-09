@@ -34,12 +34,8 @@ export const useSignUp = () => {
     try {
       if (inPreviewMode) {
         // Simulation mode - use fake authentication
-        await simulateSignUp({
-          email,
-          firstName,
-          lastName,
-          birthdate,
-        });
+        // Fix error 1: The simulateSignUp function expects more arguments
+        await simulateSignUp(email, password, firstName, lastName, birthdate);
         return undefined;
       } else {
         // Real authentication with Clerk
@@ -56,6 +52,7 @@ export const useSignUp = () => {
         });
         
         // For the signup process, continue with any needed verification
+        // Fix error 2: Compare with the correct string literal type
         if (signUpAttempt.status === "complete") {
           console.log("Signup successful and complete");
           return signUpAttempt;
