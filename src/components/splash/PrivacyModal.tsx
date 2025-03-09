@@ -49,7 +49,7 @@ const PrivacyModal = ({ isVisible, onAccept, onRefuse }: PrivacyModalProps) => {
                 opacity: { duration: 0.4, ease: "easeOut" },
                 scale: { 
                   duration: 0.5, 
-                  ease: [0.34, 1.56, 0.64, 1] // cubic-bezier pour le rebond élégant
+                  ease: [0.34, 1.56, 0.64, 1] // cubic-bezier for elegant bounce
                 }
               }}
               className={cn(

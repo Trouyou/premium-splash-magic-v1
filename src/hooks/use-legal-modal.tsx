@@ -19,7 +19,7 @@ export const useLegalModal = () => {
 
   const closeModal = useCallback(() => {
     setIsModalOpen(false);
-    // On ne réinitialise pas le documentType immédiatement pour permettre l'animation de sortie
+    // Don't reset documentType immediately to allow exit animation
     setTimeout(() => {
       setDocumentType(null);
     }, 300);

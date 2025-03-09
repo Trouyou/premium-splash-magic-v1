@@ -14,7 +14,7 @@ interface LegalModalProps {
 }
 
 const LegalModal: React.FC<LegalModalProps> = ({ isOpen, onClose, documentType }) => {
-  // Désactiver le scroll du body quand la modale est ouverte
+  // Disable body scroll when modal is open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -27,7 +27,7 @@ const LegalModal: React.FC<LegalModalProps> = ({ isOpen, onClose, documentType }
     };
   }, [isOpen]);
 
-  // Gestion de l'échappement avec la touche ESC
+  // Handle escape key
   useEffect(() => {
     const handleEscKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) {
@@ -59,12 +59,12 @@ const LegalModal: React.FC<LegalModalProps> = ({ isOpen, onClose, documentType }
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.95, opacity: 0 }}
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            className="bg-white rounded-xl w-full max-w-3xl max-h-[90vh] flex flex-col shadow-xl overflow-hidden"
+            className="bg-white rounded-xl w-full max-w-4xl max-h-[90vh] flex flex-col shadow-xl overflow-hidden"
             onClick={e => e.stopPropagation()}
           >
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
-              <h2 className="text-xl font-avantgarde font-semibold text-gray-900">{title}</h2>
+              <h2 className="text-xl font-semibold text-gray-900">{title}</h2>
               <button 
                 onClick={onClose} 
                 className="text-gray-500 hover:text-gray-700 focus:outline-none"
@@ -74,9 +74,9 @@ const LegalModal: React.FC<LegalModalProps> = ({ isOpen, onClose, documentType }
               </button>
             </div>
             
-            {/* Contenu avec défilement */}
-            <ScrollArea className="flex-grow">
-              <div className="p-6 text-gray-700">
+            {/* Content with scrolling */}
+            <ScrollArea className="flex-grow p-6" style={{ maxHeight: "calc(80vh - 140px)" }}>
+              <div className="text-gray-700">
                 {documentType === 'privacy' ? <PrivacyPolicy /> : <TermsOfService />}
               </div>
             </ScrollArea>
