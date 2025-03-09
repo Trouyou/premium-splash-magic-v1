@@ -8,8 +8,10 @@ import {
   Cherry, 
   Microwave, 
   UtensilsCrossed, 
+  KitchenKnife, 
   Scale, 
   Gauge, 
+  UtensilSpoon, 
   ChefHat, 
   ScrollText 
 } from 'lucide-react';
@@ -50,38 +52,39 @@ const KitchenEquipmentScreen: React.FC<KitchenEquipmentScreenProps> = ({
   
   const kitchenEquipment: Equipment[] = [
     // Appareils électriques
-    { id: 'thermomix', name: 'Thermomix', icon: <CookingPot strokeWidth={1.8} />, category: 'Appareils électriques' },
-    { id: 'blender', name: 'Blender / Mixeur', icon: <Cherry strokeWidth={1.8} />, category: 'Appareils électriques' },
-    { id: 'robot', name: 'Robot pâtissier', icon: <ChefHat strokeWidth={1.8} />, category: 'Appareils électriques' },
-    { id: 'airfryer', name: 'Air Fryer', icon: <CookingPot strokeWidth={1.8} />, category: 'Appareils électriques' },
-    { id: 'steamer', name: 'Cuiseur vapeur', icon: <CookingPot strokeWidth={1.8} />, category: 'Appareils électriques' },
-    { id: 'microwave', name: 'Four à micro-ondes', icon: <Microwave strokeWidth={1.8} />, category: 'Appareils électriques' },
+    { id: 'thermomix', name: 'Thermomix', icon: <CookingPot />, category: 'Appareils électriques' },
+    { id: 'blender', name: 'Blender / Mixeur', icon: <Cherry />, category: 'Appareils électriques' },
+    { id: 'robot', name: 'Robot pâtissier', icon: <ChefHat />, category: 'Appareils électriques' },
+    { id: 'airfryer', name: 'Air Fryer', icon: <CookingPot />, category: 'Appareils électriques' },
+    { id: 'steamer', name: 'Cuiseur vapeur', icon: <CookingPot />, category: 'Appareils électriques' },
+    { id: 'microwave', name: 'Four à micro-ondes', icon: <Microwave />, category: 'Appareils électriques' },
     
     // Ustensiles essentiels
-    { id: 'knife', name: 'Couteau de chef', icon: <UtensilsCrossed strokeWidth={1.8} />, category: 'Ustensiles essentiels' },
-    { id: 'cuttingboard', name: 'Planche à découper', icon: <ScrollText strokeWidth={1.8} />, category: 'Ustensiles essentiels' },
-    { id: 'whisk', name: 'Fouet', icon: <UtensilsCrossed strokeWidth={1.8} />, category: 'Ustensiles essentiels' },
-    { id: 'spatula', name: 'Spatule', icon: <Utensils strokeWidth={1.8} />, category: 'Ustensiles essentiels' },
-    { id: 'woodenspoons', name: 'Cuillères en bois', icon: <Utensils strokeWidth={1.8} />, category: 'Ustensiles essentiels' },
-    { id: 'strainer', name: 'Passoire', icon: <Utensils strokeWidth={1.8} />, category: 'Ustensiles essentiels' },
+    { id: 'knife', name: 'Couteau de chef', icon: <KitchenKnife />, category: 'Ustensiles essentiels' },
+    { id: 'cuttingboard', name: 'Planche à découper', icon: <ScrollText />, category: 'Ustensiles essentiels' },
+    { id: 'whisk', name: 'Fouet', icon: <UtensilsCrossed />, category: 'Ustensiles essentiels' },
+    { id: 'spatula', name: 'Spatule', icon: <UtensilSpoon />, category: 'Ustensiles essentiels' },
+    { id: 'woodenspoons', name: 'Cuillères en bois', icon: <UtensilSpoon />, category: 'Ustensiles essentiels' },
+    { id: 'strainer', name: 'Passoire', icon: <Utensils />, category: 'Ustensiles essentiels' },
     
     // Équipements de cuisson
-    { id: 'pan', name: 'Poêle antiadhésive', icon: <CookingPot strokeWidth={1.8} />, category: 'Équipements de cuisson' },
-    { id: 'saucepan', name: 'Casserole', icon: <CookingPot strokeWidth={1.8} />, category: 'Équipements de cuisson' },
-    { id: 'pot', name: 'Faitout/marmite', icon: <CookingPot strokeWidth={1.8} />, category: 'Équipements de cuisson' },
-    { id: 'wok', name: 'Wok', icon: <CookingPot strokeWidth={1.8} />, category: 'Équipements de cuisson' },
-    { id: 'bakingdish', name: 'Plat à gratin', icon: <CookingPot strokeWidth={1.8} />, category: 'Équipements de cuisson' },
-    { id: 'caketin', name: 'Moule à gâteau', icon: <CookingPot strokeWidth={1.8} />, category: 'Équipements de cuisson' },
+    { id: 'pan', name: 'Poêle antiadhésive', icon: <CookingPot />, category: 'Équipements de cuisson' },
+    { id: 'saucepan', name: 'Casserole', icon: <CookingPot />, category: 'Équipements de cuisson' },
+    { id: 'pot', name: 'Faitout/marmite', icon: <CookingPot />, category: 'Équipements de cuisson' },
+    { id: 'wok', name: 'Wok', icon: <CookingPot />, category: 'Équipements de cuisson' },
+    { id: 'bakingdish', name: 'Plat à gratin', icon: <CookingPot />, category: 'Équipements de cuisson' },
+    { id: 'caketin', name: 'Moule à gâteau', icon: <CookingPot />, category: 'Équipements de cuisson' },
     
     // Outils de mesure et préparation
-    { id: 'scale', name: 'Balance de cuisine', icon: <Scale strokeWidth={1.8} />, category: 'Outils de mesure et préparation' },
-    { id: 'measuringcup', name: 'Verre doseur', icon: <Gauge strokeWidth={1.8} />, category: 'Outils de mesure et préparation' },
-    { id: 'mixingbowls', name: 'Bols de préparation', icon: <CookingPot strokeWidth={1.8} />, category: 'Outils de mesure et préparation' },
-    { id: 'grater', name: 'Râpe', icon: <Utensils strokeWidth={1.8} />, category: 'Outils de mesure et préparation' },
-    { id: 'rollingpin', name: 'Rouleau à pâtisserie', icon: <ScrollText strokeWidth={1.8} />, category: 'Outils de mesure et préparation' },
-    { id: 'thermometer', name: 'Thermomètre de cuisine', icon: <Thermometer strokeWidth={1.8} />, category: 'Outils de mesure et préparation' },
+    { id: 'scale', name: 'Balance de cuisine', icon: <Scale />, category: 'Outils de mesure et préparation' },
+    { id: 'measuringcup', name: 'Verre doseur', icon: <Gauge />, category: 'Outils de mesure et préparation' },
+    { id: 'mixingbowls', name: 'Bols de préparation', icon: <CookingPot />, category: 'Outils de mesure et préparation' },
+    { id: 'grater', name: 'Râpe', icon: <Utensils />, category: 'Outils de mesure et préparation' },
+    { id: 'rollingpin', name: 'Rouleau à pâtisserie', icon: <ScrollText />, category: 'Outils de mesure et préparation' },
+    { id: 'thermometer', name: 'Thermomètre de cuisine', icon: <Thermometer />, category: 'Outils de mesure et préparation' },
   ];
   
+  // Group equipment by category
   const groupedEquipment = kitchenEquipment.reduce<Record<string, Equipment[]>>((acc, item) => {
     if (!acc[item.category]) {
       acc[item.category] = [];
@@ -94,18 +97,25 @@ const KitchenEquipmentScreen: React.FC<KitchenEquipmentScreenProps> = ({
     const { active, over } = event;
     
     if (over && over.id === 'your-equipment') {
+      // Add to selected equipment if not already there
       if (!selectedEquipment.includes(active.id as string)) {
         const newSelectedEquipment = [...selectedEquipment, active.id as string];
         setSelectedEquipment(newSelectedEquipment);
+        
+        // Update parent component state
         toggleEquipment(active.id as string);
       }
     } else if (over && over.id === 'available-equipment') {
+      // Remove from selected equipment
       const newSelectedEquipment = selectedEquipment.filter(id => id !== active.id);
       setSelectedEquipment(newSelectedEquipment);
+      
+      // Update parent component state
       toggleEquipment(active.id as string);
     }
   };
   
+  // Get equipment items that are selected and not selected
   const selectedEquipmentItems = kitchenEquipment.filter(item => 
     selectedEquipment.includes(item.id)
   );
@@ -136,6 +146,7 @@ const KitchenEquipmentScreen: React.FC<KitchenEquipmentScreenProps> = ({
         collisionDetection={closestCenter}
         onDragEnd={handleDragEnd}
       >
+        {/* Selected equipment dropzone */}
         <EquipmentDropZone 
           id="your-equipment" 
           title="Vos équipements" 
@@ -164,6 +175,7 @@ const KitchenEquipmentScreen: React.FC<KitchenEquipmentScreenProps> = ({
           )}
         </EquipmentDropZone>
         
+        {/* Available equipment */}
         <EquipmentDropZone
           id="available-equipment"
           title="Équipements disponibles"
