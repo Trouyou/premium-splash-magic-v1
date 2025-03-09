@@ -223,9 +223,22 @@ export const createLightweightValidator = (config: ValidatorConfig = {}) => {
       errorEl.style.display = 'flex';
     }
     
-    // Store error message
-    const fieldIdentifier = 'name' in fieldElement ? fieldElement.name : fieldElement.id;
+    // Store error message - fixing the TypeScript error by ensuring fieldIdentifier is a string
+    const fieldIdentifier = getFieldIdentifier(fieldElement);
     errors[fieldIdentifier] = message;
+  };
+  
+  /**
+   * Get a field identifier (name or id) ensuring it's a string
+   */
+  const getFieldIdentifier = (element: HTMLElement): string => {
+    // Check if name property exists on the element
+    if ('name' in element && element.name) {
+      return element.name;
+    }
+    
+    // Fallback to id or generate a unique identifier
+    return element.id || `field-${Math.random().toString(36).substring(2, 9)}`;
   };
   
   /**
@@ -246,8 +259,8 @@ export const createLightweightValidator = (config: ValidatorConfig = {}) => {
       errorEl.style.display = 'none';
     }
     
-    // Clear stored error
-    const fieldIdentifier = 'name' in fieldElement ? fieldElement.name : fieldElement.id;
+    // Clear stored error - fixing the TypeScript error by ensuring fieldIdentifier is a string
+    const fieldIdentifier = getFieldIdentifier(fieldElement);
     delete errors[fieldIdentifier];
   };
   
