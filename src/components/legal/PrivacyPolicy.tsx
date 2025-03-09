@@ -45,7 +45,6 @@ const PrivacyPolicy = () => {
         <li>Historique des commandes et abonnements</li>
       </ul>
       
-      {/* Sections suivantes abrégées pour la brièveté */}
       <h3 className="text-lg font-semibold mt-6 mb-2">5. Collecte des données</h3>
       <p>Nous collectons vos données lors de la création de votre compte, l'achat d'un abonnement, et lors de votre navigation sur notre site.</p>
       

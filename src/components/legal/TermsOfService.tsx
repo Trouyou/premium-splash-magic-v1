@@ -49,7 +49,6 @@ const TermsOfService = () => {
       </ul>
       <p>L'Utilisateur peut modifier ou résilier son abonnement dans les conditions prévues à l'article 8.</p>
       
-      {/* Sections suivantes abrégées pour la brièveté */}
       <h3 className="text-lg font-semibold mt-6 mb-2">5. Paiement et facturation</h3>
       <p>Les paiements sont sécurisés et peuvent être effectués par carte bancaire, prélèvement SEPA, ou Paypal.</p>
       
