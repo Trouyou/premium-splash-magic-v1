@@ -1,5 +1,7 @@
+
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { translateErrorMessage, getSignupFormError, setupFormValidation } from '@/utils/error-messages';
 import BirthdateSelector from './BirthdateSelector';
@@ -25,6 +27,7 @@ const SignupForm = () => {
   const [formError, setFormError] = useState('');
   const { signUp, isLoading, error } = useAuth();
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   useEffect(() => {
     setupFormValidation();
@@ -62,7 +65,14 @@ const SignupForm = () => {
     
     setFormError('');
     setBirthdateError('');
-    await signUp(email, password, firstName, lastName);
+    try {
+      await signUp(email, password, firstName, lastName);
+      
+      // Après une inscription réussie, rediriger vers la page d'onboarding
+      navigate('/onboarding');
+    } catch (error) {
+      console.error("Erreur d'inscription:", error);
+    }
   };
 
   const handleBirthdateChange = (date: string | null) => {
