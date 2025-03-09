@@ -20,8 +20,8 @@ export const setupErrorMessageHarmonization = () => {
       
       // Ensure message is correctly positioned
       const parentField = message.closest('.form-group, .form-field-container');
-      if (parentField && !message.parentNode.classList.contains('checkbox-container') && 
-          !message.parentNode.classList.contains('terms-checkbox-container')) {
+      if (parentField && !message.parentNode?.classList?.contains('checkbox-container') && 
+          !message.parentNode?.classList?.contains('terms-checkbox-container')) {
         // Move the message to the end of the field container
         parentField.appendChild(message);
       }
