@@ -232,9 +232,13 @@ export const createLightweightValidator = (config: ValidatorConfig = {}) => {
    * Get a field identifier (name or id) ensuring it's a string
    */
   const getFieldIdentifier = (element: HTMLElement): string => {
-    // Check if name property exists on the element
-    if ('name' in element && element.name) {
-      return element.name;
+    // Check if name property exists on the element as an HTMLInputElement, HTMLSelectElement, or HTMLTextAreaElement
+    if (element instanceof HTMLInputElement || 
+        element instanceof HTMLSelectElement || 
+        element instanceof HTMLTextAreaElement) {
+      if (element.name) {
+        return element.name;
+      }
     }
     
     // Fallback to id or generate a unique identifier
