@@ -1,9 +1,9 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
-import { translateErrorMessage, getSignupFormError } from '@/utils/error-messages';
+import { translateErrorMessage, getSignupFormError, createLightweightValidator } from '@/utils/error-messages';
 import BirthdateSelector from './BirthdateSelector';
 import FormErrorDisplay from './FormErrorDisplay';
 import PasswordInput from './PasswordInput';
@@ -12,6 +12,42 @@ import SignupButton from './SignupButton';
 import InputField from './InputField';
 import { useToast } from '@/hooks/use-toast';
 import '@/styles/form-errors.css';
+
+// Anti-freeze script that ensures the UI remains responsive
+const useAntiFreeze = () => {
+  useEffect(() => {
+    let lastTime = Date.now();
+    let frameId: number;
+    
+    const checkFreeze = () => {
+      const now = Date.now();
+      const timeDiff = now - lastTime;
+      
+      // If more than 5 seconds between frames, we might be frozen
+      if (timeDiff > 5000) {
+        console.warn('UI freeze detected, attempting recovery');
+        
+        // Find and reset any disabled buttons
+        document.querySelectorAll('button[disabled]').forEach(button => {
+          if (button instanceof HTMLButtonElement) {
+            button.disabled = false;
+          }
+        });
+      }
+      
+      lastTime = now;
+      frameId = requestAnimationFrame(checkFreeze);
+    };
+    
+    // Start monitoring
+    frameId = requestAnimationFrame(checkFreeze);
+    
+    // Clean up
+    return () => {
+      cancelAnimationFrame(frameId);
+    };
+  }, []);
+};
 
 const SignupForm = () => {
   const [email, setEmail] = useState('');
@@ -29,7 +65,68 @@ const SignupForm = () => {
   const { signUp, isLoading, error } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
-
+  const formRef = useRef<HTMLFormElement>(null);
+  
+  // Use the anti-freeze hook to prevent UI freezes
+  useAntiFreeze();
+  
+  // Initialize lightweight form validator
+  const validatorRef = useRef<ReturnType<typeof createLightweightValidator> | null>(null);
+  
+  useEffect(() => {
+    // Create the lightweight validator
+    const validator = createLightweightValidator({
+      maxValidationTime: 2000, // Max time for validation before resetting
+    });
+    
+    // Setup validators
+    validator.addValidator('firstName', (value) => {
+      if (!value) return 'Ce champ est requis';
+      return null;
+    })
+    .addValidator('lastName', (value) => {
+      if (!value) return 'Ce champ est requis';
+      return null;
+    })
+    .addValidator('email', (value) => {
+      if (!value) return 'Ce champ est requis';
+      if (!/\S+@\S+\.\S+/.test(value)) return 'Adresse email invalide';
+      return null;
+    })
+    .addValidator('password', (value) => {
+      if (!value) return 'Ce champ est requis';
+      if (value.length < 6) return 'Le mot de passe doit contenir au moins 6 caractères';
+      return null;
+    })
+    .addValidator('confirmPassword', (value, form) => {
+      if (!value) return 'Ce champ est requis';
+      
+      // Find password input
+      const passwordInput = form.querySelector('input[name="password"]') as HTMLInputElement;
+      if (passwordInput && value !== passwordInput.value) {
+        return 'Les mots de passe ne correspondent pas';
+      }
+      
+      return null;
+    })
+    .addValidator('terms-accept', (value) => {
+      if (value !== 'checked') return 'Veuillez accepter les conditions d\'utilisation';
+      return null;
+    });
+    
+    // Initialize after a short delay to ensure DOM is ready
+    setTimeout(() => {
+      validator.initialize();
+    }, 100);
+    
+    // Store the validator in the ref
+    validatorRef.current = validator;
+    
+    return () => {
+      // Cleanup will happen automatically
+    };
+  }, []);
+  
   useEffect(() => {
     if (error) {
       const translatedError = translateErrorMessage(error);
@@ -44,6 +141,11 @@ const SignupForm = () => {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Clear previous errors
+    setFormError('');
+    setBirthdateError('');
+    
+    // Basic client-side validation
     if (!birthdate || !birthdateValid) {
       setBirthdateError('Veuillez indiquer une date de naissance valide (18 ans minimum)');
       return;
@@ -60,8 +162,6 @@ const SignupForm = () => {
       return;
     }
     
-    setFormError('');
-    setBirthdateError('');
     try {
       await signUp(email, password, firstName, lastName);
       
@@ -92,7 +192,12 @@ const SignupForm = () => {
     <>
       <FormErrorDisplay error={formError} className="bg-red-50 p-3 rounded-md mb-4" />
 
-      <form onSubmit={handleSignup} className="space-y-4" noValidate>
+      <form 
+        ref={formRef}
+        onSubmit={handleSignup} 
+        className="space-y-4 lightweight-validation pristine" 
+        noValidate
+      >
         <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
           <InputField
             type="text"

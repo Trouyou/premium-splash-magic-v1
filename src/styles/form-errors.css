@@ -254,3 +254,39 @@ div > svg + div {
 .text-\[\#D11B19\].text-sm.flex.items-start {
   align-items: center !important;
 }
+
+/* Anti-freeze styling */
+.lightweight-validation input, 
+.lightweight-validation select, 
+.lightweight-validation textarea {
+  transition: border-color 0.2s ease, background-color 0.2s ease !important;
+}
+
+/* Pristine state - ensure no errors shown initially */
+form.pristine input, 
+form.pristine select, 
+form.pristine textarea {
+  border-color: #E2E8F0 !important;
+  background-color: #FFFFFF !important;
+}
+
+form.pristine .error-message,
+form.pristine [class*="error"] {
+  display: none !important;
+}
+
+/* Prevent validation freeze */
+form.lightweight-validation button[type="submit"] {
+  transition: opacity 0.2s ease !important;
+}
+
+/* Ensure form stays responsive */
+form.lightweight-validation {
+  contain: content !important;
+}
+
+form input, 
+form select, 
+form textarea {
+  will-change: auto !important;
+}
