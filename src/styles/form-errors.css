@@ -145,3 +145,122 @@
   100% { transform: scale(1.08); }
 }
 
+/* Styles pour le mode développement */
+.dev-mode-indicator {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background-color: rgba(255, 0, 0, 0.7);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: bold;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.dev-mode-message {
+  padding: 10px;
+  margin: 10px 0;
+  background-color: #f8f9fa;
+  border-left: 4px solid #17a2b8;
+  font-size: 14px;
+}
+
+.dev-mode-message strong {
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* Style pour les boutons d'authentification sociale */
+.social-auth-container {
+  margin: 20px 0;
+  width: 100%;
+}
+
+.social-separator {
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+  position: relative;
+  justify-content: center;
+}
+
+.social-separator hr {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  margin: 0;
+  border: none;
+  border-top: 1px solid #ddd;
+}
+
+.social-separator span {
+  padding: 0 15px;
+  position: relative;
+  z-index: 1;
+  background-color: #fff;
+  color: #777;
+  font-size: 14px;
+}
+
+.social-buttons-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.social-auth-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.social-auth-button:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+.social-auth-button .social-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.google-auth {
+  background-color: #DB4437;
+  color: #FFFFFF;
+}
+
+.apple-auth {
+  background-color: #000000;
+  color: #FFFFFF;
+}
+
+.facebook-auth {
+  background-color: #4267B2;
+  color: #FFFFFF;
+}
+
+@media (max-width: 768px) {
+  .social-auth-button .social-text {
+    display: none;
+  }
+  
+  .social-auth-button {
+    width: 50px;
+    padding: 12px;
+  }
+}

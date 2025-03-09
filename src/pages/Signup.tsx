@@ -42,7 +42,7 @@ const Signup = () => {
   }, []);
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen w-screen bg-white m-0 p-0 overflow-hidden" style={{ margin: 0, padding: 0, maxWidth: '100vw', width: '100vw', height: '100vh', maxHeight: '100vh', boxSizing: 'border-box', overflow: 'hidden' }}>
+    <div className="flex flex-col md:flex-row min-h-screen w-screen bg-white m-0 p-0 overflow-auto" style={{ margin: 0, padding: 0, maxWidth: '100vw', width: '100vw', minHeight: '100vh', boxSizing: 'border-box' }}>
       <StyleInjector />
       <Toaster />
       
@@ -50,7 +50,7 @@ const Signup = () => {
         <LoginAnimation />
       </div>
 
-      <div className="w-full md:w-2/5 flex flex-col justify-center items-center px-6 py-12 md:px-12" style={{ height: '100vh', maxHeight: '100vh', overflowY: 'auto' }}>
+      <div className="w-full md:w-2/5 flex flex-col justify-center items-center px-6 py-12 md:px-12" style={{ minHeight: '100vh', overflowY: 'auto' }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -58,10 +58,6 @@ const Signup = () => {
           className="w-full max-w-md"
         >
           <SignupHeader />
-          
-          <SocialLoginSection />
-          
-          <LoginSeparator />
           
           <SignupForm />
 

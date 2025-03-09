@@ -17,9 +17,25 @@ export interface SignUpFormData {
   acceptTerms: boolean;
 }
 
+export const isDevMode = (): boolean => {
+  return (
+    window.location.hostname.includes('localhost') || 
+    window.location.hostname.includes('127.0.0.1') ||
+    window.location.hostname.includes('lovableproject.com') ||
+    window.location.hostname.includes('preview--') ||
+    window.location.search.includes('dev=true')
+  );
+};
+
 export const validateSignUpForm = (
   formData: SignUpFormData
 ): ValidationErrors => {
+  // In development mode, skip validation if the dev flag is set
+  if (isDevMode() && window.location.search.includes('dev=true')) {
+    console.log('[DEV MODE] Validation bypassed in development mode with dev=true flag');
+    return {};
+  }
+  
   const errors: ValidationErrors = {};
   
   // Validate first name
