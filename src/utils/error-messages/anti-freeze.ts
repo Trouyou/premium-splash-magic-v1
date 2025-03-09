@@ -33,27 +33,6 @@ export const setupAntiFreezeProtection = () => {
     }, { passive: true });
   });
   
-  // Fonction pour afficher une erreur de champ
-  const showFieldError = (field: HTMLElement, message: string) => {
-    // Trouver le parent approprié pour ajouter le message d'erreur
-    const parent = field.closest('.form-group') || field.parentElement;
-    if (!parent) return;
-    
-    // Vérifier si un message d'erreur existe déjà
-    let errorElement = parent.querySelector('.error-message');
-    
-    // Créer un nouvel élément si nécessaire
-    if (!errorElement) {
-      errorElement = document.createElement('div');
-      errorElement.className = 'error-message text-[#D11B19] text-sm mt-1';
-      parent.appendChild(errorElement);
-    }
-    
-    // Définir le message et s'assurer qu'il est visible
-    errorElement.textContent = message;
-    (errorElement as HTMLElement).style.display = 'block';
-  };
-  
   // Observer les événements de soumission de formulaires
   document.addEventListener('submit', function(event) {
     // Récupérer le formulaire
@@ -217,6 +196,27 @@ export const setupAntiFreezeProtection = () => {
     subtree: true
   });
   
+  // Fonction pour afficher une erreur de champ
+  const showFieldError = (field: HTMLElement, message: string) => {
+    // Trouver le parent approprié pour ajouter le message d'erreur
+    const parent = field.closest('.form-group') || field.parentElement;
+    if (!parent) return;
+    
+    // Vérifier si un message d'erreur existe déjà
+    let errorElement = parent.querySelector('.error-message');
+    
+    // Créer un nouvel élément si nécessaire
+    if (!errorElement) {
+      errorElement = document.createElement('div');
+      errorElement.className = 'error-message text-[#D11B19] text-sm mt-1';
+      parent.appendChild(errorElement);
+    }
+    
+    // Définir le message et s'assurer qu'il est visible
+    errorElement.textContent = message;
+    (errorElement as HTMLElement).style.display = 'block';
+  };
+  
   // Fonction de vérification périodique pour détecter les gels d'interface
   const setupFreezeDetection = () => {
     let lastTimestamp = Date.now();
@@ -250,7 +250,7 @@ export const setupAntiFreezeProtection = () => {
     window.freezeCheckInterval = setInterval(() => {
       const now = Date.now();
       const elapsed = now - lastTimestamp;
-      const inactivityTime = now - (window.lastInteractionTime || 0);
+      const inactivityTime = now - (window.lastInteractionTime || now);
       
       // Si plus de 3 secondes se sont écoulées depuis la dernière frame, et l'utilisateur était actif récemment,
       // l'interface pourrait être gelée
