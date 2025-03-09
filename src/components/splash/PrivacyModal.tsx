@@ -2,8 +2,6 @@
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
-import { useLegalModal } from '@/hooks/use-legal-modal';
-import LegalModal from '@/components/legal/LegalModal';
 
 interface PrivacyModalProps {
   isVisible: boolean;
@@ -13,7 +11,6 @@ interface PrivacyModalProps {
 
 const PrivacyModal = ({ isVisible, onAccept, onRefuse }: PrivacyModalProps) => {
   const [imageLoaded, setImageLoaded] = useState(false);
-  const { isModalOpen, documentType, openPrivacyPolicy, closeModal } = useLegalModal();
   
   useEffect(() => {
     if (isVisible) {
@@ -90,27 +87,15 @@ const PrivacyModal = ({ isVisible, onAccept, onRefuse }: PrivacyModalProps) => {
               Accepter
             </motion.button>
           </div>
-          <button 
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              openPrivacyPolicy();
-            }}
+          <a 
+            href="/politique-confidentialite.html"
+            target="_blank"
             className="font-playfair text-sm text-[#B22222] mt-5 no-underline hover:underline"
           >
             En savoir plus sur notre politique de confidentialité
-          </button>
+          </a>
         </motion.div>
       </motion.div>
-
-      {/* Modal for legal documents */}
-      {documentType && (
-        <LegalModal 
-          isOpen={isModalOpen} 
-          onClose={closeModal} 
-          documentType={documentType} 
-        />
-      )}
     </>
   );
 };

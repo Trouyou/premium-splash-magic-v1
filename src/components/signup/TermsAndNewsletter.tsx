@@ -2,8 +2,6 @@
 import { useState, useEffect } from 'react';
 import FormErrorDisplay from './FormErrorDisplay';
 import { defaultErrorMessages } from '@/utils/error-messages';
-import { useLegalModal } from '@/hooks/use-legal-modal';
-import LegalModal from '@/components/legal/LegalModal';
 
 interface TermsAndNewsletterProps {
   acceptTerms: boolean;
@@ -20,7 +18,6 @@ const TermsAndNewsletter = ({
 }: TermsAndNewsletterProps) => {
   const [termsError, setTermsError] = useState('');
   const [isDirty, setIsDirty] = useState(false);
-  const { isModalOpen, documentType, openPrivacyPolicy, openTermsOfService, closeModal } = useLegalModal();
 
   useEffect(() => {
     if (isDirty) {
@@ -58,27 +55,21 @@ const TermsAndNewsletter = ({
         />
         <label htmlFor="terms-accept" className="font-avantgarde text-sm leading-relaxed text-[#333333] flex-1 text-left">
           J'accepte les {" "}
-          <button 
-            type="button" 
-            onClick={(e) => {
-              e.preventDefault();
-              openTermsOfService();
-            }} 
+          <a 
+            href="/conditions-utilisation.html" 
+            target="_blank" 
             className="text-eatly-primary hover:underline font-medium"
           >
             conditions d'utilisation
-          </button>
+          </a>
           {" "} et la {" "}
-          <button 
-            type="button" 
-            onClick={(e) => {
-              e.preventDefault();
-              openPrivacyPolicy();
-            }} 
+          <a 
+            href="/politique-confidentialite.html" 
+            target="_blank" 
             className="text-eatly-primary hover:underline font-medium"
           >
             politique de confidentialité
-          </button>
+          </a>
         </label>
       </div>
       <div className="pl-7 -mt-3">
@@ -101,15 +92,6 @@ const TermsAndNewsletter = ({
           Oui, je souhaite recevoir des offres personnalisées et des conseils nutritionnels
         </label>
       </div>
-
-      {/* Modal for legal documents */}
-      {documentType && (
-        <LegalModal 
-          isOpen={isModalOpen} 
-          onClose={closeModal} 
-          documentType={documentType} 
-        />
-      )}
     </>
   );
 };

@@ -1,13 +1,10 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useLegalModal } from '@/hooks/use-legal-modal';
-import LegalModal from '@/components/legal/LegalModal';
 
 const LoginFooter = () => {
   const navigate = useNavigate();
   const isClerkConfigured = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
-  const { isModalOpen, documentType, openPrivacyPolicy, openTermsOfService, closeModal } = useLegalModal();
   
   return (
     <>
@@ -35,32 +32,23 @@ const LoginFooter = () => {
 
       <div className="mt-12 text-center text-xs text-gray-500">
         <div className="flex justify-center space-x-4">
-          <button 
-            type="button"
-            onClick={openTermsOfService}
-            className="hover:underline"
+          <a 
+            href="/conditions-utilisation.html"
+            target="_blank"
+            className="hover:underline text-eatly-primary"
           >
             Conditions d'utilisation
-          </button>
+          </a>
           <span>•</span>
-          <button 
-            type="button"
-            onClick={openPrivacyPolicy}
-            className="hover:underline"
+          <a 
+            href="/politique-confidentialite.html"
+            target="_blank"
+            className="hover:underline text-eatly-primary"
           >
             Politique de confidentialité
-          </button>
+          </a>
         </div>
       </div>
-      
-      {/* Modal for legal documents */}
-      {documentType && (
-        <LegalModal 
-          isOpen={isModalOpen} 
-          onClose={closeModal} 
-          documentType={documentType} 
-        />
-      )}
     </>
   );
 };

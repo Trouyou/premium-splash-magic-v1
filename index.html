@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -7,6 +8,97 @@
     <meta name="description" content="Lovable Generated Project" />
     <meta name="author" content="Lovable" />
     <meta property="og:image" content="/og-image.png" />
+    
+    <!-- Script for fixing legal document links -->
+    <script>
+      // Script to fix legal document links
+      document.addEventListener('DOMContentLoaded', function() {
+        // Function to fix all legal links
+        function fixLegalLinks() {
+          // All links that might point to legal documents
+          const allLinks = document.querySelectorAll('a');
+          
+          allLinks.forEach(link => {
+            const href = link.getAttribute('href') || '';
+            const text = link.textContent.toLowerCase();
+            
+            // Links to Terms of Service
+            if (href.includes('cgu') || href.includes('conditions') || 
+                text.includes('conditions') || text.includes('cgu') || 
+                text.includes('terms')) {
+              link.setAttribute('href', '/conditions-utilisation.html');
+              link.setAttribute('target', '_blank');
+              link.style.color = '#9C1B1A';
+            }
+            
+            // Links to Privacy Policy
+            if (href.includes('politique') || href.includes('confidentialite') || href.includes('privacy') ||
+                text.includes('politique') || text.includes('confidentialité')) {
+              link.setAttribute('href', '/politique-confidentialite.html');
+              link.setAttribute('target', '_blank');
+              link.style.color = '#9C1B1A';
+            }
+          });
+          
+          // Look for checkbox labels (signup page)
+          const labels = document.querySelectorAll('label');
+          labels.forEach(label => {
+            const labelHtml = label.innerHTML;
+            if (labelHtml.includes('conditions') || labelHtml.includes('politique')) {
+              let newText = labelHtml;
+              
+              // Replace terms of service references
+              if (newText.includes('conditions d\'utilisation') || newText.includes('conditions d'utilisation')) {
+                newText = newText.replace(
+                  /conditions d['']utilisation/gi, 
+                  '<a href="/conditions-utilisation.html" target="_blank" style="color:#9C1B1A;">conditions d\'utilisation</a>'
+                );
+              }
+              
+              // Replace privacy policy references
+              if (newText.includes('politique de confidentialité')) {
+                newText = newText.replace(
+                  /politique de confidentialité/gi, 
+                  '<a href="/politique-confidentialite.html" target="_blank" style="color:#9C1B1A;">politique de confidentialité</a>'
+                );
+              }
+              
+              label.innerHTML = newText;
+            }
+          });
+          
+          // Fix links in RGPD popup
+          setTimeout(() => {
+            const rgpdElements = document.querySelectorAll('.rgpd-popup, .cookie-banner, .cookie-consent, [role="dialog"]');
+            rgpdElements.forEach(el => {
+              if (el.innerHTML.includes('confidentialité') || el.innerHTML.includes('politique')) {
+                let links = el.querySelectorAll('a');
+                links.forEach(link => {
+                  if (link.textContent.toLowerCase().includes('politique') || 
+                      link.textContent.toLowerCase().includes('confidentialité') || 
+                      link.textContent.toLowerCase().includes('en savoir plus')) {
+                    link.setAttribute('href', '/politique-confidentialite.html');
+                    link.setAttribute('target', '_blank');
+                    link.style.color = '#9C1B1A';
+                    link.style.fontWeight = 'bold';
+                  }
+                });
+              }
+            });
+          }, 500);
+        }
+
+        // Execute immediately
+        fixLegalLinks();
+        
+        // Re-execute after each DOM change
+        const observer = new MutationObserver(fixLegalLinks);
+        observer.observe(document.body, { childList: true, subtree: true });
+        
+        // Re-execute after complete loading
+        window.addEventListener('load', fixLegalLinks);
+      });
+    </script>
   </head>
 
   <body>
