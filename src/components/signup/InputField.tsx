@@ -76,6 +76,14 @@ const InputField = ({
       }
     }
     
+    // Sanitize input for security (remove potentially harmful code)
+    if (type === 'text' || type === 'textarea') {
+      const sanitizedValue = value.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
+      if (sanitizedValue !== value) {
+        onChange(sanitizedValue);
+      }
+    }
+    
     // No errors
     setError('');
     return true;
@@ -105,8 +113,11 @@ const InputField = ({
         onBlur={handleBlur}
         pattern={pattern}
         aria-invalid={!!error}
+        // Accessibilité améliorée
+        aria-required={required}
+        aria-describedby={error ? `${name}-error` : undefined}
       />
-      <FormErrorDisplay error={error} />
+      <FormErrorDisplay error={error} id={error ? `${name}-error` : undefined} />
     </div>
   );
 };
