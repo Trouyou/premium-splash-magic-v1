@@ -28,20 +28,33 @@
       padding: 10px 20px;
       border-radius: 5px;
       cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .button:hover {
+      background: #D11B19;
     }
     h1 { font-size: 24px; margin-top: 30px; }
     h2 { font-size: 20px; margin-top: 25px; }
     h3 { font-size: 18px; margin-top: 20px; }
     p, li { text-align: justify; }
+    .footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+      color: #666;
+      font-size: 14px;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
   <div class="header">
     <h1>Politique de confidentialité</h1>
-    <button class="button" onclick="window.history.back()">Retour</button>
+    <a href="javascript:void(0);" class="button" onclick="window.history.go(-1); return false;">Retour</a>
   </div>
   
-  <div>
+  <main>
     <h1>Politique de Protection des Données Personnelles – Eatly</h1>
     
     <h2>1. Introduction</h2>
@@ -50,20 +63,21 @@
     
     <h2>2. Responsable du traitement</h2>
     <p>Le responsable du traitement des données personnelles est :</p>
-    <p><strong>Eatly SAS</strong><br />
-    58 rue de Monceau, Paris 75008<br />
-    Email : <a href="mailto:contact@eatlyfood.fr" style="color: #9C1B1A;">contact@eatlyfood.fr</a></p>
+    <p><strong>Eatly SAS</strong><br>58 rue de Monceau, Paris 75008<br>Email : <a href="mailto:contact@eatlyfood.fr">contact@eatlyfood.fr</a></p>
     <p>Eatly a désigné un Délégué à la Protection des Données (DPO) que vous pouvez contacter pour toute question relative à la protection des données :</p>
     <ul>
-      <li>Par courrier postal : Eatly – DPO, 58 rue de Monceau, Paris 75008</li>
+        <li>Par courrier postal : Eatly – DPO, 58 rue de Monceau, Paris 75008</li>
     </ul>
     
     <h2>3. Définitions</h2>
     <ul>
-      <li><strong>Donnée à caractère personnel</strong> : toute information relative à une personne physique identifiée ou identifiable (nom, prénom, adresse e-mail, etc.).</li>
-      <li><strong>Donnée sensible</strong> : toute donnée révélant l'origine raciale ou ethnique, les opinions religieuses, les données de santé ou les préférences alimentaires spécifiques.</li>
-      <li><strong>Traitement</strong> : toute opération effectuée sur des données personnelles (collecte, stockage, modification, suppression, etc.).</li>
-      <li><strong>Responsable du traitement</strong> : la personne morale qui détermine les finalités et moyens du traitement des données.</li>
+        <li><strong>Donnée à caractère personnel</strong> : toute information relative à une personne physique identifiée ou identifiable (nom, prénom, adresse e-mail, etc.).</li>
+        <li><strong>Donnée sensible</strong> : toute donnée révélant l'origine raciale ou ethnique, les opinions religieuses, les données de santé ou les préférences alimentaires spécifiques (ex. : régimes halal, casher, diabétique, etc.).</li>
+        <li><strong>Traitement</strong> : toute opération effectuée sur des données personnelles (collecte, stockage, modification, suppression, etc.).</li>
+        <li><strong>Responsable du traitement</strong> : la personne morale qui détermine les finalités et moyens du traitement des données.</li>
+        <li><strong>Sous-traitant</strong> : une entité traitant des données personnelles pour le compte du responsable du traitement.</li>
+        <li><strong>Personne concernée</strong> : toute personne dont les données sont collectées (clients, prospects, partenaires, etc.).</li>
+        <li><strong>Destinataires</strong> : toute personne ou organisation recevant communication des données.</li>
     </ul>
     
     <h2>4. Données collectées</h2>
@@ -71,46 +85,119 @@
     
     <h3>4.1. Données d'identification</h3>
     <ul>
-      <li>Nom, prénom</li>
-      <li>Adresse e-mail</li>
-      <li>Adresse postale et numéro de téléphone</li>
+        <li>Nom, prénom</li>
+        <li>Adresse e-mail</li>
+        <li>Adresse postale et numéro de téléphone</li>
     </ul>
     
     <h3>4.2. Données liées à votre compte et votre abonnement</h3>
     <ul>
-      <li>Identifiants de connexion</li>
-      <li>Préférences alimentaires</li>
-      <li>Historique des commandes et abonnements</li>
+        <li>Identifiants de connexion</li>
+        <li>Préférences alimentaires (allergies, régimes spécifiques tels que halal, casher, diabétique, végétalien, etc.)</li>
+        <li>Historique des commandes et abonnements</li>
+        <li>Informations de santé pertinentes pour la personnalisation des repas (ex. : diabète, intolérances alimentaires)</li>
+    </ul>
+    
+    <h3>4.3. Données de paiement</h3>
+    <ul>
+        <li>Informations bancaires (gérées via des prestataires sécurisés comme Stripe ou PayPal)</li>
+        <li>Historique des transactions</li>
+    </ul>
+    
+    <h3>4.4. Données de navigation</h3>
+    <ul>
+        <li>Adresse IP</li>
+        <li>Données de connexion et d'usage de l'application Eatly</li>
+        <li>Préférences et interactions avec nos services (recettes consultées, temps passé sur l'application)</li>
     </ul>
     
     <h2>5. Collecte des données</h2>
-    <p>Nous collectons vos données lors de la création de votre compte, l'achat d'un abonnement, et lors de votre navigation sur notre site.</p>
+    <p>Nous collectons vos données de plusieurs manières :</p>
+    
+    <h3>5.1. Collecte directe</h3>
+    <ul>
+        <li>Lors de la création de votre compte Eatly</li>
+        <li>Lors de l'achat d'un abonnement ou d'un repas</li>
+        <li>Lors de votre navigation sur notre site ou application</li>
+    </ul>
+    
+    <h3>5.2. Collecte indirecte</h3>
+    <ul>
+        <li>Via nos partenaires (ex. applications de fitness synchronisées avec Eatly)</li>
+        <li>Via les réseaux sociaux lorsque vous interagissez avec nous</li>
+    </ul>
     
     <h2>6. Finalités du traitement des données</h2>
-    <p>Eatly collecte et traite vos données pour la gestion des abonnements, la personnalisation de l'expérience utilisateur, et l'amélioration du service.</p>
+    <p>Eatly collecte et traite vos données pour les finalités suivantes :</p>
+    <ul>
+        <li><strong>Gestion des abonnements et des commandes</strong> (traitement des paiements, gestion des livraisons)</li>
+        <li><strong>Personnalisation de l'expérience utilisateur</strong> (recommandations basées sur vos préférences et objectifs nutritionnels, y compris les régimes spécifiques et besoins de santé). Les données sensibles ne sont collectées et traitées <strong>que sur la base du consentement explicite de l'utilisateur</strong>. Le consentement pour le traitement des données sensibles est recueilli via une <strong>case à cocher distincte</strong> lors de l'inscription ou dans les paramètres du compte. L'utilisateur peut <strong>modifier ou retirer son consentement à tout moment</strong> dans la section "Gestion des données personnelles" de son compte.</li>
+        <li><strong>Amélioration du service et études de satisfaction</strong> (analyse des comportements d'utilisation)</li>
+        <li><strong>Marketing et communication</strong> (envoi de newsletters, promotions, et offres personnalisées, sous réserve de votre consentement préalable)</li>
+        <li><strong>Respect des obligations légales et contractuelles</strong> (facturation, comptabilité)</li>
+        <li><strong>Sécurité et prévention des fraudes</strong> (protection contre les accès non autorisés)</li>
+    </ul>
     
     <h2>7. Partage des données</h2>
-    <p>Les données personnelles peuvent être partagées avec les services internes d'Eatly, nos prestataires et partenaires, et les autorités légales en cas d'obligation réglementaire.</p>
+    <p>Les données personnelles peuvent être partagées avec :</p>
+    <ul>
+        <li><strong>Les services internes d'Eatly</strong> (équipe technique, service client, logistique)</li>
+        <li><strong>Nos prestataires et partenaires</strong> (hébergeurs, plateformes de paiement, services de livraison)</li>
+        <li><strong>Les autorités légales</strong> en cas d'obligation réglementaire</li>
+    </ul>
+    <p>Nous ne vendons ni ne louons jamais vos données personnelles à des tiers.</p>
     
     <h2>8. Hébergement et transfert des données</h2>
-    <p>Les données sont hébergées dans l'Union Européenne. Si des données personnelles sont transférées hors de l'Union Européenne, Eatly veille à ce que ces transferts soient encadrés par des garanties appropriées.</p>
+    <p>Les données sont hébergées dans l'Union Européenne. Si des données personnelles sont transférées hors de l'Union Européenne, Eatly veille à ce que ces transferts soient encadrés par des Clauses Contractuelles Types (CCT) validées par la Commission Européenne et que des garanties de sécurité adéquates soient mises en place.</p>
     
     <h2>9. Durée de conservation des données</h2>
-    <p>Les données personnelles sont conservées uniquement pour la durée nécessaire à la réalisation des finalités pour lesquelles elles ont été collectées.</p>
+    <p>Les données personnelles sont conservées uniquement pour la durée nécessaire à la réalisation des finalités pour lesquelles elles ont été collectées. Cette durée est déterminée en fonction des obligations légales, des exigences contractuelles, des recommandations des autorités de contrôle, et des besoins opérationnels d'Eatly. Une fois ces finalités atteintes, les données sont supprimées ou anonymisées de manière sécurisée.</p>
     
     <h2>10. Sécurité des données</h2>
-    <p>Eatly met en place des mesures techniques et organisationnelles pour assurer la sécurité de vos données, incluant le chiffrement des données sensibles et le stockage sécurisé.</p>
+    <p>Eatly met en place des mesures techniques et organisationnelles pour assurer la sécurité de vos données :</p>
+    <ul>
+        <li><strong>Chiffrement des données sensibles</strong></li>
+        <li><strong>Stockage sécurisé</strong> sur des serveurs conformes aux normes européennes</li>
+        <li><strong>Authentification renforcée</strong> pour les accès aux comptes</li>
+        <li><strong>Contrôles et audits réguliers</strong> de notre système de sécurité</li>
+    </ul>
+    <p>En cas de violation de vos données, nous notifierons la CNIL et les personnes concernées dans les délais légaux.</p>
     
     <h2>11. Vos droits</h2>
-    <p>Vous disposez de droits sur vos données personnelles, notamment le droit d'accès, de rectification, d'effacement, et d'opposition. Pour exercer vos droits, envoyez-nous un courrier postal.</p>
+    <p>Vous disposez des droits suivants sur vos données personnelles :</p>
+    <ul>
+        <li><strong>Droit d'accès</strong> : connaître les données détenues par Eatly sur vous</li>
+        <li><strong>Droit de rectification</strong> : corriger toute information erronée</li>
+        <li><strong>Droit à l'effacement</strong> : suppression de vos données sous certaines conditions</li>
+        <li><strong>Droit à la portabilité</strong> : récupérer vos données dans un format structuré</li>
+        <li><strong>Droit d'opposition</strong> : refuser certains traitements, notamment à des fins marketing</li>
+        <li><strong>Droit de limitation</strong> : restreindre temporairement l'utilisation de vos données</li>
+    </ul>
+    <p>Pour exercer vos droits, envoyez-nous un courrier postal à l'adresse suivante : Eatly SAS, 58 rue de Monceau, Paris 75008</p>
+    <p>Vous pouvez également déposer une réclamation auprès de la <strong>CNIL</strong> :</p>
+    <ul>
+        <li>Site web : <a href="https://www.cnil.fr/" target="_blank">www.cnil.fr</a></li>
+        <li>Adresse : 3 Place de Fontenoy – TSA 80715 – 75334 Paris Cedex 07</li>
+    </ul>
     
-    <h2>12. Modifications de la politique de confidentialité</h2>
+    <h2>12. Cookies et traceurs</h2>
+    <p>Eatly utilise des cookies pour améliorer l'expérience utilisateur. Vous pouvez gérer vos préférences depuis votre navigateur :</p>
+    <ul>
+        <li><strong>Google Chrome</strong> : Paramètres > Confidentialité et sécurité > Cookies</li>
+        <li><strong>Firefox</strong> : Options > Vie privée et sécurité > Cookies et données de site</li>
+        <li><strong>Safari</strong> : Préférences > Confidentialité > Cookies</li>
+    </ul>
+    <p>Eatly utilise un gestionnaire de consentement des cookies qui permet aux utilisateurs d'accepter ou refuser les cookies non essentiels (publicitaires, analytiques). Vous pouvez modifier vos préférences à tout moment via le <strong>Centre de gestion des cookies</strong> accessible en bas de page.</p>
+    <p>Nous utilisons <strong>Google Analytics</strong> pour analyser le trafic du site, avec la possibilité de désactiver ce service via <a href="https://tools.google.com/dlpage/gaoptout" target="_blank">cet outil</a>.</p>
+    
+    <h2>13. Modifications de la politique de confidentialité</h2>
     <p>Cette politique peut être mise à jour à tout moment en fonction des évolutions légales ou techniques. La dernière mise à jour date du <strong>08 mars 2025</strong>.</p>
     <p>Toute modification majeure sera notifiée via notre site ou par e-mail.</p>
+    <p>Avec cette politique, Eatly garantit un engagement fort en matière de protection des données et une conformité totale au RGPD, assurant ainsi à ses utilisateurs une transparence et une sécurité optimales.</p>
     
-    <div style="margin-top: 30px; text-align: center;">
-      <p style="font-weight: 600;">Eatly – Bien manger, en toute confiance.</p>
+    <div class="footer">
+        <p><strong>Eatly – Bien manger, en toute confiance.</strong></p>
     </div>
-  </div>
+  </main>
 </body>
 </html>
