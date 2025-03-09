@@ -1,12 +1,11 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   isPreviewEnvironment, 
   simulateEmailSignIn
 } from '@/utils/auth-simulator';
 import { useToast } from '@/hooks/use-toast';
-import { translateErrorMessage, setupFormValidation, defaultErrorMessages } from '@/utils/error-translator';
 
 export const SimulatedEmailAuth = ({ 
   onSuccess,
@@ -20,43 +19,12 @@ export const SimulatedEmailAuth = ({
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [formErrors, setFormErrors] = useState<{[key: string]: string}>({});
   const navigate = useNavigate();
   const { toast } = useToast();
-  
-  useEffect(() => {
-    setupFormValidation();
-    console.log("SimulatedEmailAuth: Form validation setup complete");
-  }, []);
-  
-  const validateForm = () => {
-    const errors: {[key: string]: string} = {};
-    let isValid = true;
-    
-    if (!email) {
-      errors.email = defaultErrorMessages.required;
-      isValid = false;
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-      errors.email = defaultErrorMessages.email;
-      isValid = false;
-    }
-    
-    if (!password) {
-      errors.password = defaultErrorMessages.required;
-      isValid = false;
-    }
-    
-    setFormErrors(errors);
-    return isValid;
-  };
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isPreviewEnvironment()) return;
-    
-    if (!validateForm()) {
-      return;
-    }
     
     setError(null);
     setIsLoading(true);
@@ -76,37 +44,19 @@ export const SimulatedEmailAuth = ({
         navigate("/");
       }
     } catch (error: any) {
-      const translatedError = translateErrorMessage(error.message || "Erreur lors de la connexion");
-      setError(translatedError);
+      setError(error.message || "Erreur lors de la connexion");
       toast({
         variant: "destructive",
         title: "Échec de la connexion",
-        description: translatedError,
+        description: error.message || "Veuillez vérifier vos identifiants et réessayer",
       });
     } finally {
       setIsLoading(false);
     }
   };
   
-  const handleInputChange = (field: string, value: string) => {
-    if (field === 'email') {
-      setEmail(value);
-    } else if (field === 'password') {
-      setPassword(value);
-    }
-    
-    // Clear error for this field
-    if (formErrors[field]) {
-      setFormErrors(prev => {
-        const newErrors = {...prev};
-        delete newErrors[field];
-        return newErrors;
-      });
-    }
-  };
-  
   return (
-    <form onSubmit={handleSubmit} className={className} noValidate>
+    <form onSubmit={handleSubmit} className={className}>
       {error && (
         <div className="bg-red-50 text-red-700 p-3 rounded-md mb-4 text-sm">
           {error}
@@ -118,36 +68,22 @@ export const SimulatedEmailAuth = ({
           <input
             type="email"
             value={email}
-            onChange={(e) => handleInputChange('email', e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
             placeholder="Email"
-            className={`w-full px-4 py-3 border ${formErrors.email ? 'border-red-500 bg-red-50' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-eatly-primary/20 focus:border-eatly-primary outline-none transition-all`}
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-eatly-primary/20 focus:border-eatly-primary outline-none transition-all"
             required
-            aria-invalid={!!formErrors.email}
-            aria-describedby={formErrors.email ? "email-error" : undefined}
           />
-          {formErrors.email && (
-            <div id="email-error" className="text-red-600 text-sm mt-1">
-              {formErrors.email}
-            </div>
-          )}
         </div>
         
         <div className="relative">
           <input
             type={showPassword ? "text" : "password"}
             value={password}
-            onChange={(e) => handleInputChange('password', e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
             placeholder="Mot de passe"
-            className={`w-full px-4 py-3 border ${formErrors.password ? 'border-red-500 bg-red-50' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-eatly-primary/20 focus:border-eatly-primary outline-none transition-all`}
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-eatly-primary/20 focus:border-eatly-primary outline-none transition-all"
             required
-            aria-invalid={!!formErrors.password}
-            aria-describedby={formErrors.password ? "password-error" : undefined}
           />
-          {formErrors.password && (
-            <div id="password-error" className="text-red-600 text-sm mt-1">
-              {formErrors.password}
-            </div>
-          )}
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}

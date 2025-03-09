@@ -11,19 +11,15 @@ export const simulateEmailSignIn = (
   callback?: (user: MockUser) => void
 ): Promise<MockUser> => {
   return new Promise((resolve, reject) => {
-    console.log("Simulating email sign in with:", { email, passwordLength: password?.length });
-    
     // Vérification basique du mot de passe (pour simulation uniquement)
     if (!email || !password) {
       const error = new Error("L'email et le mot de passe sont requis");
-      console.error("Authentication error:", error.message);
       reject(error);
       return;
     }
     
     if (password.length < 6) {
       const error = new Error("Le mot de passe doit contenir au moins 6 caractères");
-      console.error("Authentication error:", error.message);
       reject(error);
       return;
     }
@@ -58,10 +54,8 @@ export const simulateEmailSignIn = (
           callback(customUser);
         }
         
-        console.log("Authentication successful:", customUser);
         resolve(customUser);
       } catch (error) {
-        console.error("Authentication error:", error);
         reject(error || new Error("Erreur de connexion simulée"));
       }
     }, 800); // Délai simulé
@@ -79,20 +73,14 @@ export const simulateSignUp = (
   callback?: (user: MockUser) => void
 ): Promise<MockUser> => {
   return new Promise((resolve, reject) => {
-    console.log("Simulating sign up with:", { email, passwordLength: password?.length, firstName, lastName });
-    
     // Vérification basique du mot de passe (pour simulation uniquement)
     if (!email || !password) {
-      const error = new Error("L'email et le mot de passe sont requis");
-      console.error("Sign up error:", error.message);
-      reject(error);
+      reject(new Error("L'email et le mot de passe sont requis"));
       return;
     }
     
     if (password.length < 6) {
-      const error = new Error("Le mot de passe doit contenir au moins 6 caractères");
-      console.error("Sign up error:", error.message);
-      reject(error);
+      reject(new Error("Le mot de passe doit contenir au moins 6 caractères"));
       return;
     }
     
@@ -125,10 +113,8 @@ export const simulateSignUp = (
           callback(customUser);
         }
         
-        console.log("Sign up successful:", customUser);
         resolve(customUser);
       } catch (error) {
-        console.error("Sign up error:", error);
         reject(error || new Error("Erreur d'inscription simulée"));
       }
     }, 800); // Délai simulé
