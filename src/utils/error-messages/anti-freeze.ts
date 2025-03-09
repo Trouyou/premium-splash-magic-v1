@@ -116,10 +116,11 @@ export const setupAntiFreezeProtection = () => {
     if (errorMessageAdded) {
       // Si des erreurs sont affichées, s'assurer que le formulaire n'est pas bloqué
       document.querySelectorAll('form.submitting').forEach(form => {
-        form.classList.remove('submitting');
+        const formElement = form as HTMLFormElement;
+        formElement.classList.remove('submitting');
         
         // Réactiver le bouton de soumission
-        const submitButton = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+        const submitButton = formElement.querySelector('button[type="submit"]') as HTMLButtonElement;
         if (submitButton) {
           submitButton.disabled = false;
           // Restaurer le texte original du bouton
@@ -184,9 +185,10 @@ export const setupAntiFreezeProtection = () => {
     const recoverFromFreeze = () => {
       // Libérer tous les formulaires bloqués
       document.querySelectorAll('form.submitting').forEach(form => {
-        form.classList.remove('submitting');
+        const formElement = form as HTMLFormElement;
+        formElement.classList.remove('submitting');
         // Réinitialiser le compteur de soumissions
-        form.dataset.submitCount = '0';
+        formElement.dataset.submitCount = '0';
       });
       
       // Réactiver tous les boutons désactivés
