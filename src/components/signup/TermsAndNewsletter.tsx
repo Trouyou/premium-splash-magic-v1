@@ -1,5 +1,6 @@
 
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import FormErrorDisplay from './FormErrorDisplay';
 import { defaultErrorMessages } from '@/utils/error-messages';
 
@@ -18,6 +19,10 @@ const TermsAndNewsletter = ({
 }: TermsAndNewsletterProps) => {
   const [termsError, setTermsError] = useState('');
   const [isDirty, setIsDirty] = useState(false);
+  const location = useLocation();
+  
+  // Get current path for returnTo parameter
+  const currentPath = location.pathname;
 
   useEffect(() => {
     if (isDirty) {
@@ -56,7 +61,7 @@ const TermsAndNewsletter = ({
         <label htmlFor="terms-accept" className="font-avantgarde text-sm leading-relaxed text-[#333333] flex-1 text-left">
           J'accepte les {" "}
           <a 
-            href="/conditions-utilisation.html" 
+            href={`/conditions-utilisation.html?returnTo=${encodeURIComponent(currentPath)}`} 
             target="_blank" 
             className="text-eatly-primary hover:underline font-medium"
           >
@@ -64,7 +69,7 @@ const TermsAndNewsletter = ({
           </a>
           {" "} et la {" "}
           <a 
-            href="/politique-confidentialite.html" 
+            href={`/politique-confidentialite.html?returnTo=${encodeURIComponent(currentPath)}`} 
             target="_blank" 
             className="text-eatly-primary hover:underline font-medium"
           >

@@ -1,10 +1,14 @@
 
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const LoginFooter = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const isClerkConfigured = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+  
+  // Get current path for returnTo parameter
+  const currentPath = location.pathname;
   
   return (
     <>
@@ -33,7 +37,7 @@ const LoginFooter = () => {
       <div className="mt-12 text-center text-xs text-gray-500">
         <div className="flex justify-center space-x-4">
           <a 
-            href="/conditions-utilisation.html"
+            href={`/conditions-utilisation.html?returnTo=${encodeURIComponent(currentPath)}`}
             target="_blank"
             className="hover:underline text-eatly-primary"
           >
@@ -41,7 +45,7 @@ const LoginFooter = () => {
           </a>
           <span>•</span>
           <a 
-            href="/politique-confidentialite.html"
+            href={`/politique-confidentialite.html?returnTo=${encodeURIComponent(currentPath)}`}
             target="_blank"
             className="hover:underline text-eatly-primary"
           >

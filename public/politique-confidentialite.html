@@ -83,7 +83,7 @@
 <body>
   <div class="header">
     <h1>Politique de confidentialité</h1>
-    <a href="javascript:void(0);" class="retour-button" onclick="goBack()">
+    <a href="javascript:void(0);" class="retour-button" id="back-button">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-left">
         <path d="M19 12H5M12 19l-7-7 7-7"></path>
       </svg>
@@ -238,25 +238,30 @@
   </main>
 
   <script>
-    function goBack() {
-      // Vérifier s'il y a un historique
-      if (window.history.length > 1) {
-        window.history.back();
-      } else {
-        // Si pas d'historique, rediriger vers la page d'accueil
-        window.location.href = '/';
-      }
-    }
-    
-    // Ajouter un gestionnaire d'événements
     document.addEventListener('DOMContentLoaded', function() {
-      const button = document.querySelector('.retour-button');
-      if (button) {
-        button.addEventListener('click', function(e) {
-          e.preventDefault();
-          goBack();
-        });
-      }
+      // Get the back button
+      const backButton = document.getElementById('back-button');
+      
+      // Get the returnTo parameter from URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const returnTo = urlParams.get('returnTo');
+      
+      // Set the click event
+      backButton.addEventListener('click', function(event) {
+        event.preventDefault();
+        
+        // If returnTo parameter exists, redirect to that page
+        if (returnTo) {
+          window.location.href = returnTo;
+        } else {
+          // Default behavior - go back in history or to homepage
+          if (window.history.length > 1) {
+            window.history.back();
+          } else {
+            window.location.href = '/';
+          }
+        }
+      });
     });
   </script>
 </body>
