@@ -1,7 +1,17 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Scale, TrendingDown, TrendingUp, Utensils, Medal, Globe } from 'lucide-react';
+import { 
+  Scale, 
+  TrendingDown, 
+  TrendingUp, 
+  Utensils, 
+  Medal, 
+  Globe, 
+  ShoppingBasket,
+  Leaf,
+  Recycle
+} from 'lucide-react';
 import ProgressBar from '../ProgressBar';
 import NavigationButtons from '../NavigationButtons';
 import SelectionCard from '../SelectionCard';
@@ -30,6 +40,9 @@ const NutritionalGoalsScreen: React.FC<NutritionalGoalsScreenProps> = ({
     { id: 'balance', title: 'Équilibre nutritionnel', icon: <Utensils /> },
     { id: 'performance', title: 'Performance sportive', icon: <Medal /> },
     { id: 'discovery', title: 'Découverte culinaire', icon: <Globe /> },
+    { id: 'local', title: 'Alimentation locale', icon: <ShoppingBasket /> },
+    { id: 'eco', title: 'Impact écologique réduit', icon: <Leaf /> },
+    { id: 'waste', title: 'Réduction du gaspillage', icon: <Recycle /> },
   ];
   
   const containerVariants = {
@@ -66,7 +79,7 @@ const NutritionalGoalsScreen: React.FC<NutritionalGoalsScreenProps> = ({
       </motion.div>
       
       <motion.div 
-        className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8"
+        className="grid grid-cols-3 gap-4 mb-8"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
@@ -93,7 +106,7 @@ const NutritionalGoalsScreen: React.FC<NutritionalGoalsScreenProps> = ({
           onNext={onNext}
           onPrev={onPrev}
           isFirstStep={false}
-          isLastStep={true}
+          isLastStep={false}
         />
       </motion.div>
     </div>

@@ -7,9 +7,9 @@ import { useOnboarding } from '@/context/OnboardingContext';
 import WelcomeScreen from './screens/WelcomeScreen';
 import HouseholdScreen from './screens/HouseholdScreen';
 import DietaryPreferencesScreen from './screens/DietaryPreferencesScreen';
+import NutritionalGoalsScreen from './screens/NutritionalGoalsScreen';
 import KitchenEquipmentScreen from './screens/KitchenEquipmentScreen';
 import CookingTimeScreen from './screens/CookingTimeScreen';
-import NutritionalGoalsScreen from './screens/NutritionalGoalsScreen';
 import FinalScreen from './screens/FinalScreen';
 
 const OnboardingFlow: React.FC = () => {
@@ -60,6 +60,19 @@ const OnboardingFlow: React.FC = () => {
     
     if (currentStep === 3) {
       return (
+        <NutritionalGoalsScreen
+          currentStep={currentStep}
+          totalSteps={totalSteps}
+          goals={onboardingData.nutritionalGoals}
+          toggleGoal={toggleNutritionalGoal}
+          onNext={nextStep}
+          onPrev={prevStep}
+        />
+      );
+    }
+    
+    if (currentStep === 4) {
+      return (
         <KitchenEquipmentScreen
           currentStep={currentStep}
           totalSteps={totalSteps}
@@ -71,26 +84,13 @@ const OnboardingFlow: React.FC = () => {
       );
     }
     
-    if (currentStep === 4) {
+    if (currentStep === 5) {
       return (
         <CookingTimeScreen
           currentStep={currentStep}
           totalSteps={totalSteps}
           cookingTime={onboardingData.cookingTime}
           setCookingTime={setCookingTime}
-          onNext={nextStep}
-          onPrev={prevStep}
-        />
-      );
-    }
-    
-    if (currentStep === 5) {
-      return (
-        <NutritionalGoalsScreen
-          currentStep={currentStep}
-          totalSteps={totalSteps}
-          goals={onboardingData.nutritionalGoals}
-          toggleGoal={toggleNutritionalGoal}
           onNext={nextStep}
           onPrev={prevStep}
         />
