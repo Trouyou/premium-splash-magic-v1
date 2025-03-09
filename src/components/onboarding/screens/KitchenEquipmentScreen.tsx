@@ -5,13 +5,13 @@ import {
   CookingPot, 
   Utensils, 
   Thermometer, 
-  Blend, 
+  Cherry, 
   Microwave, 
-  WhiskIcon, 
-  Knife, 
+  UtensilsCrossed, 
+  KitchenKnife, 
   Scale, 
   Gauge, 
-  Spoon, 
+  UtensilSpoon, 
   ChefHat, 
   ScrollText 
 } from 'lucide-react';
@@ -53,18 +53,18 @@ const KitchenEquipmentScreen: React.FC<KitchenEquipmentScreenProps> = ({
   const kitchenEquipment: Equipment[] = [
     // Appareils électriques
     { id: 'thermomix', name: 'Thermomix', icon: <CookingPot />, category: 'Appareils électriques' },
-    { id: 'blender', name: 'Blender / Mixeur', icon: <Blend />, category: 'Appareils électriques' },
+    { id: 'blender', name: 'Blender / Mixeur', icon: <Cherry />, category: 'Appareils électriques' },
     { id: 'robot', name: 'Robot pâtissier', icon: <ChefHat />, category: 'Appareils électriques' },
     { id: 'airfryer', name: 'Air Fryer', icon: <CookingPot />, category: 'Appareils électriques' },
     { id: 'steamer', name: 'Cuiseur vapeur', icon: <CookingPot />, category: 'Appareils électriques' },
     { id: 'microwave', name: 'Four à micro-ondes', icon: <Microwave />, category: 'Appareils électriques' },
     
     // Ustensiles essentiels
-    { id: 'knife', name: 'Couteau de chef', icon: <Knife />, category: 'Ustensiles essentiels' },
+    { id: 'knife', name: 'Couteau de chef', icon: <KitchenKnife />, category: 'Ustensiles essentiels' },
     { id: 'cuttingboard', name: 'Planche à découper', icon: <ScrollText />, category: 'Ustensiles essentiels' },
-    { id: 'whisk', name: 'Fouet', icon: <WhiskIcon />, category: 'Ustensiles essentiels' },
-    { id: 'spatula', name: 'Spatule', icon: <Spoon />, category: 'Ustensiles essentiels' },
-    { id: 'woodenspoons', name: 'Cuillères en bois', icon: <Spoon />, category: 'Ustensiles essentiels' },
+    { id: 'whisk', name: 'Fouet', icon: <UtensilsCrossed />, category: 'Ustensiles essentiels' },
+    { id: 'spatula', name: 'Spatule', icon: <UtensilSpoon />, category: 'Ustensiles essentiels' },
+    { id: 'woodenspoons', name: 'Cuillères en bois', icon: <UtensilSpoon />, category: 'Ustensiles essentiels' },
     { id: 'strainer', name: 'Passoire', icon: <Utensils />, category: 'Ustensiles essentiels' },
     
     // Équipements de cuisson

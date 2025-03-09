@@ -54,10 +54,8 @@ export const useSignUp = () => {
         if (signUpAttempt.status === "complete") {
           console.log("Signup successful and complete");
           return signUpAttempt;
-        } else if (signUpAttempt.status === "needs_verification") {
-          console.log("Signup requires verification");
-          return signUpAttempt;
         } else {
+          // Changed from 'needs_verification' to check for non-complete status
           console.log("Signup: additional action needed", signUpAttempt.status);
           return signUpAttempt;
         }
