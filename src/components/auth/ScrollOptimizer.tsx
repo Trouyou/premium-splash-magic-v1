@@ -125,7 +125,8 @@ const ScrollOptimizer = () => {
         // Ensure containers can scroll properly
         if (container instanceof HTMLElement) {
           container.style.overflowY = 'auto';
-          container.style.WebkitOverflowScrolling = 'touch';
+          // Use type assertion to fix TypeScript error
+          (container.style as any).WebkitOverflowScrolling = 'touch';
           container.classList.add('scroll-container');
         }
       });
