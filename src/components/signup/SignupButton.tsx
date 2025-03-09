@@ -11,11 +11,30 @@ const SignupButton = ({ isLoading }: SignupButtonProps) => {
       className={`w-full py-3 px-4 bg-eatly-primary text-white rounded-lg font-avantgarde tracking-wide transition-all ${
         isLoading ? "opacity-80" : "hover:bg-eatly-secondary"
       } flex justify-center items-center`}
-      onClick={() => {
-        // Ajout d'un temps de garde lors d'un clic pour éviter les gels
+      onClick={(e) => {
+        // Anti-freeze protection
         if (isLoading) {
           // Empêcher l'action si déjà en chargement
+          e.preventDefault();
           return false;
+        }
+        
+        // Limiter le temps de désactivation du bouton
+        if (!isLoading) {
+          const button = e.currentTarget as HTMLButtonElement;
+          // Stocker le texte original pour la restauration
+          if (!button.dataset.originalText) {
+            button.dataset.originalText = button.innerHTML;
+          }
+          
+          // Protection contre le blocage: réactiver le bouton après un délai
+          setTimeout(() => {
+            button.disabled = false;
+            // Restaurer le texte original
+            if (button.dataset.originalText) {
+              button.innerHTML = button.dataset.originalText;
+            }
+          }, 8000); // 8 secondes maximum
         }
       }}
     >
