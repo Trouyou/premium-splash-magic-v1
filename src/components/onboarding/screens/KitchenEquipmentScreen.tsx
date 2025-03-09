@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
@@ -8,10 +7,9 @@ import {
   Cherry, 
   Microwave, 
   UtensilsCrossed, 
-  KitchenKnife, 
+  Knife, 
   Scale, 
   Gauge, 
-  UtensilSpoon, 
   ChefHat, 
   ScrollText 
 } from 'lucide-react';
@@ -60,11 +58,11 @@ const KitchenEquipmentScreen: React.FC<KitchenEquipmentScreenProps> = ({
     { id: 'microwave', name: 'Four à micro-ondes', icon: <Microwave />, category: 'Appareils électriques' },
     
     // Ustensiles essentiels
-    { id: 'knife', name: 'Couteau de chef', icon: <KitchenKnife />, category: 'Ustensiles essentiels' },
+    { id: 'knife', name: 'Couteau de chef', icon: <Knife />, category: 'Ustensiles essentiels' },
     { id: 'cuttingboard', name: 'Planche à découper', icon: <ScrollText />, category: 'Ustensiles essentiels' },
     { id: 'whisk', name: 'Fouet', icon: <UtensilsCrossed />, category: 'Ustensiles essentiels' },
-    { id: 'spatula', name: 'Spatule', icon: <UtensilSpoon />, category: 'Ustensiles essentiels' },
-    { id: 'woodenspoons', name: 'Cuillères en bois', icon: <UtensilSpoon />, category: 'Ustensiles essentiels' },
+    { id: 'spatula', name: 'Spatule', icon: <Utensils />, category: 'Ustensiles essentiels' },
+    { id: 'woodenspoons', name: 'Cuillères en bois', icon: <Utensils />, category: 'Ustensiles essentiels' },
     { id: 'strainer', name: 'Passoire', icon: <Utensils />, category: 'Ustensiles essentiels' },
     
     // Équipements de cuisson
@@ -84,7 +82,6 @@ const KitchenEquipmentScreen: React.FC<KitchenEquipmentScreenProps> = ({
     { id: 'thermometer', name: 'Thermomètre de cuisine', icon: <Thermometer />, category: 'Outils de mesure et préparation' },
   ];
   
-  // Group equipment by category
   const groupedEquipment = kitchenEquipment.reduce<Record<string, Equipment[]>>((acc, item) => {
     if (!acc[item.category]) {
       acc[item.category] = [];
@@ -97,25 +94,18 @@ const KitchenEquipmentScreen: React.FC<KitchenEquipmentScreenProps> = ({
     const { active, over } = event;
     
     if (over && over.id === 'your-equipment') {
-      // Add to selected equipment if not already there
       if (!selectedEquipment.includes(active.id as string)) {
         const newSelectedEquipment = [...selectedEquipment, active.id as string];
         setSelectedEquipment(newSelectedEquipment);
-        
-        // Update parent component state
         toggleEquipment(active.id as string);
       }
     } else if (over && over.id === 'available-equipment') {
-      // Remove from selected equipment
       const newSelectedEquipment = selectedEquipment.filter(id => id !== active.id);
       setSelectedEquipment(newSelectedEquipment);
-      
-      // Update parent component state
       toggleEquipment(active.id as string);
     }
   };
   
-  // Get equipment items that are selected and not selected
   const selectedEquipmentItems = kitchenEquipment.filter(item => 
     selectedEquipment.includes(item.id)
   );
@@ -146,7 +136,6 @@ const KitchenEquipmentScreen: React.FC<KitchenEquipmentScreenProps> = ({
         collisionDetection={closestCenter}
         onDragEnd={handleDragEnd}
       >
-        {/* Selected equipment dropzone */}
         <EquipmentDropZone 
           id="your-equipment" 
           title="Vos équipements" 
@@ -175,7 +164,6 @@ const KitchenEquipmentScreen: React.FC<KitchenEquipmentScreenProps> = ({
           )}
         </EquipmentDropZone>
         
-        {/* Available equipment */}
         <EquipmentDropZone
           id="available-equipment"
           title="Équipements disponibles"
