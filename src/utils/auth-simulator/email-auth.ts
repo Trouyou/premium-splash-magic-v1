@@ -75,11 +75,12 @@ export const simulateSignUp = (
   email: string, 
   password: string, 
   firstName?: string, 
-  lastName?: string, 
+  lastName?: string,
+  birthdate?: string,
   callback?: (user: MockUser) => void
 ): Promise<MockUser> => {
   return new Promise((resolve, reject) => {
-    console.log("Simulating sign up with:", { email, passwordLength: password?.length, firstName, lastName });
+    console.log("Simulating sign up with:", { email, passwordLength: password?.length, firstName, lastName, birthdate });
     
     // Vérification basique du mot de passe (pour simulation uniquement)
     if (!email || !password) {
@@ -94,6 +95,30 @@ export const simulateSignUp = (
       console.error("Sign up error:", error.message);
       reject(error);
       return;
+    }
+    
+    // Vérification de l'âge via la date de naissance (si fournie)
+    if (birthdate) {
+      try {
+        const birthDate = new Date(birthdate);
+        const today = new Date();
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+        
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+          age--;
+        }
+        
+        if (age < 18) {
+          const error = new Error("Vous devez avoir au moins 18 ans pour créer un compte");
+          console.error("Sign up error:", error.message);
+          reject(error);
+          return;
+        }
+      } catch (error) {
+        console.error("Error validating birthdate:", error);
+        // Continuer l'inscription si la validation de la date échoue
+      }
     }
     
     // Simuler un délai réseau
@@ -111,6 +136,7 @@ export const simulateSignUp = (
           fullName: `${userFirstName} ${userLastName}`,
           imageUrl: `https://ui-avatars.com/api/?name=${userFirstName}+${userLastName}&background=9C1B1A&color=fff`,
           provider: 'email',
+          birthdate: birthdate, // Stocker la date de naissance si fournie
           loggedInAt: new Date().toISOString()
         };
         

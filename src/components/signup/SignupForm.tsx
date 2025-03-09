@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { translateErrorMessage, getSignupFormError, setupFormValidation, defaultErrorMessages } from '@/utils/error-translator';
+import BirthdateSelector from './BirthdateSelector';
 
 const SignupForm = () => {
   const [email, setEmail] = useState('');
@@ -11,9 +12,11 @@ const SignupForm = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [birthdate, setBirthdate] = useState<string | null>(null);
+  const [birthdateValid, setBirthdateValid] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(false);
-  const [newsletter, setNewsletter] = useState(false); // État pour la newsletter
+  const [newsletter, setNewsletter] = useState(false);
   const [formError, setFormError] = useState('');
   const { signUp, isLoading, error } = useAuth();
 
@@ -37,9 +40,25 @@ const SignupForm = () => {
       return;
     }
     
+    // Vérifier la validation de la date de naissance
+    if (!birthdate || !birthdateValid) {
+      setFormError('Veuillez indiquer une date de naissance valide (18 ans minimum)');
+      return;
+    }
+    
     // Si pas d'erreur, effacer l'erreur précédente et continuer
     setFormError('');
     await signUp(email, password, firstName, lastName);
+  };
+
+  // Gérer le changement de date de naissance
+  const handleBirthdateChange = (date: string | null) => {
+    setBirthdate(date);
+  };
+  
+  // Gérer la validation de la date de naissance
+  const handleBirthdateValidation = (isValid: boolean) => {
+    setBirthdateValid(isValid);
   };
 
   // Traduire le message d'erreur provenant de l'authentification
@@ -119,6 +138,12 @@ const SignupForm = () => {
             }}
           />
         </div>
+
+        {/* Sélecteur de date de naissance */}
+        <BirthdateSelector 
+          onChange={handleBirthdateChange} 
+          onValidate={handleBirthdateValidation} 
+        />
 
         <div className="relative">
           <input
