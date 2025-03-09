@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 
 const Login = () => {
   useEffect(() => {
-    // Script pour forcer la suppression des bordures blanches
+    // Script pour forcer la suppression des bordures blanches et de l'espace vertical
     const style = document.createElement('style');
     style.innerHTML = `
       /* Reset complet des marges et bordures */
@@ -17,7 +17,11 @@ const Login = () => {
         margin: 0 !important;
         padding: 0 !important;
         box-sizing: border-box !important;
-        overflow-x: hidden !important;
+        overflow: hidden !important;
+        height: 100vh !important;
+        max-height: 100vh !important;
+        width: 100vw !important;
+        max-width: 100vw !important;
       }
       
       /* Force le conteneur principal à couvrir tout l'écran sans marges */
@@ -26,6 +30,7 @@ const Login = () => {
         padding: 0 !important;
         width: 100vw !important;
         height: 100vh !important;
+        max-height: 100vh !important;
         overflow: hidden !important;
         box-sizing: border-box !important;
       }
@@ -38,20 +43,40 @@ const Login = () => {
         border-radius: 0 !important;
         box-shadow: none !important;
         overflow: hidden !important;
+        height: 100vh !important;
+        max-height: 100vh !important;
+      }
+      
+      /* Force la section droite à être centrée verticalement sans débordement */
+      .w-full.md\\:w-2\\/5 {
+        height: 100vh !important;
+        max-height: 100vh !important;
+        overflow-y: auto !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
       }
     `;
     document.head.appendChild(style);
+    
+    // Empêcher le scroll du body
+    document.body.style.overflow = 'hidden';
+    
+    return () => {
+      // Nettoyage lors du démontage du composant
+      document.body.style.overflow = '';
+    };
   }, []);
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen w-screen bg-white m-0 p-0 overflow-hidden" style={{ margin: 0, padding: 0, maxWidth: '100vw', width: '100vw', height: '100vh', boxSizing: 'border-box' }}>
+    <div className="flex flex-col md:flex-row min-h-screen w-screen bg-white m-0 p-0 overflow-hidden" style={{ margin: 0, padding: 0, maxWidth: '100vw', width: '100vw', height: '100vh', maxHeight: '100vh', boxSizing: 'border-box', overflow: 'hidden' }}>
       {/* Left section - Animation */}
-      <div className="hidden md:block md:w-3/5 h-screen m-0 p-0 overflow-hidden relative" style={{ margin: 0, padding: 0, height: '100vh', overflow: 'hidden', position: 'relative', border: 'none', boxShadow: 'none' }}>
+      <div className="hidden md:block md:w-3/5 h-screen m-0 p-0 overflow-hidden relative" style={{ margin: 0, padding: 0, height: '100vh', maxHeight: '100vh', overflow: 'hidden', position: 'relative', border: 'none', boxShadow: 'none' }}>
         <LoginAnimation />
       </div>
 
       {/* Right section - Login form */}
-      <div className="w-full md:w-2/5 flex flex-col justify-center items-center px-6 py-12 md:px-12">
+      <div className="w-full md:w-2/5 flex flex-col justify-center items-center px-6 py-12 md:px-12" style={{ height: '100vh', maxHeight: '100vh', overflowY: 'auto' }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

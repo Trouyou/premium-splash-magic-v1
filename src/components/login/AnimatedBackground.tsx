@@ -19,6 +19,7 @@ const AnimatedBackground = () => {
         padding: 0,
         width: '100%',
         height: '100%',
+        maxHeight: '100vh',
         zIndex: 0,
         overflow: 'hidden',
         boxShadow: 'none',
