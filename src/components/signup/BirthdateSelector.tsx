@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { CalendarIcon, ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -350,13 +349,6 @@ const BirthdateSelector = ({ onChange, onValidate, errorMessage }: BirthdateSele
   // Rendu du composant
   return (
     <div className="birthdate-container w-full mb-4">
-      <label 
-        htmlFor="birthdate-selector" 
-        className="block mb-2 text-sm font-avantgarde text-[#333333]"
-      >
-        Date de naissance
-      </label>
-      
       {isMobile ? (
         // Vue mobile : sélecteurs déroulants
         <div className="date-selector-wrapper relative w-full">
