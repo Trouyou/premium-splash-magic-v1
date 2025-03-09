@@ -53,7 +53,7 @@ const EquipmentBubble: React.FC<EquipmentBubbleProps> = ({
       <div className="text-[#2A5D50] mb-2">
         <div dangerouslySetInnerHTML={{ __html: svg }} />
       </div>
-      <div className="equipment-name font-['AvantGarde_Bk_BT'] text-xs text-black text-center w-full h-[32px] flex flex-col justify-center white-space-pre-line overflow-hidden mt-1">
+      <div className="equipment-name font-['AvantGarde_Bk_BT'] text-[14px] leading-[16px] text-black text-center w-full h-[36px] flex flex-col justify-center overflow-visible mt-1.5">
         {formattedName.split('\n').map((line, i) => (
           <span key={i} className="line-clamp-1">{line}</span>
         ))}

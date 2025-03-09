@@ -121,3 +121,27 @@
 .performance-optimized .signup-page *:not(:visible) {
   content-visibility: auto !important;
 }
+
+/* Style pour afficher correctement les noms d'équipements */
+.equipment-name {
+  font-family: 'AvantGarde Bk BT', sans-serif;
+  font-size: 14px;
+  line-height: 16px;
+  height: 36px; /* Augmenter pour s'assurer qu'il y a assez d'espace */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  white-space: pre-line; /* Préserve les sauts de ligne */
+  width: 100%;
+  overflow: visible; /* Évite la troncature */
+  margin-top: 6px;
+}
+
+/* Style pour l'animation de sélection des équipements */
+@keyframes selectPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+  100% { transform: scale(1.08); }
+}
+
