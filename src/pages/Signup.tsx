@@ -15,6 +15,19 @@ const Signup = () => {
   useEffect(() => {
     // Initialiser la validation de formulaire personnalisée
     setupFormValidation();
+    
+    // Load the RGPD redirection fix script
+    const script = document.createElement('script');
+    script.src = '/js/rgpd-redirection-fix.js';
+    script.async = true;
+    document.body.appendChild(script);
+    
+    return () => {
+      // Clean up on unmount
+      if (script.parentNode) {
+        document.body.removeChild(script);
+      }
+    };
   }, []);
 
   return (

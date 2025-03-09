@@ -6,8 +6,23 @@ import SocialLoginSection from '@/components/login/SocialLoginSection';
 import LoginSeparator from '@/components/login/LoginSeparator';
 import LoginFooter from '@/components/login/LoginFooter';
 import StyleInjector from '@/components/auth/StyleInjector';
+import { useEffect } from 'react';
 
 const Login = () => {
+  // Add script to handle RGPD popup redirections
+  useEffect(() => {
+    // Load the RGPD redirection fix script
+    const script = document.createElement('script');
+    script.src = '/js/rgpd-redirection-fix.js';
+    script.async = true;
+    document.body.appendChild(script);
+    
+    return () => {
+      // Clean up on unmount
+      document.body.removeChild(script);
+    };
+  }, []);
+  
   return (
     <div className="flex flex-col md:flex-row min-h-screen w-screen bg-white m-0 p-0 overflow-hidden" style={{ margin: 0, padding: 0, maxWidth: '100vw', width: '100vw', height: '100vh', maxHeight: '100vh', boxSizing: 'border-box', overflow: 'hidden' }}>
       <StyleInjector />
