@@ -116,16 +116,16 @@ const SignupForm = () => {
           />
         </div>
 
-        <div className="terms-container flex items-start my-5 w-full">
+        <div className="terms-checkbox-container flex items-start my-5 w-full">
           <input
             type="checkbox"
             id="terms-accept"
             checked={acceptTerms}
             onChange={() => setAcceptTerms(!acceptTerms)}
-            className="terms-checkbox mt-[3px] mr-[10px] min-w-[18px] h-[18px] text-eatly-primary border-gray-300 rounded focus:ring-eatly-primary"
+            className="mt-[3px] mr-[10px] min-w-[18px] h-[18px] text-eatly-primary border-gray-300 rounded focus:ring-eatly-primary flex-shrink-0"
             required
           />
-          <label htmlFor="terms-accept" className="terms-text font-avantgarde text-sm leading-relaxed text-[#333333] flex-1 text-left">
+          <label htmlFor="terms-accept" className="font-avantgarde text-sm leading-relaxed text-[#333333] flex-1 text-left">
             J'accepte les <a href="#terms" className="text-eatly-primary hover:underline font-medium">conditions d'utilisation</a> et la <a href="#privacy" className="text-eatly-primary hover:underline font-medium">politique de confidentialité</a>
           </label>
         </div>
