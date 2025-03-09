@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff } from 'lucide-react';
@@ -27,11 +26,7 @@ const Signup = () => {
         margin: 0 !important;
         padding: 0 !important;
         box-sizing: border-box !important;
-        overflow: hidden !important;
-        height: 100vh !important;
-        max-height: 100vh !important;
-        width: 100vw !important;
-        max-width: 100vw !important;
+        overflow-x: hidden !important;
       }
       
       body > div, #root, .app-container {
@@ -39,7 +34,6 @@ const Signup = () => {
         padding: 0 !important;
         width: 100vw !important;
         height: 100vh !important;
-        max-height: 100vh !important;
         overflow: hidden !important;
         box-sizing: border-box !important;
       }
@@ -51,29 +45,9 @@ const Signup = () => {
         border-radius: 0 !important;
         box-shadow: none !important;
         overflow: hidden !important;
-        height: 100vh !important;
-        max-height: 100vh !important;
-      }
-      
-      /* Force la section droite à être scrollable si nécessaire */
-      .w-full.md\\:w-2\\/5 {
-        height: 100vh !important;
-        max-height: 100vh !important;
-        overflow-y: auto !important;
-        display: flex !important;
-        flex-direction: column !important;
-        justify-content: center !important;
       }
     `;
     document.head.appendChild(style);
-    
-    // Empêcher le scroll du body
-    document.body.style.overflow = 'hidden';
-    
-    return () => {
-      // Nettoyage lors du démontage du composant
-      document.body.style.overflow = '';
-    };
   }, []);
 
   const handleSignup = async (e: React.FormEvent) => {
@@ -99,12 +73,12 @@ const Signup = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen w-screen bg-white m-0 p-0 overflow-hidden" style={{ margin: 0, padding: 0, maxWidth: '100vw', width: '100vw', height: '100vh', maxHeight: '100vh', boxSizing: 'border-box', overflow: 'hidden' }}>
-      <div className="hidden md:block md:w-3/5 h-screen m-0 p-0 overflow-hidden relative" style={{ margin: 0, padding: 0, height: '100vh', maxHeight: '100vh', overflow: 'hidden', position: 'relative', border: 'none', boxShadow: 'none' }}>
+    <div className="flex flex-col md:flex-row min-h-screen w-screen bg-white m-0 p-0 overflow-hidden" style={{ margin: 0, padding: 0, maxWidth: '100vw', width: '100vw', height: '100vh', boxSizing: 'border-box' }}>
+      <div className="hidden md:block md:w-3/5 h-screen m-0 p-0 overflow-hidden relative" style={{ margin: 0, padding: 0, height: '100vh', overflow: 'hidden', position: 'relative', border: 'none', boxShadow: 'none' }}>
         <LoginAnimation />
       </div>
 
-      <div className="w-full md:w-2/5 flex flex-col justify-center items-center px-6 py-12 md:px-12" style={{ height: '100vh', maxHeight: '100vh', overflowY: 'auto' }}>
+      <div className="w-full md:w-2/5 flex flex-col justify-center items-center px-6 py-12 md:px-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
