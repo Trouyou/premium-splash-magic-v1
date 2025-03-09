@@ -4,6 +4,30 @@ interface SignupButtonProps {
 }
 
 const SignupButton = ({ isLoading }: SignupButtonProps) => {
+  // Protection supplémentaire pour réinitialiser un état de chargement bloqué
+  React.useEffect(() => {
+    let timeout: NodeJS.Timeout;
+    if (isLoading) {
+      // Si le bouton reste en état de chargement plus de 10 secondes, on force le reset du formulaire
+      timeout = setTimeout(() => {
+        const button = document.querySelector('button[type="submit"]') as HTMLButtonElement;
+        if (button && button.disabled) {
+          console.log("Protection anti-blocage activée: réinitialisation du bouton");
+          button.disabled = false;
+          if (button.dataset.originalText) {
+            button.innerHTML = button.dataset.originalText;
+          } else {
+            button.innerHTML = "S'inscrire";
+          }
+        }
+      }, 10000);
+    }
+    
+    return () => {
+      if (timeout) clearTimeout(timeout);
+    };
+  }, [isLoading]);
+
   const validateRequiredFields = (form: HTMLFormElement): boolean => {
     const requiredFields = form.querySelectorAll('[required]');
     let allValid = true;
@@ -61,23 +85,22 @@ const SignupButton = ({ isLoading }: SignupButtonProps) => {
           }
         }
         
-        // Limiter le temps de désactivation du bouton
-        if (!isLoading) {
-          const button = e.currentTarget as HTMLButtonElement;
-          // Stocker le texte original pour la restauration
-          if (!button.dataset.originalText) {
-            button.dataset.originalText = button.innerHTML;
-          }
-          
-          // Protection contre le blocage: réactiver le bouton après un délai
-          setTimeout(() => {
+        // Stocker le texte original pour la restauration
+        const button = e.currentTarget as HTMLButtonElement;
+        if (!button.dataset.originalText) {
+          button.dataset.originalText = button.innerHTML;
+        }
+        
+        // Protection contre le blocage: réactiver le bouton après un délai
+        setTimeout(() => {
+          if (button && button.disabled) {
             button.disabled = false;
             // Restaurer le texte original
             if (button.dataset.originalText) {
               button.innerHTML = button.dataset.originalText;
             }
-          }, 4000); // Réduit à 4 secondes maximum
-        }
+          }
+        }, 10000); // Augmenté à 10 secondes pour donner plus de temps, mais protéger contre les blocages
       }}
     >
       {isLoading ? (
