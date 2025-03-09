@@ -4,6 +4,35 @@ interface SignupButtonProps {
 }
 
 const SignupButton = ({ isLoading }: SignupButtonProps) => {
+  const validateRequiredFields = (form: HTMLFormElement): boolean => {
+    const requiredFields = form.querySelectorAll('[required]');
+    let allValid = true;
+    
+    requiredFields.forEach(field => {
+      if (field instanceof HTMLInputElement || field instanceof HTMLSelectElement || field instanceof HTMLTextAreaElement) {
+        if (!field.value.trim()) {
+          allValid = false;
+          field.classList.add('has-error');
+          
+          // Trouver ou créer un message d'erreur
+          const parent = field.closest('.form-group') || field.parentElement;
+          if (parent) {
+            let errorElement = parent.querySelector('.error-message');
+            if (!errorElement) {
+              errorElement = document.createElement('div');
+              errorElement.className = 'error-message text-[#D11B19] text-sm mt-1';
+              parent.appendChild(errorElement);
+            }
+            errorElement.textContent = "Ce champ est requis";
+            (errorElement as HTMLElement).style.display = 'block';
+          }
+        }
+      }
+    });
+    
+    return allValid;
+  };
+  
   return (
     <button
       type="submit"
@@ -16,7 +45,20 @@ const SignupButton = ({ isLoading }: SignupButtonProps) => {
         if (isLoading) {
           // Empêcher l'action si déjà en chargement
           e.preventDefault();
+          e.stopPropagation();
           return false;
+        }
+        
+        // Récupérer le formulaire parent
+        const form = (e.currentTarget as HTMLElement).closest('form') as HTMLFormElement;
+        if (form) {
+          // Vérifier si tous les champs requis sont remplis
+          if (!validateRequiredFields(form)) {
+            console.log("Formulaire incomplet, prévention du gel");
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+          }
         }
         
         // Limiter le temps de désactivation du bouton
@@ -34,7 +76,7 @@ const SignupButton = ({ isLoading }: SignupButtonProps) => {
             if (button.dataset.originalText) {
               button.innerHTML = button.dataset.originalText;
             }
-          }, 8000); // 8 secondes maximum
+          }, 4000); // Réduit à 4 secondes maximum
         }
       }}
     >

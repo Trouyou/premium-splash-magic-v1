@@ -3,14 +3,35 @@
  * Utilitaire pour empêcher l'interface de geler lors de validations intensives
  */
 
+// Déclaration du type pour window pour éviter les erreurs TypeScript
+declare global {
+  interface Window {
+    antiFreezeProtectionInstalled: boolean;
+    lastInteractionTime: number;
+    freezeCheckInterval: number | null;
+  }
+}
+
 export const setupAntiFreezeProtection = () => {
   // Vérifier si déjà installé
   if (window.antiFreezeProtectionInstalled) {
     return;
   }
   
+  console.log("Installation de la protection anti-freeze renforcée");
+  
   // Marquer comme installé
   window.antiFreezeProtectionInstalled = true;
+  
+  // Stocker le timestamp de la dernière interaction
+  window.lastInteractionTime = Date.now();
+  
+  // Mettre à jour le timestamp lors des interactions utilisateur
+  ['click', 'keydown', 'mousemove', 'touchstart', 'scroll'].forEach(eventType => {
+    document.addEventListener(eventType, () => {
+      window.lastInteractionTime = Date.now();
+    }, { passive: true });
+  });
   
   // Observer les événements de soumission de formulaires
   document.addEventListener('submit', function(event) {
@@ -25,6 +46,43 @@ export const setupAntiFreezeProtection = () => {
     
     if (isSignupForm) {
       console.log("Protection anti-freeze activée pour le formulaire d'inscription");
+      
+      // Protection contre les soumissions malgré validation échouée
+      const requiredFields = form.querySelectorAll('[required]');
+      let hasEmptyRequired = false;
+      
+      requiredFields.forEach(field => {
+        if (field instanceof HTMLInputElement || field instanceof HTMLSelectElement || field instanceof HTMLTextAreaElement) {
+          if (!field.value.trim()) {
+            hasEmptyRequired = true;
+            // Ajouter une classe pour indiquer visuellement l'erreur
+            field.classList.add('has-error');
+          }
+        }
+      });
+      
+      if (hasEmptyRequired) {
+        console.log("Formulaire incomplet, blocage de la soumission pour éviter un gel");
+        event.preventDefault();
+        event.stopPropagation();
+        
+        // Force l'affichage des erreurs
+        setTimeout(() => {
+          // Trouver tous les champs requis vides et montrer les erreurs
+          requiredFields.forEach(field => {
+            if (field instanceof HTMLInputElement || field instanceof HTMLSelectElement || field instanceof HTMLTextAreaElement) {
+              if (!field.value.trim()) {
+                // Déclencher une validation native
+                field.reportValidity();
+                // Créer ou montrer un message d'erreur si pas déjà présent
+                showFieldError(field, "Ce champ est requis");
+              }
+            }
+          });
+        }, 10);
+        
+        return false;
+      }
       
       // Vérifier si le formulaire est déjà en cours de soumission
       if (form.classList.contains('submitting')) {
@@ -55,7 +113,7 @@ export const setupAntiFreezeProtection = () => {
         setTimeout(() => {
           form.dataset.submitCount = '0';
           form.classList.remove('submitting');
-        }, 5000);
+        }, 2000); // Réduit à 2 secondes pour une récupération plus rapide
         
         event.preventDefault();
         event.stopPropagation();
@@ -87,7 +145,7 @@ export const setupAntiFreezeProtection = () => {
             submitButton.innerHTML = submitButton.dataset.originalText;
           }
         }
-      }, 8000); // 8 secondes maximum
+      }, 4000); // Réduit à 4 secondes maximum
     }
   }, true); // Capture phase
   
@@ -138,6 +196,27 @@ export const setupAntiFreezeProtection = () => {
     subtree: true
   });
   
+  // Fonction pour afficher une erreur de champ
+  const showFieldError = (field: HTMLElement, message: string) => {
+    // Trouver le parent approprié pour ajouter le message d'erreur
+    const parent = field.closest('.form-group') || field.parentElement;
+    if (!parent) return;
+    
+    // Vérifier si un message d'erreur existe déjà
+    let errorElement = parent.querySelector('.error-message');
+    
+    // Créer un nouvel élément si nécessaire
+    if (!errorElement) {
+      errorElement = document.createElement('div');
+      errorElement.className = 'error-message text-[#D11B19] text-sm mt-1';
+      parent.appendChild(errorElement);
+    }
+    
+    // Définir le message et s'assurer qu'il est visible
+    errorElement.textContent = message;
+    (errorElement as HTMLElement).style.display = 'block';
+  };
+  
   // Fonction de vérification périodique pour détecter les gels d'interface
   const setupFreezeDetection = () => {
     let lastTimestamp = Date.now();
@@ -168,21 +247,25 @@ export const setupAntiFreezeProtection = () => {
     requestAnimationFrame(checkFrameRate);
     
     // Vérifier périodiquement si l'interface répond
-    const heartbeatInterval = setInterval(() => {
+    window.freezeCheckInterval = setInterval(() => {
       const now = Date.now();
       const elapsed = now - lastTimestamp;
+      const inactivityTime = now - window.lastInteractionTime;
       
-      // Si plus de 3 secondes se sont écoulées, l'interface pourrait être gelée
-      if (elapsed > 3000) {
+      // Si plus de 3 secondes se sont écoulées depuis la dernière frame, et l'utilisateur était actif récemment,
+      // l'interface pourrait être gelée
+      if (elapsed > 3000 && inactivityTime < 10000) {
         console.warn('Potentiel gel d\'interface détecté! Tentative de récupération...');
         recoverFromFreeze();
       }
       
       lastTimestamp = now;
-    }, 1000);
+    }, 500); // Vérifie toutes les 500ms pour une détection plus rapide
     
     // Fonction pour récupérer d'un gel
     const recoverFromFreeze = () => {
+      console.log("Tentative de récupération d'un gel d'interface");
+      
       // Libérer tous les formulaires bloqués
       document.querySelectorAll('form.submitting').forEach(form => {
         const formElement = form as HTMLFormElement;
@@ -206,11 +289,21 @@ export const setupAntiFreezeProtection = () => {
       window.requestAnimationFrame(() => {
         const forceReflow = document.body.offsetHeight;
       });
+      
+      // Réinitialiser les validations en cours
+      document.querySelectorAll('input.has-error, select.has-error, textarea.has-error').forEach(field => {
+        field.classList.remove('has-error');
+      });
+      
+      // Vider la file d'attente des événements JavaScript
+      setTimeout(() => {}, 0);
     };
     
     // Nettoyage lors de la décharge de la page
     window.addEventListener('beforeunload', () => {
-      clearInterval(heartbeatInterval);
+      if (window.freezeCheckInterval) {
+        clearInterval(window.freezeCheckInterval);
+      }
     });
     
     // Ajouter un gestionnaire d'erreurs global
@@ -243,6 +336,41 @@ export const setupAntiFreezeProtection = () => {
     }
     
     if (submitButton) {
+      // Vérifier le formulaire parent
+      const form = submitButton.closest('form') as HTMLFormElement;
+      if (!form) return;
+      
+      // Vérifier si tous les champs requis sont remplis
+      const requiredFields = form.querySelectorAll('[required]');
+      let hasEmptyRequired = false;
+      
+      requiredFields.forEach(field => {
+        if (field instanceof HTMLInputElement || field instanceof HTMLSelectElement || field instanceof HTMLTextAreaElement) {
+          if (!field.value.trim()) {
+            hasEmptyRequired = true;
+            field.classList.add('has-error');
+            
+            // Montrer un message d'erreur si pas déjà présent
+            showFieldError(field, "Ce champ est requis");
+          }
+        }
+      });
+      
+      if (hasEmptyRequired) {
+        // Empêcher le gel en cas de formulaire incomplet
+        event.preventDefault();
+        event.stopPropagation();
+        
+        // Afficher un message d'erreur général
+        const formErrorEl = form.querySelector('.form-error');
+        if (formErrorEl) {
+          formErrorEl.textContent = "Veuillez remplir tous les champs obligatoires.";
+          (formErrorEl as HTMLElement).style.display = 'block';
+        }
+        
+        return false;
+      }
+      
       // Si le bouton est déjà désactivé, ne rien faire (évite les double-clics)
       if (submitButton.disabled) {
         event.preventDefault();
@@ -262,9 +390,30 @@ export const setupAntiFreezeProtection = () => {
         if (submitButton.dataset.originalText) {
           submitButton.innerHTML = submitButton.dataset.originalText;
         }
-      }, 10000); // 10 secondes maximum
+      }, 5000); // 5 secondes maximum
     }
   }, true); // Capture phase
+  
+  // Fonction pour afficher une erreur de champ (définie pour être utilisée dans différents contextes)
+  function showFieldError(field: HTMLElement, message: string) {
+    // Trouver le parent approprié
+    const parent = field.closest('.form-group') || field.parentElement;
+    if (!parent) return;
+    
+    // Vérifier si un message d'erreur existe déjà
+    let errorElement = parent.querySelector('.error-message');
+    
+    // Si aucun message d'erreur n'existe, en créer un nouveau
+    if (!errorElement) {
+      errorElement = document.createElement('div');
+      errorElement.className = 'error-message text-[#D11B19] text-sm mt-1';
+      parent.appendChild(errorElement);
+    }
+    
+    // Définir le message
+    errorElement.textContent = message;
+    (errorElement as HTMLElement).style.display = 'block';
+  }
   
   console.log("Protection anti-freeze renforcée installée avec succès");
 };
