@@ -8,3 +8,4 @@ export { getSignupFormError } from './form-validation';
 export { setupFormValidation } from './validation-setup';
 export { defaultErrorMessages } from './dictionary';
 export { createLightweightValidator } from './lightweight-validator';
+export { setupAntiFreezeProtection } from './anti-freeze';

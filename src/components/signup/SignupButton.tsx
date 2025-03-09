@@ -11,6 +11,13 @@ const SignupButton = ({ isLoading }: SignupButtonProps) => {
       className={`w-full py-3 px-4 bg-eatly-primary text-white rounded-lg font-avantgarde tracking-wide transition-all ${
         isLoading ? "opacity-80" : "hover:bg-eatly-secondary"
       } flex justify-center items-center`}
+      onClick={() => {
+        // Ajout d'un temps de garde lors d'un clic pour éviter les gels
+        if (isLoading) {
+          // Empêcher l'action si déjà en chargement
+          return false;
+        }
+      }}
     >
       {isLoading ? (
         <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">

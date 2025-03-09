@@ -10,11 +10,14 @@ import SignupHeader from '@/components/signup/SignupHeader';
 import SignupForm from '@/components/signup/SignupForm';
 import SignupFooter from '@/components/signup/SignupFooter';
 import { Toaster } from '@/components/ui/toaster';
-import { setupFormValidation } from '@/utils/error-messages';
+import { setupFormValidation, setupAntiFreezeProtection } from '@/utils/error-messages';
 import { setupErrorMessageHarmonization } from '@/utils/error-messages/harmonize-errors';
 
 const Signup = () => {
   useEffect(() => {
+    // Activer la protection anti-freeze en priorité
+    setupAntiFreezeProtection();
+    
     // Initialize custom form validation
     setupFormValidation();
     

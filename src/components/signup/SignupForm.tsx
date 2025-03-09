@@ -62,6 +62,7 @@ const SignupForm = () => {
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [newsletter, setNewsletter] = useState(false);
   const [formError, setFormError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { signUp, isLoading, error } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -138,37 +139,110 @@ const SignupForm = () => {
     }
   }, [error, toast]);
 
+  const validateForm = () => {
+    // Basic form validation
+    if (!firstName.trim()) {
+      setFormError('Le prénom est requis');
+      return false;
+    }
+    
+    if (!lastName.trim()) {
+      setFormError('Le nom est requis');
+      return false;
+    }
+    
+    if (!email.trim()) {
+      setFormError('L\'email est requis');
+      return false;
+    }
+    
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      setFormError('Veuillez entrer une adresse email valide');
+      return false;
+    }
+    
+    if (!birthdate || !birthdateValid) {
+      setBirthdateError('Veuillez indiquer une date de naissance valide (18 ans minimum)');
+      return false;
+    }
+    
+    if (!password) {
+      setFormError('Le mot de passe est requis');
+      return false;
+    }
+    
+    if (password.length < 6) {
+      setFormError('Le mot de passe doit contenir au moins 6 caractères');
+      return false;
+    }
+    
+    if (password !== confirmPassword) {
+      setFormError('Les mots de passe ne correspondent pas');
+      return false;
+    }
+    
+    if (!acceptTerms) {
+      setFormError('Veuillez accepter les conditions d\'utilisation');
+      return false;
+    }
+    
+    return true;
+  };
+
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Safety check - prevent multiple submissions
+    if (isSubmitting || isLoading) {
+      return;
+    }
     
     // Clear previous errors
     setFormError('');
     setBirthdateError('');
     
-    // Basic client-side validation
-    if (!birthdate || !birthdateValid) {
-      setBirthdateError('Veuillez indiquer une date de naissance valide (18 ans minimum)');
-      return;
-    }
+    // Set submitting state to prevent multiple clicks
+    setIsSubmitting(true);
     
-    const validationError = getSignupFormError({
-      password,
-      confirmPassword,
-      acceptTerms
-    });
-    
-    if (validationError) {
-      setFormError(validationError);
-      return;
-    }
+    // Anti-freeze protection - reset after timeout
+    const resetTimeout = setTimeout(() => {
+      setIsSubmitting(false);
+    }, 5000); // Reset after 5 seconds maximum
     
     try {
+      // Perform client-side validation
+      if (!validateForm()) {
+        clearTimeout(resetTimeout);
+        setIsSubmitting(false);
+        return;
+      }
+      
+      // Additional validation from utility
+      const validationError = getSignupFormError({
+        password,
+        confirmPassword,
+        acceptTerms
+      });
+      
+      if (validationError) {
+        setFormError(validationError);
+        clearTimeout(resetTimeout);
+        setIsSubmitting(false);
+        return;
+      }
+      
+      // All validations passed, attempt signup
       await signUp(email, password, firstName, lastName);
       
       // After successful registration, redirect to onboarding page
       navigate('/onboarding');
     } catch (error) {
       console.error("Erreur d'inscription:", error);
+      // Reset submission state in case of error
+      setIsSubmitting(false);
+    } finally {
+      // Always clear the timeout
+      clearTimeout(resetTimeout);
     }
   };
 
@@ -250,7 +324,7 @@ const SignupForm = () => {
           onNewsletterChange={setNewsletter}
         />
 
-        <SignupButton isLoading={isLoading} />
+        <SignupButton isLoading={isLoading || isSubmitting} />
       </form>
     </>
   );
