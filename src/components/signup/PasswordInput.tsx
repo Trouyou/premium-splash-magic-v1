@@ -1,5 +1,7 @@
 
+import { useState, useEffect } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
+import FormErrorDisplay from './FormErrorDisplay';
 import { defaultErrorMessages } from '@/utils/error-messages';
 
 interface PasswordInputProps {
@@ -19,30 +21,73 @@ const PasswordInput = ({
   onConfirmPasswordChange,
   onToggleShowPassword
 }: PasswordInputProps) => {
+  const [passwordError, setPasswordError] = useState('');
+  const [confirmError, setConfirmError] = useState('');
+  const [isDirty, setIsDirty] = useState({ password: false, confirm: false });
+
+  // Validate password when it changes (only if dirty)
+  useEffect(() => {
+    if (isDirty.password) {
+      validatePassword();
+    }
+  }, [password]);
+
+  // Validate confirm password when either password changes (only if dirty)
+  useEffect(() => {
+    if (isDirty.confirm) {
+      validateConfirmPassword();
+    }
+  }, [confirmPassword, password]);
+
+  const validatePassword = () => {
+    if (!password) {
+      setPasswordError('Ce champ est requis');
+      return false;
+    } else if (password.length < 8) {
+      setPasswordError('Le mot de passe doit contenir au moins 8 caractères');
+      return false;
+    }
+    setPasswordError('');
+    return true;
+  };
+
+  const validateConfirmPassword = () => {
+    if (!confirmPassword) {
+      setConfirmError('Ce champ est requis');
+      return false;
+    } else if (password !== confirmPassword) {
+      setConfirmError('Les mots de passe ne correspondent pas');
+      return false;
+    }
+    setConfirmError('');
+    return true;
+  };
+
+  const handlePasswordBlur = () => {
+    setIsDirty(prev => ({ ...prev, password: true }));
+    validatePassword();
+  };
+
+  const handleConfirmBlur = () => {
+    setIsDirty(prev => ({ ...prev, confirm: true }));
+    validateConfirmPassword();
+  };
+
   return (
     <>
-      <div className="relative">
+      <div className="relative mb-4">
         <input
           type={showPassword ? "text" : "password"}
           value={password}
           onChange={(e) => onPasswordChange(e.target.value)}
+          onBlur={handlePasswordBlur}
           placeholder="Mot de passe"
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-eatly-primary/20 focus:border-eatly-primary outline-none transition-all"
+          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-eatly-primary/20 focus:border-eatly-primary outline-none transition-all ${
+            passwordError ? 'border-eatly-primary bg-red-50' : 'border-gray-300'
+          }`}
           required
           minLength={8}
-          onInvalid={(e) => {
-            e.preventDefault();
-            const input = e.target as HTMLInputElement;
-            input.setCustomValidity(
-              input.value.length === 0 
-                ? defaultErrorMessages.required 
-                : defaultErrorMessages.shortPassword
-            );
-          }}
-          onInput={(e) => {
-            const input = e.target as HTMLInputElement;
-            input.setCustomValidity('');
-          }}
+          aria-invalid={!!passwordError}
         />
         <button
           type="button"
@@ -51,30 +96,23 @@ const PasswordInput = ({
         >
           {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
         </button>
+        <FormErrorDisplay error={passwordError} className="mt-1" />
       </div>
 
-      <div>
+      <div className="mb-4">
         <input
           type={showPassword ? "text" : "password"}
           value={confirmPassword}
           onChange={(e) => onConfirmPasswordChange(e.target.value)}
+          onBlur={handleConfirmBlur}
           placeholder="Confirmer le mot de passe"
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-eatly-primary/20 focus:border-eatly-primary outline-none transition-all"
+          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-eatly-primary/20 focus:border-eatly-primary outline-none transition-all ${
+            confirmError ? 'border-eatly-primary bg-red-50' : 'border-gray-300'
+          }`}
           required
-          onInvalid={(e) => {
-            e.preventDefault();
-            const input = e.target as HTMLInputElement;
-            input.setCustomValidity(
-              input.value.length === 0 
-                ? defaultErrorMessages.required 
-                : defaultErrorMessages.passwordMatch
-            );
-          }}
-          onInput={(e) => {
-            const input = e.target as HTMLInputElement;
-            input.setCustomValidity('');
-          }}
+          aria-invalid={!!confirmError}
         />
+        <FormErrorDisplay error={confirmError} className="mt-1" />
       </div>
     </>
   );
