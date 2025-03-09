@@ -20,6 +20,13 @@ const PrivacyModal = ({ isVisible, onAccept, onRefuse }: PrivacyModalProps) => {
 
   if (!isVisible) return null;
   
+  // Déterminer la page actuelle pour le paramètre returnTo
+  const currentPath = window.location.pathname;
+  // Pour la page d'index, indiquer qu'il faut revenir au popup RGPD
+  const returnParam = currentPath === '/' || currentPath === '/index' 
+    ? '?returnTo=popup-rgpd' 
+    : `?returnTo=${encodeURIComponent(currentPath)}`;
+  
   return (
     <>
       <motion.div
@@ -88,7 +95,7 @@ const PrivacyModal = ({ isVisible, onAccept, onRefuse }: PrivacyModalProps) => {
             </motion.button>
           </div>
           <a 
-            href="/politique-confidentialite.html"
+            href={`/politique-confidentialite.html${returnParam}`}
             target="_blank"
             className="font-playfair text-sm text-[#B22222] mt-5 no-underline hover:underline"
           >

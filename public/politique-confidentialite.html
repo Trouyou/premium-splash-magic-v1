@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -248,6 +249,12 @@
       // Set the click event
       backButton.addEventListener('click', function(event) {
         event.preventDefault();
+        
+        // Special case for popup-rgpd - redirect to index with parameter
+        if (returnTo === 'popup-rgpd') {
+          window.location.href = '/?returnTo=popup-rgpd';
+          return;
+        }
         
         // If returnTo parameter exists, redirect to that page
         if (returnTo) {

@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import NetworkErrorMessage from './splash/NetworkErrorMessage';
 import PrivacyModal from './splash/PrivacyModal';
 import LoadingIndicator from './splash/LoadingIndicator';
@@ -18,6 +18,22 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
   const [loading, setLoading] = useState(false);
   const [networkError, setNetworkError] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Vérification si l'utilisateur revient du document de politique de confidentialité
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const returnTo = searchParams.get('returnTo');
+    
+    // Si returnTo=popup-rgpd, afficher la modal RGPD
+    if (returnTo === 'popup-rgpd') {
+      setShowModal(true);
+      
+      // Nettoyer l'URL sans recharger la page
+      const newUrl = `${window.location.pathname}${window.location.hash}`;
+      window.history.replaceState({}, document.title, newUrl);
+    }
+  }, [location]);
   
   // Vérification de connexion et chargement initial
   useEffect(() => {
