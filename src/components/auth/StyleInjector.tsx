@@ -2,7 +2,6 @@
 import { useEffect } from 'react';
 import '@/styles/auth.css';
 import '@/styles/form-errors.css';
-import { isDevMode } from '@/components/auth/simulators/signup/FormValidator';
 
 const StyleInjector = () => {
   useEffect(() => {
@@ -23,25 +22,6 @@ const StyleInjector = () => {
             document.activeElement !== document.activeElement.form.querySelector('button[type="submit"]')) {
           e.preventDefault();
           
-          // Find the next input field
-          const form = document.activeElement.form;
-          const inputs = Array.from(form.querySelectorAll(
-            'input:not([type="hidden"]):not([type="submit"]), select, textarea'
-          ));
-          
-          const currentIndex = inputs.indexOf(document.activeElement);
-          if (currentIndex !== -1 && currentIndex < inputs.length - 1) {
-            // Move to next field - need to cast to HTMLElement to use focus()
-            const nextElement = inputs[currentIndex + 1] as HTMLElement;
-            nextElement.focus();
-          } else {
-            // If it's the last field, submit the form safely
-            const submitButton = form.querySelector('button[type="submit"], input[type="submit"]');
-            if (submitButton && submitButton instanceof HTMLElement) {
-              submitButton.click();
-            }
-          }
-          
           // Clear the processing flag after a short delay
           setTimeout(() => {
             if (document.activeElement instanceof HTMLInputElement) {
@@ -58,30 +38,12 @@ const StyleInjector = () => {
     // Add class to body for performance optimizations
     document.body.classList.add('performance-optimized');
     
-    // Add dev mode indicator if needed
-    if (isDevMode()) {
-      const devModeExists = document.querySelector('.dev-mode-indicator');
-      if (!devModeExists) {
-        const devIndicator = document.createElement('div');
-        devIndicator.className = 'dev-mode-indicator';
-        devIndicator.textContent = 'DEV MODE';
-        document.body.appendChild(devIndicator);
-        console.log('[DEV MODE] Development mode detected and indicator added');
-      }
-    }
-    
     return () => {
       // Remove handler on cleanup
       document.removeEventListener('keydown', handleEnterKey, true);
       
       // Remove optimization class
       document.body.classList.remove('performance-optimized');
-      
-      // Remove dev mode indicator
-      const devIndicator = document.querySelector('.dev-mode-indicator');
-      if (devIndicator) {
-        devIndicator.remove();
-      }
     };
   }, []);
   
