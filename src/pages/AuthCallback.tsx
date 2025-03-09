@@ -2,7 +2,7 @@
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useClerk } from '@clerk/clerk-react';
-import { isPreviewEnvironment } from '@/utils/auth-simulator';
+import { isPreviewEnvironment, simulateSignIn } from '@/utils/auth-simulator';
 import '../App.css';
 
 const AuthCallback = () => {
@@ -28,45 +28,60 @@ const AuthCallback = () => {
             url: window.location.href,
             origin: window.location.origin
           });
+          
+          // Dans l'environnement Lovable, simuler une connexion réussie
+          // Extraire le provider de l'URL si disponible
+          const urlParams = new URLSearchParams(window.location.search);
+          const provider = urlParams.get('provider') || 'oauth_google';
+          simulateSignIn(provider, () => {
+            startRedirectionAnimation();
+          });
+          return;
         }
 
         // Traiter le callback d'authentification
         await handleRedirectCallback({
-          signInFallbackRedirectUrl: window.location.origin
+          redirectUrl: window.location.origin + "/auth/callback",
+          afterSignInUrl: window.location.origin
         });
         
-        // Animation fluide utilisant requestAnimationFrame
-        let start: number | null = null;
-        const duration = 1500; // 1.5 secondes exactement
-        
-        const animate = (timestamp: number) => {
-          if (!start) start = timestamp;
-          const progress = timestamp - start;
-          
-          // Met à jour le pourcentage de progression visuellement
-          if (progressCircleRef.current) {
-            const progressPercentage = Math.min(progress / duration, 1);
-            progressCircleRef.current.style.strokeDashoffset = `${283 * (1 - progressPercentage)}`;
-          }
-          
-          if (progress < duration) {
-            requestAnimationFrame(animate);
-          } else {
-            // Ajout d'une animation de fade-out avant la redirection
-            if (containerRef.current) {
-              containerRef.current.classList.add('fade-out');
-            }
-            
-            // Redirection après l'animation complète
-            setTimeout(() => navigate('/'), 300);
-          }
-        };
-        
-        requestAnimationFrame(animate);
+        // Démarrer l'animation de redirection
+        startRedirectionAnimation();
       } catch (error) {
         console.error('Erreur lors du traitement du callback:', error);
         navigate('/login');
       }
+    };
+    
+    const startRedirectionAnimation = () => {
+      // Animation fluide utilisant requestAnimationFrame
+      let start: number | null = null;
+      const duration = 1500; // 1.5 secondes exactement
+      
+      const animate = (timestamp: number) => {
+        if (!start) start = timestamp;
+        const progress = timestamp - start;
+        
+        // Met à jour le pourcentage de progression visuellement
+        if (progressCircleRef.current) {
+          const progressPercentage = Math.min(progress / duration, 1);
+          progressCircleRef.current.style.strokeDashoffset = `${283 * (1 - progressPercentage)}`;
+        }
+        
+        if (progress < duration) {
+          requestAnimationFrame(animate);
+        } else {
+          // Ajout d'une animation de fade-out avant la redirection
+          if (containerRef.current) {
+            containerRef.current.classList.add('fade-out');
+          }
+          
+          // Redirection après l'animation complète
+          setTimeout(() => navigate('/'), 300);
+        }
+      };
+      
+      requestAnimationFrame(animate);
     };
 
     processCallback();
