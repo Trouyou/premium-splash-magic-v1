@@ -13,7 +13,9 @@ export { withAuthSimulation } from './simulators/ProtectedRoute';
 // Main AuthSimulator component for backwards compatibility
 const AuthSimulator = () => {
   return (
-    <PreviewModeBanner />
+    <div className="preview-mode-banner">
+      This is a preview mode. Real authentication is disabled.
+    </div>
   );
 };
 

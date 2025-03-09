@@ -8,8 +8,8 @@ import AnimatedDivider from './AnimatedDivider';
 
 const LoginAnimation = () => {
   return (
-    <div className="w-full h-full flex flex-col justify-center items-center relative overflow-hidden px-8">
-      {/* Background with gradient */}
+    <div className="w-full h-full flex flex-col justify-center items-center relative overflow-hidden">
+      {/* Background gradient */}
       <AnimatedBackground />
 
       {/* Logo */}
@@ -28,7 +28,7 @@ const LoginAnimation = () => {
       {/* Description paragraph */}
       <AnimatedDescription />
 
-      {/* Graphic element: decorative line */}
+      {/* Decorative line */}
       <AnimatedDivider />
     </div>
   );

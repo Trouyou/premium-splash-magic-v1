@@ -1,13 +1,9 @@
-
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import AnimatedBackground from '@/components/login/AnimatedBackground';
 import LoginAnimation from '@/components/login/LoginAnimation';
-import SocialLoginSection from '@/components/login/SocialLoginSection';
-import LoginSeparator from '@/components/login/LoginSeparator';
 
 const Signup = () => {
   const [email, setEmail] = useState('');
@@ -45,13 +41,13 @@ const Signup = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-white">
-      {/* Partie gauche - Animation */}
-      <div className="hidden md:flex md:w-3/5">
+    <div className="flex flex-col md:flex-row min-h-screen w-screen bg-white m-0 p-0 overflow-hidden">
+      {/* Left section - Animation */}
+      <div className="hidden md:block md:w-3/5 h-screen m-0 p-0 overflow-hidden relative">
         <LoginAnimation />
       </div>
 
-      {/* Partie droite - Formulaire d'inscription */}
+      {/* Right section - Signup form */}
       <div className="w-full md:w-2/5 flex flex-col justify-center items-center px-6 py-12 md:px-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

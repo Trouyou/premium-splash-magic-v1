@@ -8,13 +8,13 @@ import LoginFooter from '@/components/login/LoginFooter';
 
 const Login = () => {
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-white">
-      {/* Partie gauche - Animation */}
-      <div className="hidden md:flex md:w-3/5">
+    <div className="flex flex-col md:flex-row min-h-screen w-screen bg-white m-0 p-0 overflow-hidden">
+      {/* Left section - Animation */}
+      <div className="hidden md:block md:w-3/5 h-screen m-0 p-0 overflow-hidden relative">
         <LoginAnimation />
       </div>
 
-      {/* Partie droite - Formulaire de connexion */}
+      {/* Right section - Login form */}
       <div className="w-full md:w-2/5 flex flex-col justify-center items-center px-6 py-12 md:px-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -27,16 +27,16 @@ const Login = () => {
             <p className="font-playfair text-base text-eatly-secondary">Accédez à votre compte</p>
           </div>
 
-          {/* Boutons de connexion sociale */}
+          {/* Social login buttons */}
           <SocialLoginSection />
 
-          {/* Séparateur */}
+          {/* Separator */}
           <LoginSeparator />
 
-          {/* Formulaire de connexion */}
+          {/* Login form */}
           <LoginForm />
 
-          {/* Pied de page */}
+          {/* Footer */}
           <LoginFooter />
         </motion.div>
       </div>
