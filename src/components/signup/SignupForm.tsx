@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
@@ -26,9 +26,12 @@ const SignupForm = () => {
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [newsletter, setNewsletter] = useState(false);
   const [formError, setFormError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { signUp, isLoading, error } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const safetyTimeoutRef = useRef<number | null>(null);
+  const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
     if (error) {
@@ -38,17 +41,60 @@ const SignupForm = () => {
         description: translatedError,
         variant: "destructive"
       });
+      // Ensure the button resets if there's an error
+      setIsSubmitting(false);
     }
   }, [error, toast]);
 
-  const handleSignup = async (e: React.FormEvent) => {
-    e.preventDefault();
+  // Safety mechanism to prevent UI from getting stuck
+  useEffect(() => {
+    return () => {
+      // Clear any pending timeouts when component unmounts
+      if (safetyTimeoutRef.current) {
+        window.clearTimeout(safetyTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  // Additional safety mechanism - reset button state if stuck
+  useEffect(() => {
+    let lastActivity = Date.now();
+    const recordActivity = () => { lastActivity = Date.now(); };
     
+    // Record user interactions
+    document.addEventListener('mousemove', recordActivity);
+    document.addEventListener('keydown', recordActivity);
+    document.addEventListener('click', recordActivity);
+    
+    // Check for stuck states periodically
+    const intervalId = setInterval(() => {
+      // If no activity for 10 seconds and button is still in loading state
+      if (Date.now() - lastActivity > 10000 && isSubmitting) {
+        console.log('Potential stuck state detected - resetting form state');
+        setIsSubmitting(false);
+      }
+    }, 2000);
+    
+    return () => {
+      document.removeEventListener('mousemove', recordActivity);
+      document.removeEventListener('keydown', recordActivity);
+      document.removeEventListener('click', recordActivity);
+      clearInterval(intervalId);
+    };
+  }, [isSubmitting]);
+
+  const validateForm = () => {
+    // Reset previous errors
+    setFormError('');
+    setBirthdateError('');
+    
+    // Validate birthdate
     if (!birthdate || !birthdateValid) {
       setBirthdateError('Veuillez indiquer une date de naissance valide (18 ans minimum)');
-      return;
+      return false;
     }
     
+    // Validate other fields
     const validationError = getSignupFormError({
       password,
       confirmPassword,
@@ -57,18 +103,59 @@ const SignupForm = () => {
     
     if (validationError) {
       setFormError(validationError);
+      return false;
+    }
+    
+    // Check required fields
+    if (!email || !firstName || !lastName) {
+      setFormError('Veuillez remplir tous les champs obligatoires');
+      return false;
+    }
+    
+    return true;
+  };
+
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Prevent multiple submissions
+    if (isSubmitting) return;
+    
+    // Validate form
+    if (!validateForm()) {
       return;
     }
     
-    setFormError('');
-    setBirthdateError('');
+    setIsSubmitting(true);
+    
+    // Safety timeout - reset form after 5 seconds max to prevent UI from getting stuck
+    safetyTimeoutRef.current = window.setTimeout(() => {
+      console.log('Safety timeout triggered - resetting form state');
+      setIsSubmitting(false);
+    }, 5000);
+    
     try {
       await signUp(email, password, firstName, lastName);
+      
+      // Clear safety timeout as signup was successful
+      if (safetyTimeoutRef.current) {
+        window.clearTimeout(safetyTimeoutRef.current);
+      }
       
       // After successful registration, redirect to onboarding page
       navigate('/onboarding');
     } catch (error) {
       console.error("Erreur d'inscription:", error);
+      // The error will be handled by the useEffect that watches the error state
+    } finally {
+      // Always ensure the button state is reset
+      setIsSubmitting(false);
+      
+      // Clear safety timeout
+      if (safetyTimeoutRef.current) {
+        window.clearTimeout(safetyTimeoutRef.current);
+        safetyTimeoutRef.current = null;
+      }
     }
   };
 
@@ -92,7 +179,12 @@ const SignupForm = () => {
     <>
       <FormErrorDisplay error={formError} className="bg-red-50 p-3 rounded-md mb-4" />
 
-      <form onSubmit={handleSignup} className="space-y-4" noValidate>
+      <form 
+        ref={formRef}
+        onSubmit={handleSignup} 
+        className="space-y-4" 
+        noValidate
+      >
         <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
           <InputField
             type="text"
@@ -124,9 +216,10 @@ const SignupForm = () => {
         <div className="mt-4 birthdate-field-container">
           <BirthdateSelector 
             onChange={handleBirthdateChange} 
-            onValidate={handleBirthdateValidation} 
+            onValidate={handleBirthdateValidation}
+            errorMessage={birthdateError}
           />
-          <FormErrorDisplay error={birthdateError} className="mt-1" />
+          {!birthdateError && <FormErrorDisplay error={birthdateError} className="mt-1" />}
         </div>
 
         <PasswordInput 
@@ -145,7 +238,7 @@ const SignupForm = () => {
           onNewsletterChange={setNewsletter}
         />
 
-        <SignupButton isLoading={isLoading} />
+        <SignupButton isLoading={isSubmitting || isLoading} />
       </form>
     </>
   );
