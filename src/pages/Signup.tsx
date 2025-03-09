@@ -21,175 +21,82 @@ const Signup = () => {
     // Initialize error message harmonization
     const cleanup = setupErrorMessageHarmonization();
     
-    // Load the RGPD redirection fix script
-    const script = document.createElement('script');
-    script.src = '/js/rgpd-redirection-fix.js';
-    script.async = true;
-    document.body.appendChild(script);
-    
-    // Add anti-blocking script for the signup form
-    const antiBlockingScript = document.createElement('script');
-    antiBlockingScript.textContent = `
-      // Correction du problème de blocage de la page signup
-      document.addEventListener('DOMContentLoaded', function() {
-        // Identifier le formulaire d'inscription
-        const signupForm = document.querySelector('form');
+    // Add emergency unblocking script for the form
+    const unblockingScript = document.createElement('script');
+    unblockingScript.textContent = `
+      // Emergency unblocking system to avoid page freezes
+      (function() {
+        const MAX_BUTTON_DISABLED_TIME = 5000; // 5 seconds max
         
-        if (signupForm) {
-          // Sauvegarder le comportement original
-          const originalSubmitBehavior = signupForm.onsubmit;
+        // Check every second for stuck buttons
+        const safetyInterval = setInterval(() => {
+          // Find all disabled buttons and inputs
+          const blockedElements = document.querySelectorAll('button[disabled], input[disabled], button.submitting, button.loading');
           
-          // Remplacer par une version sécurisée
-          signupForm.onsubmit = function(event) {
-            // Empêcher la soumission par défaut
-            event.preventDefault();
+          if (blockedElements.length > 0) {
+            console.log('Performing safety check on disabled elements:', blockedElements.length);
             
-            // Bouton de soumission
-            const submitButton = signupForm.querySelector('button[type="submit"], input[type="submit"], button:not([type])');
-            
-            try {
-              // Vérifier si tous les champs requis sont remplis
-              const requiredFields = signupForm.querySelectorAll('[required]');
-              let allFieldsValid = true;
+            // Re-enable each element
+            blockedElements.forEach(element => {
+              element.disabled = false;
               
-              requiredFields.forEach(field => {
-                if (!field.value.trim()) {
-                  allFieldsValid = false;
-                  // Ajouter une classe d'erreur ou un message
-                  field.classList.add('error-field');
-                  
-                  // Si le champ a un message d'erreur associé, l'afficher
-                  const errorElement = document.getElementById(\`\${field.id}-error\`) || 
-                                      field.parentNode.querySelector('.error-message');
-                  if (errorElement) {
-                    errorElement.style.display = 'block';
-                  }
-                } else {
-                  // Supprimer les marqueurs d'erreur si présents
-                  field.classList.remove('error-field');
-                  
-                  const errorElement = document.getElementById(\`\${field.id}-error\`) ||
-                                      field.parentNode.querySelector('.error-message');
-                  if (errorElement) {
-                    errorElement.style.display = 'none';
-                  }
+              // Remove any loading classes
+              ['submitting', 'loading', 'spinning'].forEach(cls => {
+                if (element.classList.contains(cls)) {
+                  element.classList.remove(cls);
                 }
               });
               
-              // Réactiver le bouton si désactivé
-              if (submitButton) {
-                submitButton.disabled = false;
-                submitButton.classList.remove('active', 'pressed', 'submitting');
+              // Hide any spinner elements
+              const spinner = element.querySelector('.animate-spin, .spinner');
+              if (spinner) {
+                spinner.style.display = 'none';
               }
-              
-              // Si tous les champs sont valides, appeler le comportement original
-              // avec une protection contre le timeout
-              if (allFieldsValid) {
-                // Protection contre le blocage
-                const timeoutProtection = setTimeout(() => {
-                  console.log('Protection contre le blocage déclenchée');
-                  if (submitButton) {
-                    submitButton.disabled = false;
-                    submitButton.classList.remove('active', 'pressed', 'submitting');
-                  }
-                }, 3000); // 3 secondes maximum pour le traitement
-                
-                try {
-                  // Appeler le comportement original si existant
-                  if (typeof originalSubmitBehavior === 'function') {
-                    originalSubmitBehavior.call(this, event);
-                  } else {
-                    // Sinon, soumettre normalement
-                    signupForm.removeAttribute('onsubmit');
-                    setTimeout(() => {
-                      signupForm.submit();
-                    }, 10);
-                  }
-                } finally {
-                  clearTimeout(timeoutProtection);
-                }
-              } else {
-                // Afficher un message global d'erreur si nécessaire
-                const formErrorContainer = document.querySelector('.form-error') || 
-                                          document.querySelector('.error-container');
-                if (formErrorContainer) {
-                  formErrorContainer.textContent = 'Veuillez remplir tous les champs obligatoires.';
-                  formErrorContainer.style.display = 'block';
-                } else {
-                  // Créer un message d'erreur si aucun conteneur n'existe
-                  const errorDiv = document.createElement('div');
-                  errorDiv.className = 'form-error';
-                  errorDiv.textContent = 'Veuillez remplir tous les champs obligatoires.';
-                  errorDiv.style.color = '#D11B19';
-                  errorDiv.style.marginTop = '10px';
-                  errorDiv.style.fontSize = '14px';
-                  signupForm.prepend(errorDiv);
-                }
-              }
-            } catch (error) {
-              console.error('Erreur lors de la validation du formulaire:', error);
-              
-              // Réactiver le bouton en cas d'erreur
-              if (submitButton) {
-                submitButton.disabled = false;
-                submitButton.classList.remove('active', 'pressed', 'submitting');
-              }
-              
-              // Si une erreur se produit, ne pas bloquer l'interface
-              return false;
-            }
-            
-            return false; // Empêcher la soumission standard
-          };
-          
-          // Protection supplémentaire - surveillance des événements de clic sur le bouton
-          const submitButton = signupForm.querySelector('button[type="submit"], input[type="submit"], button:not([type])');
-          if (submitButton) {
-            submitButton.addEventListener('click', function(event) {
-              // Définir un timeout de protection pour réinitialiser l'état du bouton
-              setTimeout(() => {
-                this.disabled = false;
-                this.classList.remove('active', 'pressed', 'submitting');
-              }, 3000); // 3 secondes maximum
             });
           }
-        }
-        
-        // Surveillance de l'état de la page - mécanisme de sécurité supplémentaire
-        let lastHeartbeat = Date.now();
-        const heartbeatInterval = setInterval(() => {
-          // Si plus de 5 secondes se sont écoulées sans heartbeat, c'est que la page est bloquée
-          if (Date.now() - lastHeartbeat > 5000) {
-            console.warn('Détection de blocage potentiel - réinitialisation des états');
-            // Réinitialiser l'état de tous les boutons
-            document.querySelectorAll('button, input[type="submit"]').forEach(btn => {
-              btn.disabled = false;
-              btn.classList.remove('active', 'pressed', 'submitting');
-            });
-          }
-          
-          lastHeartbeat = Date.now();
         }, 1000);
         
-        // Nettoyage lorsque l'utilisateur quitte la page
+        // Stop checking when user leaves the page
         window.addEventListener('beforeunload', () => {
-          clearInterval(heartbeatInterval);
+          clearInterval(safetyInterval);
         });
-      });
+        
+        // Monitor for page freezes by checking script execution
+        let lastCheck = Date.now();
+        const freezeDetector = setInterval(() => {
+          const now = Date.now();
+          const timeSinceLastCheck = now - lastCheck;
+          
+          // If more than 2 seconds between checks, the page might have frozen
+          if (timeSinceLastCheck > 2000) {
+            console.warn('Possible page freeze detected, elapsed time:', timeSinceLastCheck);
+            
+            // Re-enable all form controls as emergency measure
+            document.querySelectorAll('button, input').forEach(el => {
+              if (el instanceof HTMLElement) {
+                el.disabled = false;
+              }
+            });
+          }
+          
+          lastCheck = now;
+        }, 1000);
+        
+        // Clear on unload
+        window.addEventListener('beforeunload', () => {
+          clearInterval(freezeDetector);
+        });
+      })();
     `;
-    document.body.appendChild(antiBlockingScript);
+    document.body.appendChild(unblockingScript);
     
     // Add signup-page class to body for CSS targeting
     document.body.classList.add('signup-page');
     
     return () => {
       // Clean up on unmount
-      if (script.parentNode) {
-        document.body.removeChild(script);
-      }
-      // Remove the anti-blocking script when component unmounts
-      if (antiBlockingScript.parentNode) {
-        document.body.removeChild(antiBlockingScript);
+      if (unblockingScript.parentNode) {
+        document.body.removeChild(unblockingScript);
       }
       // Remove signup-page class when component unmounts
       document.body.classList.remove('signup-page');

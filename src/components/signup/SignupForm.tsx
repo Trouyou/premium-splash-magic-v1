@@ -32,6 +32,7 @@ const SignupForm = () => {
   const navigate = useNavigate();
   const safetyTimeoutRef = useRef<number | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
+  const maxSubmitTime = 5000; // Max time to wait for submission (5 seconds)
 
   useEffect(() => {
     if (error) {
@@ -56,31 +57,16 @@ const SignupForm = () => {
     };
   }, []);
 
-  // Additional safety mechanism - reset button state if stuck
   useEffect(() => {
-    let lastActivity = Date.now();
-    const recordActivity = () => { lastActivity = Date.now(); };
-    
-    // Record user interactions
-    document.addEventListener('mousemove', recordActivity);
-    document.addEventListener('keydown', recordActivity);
-    document.addEventListener('click', recordActivity);
-    
-    // Check for stuck states periodically
-    const intervalId = setInterval(() => {
-      // If no activity for 10 seconds and button is still in loading state
-      if (Date.now() - lastActivity > 10000 && isSubmitting) {
-        console.log('Potential stuck state detected - resetting form state');
+    // Reset loading state after maximum wait time
+    if (isSubmitting) {
+      const safetyTimer = window.setTimeout(() => {
+        console.log('Safety timeout triggered - resetting form state');
         setIsSubmitting(false);
-      }
-    }, 2000);
-    
-    return () => {
-      document.removeEventListener('mousemove', recordActivity);
-      document.removeEventListener('keydown', recordActivity);
-      document.removeEventListener('click', recordActivity);
-      clearInterval(intervalId);
-    };
+      }, maxSubmitTime);
+      
+      return () => window.clearTimeout(safetyTimer);
+    }
   }, [isSubmitting]);
 
   const validateForm = () => {
@@ -128,14 +114,22 @@ const SignupForm = () => {
     
     setIsSubmitting(true);
     
-    // Safety timeout - reset form after 5 seconds max to prevent UI from getting stuck
+    // Safety timeout - reset form after maxSubmitTime to prevent UI from getting stuck
     safetyTimeoutRef.current = window.setTimeout(() => {
       console.log('Safety timeout triggered - resetting form state');
       setIsSubmitting(false);
-    }, 5000);
+    }, maxSubmitTime);
     
     try {
-      await signUp(email, password, firstName, lastName);
+      // Create a promise with timeout to avoid blocking UI
+      const signupPromise = Promise.race([
+        signUp(email, password, firstName, lastName),
+        new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Délai d\'attente dépassé')), maxSubmitTime - 500)
+        )
+      ]);
+      
+      await signupPromise;
       
       // Clear safety timeout as signup was successful
       if (safetyTimeoutRef.current) {
@@ -146,7 +140,23 @@ const SignupForm = () => {
       navigate('/onboarding');
     } catch (error) {
       console.error("Erreur d'inscription:", error);
-      // The error will be handled by the useEffect that watches the error state
+      // Reset submission state
+      setIsSubmitting(false);
+      
+      // Show error toast if not already shown by the useEffect
+      if (!error.message?.includes('Délai d\'attente dépassé')) {
+        toast({
+          title: "Erreur d'inscription",
+          description: error.message || "Une erreur s'est produite lors de l'inscription",
+          variant: "destructive"
+        });
+      } else {
+        toast({
+          title: "Erreur d'inscription",
+          description: "Le serveur met trop de temps à répondre. Veuillez réessayer.",
+          variant: "destructive"
+        });
+      }
     } finally {
       // Always ensure the button state is reset
       setIsSubmitting(false);
@@ -219,7 +229,7 @@ const SignupForm = () => {
             onValidate={handleBirthdateValidation}
             errorMessage={birthdateError}
           />
-          {!birthdateError && <FormErrorDisplay error={birthdateError} className="mt-1" />}
+          {birthdateError && <FormErrorDisplay error={birthdateError} className="mt-1" />}
         </div>
 
         <PasswordInput 

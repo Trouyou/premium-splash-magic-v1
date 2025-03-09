@@ -29,6 +29,7 @@ const FormErrorDisplay = ({ error, className = "", id }: FormErrorDisplayProps) 
         strokeLinecap="round" 
         strokeLinejoin="round" 
         className="mr-1 flex-shrink-0"
+        aria-hidden="true"
       >
         <circle cx="12" cy="12" r="10"></circle>
         <line x1="12" y1="8" x2="12" y2="12"></line>
