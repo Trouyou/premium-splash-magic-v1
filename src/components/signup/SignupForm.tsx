@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
-import { translateErrorMessage, getSignupFormError, setupFormValidation, defaultErrorMessages } from '@/utils/error-translator';
+import { translateErrorMessage, getSignupFormError, setupFormValidation, defaultErrorMessages } from '@/utils/error-messages';
 import BirthdateSelector from './BirthdateSelector';
 
 const SignupForm = () => {

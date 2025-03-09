@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
@@ -6,7 +5,7 @@ import {
   simulateEmailSignIn
 } from '@/utils/auth-simulator';
 import { useToast } from '@/hooks/use-toast';
-import { translateErrorMessage, setupFormValidation, defaultErrorMessages } from '@/utils/error-translator';
+import { translateErrorMessage, setupFormValidation, defaultErrorMessages } from '@/utils/error-messages';
 
 export const SimulatedEmailAuth = ({ 
   onSuccess,

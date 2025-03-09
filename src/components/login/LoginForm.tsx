@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff } from 'lucide-react';
@@ -6,7 +5,7 @@ import { useAuth } from '@/context/AuthContext';
 import { isPreviewEnvironment } from '@/utils/auth-simulator';
 import { SimulatedEmailAuth } from '@/components/auth/AuthSimulator';
 import { PreviewModeBanner } from '@/components/auth/AuthSimulator';
-import { translateErrorMessage, setupFormValidation, defaultErrorMessages } from '@/utils/error-translator';
+import { translateErrorMessage, setupFormValidation, defaultErrorMessages } from '@/utils/error-messages';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
@@ -15,10 +14,8 @@ const LoginForm = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const { signInWithEmail, isLoading, error } = useAuth();
 
-  // Déterminer si nous sommes dans un environnement preview/iframe
   const inPreviewMode = isPreviewEnvironment();
 
-  // Setup pour la validation des formulaires personnalisée
   useEffect(() => {
     setupFormValidation();
   }, []);
@@ -33,7 +30,6 @@ const LoginForm = () => {
     }
   };
 
-  // Si nous sommes en mode preview, utiliser SimulatedEmailAuth
   if (inPreviewMode) {
     return (
       <>
@@ -44,10 +40,8 @@ const LoginForm = () => {
     );
   }
 
-  // Traduire le message d'erreur
   const translatedError = error ? translateErrorMessage(error) : '';
 
-  // Vérifie si le message d'erreur contient "single session mode"
   const isSessionModeError = error && (
     error.includes('single session mode') || 
     error.includes('signed into one account')
@@ -55,7 +49,6 @@ const LoginForm = () => {
 
   return (
     <>
-      {/* Message d'erreur */}
       {translatedError && (
         <motion.div
           initial={{ opacity: 0, y: -10 }}
@@ -65,7 +58,6 @@ const LoginForm = () => {
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 mt-0.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
           {translatedError}
           
-          {/* Affiche un message supplémentaire pour l'erreur de session */}
           {isSessionModeError && (
             <div className="mt-2 text-xs">
               Pour résoudre ce problème, veuillez vous déconnecter d'abord de votre compte actuel.
@@ -74,7 +66,6 @@ const LoginForm = () => {
         </motion.div>
       )}
 
-      {/* Formulaire */}
       <form onSubmit={handleLogin} className="space-y-4" noValidate>
         <div>
           <div className="relative">
