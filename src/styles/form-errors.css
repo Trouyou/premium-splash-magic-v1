@@ -8,7 +8,8 @@
   font-size: 14px !important;
   margin-top: 6px !important;
   margin-bottom: 10px !important;
-  display: block !important;
+  display: flex !important;
+  align-items: center !important;
   text-align: left !important;
   padding-left: 2px !important;
   opacity: 1 !important;
@@ -63,6 +64,8 @@
   font-size: 14px !important;
   margin-top: 6px !important;
   font-family: 'AvantGarde Bk BT', sans-serif !important;
+  display: flex !important;
+  align-items: center !important;
 }
 
 /* Espacement spécifique pour le champ date de naissance */
@@ -145,3 +148,109 @@
   100% { transform: scale(1.08); }
 }
 
+/* Styles pour améliorer l'alignement des messages d'erreur */
+/* Style pour le conteneur du message d'erreur - styles globaux */
+.error-message, 
+.form-error, 
+.invalid-feedback,
+.field-error,
+[class*="error"],
+[id*="error"] {
+  display: flex !important;
+  align-items: center !important;
+  margin-top: 5px !important;
+  color: #9C1B1A !important;
+  font-size: 14px !important;
+}
+
+/* Style pour l'icône d'erreur (point d'exclamation) */
+.error-message::before, 
+.form-error::before, 
+.invalid-feedback::before,
+.field-error::before,
+[class*="error"]::before,
+[id*="error"]::before,
+.error-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  margin-right: 6px !important;
+  vertical-align: middle !important;
+}
+
+/* Sélecteur générique pour tous les messages d'erreur possibles */
+[class*="error-message"], 
+[class*="form-error"], 
+[class*="invalid-feedback"],
+[class*="field-error"],
+[class*="error"] {
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* Correction spécifique pour les erreurs avec point d'exclamation */
+.error-with-icon,
+.error-text,
+label + .text-danger,
+.required-message,
+.validation-error {
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* Appliquer à tous les conteneurs d'erreurs possibles */
+form .text-danger,
+form .alert-danger,
+form .text-error,
+form [role="alert"] {
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* Cibler directement les éléments */
+form .text-danger,
+form [role="alert"]:has(svg),
+form label + div:has(svg) {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+/* Alignement de l'icône d'exclamation */
+svg[fill="red"],
+svg[stroke="red"],
+svg[color="red"],
+.text-danger svg,
+[role="alert"] svg {
+  vertical-align: middle !important;
+  margin-right: 6px !important;
+  display: inline-block !important;
+  flex-shrink: 0 !important;
+}
+
+/* CSS plus spécifique pour cibler le cas exact */
+.error-message .exclamation-circle,
+svg circle + path,
+svg[viewBox*="0 0 24 24"] {
+  display: inline-flex !important;
+  vertical-align: middle !important;
+  margin-right: 6px !important;
+}
+
+/* Solution pour gérer les messages d'erreur qui utilisent des éléments div séparés */
+div > svg + span,
+div > svg + div {
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+/* Correction générale pour tous les textes d'erreur */
+.ce-champ-est-requis {
+  display: flex !important;
+  align-items: center !important;
+  color: #9C1B1A !important;
+}
+
+/* Styles spécifiques pour le composant FormErrorDisplay */
+.text-\[\#D11B19\].text-sm.flex.items-start {
+  align-items: center !important;
+}
