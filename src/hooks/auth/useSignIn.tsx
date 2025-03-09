@@ -29,6 +29,7 @@ export const useSignIn = () => {
       if (inPreviewMode) {
         // Simulation mode - use fake authentication
         await simulateEmailSignIn(email, password);
+        return undefined;
       } else {
         // Real authentication with Clerk
         if (!clerkSignIn || !signInLoaded) {
@@ -44,6 +45,7 @@ export const useSignIn = () => {
         // Handle necessary actions after signin
         if (result.status === 'complete') {
           console.log("Authentication successful");
+          return undefined;
         } else {
           console.log("Additional verification needed:", result);
           // Return needed verification, handled by calling component

@@ -16,9 +16,35 @@ export const useEmailAuth = () => {
   // Set error from any source
   const combinedError = signInHook.error || signUpHook.error || error;
 
+  // Wrap the signInWithEmail function to maintain consistent return type
+  const signInWithEmail = async (email: string, password: string) => {
+    try {
+      return await signInHook.signInWithEmail(email, password);
+    } catch (err) {
+      // Error is already set in the hook
+      throw err;
+    }
+  };
+
+  // Wrap the signUp function
+  const signUp = async (
+    email: string, 
+    password: string, 
+    firstName?: string, 
+    lastName?: string,
+    birthdate?: string
+  ) => {
+    try {
+      return await signUpHook.signUp(email, password, firstName, lastName, birthdate);
+    } catch (err) {
+      // Error is already set in the hook
+      throw err;
+    }
+  };
+
   return {
-    signInWithEmail: signInHook.signInWithEmail,
-    signUp: signUpHook.signUp,
+    signInWithEmail,
+    signUp,
     isLoading,
     error: combinedError,
     setError

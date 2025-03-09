@@ -53,7 +53,9 @@ export const useSignUp = () => {
         // Prepare verification if needed
         if (result.status === 'complete') {
           await result.createdSessionId;
-        } else if (result.status === 'needs_verification') {
+        } else if (result.status === 'needs_verification' || 
+                  result.status === 'missing_requirements' || 
+                  result.status === 'abandoned') {
           // Return needed verification, handled by the calling component
           return result;
         }
