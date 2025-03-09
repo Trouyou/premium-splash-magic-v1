@@ -8,7 +8,7 @@ declare global {
   interface Window {
     antiFreezeProtectionInstalled?: boolean;
     lastInteractionTime?: number;
-    freezeCheckInterval?: number | NodeJS.Timeout;
+    freezeCheckInterval?: NodeJS.Timeout;
   }
 }
 
@@ -302,7 +302,7 @@ export const setupAntiFreezeProtection = () => {
     // Nettoyage lors de la décharge de la page
     window.addEventListener('beforeunload', () => {
       if (window.freezeCheckInterval) {
-        clearInterval(window.freezeCheckInterval as NodeJS.Timeout);
+        clearInterval(window.freezeCheckInterval);
       }
     });
     
