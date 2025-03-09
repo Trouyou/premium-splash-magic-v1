@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
@@ -27,12 +26,10 @@ const SignupForm = () => {
   const { signUp, isLoading, error } = useAuth();
   const { toast } = useToast();
 
-  // Setup pour la validation des formulaires personnalisée
   useEffect(() => {
     setupFormValidation();
   }, []);
 
-  // Display API errors using toast
   useEffect(() => {
     if (error) {
       const translatedError = translateErrorMessage(error);
@@ -47,13 +44,11 @@ const SignupForm = () => {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Check birthdate
     if (!birthdate || !birthdateValid) {
       setBirthdateError('Veuillez indiquer une date de naissance valide (18 ans minimum)');
       return;
     }
     
-    // Validate form using our central validation
     const validationError = getSignupFormError({
       password,
       confirmPassword,
@@ -65,13 +60,11 @@ const SignupForm = () => {
       return;
     }
     
-    // If no error, clear previous error and continue
     setFormError('');
     setBirthdateError('');
     await signUp(email, password, firstName, lastName);
   };
 
-  // Handle birthdate change
   const handleBirthdateChange = (date: string | null) => {
     setBirthdate(date);
     if (date) {
@@ -79,7 +72,6 @@ const SignupForm = () => {
     }
   };
   
-  // Handle birthdate validation
   const handleBirthdateValidation = (isValid: boolean) => {
     setBirthdateValid(isValid);
     if (!isValid && birthdate) {
@@ -122,7 +114,6 @@ const SignupForm = () => {
           name="email"
         />
 
-        {/* Birthdate selector */}
         <div className="mt-4">
           <BirthdateSelector 
             onChange={handleBirthdateChange} 
@@ -131,7 +122,6 @@ const SignupForm = () => {
           <FormErrorDisplay error={birthdateError} className="mt-1" />
         </div>
 
-        {/* Password inputs */}
         <PasswordInput 
           password={password}
           confirmPassword={confirmPassword}
@@ -141,7 +131,6 @@ const SignupForm = () => {
           onToggleShowPassword={() => setShowPassword(!showPassword)}
         />
 
-        {/* Terms and newsletter */}
         <TermsAndNewsletter
           acceptTerms={acceptTerms}
           newsletter={newsletter}
@@ -149,7 +138,6 @@ const SignupForm = () => {
           onNewsletterChange={setNewsletter}
         />
 
-        {/* Submit button */}
         <SignupButton isLoading={isLoading} />
       </form>
     </>
