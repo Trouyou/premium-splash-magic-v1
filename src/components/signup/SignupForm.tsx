@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { translateErrorMessage, getSignupFormError } from '@/utils/error-translator';
 
 const SignupForm = () => {
   const [email, setEmail] = useState('');
@@ -19,36 +20,37 @@ const SignupForm = () => {
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Utiliser la fonction d'aide pour obtenir les erreurs de validation du formulaire
+    const validationError = getSignupFormError({
+      password,
+      confirmPassword,
+      acceptTerms
+    });
+    
+    if (validationError) {
+      setFormError(validationError);
+      return;
+    }
+    
+    // Si pas d'erreur, effacer l'erreur précédente et continuer
     setFormError('');
-    
-    if (password !== confirmPassword) {
-      setFormError('Les mots de passe ne correspondent pas');
-      return;
-    }
-    
-    if (password.length < 8) {
-      setFormError('Le mot de passe doit contenir au moins 8 caractères');
-      return;
-    }
-    
-    if (!acceptTerms) {
-      setFormError('Vous devez accepter les conditions d\'utilisation');
-      return;
-    }
-    
     await signUp(email, password, firstName, lastName);
   };
 
+  // Traduire le message d'erreur provenant de l'authentification
+  const displayError = formError || (error ? translateErrorMessage(error) : '');
+
   return (
     <>
-      {(error || formError) && (
+      {displayError && (
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           className="bg-red-50 text-eatly-primary p-3 rounded-md mb-4 text-sm flex items-start"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 mt-0.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-          {formError || error}
+          {displayError}
         </motion.div>
       )}
 

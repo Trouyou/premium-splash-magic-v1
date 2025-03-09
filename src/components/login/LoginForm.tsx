@@ -6,6 +6,7 @@ import { useAuth } from '@/context/AuthContext';
 import { isPreviewEnvironment } from '@/utils/auth-simulator';
 import { SimulatedEmailAuth } from '@/components/auth/AuthSimulator';
 import { PreviewModeBanner } from '@/components/auth/AuthSimulator';
+import { translateErrorMessage } from '@/utils/error-translator';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
@@ -52,6 +53,9 @@ const LoginForm = () => {
     );
   }
 
+  // Traduire le message d'erreur
+  const translatedError = error ? translateErrorMessage(error) : '';
+
   // Vérifie si le message d'erreur contient "single session mode"
   const isSessionModeError = error && (
     error.includes('single session mode') || 
@@ -61,14 +65,14 @@ const LoginForm = () => {
   return (
     <>
       {/* Message d'erreur */}
-      {error && (
+      {translatedError && (
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           className="bg-red-50 text-eatly-primary p-3 rounded-md mb-4 text-sm flex items-start"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 mt-0.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-          {error}
+          {translatedError}
           
           {/* Affiche un message supplémentaire pour l'erreur de session */}
           {isSessionModeError && (
