@@ -8,41 +8,19 @@
     <style>
         body {
             font-family: -apple-system, system-ui, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
             color: #333;
         }
-        .container {
-            width: 80%;
-            margin: auto;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
         .header {
-            text-align: center;
-            padding: 20px 0;
-            border-bottom: 1px solid #ddd;
-            position: relative;
-        }
-        .logo {
-            width: 100px;
-            height: auto;
-            margin-bottom: 10px;
-        }
-        h1 {
-            color: #555;
-        }
-        .content {
-            padding: 20px 0;
-            line-height: 1.6;
-        }
-        .footer {
-            text-align: center;
-            padding: 20px 0;
-            border-top: 1px solid #ddd;
-            color: #777;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #EDE6D6;
         }
         .retour-button {
             display: flex;
@@ -59,7 +37,6 @@
             text-decoration: none;
             transition: background-color 0.2s ease, transform 0.1s ease;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin: 0 auto 20px;
         }
         .retour-button:hover {
             background-color: #D11B19;
@@ -76,53 +53,65 @@
                 font-size: 14px;
             }
         }
+        h1 { font-size: 24px; margin-top: 0; margin-bottom: 0; }
+        h2 { font-size: 20px; margin-top: 25px; }
+        h3 { font-size: 18px; margin-top: 20px; }
+        p, li { text-align: justify; }
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #666;
+            font-size: 14px;
+            text-align: center;
+        }
+        .content {
+            padding: 0;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <a href="javascript:void(0);" class="retour-button" id="back-button">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-left">
-                    <path d="M19 12H5M12 19l-7-7 7-7"></path>
-                </svg>
-                Retour
-            </a>
-            <img src="/lovable-uploads/bae62a19-a42c-4047-8b4c-c9ce60746ff3.png" alt="Logo Eatly" class="logo">
-            <h1>Politique de Confidentialité</h1>
-        </div>
-        
-        <div class="content">
-            <h2>1. Introduction</h2>
-            <p>Votre vie privée est importante pour Eatly. Cette politique de confidentialité explique comment nous collectons, utilisons, partageons et protégeons vos informations personnelles.</p>
+    <div class="header">
+        <h1>Politique de Confidentialité</h1>
+        <a href="javascript:void(0);" class="retour-button" id="back-button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-left">
+                <path d="M19 12H5M12 19l-7-7 7-7"></path>
+            </svg>
+            Retour
+        </a>
+    </div>
+    
+    <div class="content">
+        <h2>1. Introduction</h2>
+        <p>Votre vie privée est importante pour Eatly. Cette politique de confidentialité explique comment nous collectons, utilisons, partageons et protégeons vos informations personnelles.</p>
 
-            <h2>2. Collecte d'Informations</h2>
-            <p>Nous collectons des informations lorsque vous vous inscrivez sur notre site, passez une commande, vous abonnez à notre newsletter, ou remplissez un formulaire. Ces informations peuvent inclure votre nom, adresse e-mail, adresse postale, numéro de téléphone, et informations de paiement.</p>
+        <h2>2. Collecte d'Informations</h2>
+        <p>Nous collectons des informations lorsque vous vous inscrivez sur notre site, passez une commande, vous abonnez à notre newsletter, ou remplissez un formulaire. Ces informations peuvent inclure votre nom, adresse e-mail, adresse postale, numéro de téléphone, et informations de paiement.</p>
 
-            <h2>3. Utilisation des Informations</h2>
-            <p>Les informations que nous collectons peuvent être utilisées pour personnaliser votre expérience, améliorer notre site web, améliorer le service client, traiter les transactions, envoyer des e-mails périodiques, et administrer un concours, une promotion, ou une enquête.</p>
+        <h2>3. Utilisation des Informations</h2>
+        <p>Les informations que nous collectons peuvent être utilisées pour personnaliser votre expérience, améliorer notre site web, améliorer le service client, traiter les transactions, envoyer des e-mails périodiques, et administrer un concours, une promotion, ou une enquête.</p>
 
-            <h2>4. Partage des Informations</h2>
-            <p>Nous ne vendons, n'échangeons, ni ne transférons vos informations personnelles identifiables à des tiers, sauf si nous vous en informons à l'avance. Cela n'inclut pas les tiers de confiance qui nous aident à exploiter notre site web, à mener nos affaires, ou à vous servir, tant que ces parties conviennent de garder ces informations confidentielles.</p>
+        <h2>4. Partage des Informations</h2>
+        <p>Nous ne vendons, n'échangeons, ni ne transférons vos informations personnelles identifiables à des tiers, sauf si nous vous en informons à l'avance. Cela n'inclut pas les tiers de confiance qui nous aident à exploiter notre site web, à mener nos affaires, ou à vous servir, tant que ces parties conviennent de garder ces informations confidentielles.</p>
 
-            <h2>5. Protection des Informations</h2>
-            <p>Nous mettons en œuvre une variété de mesures de sécurité pour maintenir la sécurité de vos informations personnelles. Nous utilisons un cryptage de pointe pour protéger les informations sensibles transmises en ligne. Nous protégeons également vos informations hors ligne.</p>
+        <h2>5. Protection des Informations</h2>
+        <p>Nous mettons en œuvre une variété de mesures de sécurité pour maintenir la sécurité de vos informations personnelles. Nous utilisons un cryptage de pointe pour protéger les informations sensibles transmises en ligne. Nous protégeons également vos informations hors ligne.</p>
 
-            <h2>6. Cookies</h2>
-            <p>Nous utilisons des cookies pour améliorer votre expérience sur notre site. Un cookie est un petit fichier texte qui est stocké sur votre ordinateur pour aider le site à se souvenir de vos préférences. Vous avez la possibilité d'accepter ou de refuser les cookies. La plupart des navigateurs web acceptent automatiquement les cookies, mais vous pouvez généralement modifier les paramètres de votre navigateur pour refuser les cookies si vous préférez.</p>
+        <h2>6. Cookies</h2>
+        <p>Nous utilisons des cookies pour améliorer votre expérience sur notre site. Un cookie est un petit fichier texte qui est stocké sur votre ordinateur pour aider le site à se souvenir de vos préférences. Vous avez la possibilité d'accepter ou de refuser les cookies. La plupart des navigateurs web acceptent automatiquement les cookies, mais vous pouvez généralement modifier les paramètres de votre navigateur pour refuser les cookies si vous préférez.</p>
 
-            <h2>7. Consentement</h2>
-            <p>En utilisant notre site, vous consentez à notre politique de confidentialité.</p>
+        <h2>7. Consentement</h2>
+        <p>En utilisant notre site, vous consentez à notre politique de confidentialité.</p>
 
-            <h2>8. Modifications de la Politique de Confidentialité</h2>
-            <p>Si nous décidons de modifier notre politique de confidentialité, nous publierons ces modifications sur cette page.</p>
+        <h2>8. Modifications de la Politique de Confidentialité</h2>
+        <p>Si nous décidons de modifier notre politique de confidentialité, nous publierons ces modifications sur cette page.</p>
 
-            <h2>9. Contactez-nous</h2>
-            <p>Si vous avez des questions concernant cette politique de confidentialité, vous pouvez nous contacter à l'adresse suivante : contact@eatly.ai</p>
-        </div>
-        
-        <div class="footer">
-            <p>© 2023 Eatly. Tous droits réservés.</p>
-        </div>
+        <h2>9. Contactez-nous</h2>
+        <p>Si vous avez des questions concernant cette politique de confidentialité, vous pouvez nous contacter à l'adresse suivante : contact@eatly.ai</p>
+    </div>
+    
+    <div class="footer">
+        <p>© 2023 Eatly. Tous droits réservés.</p>
     </div>
 
     <script>
