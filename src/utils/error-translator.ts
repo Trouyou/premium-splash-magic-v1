@@ -152,7 +152,7 @@ export const setupFormValidation = () => {
           input.setCustomValidity('');
           input.classList.remove('input-error');
           const errorElement = input.parentElement?.querySelector('.error-message');
-          if (errorElement) {
+          if (errorElement && errorElement instanceof HTMLElement) {
             errorElement.textContent = '';
             errorElement.style.display = 'none';
           }
