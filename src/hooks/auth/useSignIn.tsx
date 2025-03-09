@@ -1,6 +1,7 @@
 
 import { useState } from 'react';
 import { useSignIn as useClerkSignIn } from '@clerk/clerk-react';
+import { SignInResource } from '@clerk/types';
 import { 
   isPreviewEnvironment, 
   simulateEmailSignIn
@@ -19,7 +20,7 @@ export const useSignIn = () => {
   /**
    * Handles user signin with email and password
    */
-  const signInWithEmail = async (email: string, password: string) => {
+  const signInWithEmail = async (email: string, password: string): Promise<SignInResource | void> => {
     console.log("Sign in attempt with:", email);
     
     setError(null);
