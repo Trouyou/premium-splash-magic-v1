@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
@@ -12,14 +13,10 @@ import {
   ChefHat, 
   ScrollText 
 } from 'lucide-react';
-import { DndContext, DragEndEvent, closestCenter } from '@dnd-kit/core';
-import { SortableContext, rectSortingStrategy } from '@dnd-kit/sortable';
 
 import ProgressBar from '../ProgressBar';
 import NavigationButtons from '../NavigationButtons';
-import EquipmentItem from '../EquipmentItem';
-import EquipmentDropZone from '../EquipmentDropZone';
-import EquipmentCategory from '../EquipmentCategory';
+import EquipmentBubble from '../EquipmentBubble';
 
 interface KitchenEquipmentScreenProps {
   currentStep: number;
@@ -49,36 +46,156 @@ const KitchenEquipmentScreen: React.FC<KitchenEquipmentScreenProps> = ({
   
   const kitchenEquipment: Equipment[] = [
     // Appareils électriques
-    { id: 'thermomix', name: 'Thermomix', icon: <CookingPot />, category: 'Appareils électriques' },
-    { id: 'blender', name: 'Blender / Mixeur', icon: <Cherry />, category: 'Appareils électriques' },
-    { id: 'robot', name: 'Robot pâtissier', icon: <ChefHat />, category: 'Appareils électriques' },
-    { id: 'airfryer', name: 'Air Fryer', icon: <CookingPot />, category: 'Appareils électriques' },
-    { id: 'steamer', name: 'Cuiseur vapeur', icon: <CookingPot />, category: 'Appareils électriques' },
-    { id: 'microwave', name: 'Four à micro-ondes', icon: <Microwave />, category: 'Appareils électriques' },
+    { 
+      id: 'thermomix', 
+      name: 'Thermomix', 
+      icon: <CookingPot strokeWidth={1.5} size={32} />, 
+      category: 'Appareils électriques' 
+    },
+    { 
+      id: 'blender', 
+      name: 'Blender / Mixeur', 
+      icon: <Cherry strokeWidth={1.5} size={32} />, 
+      category: 'Appareils électriques' 
+    },
+    { 
+      id: 'robot', 
+      name: 'Robot pâtissier', 
+      icon: <ChefHat strokeWidth={1.5} size={32} />, 
+      category: 'Appareils électriques' 
+    },
+    { 
+      id: 'airfryer', 
+      name: 'Air Fryer', 
+      icon: <CookingPot strokeWidth={1.5} size={32} />, 
+      category: 'Appareils électriques' 
+    },
+    { 
+      id: 'steamer', 
+      name: 'Cuiseur vapeur', 
+      icon: <CookingPot strokeWidth={1.5} size={32} />, 
+      category: 'Appareils électriques' 
+    },
+    { 
+      id: 'microwave', 
+      name: 'Four à micro-ondes', 
+      icon: <Microwave strokeWidth={1.5} size={32} />, 
+      category: 'Appareils électriques' 
+    },
     
     // Ustensiles essentiels
-    { id: 'knife', name: 'Couteau de chef', icon: <UtensilsCrossed />, category: 'Ustensiles essentiels' },
-    { id: 'cuttingboard', name: 'Planche à découper', icon: <ScrollText />, category: 'Ustensiles essentiels' },
-    { id: 'whisk', name: 'Fouet', icon: <UtensilsCrossed />, category: 'Ustensiles essentiels' },
-    { id: 'spatula', name: 'Spatule', icon: <Utensils />, category: 'Ustensiles essentiels' },
-    { id: 'woodenspoons', name: 'Cuillères en bois', icon: <Utensils />, category: 'Ustensiles essentiels' },
-    { id: 'strainer', name: 'Passoire', icon: <Utensils />, category: 'Ustensiles essentiels' },
+    { 
+      id: 'knife', 
+      name: 'Couteau de chef', 
+      icon: <UtensilsCrossed strokeWidth={1.5} size={32} />, 
+      category: 'Ustensiles essentiels' 
+    },
+    { 
+      id: 'cuttingboard', 
+      name: 'Planche à découper', 
+      icon: <ScrollText strokeWidth={1.5} size={32} />, 
+      category: 'Ustensiles essentiels' 
+    },
+    { 
+      id: 'whisk', 
+      name: 'Fouet', 
+      icon: <UtensilsCrossed strokeWidth={1.5} size={32} />, 
+      category: 'Ustensiles essentiels' 
+    },
+    { 
+      id: 'spatula', 
+      name: 'Spatule', 
+      icon: <Utensils strokeWidth={1.5} size={32} />, 
+      category: 'Ustensiles essentiels' 
+    },
+    { 
+      id: 'woodenspoons', 
+      name: 'Cuillères en bois', 
+      icon: <Utensils strokeWidth={1.5} size={32} />, 
+      category: 'Ustensiles essentiels' 
+    },
+    { 
+      id: 'strainer', 
+      name: 'Passoire', 
+      icon: <Utensils strokeWidth={1.5} size={32} />, 
+      category: 'Ustensiles essentiels' 
+    },
     
     // Équipements de cuisson
-    { id: 'pan', name: 'Poêle antiadhésive', icon: <CookingPot />, category: 'Équipements de cuisson' },
-    { id: 'saucepan', name: 'Casserole', icon: <CookingPot />, category: 'Équipements de cuisson' },
-    { id: 'pot', name: 'Faitout/marmite', icon: <CookingPot />, category: 'Équipements de cuisson' },
-    { id: 'wok', name: 'Wok', icon: <CookingPot />, category: 'Équipements de cuisson' },
-    { id: 'bakingdish', name: 'Plat à gratin', icon: <CookingPot />, category: 'Équipements de cuisson' },
-    { id: 'caketin', name: 'Moule à gâteau', icon: <CookingPot />, category: 'Équipements de cuisson' },
+    { 
+      id: 'pan', 
+      name: 'Poêle antiadhésive', 
+      icon: <CookingPot strokeWidth={1.5} size={32} />, 
+      category: 'Équipements de cuisson' 
+    },
+    { 
+      id: 'saucepan', 
+      name: 'Casserole', 
+      icon: <CookingPot strokeWidth={1.5} size={32} />, 
+      category: 'Équipements de cuisson' 
+    },
+    { 
+      id: 'pot', 
+      name: 'Faitout/marmite', 
+      icon: <CookingPot strokeWidth={1.5} size={32} />, 
+      category: 'Équipements de cuisson' 
+    },
+    { 
+      id: 'wok', 
+      name: 'Wok', 
+      icon: <CookingPot strokeWidth={1.5} size={32} />, 
+      category: 'Équipements de cuisson' 
+    },
+    { 
+      id: 'bakingdish', 
+      name: 'Plat à gratin', 
+      icon: <CookingPot strokeWidth={1.5} size={32} />, 
+      category: 'Équipements de cuisson' 
+    },
+    { 
+      id: 'caketin', 
+      name: 'Moule à gâteau', 
+      icon: <CookingPot strokeWidth={1.5} size={32} />, 
+      category: 'Équipements de cuisson' 
+    },
     
     // Outils de mesure et préparation
-    { id: 'scale', name: 'Balance de cuisine', icon: <Scale />, category: 'Outils de mesure et préparation' },
-    { id: 'measuringcup', name: 'Verre doseur', icon: <Gauge />, category: 'Outils de mesure et préparation' },
-    { id: 'mixingbowls', name: 'Bols de préparation', icon: <CookingPot />, category: 'Outils de mesure et préparation' },
-    { id: 'grater', name: 'Râpe', icon: <Utensils />, category: 'Outils de mesure et préparation' },
-    { id: 'rollingpin', name: 'Rouleau à pâtisserie', icon: <ScrollText />, category: 'Outils de mesure et préparation' },
-    { id: 'thermometer', name: 'Thermomètre de cuisine', icon: <Thermometer />, category: 'Outils de mesure et préparation' },
+    { 
+      id: 'scale', 
+      name: 'Balance de cuisine', 
+      icon: <Scale strokeWidth={1.5} size={32} />, 
+      category: 'Outils de mesure et préparation' 
+    },
+    { 
+      id: 'measuringcup', 
+      name: 'Verre doseur', 
+      icon: <Gauge strokeWidth={1.5} size={32} />, 
+      category: 'Outils de mesure et préparation' 
+    },
+    { 
+      id: 'mixingbowls', 
+      name: 'Bols de préparation', 
+      icon: <CookingPot strokeWidth={1.5} size={32} />, 
+      category: 'Outils de mesure et préparation' 
+    },
+    { 
+      id: 'grater', 
+      name: 'Râpe', 
+      icon: <Utensils strokeWidth={1.5} size={32} />, 
+      category: 'Outils de mesure et préparation' 
+    },
+    { 
+      id: 'rollingpin', 
+      name: 'Rouleau à pâtisserie', 
+      icon: <ScrollText strokeWidth={1.5} size={32} />, 
+      category: 'Outils de mesure et préparation' 
+    },
+    { 
+      id: 'thermometer', 
+      name: 'Thermomètre de cuisine', 
+      icon: <Thermometer strokeWidth={1.5} size={32} />, 
+      category: 'Outils de mesure et préparation' 
+    },
   ];
   
   const groupedEquipment = kitchenEquipment.reduce<Record<string, Equipment[]>>((acc, item) => {
@@ -89,29 +206,22 @@ const KitchenEquipmentScreen: React.FC<KitchenEquipmentScreenProps> = ({
     return acc;
   }, {});
   
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-    
-    if (over && over.id === 'your-equipment') {
-      if (!selectedEquipment.includes(active.id as string)) {
-        const newSelectedEquipment = [...selectedEquipment, active.id as string];
-        setSelectedEquipment(newSelectedEquipment);
-        toggleEquipment(active.id as string);
-      }
-    } else if (over && over.id === 'available-equipment') {
-      const newSelectedEquipment = selectedEquipment.filter(id => id !== active.id);
+  const handleToggleEquipment = (equipmentId: string) => {
+    // Si l'équipement est déjà sélectionné, on le retire
+    if (selectedEquipment.includes(equipmentId)) {
+      const newSelectedEquipment = selectedEquipment.filter(id => id !== equipmentId);
       setSelectedEquipment(newSelectedEquipment);
-      toggleEquipment(active.id as string);
+      toggleEquipment(equipmentId); // On indique au contexte parent qu'il y a changement
+    } 
+    // Sinon, on l'ajoute
+    else {
+      const newSelectedEquipment = [...selectedEquipment, equipmentId];
+      setSelectedEquipment(newSelectedEquipment);
+      toggleEquipment(equipmentId); // On indique au contexte parent qu'il y a changement
     }
   };
   
-  const selectedEquipmentItems = kitchenEquipment.filter(item => 
-    selectedEquipment.includes(item.id)
-  );
-  
-  const availableEquipmentItems = kitchenEquipment.filter(item => 
-    !selectedEquipment.includes(item.id)
-  );
+  const selectedCount = selectedEquipment.length;
   
   return (
     <div className="w-full max-w-2xl mx-auto px-4">
@@ -121,7 +231,7 @@ const KitchenEquipmentScreen: React.FC<KitchenEquipmentScreenProps> = ({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="text-center mb-6"
+        className="text-center mb-8"
       >
         <h2 className="font-['Playfair_Display'] text-2xl md:text-3xl text-black mb-2">
           Quels équipements avez-vous ?
@@ -131,62 +241,31 @@ const KitchenEquipmentScreen: React.FC<KitchenEquipmentScreenProps> = ({
         </p>
       </motion.div>
       
-      <DndContext
-        collisionDetection={closestCenter}
-        onDragEnd={handleDragEnd}
-      >
-        <EquipmentDropZone 
-          id="your-equipment" 
-          title="Vos équipements" 
-          equipmentCount={selectedEquipmentItems.length}
-        >
-          {selectedEquipmentItems.length === 0 ? (
-            <div className="flex items-center justify-center h-[100px] text-[#4A5568] text-sm opacity-50">
-              Faites glisser vos équipements ici
-            </div>
-          ) : (
-            <SortableContext items={selectedEquipmentItems.map(item => item.id)} strategy={rectSortingStrategy}>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                {selectedEquipmentItems.map(item => (
-                  <EquipmentItem
-                    key={item.id}
-                    id={item.id}
-                    name={item.name}
-                    icon={item.icon}
-                    selected={true}
-                    category={item.category}
-                    onClick={() => toggleEquipment(item.id)}
-                  />
-                ))}
-              </div>
-            </SortableContext>
-          )}
-        </EquipmentDropZone>
-        
-        <EquipmentDropZone
-          id="available-equipment"
-          title="Équipements disponibles"
-        >
-          {Object.entries(groupedEquipment).map(([category, items]) => (
-            <EquipmentCategory key={category} title={category}>
-              {items
-                .filter(item => !selectedEquipment.includes(item.id))
-                .map(item => (
-                  <EquipmentItem
-                    key={item.id}
-                    id={item.id}
-                    name={item.name}
-                    icon={item.icon}
-                    selected={false}
-                    category={item.category}
-                    onClick={() => toggleEquipment(item.id)}
-                  />
-                ))
-              }
-            </EquipmentCategory>
-          ))}
-        </EquipmentDropZone>
-      </DndContext>
+      {Object.entries(groupedEquipment).map(([category, items]) => (
+        <div key={category} className="mb-8">
+          <h3 className="font-['AvantGarde_Bk_BT'] text-lg text-[#4A5568] mb-4">
+            {category}
+          </h3>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            {items.map(item => (
+              <EquipmentBubble
+                key={item.id}
+                id={item.id}
+                name={item.name}
+                icon={item.icon}
+                selected={selectedEquipment.includes(item.id)}
+                onClick={() => handleToggleEquipment(item.id)}
+              />
+            ))}
+          </div>
+        </div>
+      ))}
+      
+      <div className="text-center mt-6 mb-4">
+        <p className="font-['AvantGarde_Bk_BT'] text-base text-[#2A5D50]">
+          {selectedCount} équipement{selectedCount !== 1 ? 's' : ''} sélectionné{selectedCount !== 1 ? 's' : ''}
+        </p>
+      </div>
       
       <NavigationButtons
         onNext={onNext}
