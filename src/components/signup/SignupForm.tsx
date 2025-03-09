@@ -3,8 +3,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
-import { translateErrorMessage, getSignupFormError, setupFormValidation } from '@/utils/error-messages';
-import { setupErrorMessageHarmonization } from '@/utils/error-messages/harmonize-errors';
+import { translateErrorMessage, getSignupFormError } from '@/utils/error-messages';
 import BirthdateSelector from './BirthdateSelector';
 import FormErrorDisplay from './FormErrorDisplay';
 import PasswordInput from './PasswordInput';
@@ -30,16 +29,6 @@ const SignupForm = () => {
   const { signUp, isLoading, error } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    setupFormValidation();
-    
-    // Setup error message harmonization
-    const cleanup = setupErrorMessageHarmonization();
-    
-    // Clean up on unmount
-    return cleanup;
-  }, []);
 
   useEffect(() => {
     if (error) {
@@ -76,7 +65,7 @@ const SignupForm = () => {
     try {
       await signUp(email, password, firstName, lastName);
       
-      // Après une inscription réussie, rediriger vers la page d'onboarding
+      // After successful registration, redirect to onboarding page
       navigate('/onboarding');
     } catch (error) {
       console.error("Erreur d'inscription:", error);

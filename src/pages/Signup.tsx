@@ -10,11 +10,15 @@ import SignupForm from '@/components/signup/SignupForm';
 import SignupFooter from '@/components/signup/SignupFooter';
 import { Toaster } from '@/components/ui/toaster';
 import { setupFormValidation } from '@/utils/error-messages';
+import { setupErrorMessageHarmonization } from '@/utils/error-messages/harmonize-errors';
 
 const Signup = () => {
   useEffect(() => {
-    // Initialiser la validation de formulaire personnalisée
+    // Initialize custom form validation
     setupFormValidation();
+    
+    // Initialize error message harmonization
+    const cleanup = setupErrorMessageHarmonization();
     
     // Load the RGPD redirection fix script
     const script = document.createElement('script');
@@ -32,6 +36,8 @@ const Signup = () => {
       }
       // Remove signup-page class when component unmounts
       document.body.classList.remove('signup-page');
+      // Run cleanup function for error message harmonization
+      if (cleanup) cleanup();
     };
   }, []);
 

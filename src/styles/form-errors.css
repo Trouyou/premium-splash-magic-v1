@@ -83,3 +83,21 @@
 .signup-page .form-field-error.visible {
   animation: fadeInError 0.3s ease forwards;
 }
+
+/* Style spécifique pour les champs avec erreur */
+.signup-page input.has-error,
+.signup-page select.has-error,
+.signup-page textarea.has-error {
+  border-color: #D11B19 !important;
+  background-color: rgba(209, 27, 25, 0.05) !important;
+}
+
+/* Indication visuelle de focus sur les champs */
+.signup-page input:focus, 
+.signup-page select:focus, 
+.signup-page textarea:focus {
+  outline: none !important;
+  border-color: #80bdff !important;
+  box-shadow: 0 0 0 2px rgba(0,123,255,.25) !important;
+}
+
