@@ -7,7 +7,6 @@ import {
   Cherry, 
   Microwave, 
   UtensilsCrossed, 
-  Knife, 
   Scale, 
   Gauge, 
   ChefHat, 
@@ -58,7 +57,7 @@ const KitchenEquipmentScreen: React.FC<KitchenEquipmentScreenProps> = ({
     { id: 'microwave', name: 'Four à micro-ondes', icon: <Microwave />, category: 'Appareils électriques' },
     
     // Ustensiles essentiels
-    { id: 'knife', name: 'Couteau de chef', icon: <Knife />, category: 'Ustensiles essentiels' },
+    { id: 'knife', name: 'Couteau de chef', icon: <UtensilsCrossed />, category: 'Ustensiles essentiels' },
     { id: 'cuttingboard', name: 'Planche à découper', icon: <ScrollText />, category: 'Ustensiles essentiels' },
     { id: 'whisk', name: 'Fouet', icon: <UtensilsCrossed />, category: 'Ustensiles essentiels' },
     { id: 'spatula', name: 'Spatule', icon: <Utensils />, category: 'Ustensiles essentiels' },
