@@ -239,3 +239,24 @@ input:invalid:not(:focus),
 .scrollbar-legal::-webkit-scrollbar-thumb:hover {
   background: #9C1B1A;
 }
+
+/* Equipment bubble selection animation */
+@keyframes selectPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+  100% { transform: scale(1.08); }
+}
+
+/* Equipment name styling */
+.equipment-name {
+  font-size: 12px;
+  line-height: 16px;
+  height: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  white-space: pre-line;
+  width: 100%;
+  overflow: hidden;
+}

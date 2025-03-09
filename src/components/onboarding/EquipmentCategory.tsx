@@ -27,7 +27,7 @@ const EquipmentCategory: React.FC<EquipmentCategoryProps> = ({
             key={item.id}
             id={item.id}
             name={item.name}
-            icon={item.icon}
+            svg={item.svg}
             selected={selectedEquipment.includes(item.id)}
             onClick={() => onToggleEquipment(item.id)}
           />
