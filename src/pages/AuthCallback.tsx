@@ -1,9 +1,9 @@
-
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useClerk } from '@clerk/clerk-react';
 import { isPreviewEnvironment, simulateSignIn } from '@/utils/auth-simulator';
 import { useToast } from '@/hooks/use-toast';
+import { translateErrorMessage } from '@/utils/error-translator';
 import '../App.css';
 
 const AuthCallback = () => {
@@ -54,10 +54,7 @@ const AuthCallback = () => {
         console.error('Erreur lors du traitement du callback:', error);
         
         // Traduction du message d'erreur
-        let errorMessage = error.message || "Une erreur s'est produite lors de l'authentification";
-        if (errorMessage.includes('single session mode') || errorMessage.includes('signed into one account')) {
-          errorMessage = 'Vous êtes actuellement en mode session unique. Vous ne pouvez être connecté qu\'à un seul compte à la fois.';
-        }
+        const errorMessage = translateErrorMessage(error.message || "Une erreur s'est produite lors de l'authentification");
         
         // Afficher une notification d'erreur
         toast({

@@ -1,10 +1,10 @@
-
 import { useState, useEffect } from 'react';
 import SocialButton from './SocialButton';
 import { useAuth } from '@/context/AuthContext';
 import { isPreviewEnvironment } from '@/utils/auth-simulator';
 import { SimulatedSocialButton } from '@/components/auth/AuthSimulator';
 import { useToast } from '@/hooks/use-toast';
+import { translateErrorMessage } from '@/utils/error-translator';
 
 const SocialLoginSection = () => {
   const [error, setError] = useState('');
@@ -42,20 +42,6 @@ const SocialLoginSection = () => {
       <path d="M24 12C24 5.37258 18.6274 0 12 0C5.37258 0 0 5.37258 0 12C0 17.9895 4.38823 22.954 10.125 23.8542V15.4688H7.07812V12H10.125V9.35625C10.125 6.34875 11.9166 4.6875 14.6576 4.6875C15.9701 4.6875 17.3438 4.92188 17.3438 4.92188V7.875H15.8306C14.34 7.875 13.875 8.80008 13.875 9.75V12H17.2031L16.6711 15.4688H13.875V23.8542C19.6118 22.954 24 17.9895 24 12Z" />
     </svg>
   );
-
-  // Traduction des messages d'erreur
-  const translateErrorMessage = (errorMsg: string) => {
-    if (errorMsg.includes('single session mode') || errorMsg.includes('signed into one account')) {
-      return 'Vous êtes actuellement en mode session unique. Vous ne pouvez être connecté qu\'à un seul compte à la fois.';
-    } else if (errorMsg.includes('connection failed') || errorMsg.includes('Failed to connect')) {
-      return 'Échec de la connexion au fournisseur d\'authentification.';
-    } else if (errorMsg.includes('popup closed') || errorMsg.includes('window closed')) {
-      return 'La fenêtre d\'authentification a été fermée. Veuillez réessayer.';
-    } else if (errorMsg.includes('network error')) {
-      return 'Erreur réseau. Veuillez vérifier votre connexion internet.';
-    }
-    return errorMsg || 'Une erreur inattendue s\'est produite. Veuillez réessayer.';
-  };
 
   const handleSocialLogin = async (provider: 'oauth_google' | 'oauth_facebook' | 'oauth_apple') => {
     setError('');
