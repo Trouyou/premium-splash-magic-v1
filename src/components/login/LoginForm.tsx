@@ -1,12 +1,12 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { isPreviewEnvironment } from '@/utils/auth-simulator';
 import { SimulatedEmailAuth } from '@/components/auth/AuthSimulator';
 import { PreviewModeBanner } from '@/components/auth/AuthSimulator';
-import { translateErrorMessage } from '@/utils/error-translator';
+import { translateErrorMessage, setupFormValidation, defaultErrorMessages } from '@/utils/error-translator';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
@@ -17,6 +17,11 @@ const LoginForm = () => {
 
   // Déterminer si nous sommes dans un environnement preview/iframe
   const inPreviewMode = isPreviewEnvironment();
+
+  // Setup pour la validation des formulaires personnalisée
+  useEffect(() => {
+    setupFormValidation();
+  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -70,7 +75,7 @@ const LoginForm = () => {
       )}
 
       {/* Formulaire */}
-      <form onSubmit={handleLogin} className="space-y-4">
+      <form onSubmit={handleLogin} className="space-y-4" noValidate>
         <div>
           <div className="relative">
             <input
@@ -80,6 +85,15 @@ const LoginForm = () => {
               placeholder="Email"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-eatly-primary/20 focus:border-eatly-primary outline-none transition-all"
               required
+              onInvalid={(e) => {
+                e.preventDefault();
+                const input = e.target as HTMLInputElement;
+                input.setCustomValidity(defaultErrorMessages.email);
+              }}
+              onInput={(e) => {
+                const input = e.target as HTMLInputElement;
+                input.setCustomValidity('');
+              }}
             />
           </div>
         </div>
@@ -93,6 +107,15 @@ const LoginForm = () => {
               placeholder="Mot de passe"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-eatly-primary/20 focus:border-eatly-primary outline-none transition-all"
               required
+              onInvalid={(e) => {
+                e.preventDefault();
+                const input = e.target as HTMLInputElement;
+                input.setCustomValidity(defaultErrorMessages.password);
+              }}
+              onInput={(e) => {
+                const input = e.target as HTMLInputElement;
+                input.setCustomValidity('');
+              }}
             />
             <button
               type="button"

@@ -1,6 +1,6 @@
 
 /**
- * Utility pour traduire les messages d'erreur d'authentification
+ * Utility pour traduire les messages d'erreur d'authentification et de validation de formulaire
  */
 
 // Dictionnaire de traduction des messages d'erreur
@@ -66,4 +66,66 @@ export const getSignupFormError = (formState: {
   }
   
   return '';
+};
+
+// Personnaliser les messages d'erreur de validation HTML5
+export const setupFormValidation = () => {
+  // Cette fonction sera appelée au chargement des composants
+  document.addEventListener('DOMContentLoaded', () => {
+    const inputs = document.querySelectorAll('input, select, textarea');
+    
+    inputs.forEach(input => {
+      // S'assurer que c'est un élément input
+      if (input instanceof HTMLInputElement) {
+        // Désactiver la validation native et ajouter la nôtre
+        input.addEventListener('invalid', (e) => {
+          e.preventDefault();
+          
+          // Déterminer le message d'erreur approprié
+          let message = 'Ce champ est requis';
+          
+          if (input.validity.typeMismatch && input.type === 'email') {
+            message = 'Adresse email invalide';
+          } else if (input.type === 'password') {
+            message = 'Veuillez entrer un mot de passe valide';
+          }
+          
+          // Appliquer le message personnalisé
+          input.setCustomValidity(message);
+          
+          // Appliquer une classe d'erreur pour le style
+          input.classList.add('input-error');
+          
+          // Créer ou mettre à jour le message d'erreur
+          let errorElement = input.parentElement?.querySelector('.form-error-message');
+          if (!errorElement) {
+            errorElement = document.createElement('div');
+            errorElement.className = 'form-error-message text-eatly-primary text-sm mt-1';
+            input.parentElement?.appendChild(errorElement);
+          }
+          errorElement.textContent = message;
+        });
+        
+        // Réinitialiser l'erreur lors de la modification
+        input.addEventListener('input', () => {
+          input.setCustomValidity('');
+          input.classList.remove('input-error');
+          const errorElement = input.parentElement?.querySelector('.form-error-message');
+          if (errorElement) {
+            errorElement.textContent = '';
+          }
+        });
+      }
+    });
+  });
+};
+
+// Exporter les messages par défaut pour réutilisation
+export const defaultErrorMessages = {
+  email: 'Adresse email invalide',
+  password: 'Veuillez entrer un mot de passe valide',
+  required: 'Ce champ est requis',
+  terms: 'Veuillez accepter les conditions d\'utilisation',
+  passwordMatch: 'Les mots de passe ne correspondent pas',
+  shortPassword: 'Le mot de passe doit contenir au moins 8 caractères'
 };

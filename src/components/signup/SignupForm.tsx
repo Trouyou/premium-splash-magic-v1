@@ -1,10 +1,9 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
-import { useNavigate } from 'react-router-dom';
-import { translateErrorMessage, getSignupFormError } from '@/utils/error-translator';
+import { translateErrorMessage, getSignupFormError, setupFormValidation, defaultErrorMessages } from '@/utils/error-translator';
 
 const SignupForm = () => {
   const [email, setEmail] = useState('');
@@ -17,7 +16,11 @@ const SignupForm = () => {
   const [newsletter, setNewsletter] = useState(false); // État pour la newsletter
   const [formError, setFormError] = useState('');
   const { signUp, isLoading, error } = useAuth();
-  const navigate = useNavigate();
+
+  // Setup pour la validation des formulaires personnalisée
+  useEffect(() => {
+    setupFormValidation();
+  }, []);
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,7 +58,7 @@ const SignupForm = () => {
         </motion.div>
       )}
 
-      <form onSubmit={handleSignup} className="space-y-4">
+      <form onSubmit={handleSignup} className="space-y-4" noValidate>
         <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
           <div className="w-full">
             <input
@@ -65,6 +68,15 @@ const SignupForm = () => {
               placeholder="Prénom"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-eatly-primary/20 focus:border-eatly-primary outline-none transition-all"
               required
+              onInvalid={(e) => {
+                e.preventDefault();
+                const input = e.target as HTMLInputElement;
+                input.setCustomValidity(defaultErrorMessages.required);
+              }}
+              onInput={(e) => {
+                const input = e.target as HTMLInputElement;
+                input.setCustomValidity('');
+              }}
             />
           </div>
           <div className="w-full">
@@ -75,6 +87,15 @@ const SignupForm = () => {
               placeholder="Nom"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-eatly-primary/20 focus:border-eatly-primary outline-none transition-all"
               required
+              onInvalid={(e) => {
+                e.preventDefault();
+                const input = e.target as HTMLInputElement;
+                input.setCustomValidity(defaultErrorMessages.required);
+              }}
+              onInput={(e) => {
+                const input = e.target as HTMLInputElement;
+                input.setCustomValidity('');
+              }}
             />
           </div>
         </div>
@@ -87,6 +108,15 @@ const SignupForm = () => {
             placeholder="Email"
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-eatly-primary/20 focus:border-eatly-primary outline-none transition-all"
             required
+            onInvalid={(e) => {
+              e.preventDefault();
+              const input = e.target as HTMLInputElement;
+              input.setCustomValidity(defaultErrorMessages.email);
+            }}
+            onInput={(e) => {
+              const input = e.target as HTMLInputElement;
+              input.setCustomValidity('');
+            }}
           />
         </div>
 
@@ -98,6 +128,20 @@ const SignupForm = () => {
             placeholder="Mot de passe"
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-eatly-primary/20 focus:border-eatly-primary outline-none transition-all"
             required
+            minLength={8}
+            onInvalid={(e) => {
+              e.preventDefault();
+              const input = e.target as HTMLInputElement;
+              input.setCustomValidity(
+                input.value.length === 0 
+                  ? defaultErrorMessages.required 
+                  : defaultErrorMessages.shortPassword
+              );
+            }}
+            onInput={(e) => {
+              const input = e.target as HTMLInputElement;
+              input.setCustomValidity('');
+            }}
           />
           <button
             type="button"
@@ -116,6 +160,19 @@ const SignupForm = () => {
             placeholder="Confirmer le mot de passe"
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-eatly-primary/20 focus:border-eatly-primary outline-none transition-all"
             required
+            onInvalid={(e) => {
+              e.preventDefault();
+              const input = e.target as HTMLInputElement;
+              input.setCustomValidity(
+                input.value.length === 0 
+                  ? defaultErrorMessages.required 
+                  : defaultErrorMessages.passwordMatch
+              );
+            }}
+            onInput={(e) => {
+              const input = e.target as HTMLInputElement;
+              input.setCustomValidity('');
+            }}
           />
         </div>
 
@@ -127,6 +184,15 @@ const SignupForm = () => {
             onChange={() => setAcceptTerms(!acceptTerms)}
             className="mt-[3px] mr-[10px] min-w-[18px] h-[18px] text-eatly-primary border-gray-300 rounded focus:ring-eatly-primary flex-shrink-0"
             required
+            onInvalid={(e) => {
+              e.preventDefault();
+              const input = e.target as HTMLInputElement;
+              input.setCustomValidity(defaultErrorMessages.terms);
+            }}
+            onInput={(e) => {
+              const input = e.target as HTMLInputElement;
+              input.setCustomValidity('');
+            }}
           />
           <label htmlFor="terms-accept" className="font-avantgarde text-sm leading-relaxed text-[#333333] flex-1 text-left">
             J'accepte les <a href="#terms" className="text-eatly-primary hover:underline font-medium">conditions d'utilisation</a> et la <a href="#privacy" className="text-eatly-primary hover:underline font-medium">politique de confidentialité</a>
