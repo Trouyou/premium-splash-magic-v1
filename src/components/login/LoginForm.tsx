@@ -13,7 +13,6 @@ const LoginForm = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
-  const [newsletter, setNewsletter] = useState(false);
   const { signInWithEmail, isLoading, error } = useAuth();
 
   // Déterminer si nous sommes dans un environnement preview/iframe
@@ -36,19 +35,6 @@ const LoginForm = () => {
         <PreviewModeBanner />
         
         <SimulatedEmailAuth />
-        
-        <div className="flex items-center mt-4">
-          <input
-            type="checkbox"
-            id="newsletter"
-            checked={newsletter}
-            onChange={() => setNewsletter(!newsletter)}
-            className="h-4 w-4 text-eatly-primary border-gray-300 rounded focus:ring-eatly-primary"
-          />
-          <label htmlFor="newsletter" className="ml-2 block text-sm text-gray-700">
-            Oui, je souhaite recevoir des offres personnalisées et des conseils nutritionnels.
-          </label>
-        </div>
       </>
     );
   }
@@ -151,19 +137,6 @@ const LoginForm = () => {
           ) : null}
           {isLoading ? "Connexion en cours..." : "Se connecter"}
         </button>
-
-        <div className="flex items-center mt-4">
-          <input
-            type="checkbox"
-            id="newsletter"
-            checked={newsletter}
-            onChange={() => setNewsletter(!newsletter)}
-            className="h-4 w-4 text-eatly-primary border-gray-300 rounded focus:ring-eatly-primary"
-          />
-          <label htmlFor="newsletter" className="ml-2 block text-sm text-gray-700">
-            Oui, je souhaite recevoir des offres personnalisées et des conseils nutritionnels.
-          </label>
-        </div>
       </form>
     </>
   );

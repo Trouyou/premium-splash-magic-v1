@@ -14,6 +14,7 @@ const SignupForm = () => {
   const [lastName, setLastName] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(false);
+  const [newsletter, setNewsletter] = useState(false); // État pour la newsletter
   const [formError, setFormError] = useState('');
   const { signUp, isLoading, error } = useAuth();
   const navigate = useNavigate();
@@ -129,6 +130,24 @@ const SignupForm = () => {
           />
           <label htmlFor="terms-accept" className="font-avantgarde text-sm leading-relaxed text-[#333333] flex-1 text-left">
             J'accepte les <a href="#terms" className="text-eatly-primary hover:underline font-medium">conditions d'utilisation</a> et la <a href="#privacy" className="text-eatly-primary hover:underline font-medium">politique de confidentialité</a>
+          </label>
+        </div>
+
+        {/* Ajout de la case newsletter */}
+        <div className="newsletter-container flex items-start my-5 w-full">
+          <input
+            type="checkbox"
+            id="newsletter-signup"
+            name="newsletter-signup"
+            checked={newsletter}
+            onChange={() => setNewsletter(!newsletter)}
+            className="newsletter-checkbox mt-[3px] mr-[10px] min-w-[18px] h-[18px] text-eatly-primary border-gray-300 rounded focus:ring-eatly-primary flex-shrink-0 cursor-pointer"
+          />
+          <label
+            htmlFor="newsletter-signup"
+            className="newsletter-text font-avantgarde text-sm leading-relaxed text-[#333333] flex-1 text-left cursor-pointer"
+          >
+            Oui, je souhaite recevoir des offres personnalisées et des conseils nutritionnels
           </label>
         </div>
 
