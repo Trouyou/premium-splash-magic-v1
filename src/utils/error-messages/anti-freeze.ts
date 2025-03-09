@@ -3,14 +3,7 @@
  * Utilitaire pour empêcher l'interface de geler lors de validations intensives
  */
 
-// Déclaration du type pour window pour éviter les erreurs TypeScript
-declare global {
-  interface Window {
-    antiFreezeProtectionInstalled?: boolean;
-    lastInteractionTime?: number;
-    freezeCheckInterval?: NodeJS.Timeout;
-  }
-}
+// Le type global a été déplacé dans vite-env.d.ts
 
 export const setupAntiFreezeProtection = () => {
   // Vérifier si déjà installé
@@ -32,6 +25,27 @@ export const setupAntiFreezeProtection = () => {
       window.lastInteractionTime = Date.now();
     }, { passive: true });
   });
+  
+  // Fonction pour afficher une erreur de champ
+  const showFieldError = (field: HTMLElement, message: string) => {
+    // Trouver le parent approprié pour ajouter le message d'erreur
+    const parent = field.closest('.form-group') || field.parentElement;
+    if (!parent) return;
+    
+    // Vérifier si un message d'erreur existe déjà
+    let errorElement = parent.querySelector('.error-message');
+    
+    // Créer un nouvel élément si nécessaire
+    if (!errorElement) {
+      errorElement = document.createElement('div');
+      errorElement.className = 'error-message text-[#D11B19] text-sm mt-1';
+      parent.appendChild(errorElement);
+    }
+    
+    // Définir le message et s'assurer qu'il est visible
+    errorElement.textContent = message;
+    (errorElement as HTMLElement).style.display = 'block';
+  };
   
   // Observer les événements de soumission de formulaires
   document.addEventListener('submit', function(event) {
@@ -195,27 +209,6 @@ export const setupAntiFreezeProtection = () => {
     childList: true,
     subtree: true
   });
-  
-  // Fonction pour afficher une erreur de champ
-  const showFieldError = (field: HTMLElement, message: string) => {
-    // Trouver le parent approprié pour ajouter le message d'erreur
-    const parent = field.closest('.form-group') || field.parentElement;
-    if (!parent) return;
-    
-    // Vérifier si un message d'erreur existe déjà
-    let errorElement = parent.querySelector('.error-message');
-    
-    // Créer un nouvel élément si nécessaire
-    if (!errorElement) {
-      errorElement = document.createElement('div');
-      errorElement.className = 'error-message text-[#D11B19] text-sm mt-1';
-      parent.appendChild(errorElement);
-    }
-    
-    // Définir le message et s'assurer qu'il est visible
-    errorElement.textContent = message;
-    (errorElement as HTMLElement).style.display = 'block';
-  };
   
   // Fonction de vérification périodique pour détecter les gels d'interface
   const setupFreezeDetection = () => {
