@@ -77,9 +77,11 @@ const checkDisabledDuration = (elements: NodeListOf<Element>) => {
       if (disabledDuration > MAX_DISABLED_TIME) {
         console.log("Found element disabled for too long, enabling:", element);
         
-        // Type guard: Check if element has the disabled property
-        if (element instanceof HTMLButtonElement || element instanceof HTMLInputElement) {
-          element.disabled = false;
+        // Before setting disabled to false, check if the element is a button or input
+        // using instanceof to provide proper type checking for TypeScript
+        if ('disabled' in element) {
+          // Using 'in' operator to check if property exists on element
+          (element as HTMLButtonElement | HTMLInputElement).disabled = false;
         }
         
         // Remove any loading classes
