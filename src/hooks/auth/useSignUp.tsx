@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { useSignUp as useClerkSignUp } from '@clerk/clerk-react';
+import { useUser, useSignUp as useClerkSignUp } from '@clerk/clerk-react';
 import { 
   isPreviewEnvironment, 
   simulateSignUp
@@ -11,6 +11,7 @@ export const useSignUp = () => {
   const [error, setError] = useState<string | null>(null);
   
   // Use Clerk hooks
+  const { isLoaded: userLoaded } = useUser();
   const { signUp: clerkSignUp, isLoaded: signUpLoaded } = useClerkSignUp();
   
   // Check if we're in preview environment
@@ -34,37 +35,29 @@ export const useSignUp = () => {
     try {
       if (inPreviewMode) {
         // Simulation mode - use fake authentication
-        await simulateSignUp({
-          email,
-          firstName,
-          lastName,
-          birthdate,
-        });
-        return undefined;
+        await simulateSignUp(email, password, firstName, lastName, birthdate);
       } else {
         // Real authentication with Clerk
         if (!clerkSignUp || !signUpLoaded) {
           throw new Error("L'authentification n'est pas disponible pour le moment");
         }
         
-        // Create the user using Clerk
-        const signUpAttempt = await clerkSignUp.create({
+        // Create the user using Clerk's signup
+        const result = await clerkSignUp.create({
           emailAddress: email,
           password,
           firstName,
-          lastName,
+          lastName
         });
         
-        // For the signup process, continue with any needed verification
-        if (signUpAttempt.status === "complete") {
-          console.log("Signup successful and complete");
-          return signUpAttempt;
-        } else if (signUpAttempt.status === "needs_verification") {
-          console.log("Signup requires verification");
-          return signUpAttempt;
-        } else {
-          console.log("Signup: additional action needed", signUpAttempt.status);
-          return signUpAttempt;
+        // Prepare verification if needed
+        if (result.status === 'complete') {
+          await result.createdSessionId;
+        } else if (result.status === 'needs_verification' || 
+                  result.status === 'missing_requirements' || 
+                  result.status === 'abandoned') {
+          // Return needed verification, handled by the calling component
+          return result;
         }
       }
     } catch (err: any) {

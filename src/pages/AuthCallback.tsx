@@ -4,7 +4,7 @@ import { useClerk } from '@clerk/clerk-react';
 import { isPreviewEnvironment, simulateSignIn } from '@/utils/auth-simulator';
 import { useToast } from '@/hooks/use-toast';
 import { translateErrorMessage } from '@/utils/error-translator';
-import '../styles/auth-callback.css';
+import '../App.css';
 
 const AuthCallback = () => {
   const { handleRedirectCallback } = useClerk();
