@@ -45,11 +45,7 @@ const AuthCallback = () => {
         await handleRedirectCallback({
           redirectUrl: window.location.origin + "/auth/callback",
           afterSignInUrl: window.location.origin,
-          // Ajouter l'option allowMultipleSessions pour résoudre le problème de single session
-          afterSignUpUrl: window.location.origin,
-          sessionOptions: {
-            allowMultipleSessions: true
-          }
+          afterSignUpUrl: window.location.origin
         });
         
         // Démarrer l'animation de redirection

@@ -142,19 +142,11 @@ export const useAuthProvider = () => {
         });
       }
       
-      // Utiliser l'option allowMultipleSessions pour résoudre le problème de single session mode
+      // Utiliser les options correctes selon la documentation de Clerk
       await signIn.authenticateWithRedirect({
         strategy: provider,
         redirectUrl: window.location.origin + "/auth/callback",
-        redirectUrlComplete: window.location.origin,
-        // Option pour permettre des sessions multiples
-        sessionOptions: {
-          expires: {
-            type: "days",
-            days: 30
-          },
-          allowMultipleSessions: true
-        }
+        redirectUrlComplete: window.location.origin
       });
     } catch (err: any) {
       console.error(`Erreur de connexion avec ${provider}:`, err);
@@ -199,11 +191,7 @@ export const useAuthProvider = () => {
 
       if (result.status === "complete") {
         await setSignUpActive({ 
-          session: result.createdSessionId,
-          // Option pour permettre des sessions multiples
-          sessionOptions: {
-            allowMultipleSessions: true
-          }
+          session: result.createdSessionId
         });
         toast({
           title: "Inscription réussie",
