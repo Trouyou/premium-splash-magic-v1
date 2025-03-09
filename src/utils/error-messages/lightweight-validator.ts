@@ -156,11 +156,13 @@ export const createLightweightValidator = (config: ValidatorConfig = {}) => {
     if (!errorEl) {
       errorEl = document.createElement('div');
       errorEl.className = 'error-message';
-      errorEl.style.color = '#D11B19';
-      errorEl.style.fontSize = '14px';
-      errorEl.style.marginTop = '4px';
-      errorEl.style.display = 'flex';
-      errorEl.style.alignItems = 'center';
+      if (errorEl instanceof HTMLElement) {
+        errorEl.style.color = '#D11B19';
+        errorEl.style.fontSize = '14px';
+        errorEl.style.marginTop = '4px';
+        errorEl.style.display = 'flex';
+        errorEl.style.alignItems = 'center';
+      }
       
       // Add error icon
       const iconSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -212,15 +214,18 @@ export const createLightweightValidator = (config: ValidatorConfig = {}) => {
     const textSpan = errorEl.querySelector('span');
     if (textSpan) {
       textSpan.textContent = message;
-    } else {
+    } else if (errorEl instanceof HTMLElement) {
       errorEl.textContent = message;
     }
     
     // Show error element
-    errorEl.style.display = 'flex';
+    if (errorEl instanceof HTMLElement) {
+      errorEl.style.display = 'flex';
+    }
     
     // Store error message
-    errors[fieldElement.name || fieldElement.id] = message;
+    const fieldIdentifier = 'name' in fieldElement ? fieldElement.name : fieldElement.id;
+    errors[fieldIdentifier] = message;
   };
   
   /**
@@ -237,12 +242,13 @@ export const createLightweightValidator = (config: ValidatorConfig = {}) => {
     if (!parentEl) return;
     
     const errorEl = parentEl.querySelector('.error-message');
-    if (errorEl) {
+    if (errorEl instanceof HTMLElement) {
       errorEl.style.display = 'none';
     }
     
     // Clear stored error
-    delete errors[fieldElement.name || fieldElement.id];
+    const fieldIdentifier = 'name' in fieldElement ? fieldElement.name : fieldElement.id;
+    delete errors[fieldIdentifier];
   };
   
   /**
