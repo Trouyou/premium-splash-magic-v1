@@ -320,6 +320,9 @@ const timePresets = [
   { id: 'long', name: '< 60 min' },
 ];
 
+// Default placeholder image to use when recipe image fails to load
+const DEFAULT_IMAGE = 'https://images.unsplash.com/photo-1495521821757-a1efb6729352?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3';
+
 const FavoriteRecipesScreen: React.FC<FavoriteRecipesScreenProps> = ({
   currentStep,
   totalSteps,
@@ -338,6 +341,7 @@ const FavoriteRecipesScreen: React.FC<FavoriteRecipesScreenProps> = ({
   const [selectedTimeFilter, setSelectedTimeFilter] = useState('all');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [page, setPage] = useState(1);
+  const [imagesLoaded, setImagesLoaded] = useState<Record<string, boolean>>({});
   const recipesPerPage = 8;
   
   // Debounce search input for better performance
@@ -436,10 +440,30 @@ const FavoriteRecipesScreen: React.FC<FavoriteRecipesScreenProps> = ({
     setIsLoading(true);
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1000);
+    }, 800);
     
     return () => clearTimeout(timer);
   }, []);
+
+  // Preload recipe images
+  useEffect(() => {
+    const preloadImages = () => {
+      filteredRecipes.forEach(recipe => {
+        const img = new Image();
+        img.onload = () => {
+          setImagesLoaded(prev => ({ ...prev, [recipe.id]: true }));
+        };
+        img.onerror = () => {
+          setImagesLoaded(prev => ({ ...prev, [recipe.id]: false }));
+        };
+        img.src = recipe.image;
+      });
+    };
+    
+    if (!isLoading) {
+      preloadImages();
+    }
+  }, [filteredRecipes, isLoading]);
 
   const handleLoadMore = () => {
     setPage(prev => prev + 1);
@@ -547,9 +571,9 @@ const FavoriteRecipesScreen: React.FC<FavoriteRecipesScreenProps> = ({
               variant="outline"
               className="px-3 py-2 border-[#EDE6D6] text-[#4A5568] hover:bg-[#F5F3E7]"
             >
-              <Filter size={18} />
+              <Filter size={18} className="mr-1" />
               Filtres
-              <ChevronDown size={16} className={`transition-transform ${showFilters ? 'rotate-180' : ''}`} />
+              <ChevronDown size={16} className={`ml-1 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
             </Button>
             
             <Button
@@ -669,7 +693,7 @@ const FavoriteRecipesScreen: React.FC<FavoriteRecipesScreenProps> = ({
           ) : (
             <>
               <motion.div 
-                className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8"
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 mb-8"
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
@@ -683,6 +707,8 @@ const FavoriteRecipesScreen: React.FC<FavoriteRecipesScreenProps> = ({
                     dietLabel={getDietLabel(recipe.dietaryOptions)}
                     nutrientLabel={getNutrientLabel(recipe)}
                     onToggleFavorite={() => toggleFavoriteRecipe(recipe.id)}
+                    imageLoaded={imagesLoaded[recipe.id]}
+                    defaultImage={DEFAULT_IMAGE}
                   />
                 ))}
               </motion.div>
@@ -723,6 +749,8 @@ interface RecipeCardProps {
   dietLabel: string;
   nutrientLabel: string;
   onToggleFavorite: () => void;
+  imageLoaded?: boolean;
+  defaultImage: string;
 }
 
 const RecipeCard: React.FC<RecipeCardProps> = ({ 
@@ -731,9 +759,23 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
   timeLabel,
   dietLabel,
   nutrientLabel,
-  onToggleFavorite 
+  onToggleFavorite,
+  imageLoaded,
+  defaultImage
 }) => {
   const [isHovering, setIsHovering] = useState(false);
+  const [imgSrc, setImgSrc] = useState(recipe.image);
+  const [isImgLoaded, setIsImgLoaded] = useState(false);
+  
+  // Handle image error
+  const handleImageError = () => {
+    setImgSrc(defaultImage);
+  };
+  
+  // Mark image as loaded
+  const handleImageLoaded = () => {
+    setIsImgLoaded(true);
+  };
   
   return (
     <motion.div
@@ -743,31 +785,41 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
       }}
       whileHover={{ scale: isFavorite ? 1.03 : 1.05 }}
       whileTap={{ scale: 0.98 }}
-      className={`rounded-lg overflow-hidden shadow-md cursor-pointer ${
+      className={`rounded-lg overflow-hidden shadow-md cursor-pointer transition-all ${
         isFavorite ? 'ring-2 ring-[#D11B19]' : ''
       }`}
       onClick={onToggleFavorite}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
     >
-      <div className="relative aspect-square overflow-hidden">
+      <div className="relative aspect-square overflow-hidden bg-gray-100">
+        {!isImgLoaded && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <Loader2 className="h-8 w-8 text-gray-300 animate-spin" />
+          </div>
+        )}
+        
         <img 
-          src={recipe.image} 
+          src={imgSrc} 
           alt={recipe.name}
-          className="w-full h-full object-cover transition-transform duration-300 ease-in-out"
+          onError={handleImageError}
+          onLoad={handleImageLoaded}
+          className={`w-full h-full object-cover transition-all duration-300 ease-in-out ${
+            isImgLoaded ? 'opacity-100' : 'opacity-0'
+          }`}
           style={{
             transform: isHovering ? 'scale(1.1)' : 'scale(1)'
           }}
         />
         
         {isFavorite && (
-          <div className="absolute top-2 right-2 bg-[#D11B19] text-white px-2 py-1 rounded-full text-xs font-medium">
+          <div className="absolute top-2 right-2 bg-[#D11B19] text-white px-2 py-1 rounded-full text-xs font-medium z-10">
             Favori ✓
           </div>
         )}
         
         <div 
-          className={`absolute inset-0 bg-black/50 flex flex-col justify-end p-3 transition-opacity duration-300 ${
+          className={`absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex flex-col justify-end p-3 transition-opacity duration-300 ${
             isHovering ? 'opacity-100' : 'opacity-0'
           }`}
         >
@@ -776,7 +828,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
             {recipe.mainIngredients.map((ingredient, index) => (
               <span 
                 key={index} 
-                className="bg-white/20 text-white text-xs px-2 py-1 rounded-full"
+                className="bg-white/20 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full"
               >
                 {ingredient}
               </span>
@@ -785,17 +837,17 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
           
           <div className="flex flex-wrap gap-1 mt-auto">
             {timeLabel && (
-              <span className="bg-white/30 text-white text-xs px-2 py-1 rounded-full">
+              <span className="bg-white/30 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full">
                 {timeLabel}
               </span>
             )}
             {dietLabel && (
-              <span className="bg-white/30 text-white text-xs px-2 py-1 rounded-full">
+              <span className="bg-white/30 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full">
                 {dietLabel}
               </span>
             )}
             {nutrientLabel && (
-              <span className="bg-white/30 text-white text-xs px-2 py-1 rounded-full">
+              <span className="bg-white/30 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full">
                 {nutrientLabel}
               </span>
             )}
