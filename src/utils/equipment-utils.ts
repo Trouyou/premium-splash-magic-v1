@@ -1,38 +1,43 @@
 
 import { Equipment } from '@/types/equipment';
 
-// Function to format equipment names for better display
-export const formatEquipmentName = (name: string) => {
-  // If name contains slash or dash, split on that character
-  if (name.includes('/') || name.includes('-')) {
-    return name.replace(/[\/\-]/g, '\n');
-  }
-  
-  // If name contains "à", separate before "à"
-  if (name.includes(' à ')) {
-    return name.replace(' à ', '\nà ');
-  }
-  
-  // If name is composed of multiple words and is long
-  const words = name.split(' ');
-  if (words.length > 1 && name.length > 10) {
-    const midpoint = Math.ceil(words.length / 2);
-    return words.slice(0, midpoint).join(' ') + '\n' + words.slice(midpoint).join(' ');
+/**
+ * Formats the equipment name for display, breaking long names into multiple lines
+ * @param name Equipment name to format
+ * @returns Formatted name with line breaks if needed
+ */
+export const formatEquipmentName = (name: string): string => {
+  if (name.length > 15) {
+    // Find the best place to break
+    const middleIndex = Math.floor(name.length / 2);
+    let breakIndex = name.indexOf(' ', middleIndex - 5);
+    
+    if (breakIndex === -1 || breakIndex > middleIndex + 5) {
+      breakIndex = name.indexOf('/', middleIndex - 5);
+    }
+    
+    if (breakIndex !== -1 && breakIndex < name.length - 3) {
+      return `${name.substring(0, breakIndex)}\n${name.substring(breakIndex + 1)}`;
+    }
   }
   
   return name;
 };
 
-// Helper function to group equipment by category
+/**
+ * Groups equipment by category
+ * @param equipment Array of equipment to group
+ * @returns Object with equipment grouped by category
+ */
 export const groupEquipmentByCategory = (equipment: Equipment[]): Record<string, Equipment[]> => {
-  const grouped: Record<string, Equipment[]> = {};
+  const groupedEquipment: Record<string, Equipment[]> = {};
   
   equipment.forEach(item => {
-    if (!grouped[item.category]) {
-      grouped[item.category] = [];
+    if (!groupedEquipment[item.category]) {
+      groupedEquipment[item.category] = [];
     }
-    grouped[item.category].push(item);
+    groupedEquipment[item.category].push(item);
   });
   
-  return grouped;
+  return groupedEquipment;
 };
