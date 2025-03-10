@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 export interface Equipment {
@@ -44,38 +43,36 @@ export const groupEquipmentByCategory = () => {
   return grouped;
 };
 
-// Enhanced SVG icons with more realistic and recognizable designs
 const svgIcons = {
   // Appareils électriques
   thermomix: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="1.8" fill="none">
-      <rect x="18" y="12" width="28" height="40" rx="3" ry="3"/>
-      <rect x="22" y="16" width="20" height="22" rx="2" ry="2"/>
-      <circle cx="32" cy="44" r="4"/>
-      <path d="M26,21 h12 M26,25 h12 M26,29 h12 M26,33 h12"/>
-      <rect x="24" y="38" width="16" height="12" rx="1" fill="currentColor" fill-opacity="0.1"/>
-      <path d="M32,16 L32,12 M28,14 C28,12 30,10 32,10 S36,12 36,14"/>
+      <rect x="16" y="12" width="32" height="40" rx="3"/>
+      <rect x="18" y="16" width="28" height="16" rx="2"/>
+      <circle cx="32" cy="42" r="6"/>
+      <path d="M22,20 h20 M22,24 h20 M22,28 h20"/>
+      <circle cx="32" cy="42" r="3" fill="currentColor" fill-opacity="0.1"/>
+      <rect x="24" y="38" width="16" height="8" rx="1" fill="currentColor" fill-opacity="0.1"/>
     </svg>
   `,
   blender: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="1.8" fill="none">
-      <path d="M24,16 L20,44 H44 L40,16 Z"/>
-      <path d="M24,16 C24,14 26,12 32,12 S40,14 40,16"/>
-      <circle cx="32" cy="12" r="2"/>
-      <path d="M22,44 H42 C42,48 38,52 32,52 S22,48 22,44"/>
-      <path d="M32,20 L32,36"/>
-      <path d="M27,24 L37,24 M27,28 L37,28 M27,32 L37,32"/>
-      <path d="M29,44 L35,44" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M24,44 h16 c2,0 4,-2 4,-4 v-24 c0,-2 -2,-4 -4,-4 h-16 c-2,0 -4,2 -4,4 v24 c0,2 2,4 4,4 z"/>
+      <path d="M20,16 l24,0"/>
+      <path d="M28,20 l8,0 M28,26 l8,0 M28,32 l8,0"/>
+      <rect x="28" y="44" width="8" height="4"/>
+      <circle cx="32" cy="14" r="2"/>
+      <path d="M32,38 v-18" stroke-dasharray="2,2"/>
     </svg>
   `,
   robot: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="1.8" fill="none">
-      <rect x="14" y="24" width="36" height="28" rx="3" ry="3"/>
-      <path d="M32,24 V16 C32,14 34,12 36,12 L42,12 C44,12 46,14 46,16 V24"/>
-      <circle cx="42" cy="18" r="2"/>
-      <path d="M20,30 H44 M20,34 H44 M20,38 H44"/>
-      <rect x="24" y="44" width="16" height="4" rx="1" fill="currentColor" fill-opacity="0.1"/>
-      <path d="M36,18 C36,15 40,14 44,16" stroke-dasharray="2,2"/>
+      <path d="M18,42 c0,-8 6,-16 14,-16 s14,8 14,16"/>
+      <rect x="18" y="42" width="28" height="6" rx="2"/>
+      <path d="M24,26 c0,-4 4,-8 8,-8 s8,4 8,8"/>
+      <circle cx="32" cy="42" r="4"/>
+      <path d="M26,34 h12 M26,38 h12"/>
+      <circle cx="32" cy="18" r="2" fill="currentColor"/>
     </svg>
   `,
   airfryer: `
@@ -106,16 +103,13 @@ const svgIcons = {
   `,
   microwave: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="1.8" fill="none">
-      <rect x="12" y="16" width="40" height="32" rx="3" ry="3"/>
-      <rect x="16" y="20" width="22" height="24" rx="2" ry="2"/>
-      <line x1="44" y1="24" x2="44" y2="28" stroke-width="3" stroke-linecap="round"/>
-      <circle cx="44" cy="24" r="1.5" fill="currentColor"/>
-      <circle cx="44" cy="28" r="1.5" fill="currentColor"/>
-      <circle cx="44" cy="32" r="1.5" fill="currentColor"/>
-      <circle cx="44" cy="36" r="1.5" fill="currentColor"/>
-      <circle cx="44" cy="40" r="1.5" fill="currentColor"/>
-      <path d="M16,20 L38,20" stroke-opacity="0.5"/>
-      <path d="M26,32 C26,30 28,28 31,28 S36,30 36,32"/>
+      <rect x="12" y="16" width="40" height="32" rx="2"/>
+      <rect x="16" y="20" width="24" height="24" rx="1"/>
+      <circle cx="44" cy="24" r="2"/>
+      <path d="M44,28 v4 M44,34 v4"/>
+      <path d="M16,20 h24" stroke-opacity="0.5"/>
+      <rect x="16" y="44" width="32" height="4"/>
+      <path d="M20,28 h16 M20,32 h16 M20,36 h16" stroke-opacity="0.3"/>
     </svg>
   `,
   oven: `
@@ -146,27 +140,22 @@ const svgIcons = {
     </svg>
   `,
 
-  // Ustensiles essentiels with more realistic designs
+  // Ustensiles essentiels
   knife: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="1.8" fill="none">
-      <path d="M18,46 L44,20"/>
-      <path d="M44,20 L50,14 C52,12 52,8 50,6 C48,4 44,4 42,6 L36,12"/>
-      <path d="M18,46 L12,52"/>
-      <path d="M36,12 L20,28 L36,44 L44,36 L42,20 L36,12Z" stroke-width="1.2" fill="currentColor" fill-opacity="0.05"/>
-      <path d="M42,22 L46,18" stroke-width="1.2" stroke-dasharray="1,1"/>
+      <path d="M20,44 L44,20"/>
+      <path d="M20,44 L16,48"/>
+      <path d="M44,20 L48,16"/>
+      <path d="M32,32 L40,24"/>
+      <path d="M24,40 L32,32"/>
+      <rect x="40" y="16" width="8" height="8" transform="rotate(45 44 20)" fill="currentColor" fill-opacity="0.1"/>
     </svg>
   `,
   cuttingboard: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="1.8" fill="none">
-      <rect x="12" y="14" width="40" height="36" rx="3" ry="3"/>
-      <path d="M18,14 L18,50"/>
-      <path d="M24,14 L24,50"/>
-      <path d="M30,14 L30,50"/>
-      <path d="M36,14 L36,50"/>
-      <path d="M42,14 L42,50"/>
-      <path d="M48,14 L48,50"/>
-      <path d="M16,18 L20,18 M16,24 L20,24 M16,30 L20,30" stroke-width="1.2"/>
-      <rect x="48" y="22" width="4" height="20" rx="1" fill="currentColor" fill-opacity="0.1"/>
+      <rect x="16" y="16" width="32" height="40" rx="2"/>
+      <path d="M20,16 v40 M24,16 v40 M28,16 v40 M32,16 v40 M36,16 v40 M40,16 v40 M44,16 v40" stroke-opacity="0.2"/>
+      <path d="M16,20 h32 M16,24 h32 M16,28 h32 M16,32 h32 M16,36 h32 M16,40 h32" stroke-opacity="0.2"/>
     </svg>
   `,
   whisk: `
@@ -216,7 +205,7 @@ const svgIcons = {
     </svg>
   `,
 
-  // Équipements de cuisson with more detailed designs
+  // Équipements de cuisson
   pan: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="1.8" fill="none">
       <circle cx="24" cy="32" r="16"/>
@@ -283,42 +272,32 @@ const svgIcons = {
     </svg>
   `,
 
-  // Outils de mesure et préparation with clearer depictions
+  // Outils de mesure et préparation
   scale: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="1.8" fill="none">
-      <rect x="10" y="36" width="44" height="12" rx="2" ry="2"/>
-      <rect x="16" y="24" width="32" height="12" rx="1" ry="1"/>
-      <rect x="20" y="40" width="16" height="4" rx="1" ry="1" fill="currentColor" fill-opacity="0.1"/>
-      <circle cx="44" cy="42" r="2" fill="currentColor" fill-opacity="0.8"/>
-      <path d="M26,32 L38,32 M32,28 L32,36"/>
-      <path d="M18,24 L18,16 C18,14 20,12 28,12 S38,14 38,16 L38,24" stroke-width="1.2" stroke-opacity="0.4"/>
-      <path d="M42,40 L42,44 M46,40 L46,44" stroke-width="1.2" stroke-linecap="round"/>
+      <rect x="14" y="40" width="36" height="8" rx="2"/>
+      <circle cx="32" cy="44" r="2"/>
+      <path d="M24,40 v-4 M32,40 v-4 M40,40 v-4"/>
+      <rect x="20" y="24" width="24" height="12" rx="2"/>
+      <path d="M32,30 l-8,-4 l16,0 l-8,4" fill="currentColor" fill-opacity="0.1"/>
     </svg>
   `,
   measuringcup: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="1.8" fill="none">
-      <path d="M20,52 L28,16 L44,16 L52,52 Z"/>
-      <line x1="24" y1="34" x2="28" y2="34"/>
-      <line x1="26" y1="25" x2="30" y2="25"/>
-      <line x1="38" y1="34" x2="42" y2="34"/>
-      <line x1="38" y1="25" x2="42" y2="25"/>
-      <path d="M52,42 L56,42" stroke-linecap="round"/>
-      <path d="M24,42 L48,42" stroke-width="1.2" stroke-opacity="0.4"/>
-      <path d="M20,52 L52,52" stroke-width="2.5"/>
-      <path d="M32,34 L36,34" stroke-width="1.2" stroke-opacity="0.6"/>
-      <path d="M34,25 L38,25" stroke-width="1.2" stroke-opacity="0.6"/>
+      <path d="M24,48 L22,20 h20 L40,48 z"/>
+      <path d="M22,36 h4 M22,28 h4 M38,36 h4 M38,28 h4"/>
+      <path d="M22,44 h20" stroke-width="2"/>
+      <path d="M30,36 h4 M30,28 h4" stroke-opacity="0.6"/>
+      <path d="M26,20 C26,18 28,16 32,16 S38,18 38,20"/>
     </svg>
   `,
   mixingbowls: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="1.8" fill="none">
-      <path d="M14,46 C14,34 22,22 32,22 S50,34 50,46"/>
-      <ellipse cx="32" cy="46" rx="18" ry="6"/>
-      <path d="M20,38 C20,30 26,22 32,22 S44,30 44,38" stroke-opacity="0.7"/>
-      <ellipse cx="32" cy="38" rx="12" ry="4" stroke-opacity="0.7"/>
-      <path d="M26,30 C26,26 28,22 32,22 S38,26 38,30" stroke-opacity="0.5"/>
-      <ellipse cx="32" cy="30" rx="6" ry="2" stroke-opacity="0.5"/>
-      <path d="M28,16 C28,14 30,12 32,14 C34,16 36,14 38,16" stroke-width="1.2" stroke-opacity="0.4"/>
-      <path d="M18,42 C18,40 20,38 32,38 S46,40 46,42" stroke-width="1.2" stroke-opacity="0.4"/>
+      <path d="M16,44 C16,36 22,28 32,28 S48,36 48,44"/>
+      <ellipse cx="32" cy="44" rx="16" ry="4"/>
+      <path d="M20,36 C20,32 24,28 32,28 S44,32 44,36"/>
+      <ellipse cx="32" cy="36" rx="12" ry="3" stroke-opacity="0.7"/>
+      <path d="M24,28 C24,24 28,20 32,20 S40,24 40,28" stroke-opacity="0.4"/>
     </svg>
   `,
   grater: `
@@ -337,193 +316,3 @@ const svgIcons = {
   rollingpin: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="1.8" fill="none">
       <rect x="20" y="26" width="24" height="12" rx="6" ry="6"/>
-      <rect x="8" y="22" width="12" height="20" rx="4" ry="4"/>
-      <rect x="44" y="22" width="12" height="20" rx="4" ry="4"/>
-      <line x1="20" y1="32" x2="8" y2="32"/>
-      <line x1="44" y1="32" x2="56" y2="32"/>
-      <path d="M20,26 C20,26 24,24 32,24 S44,26 44,26" stroke-width="1.2" stroke-opacity="0.6"/>
-      <path d="M20,38 C20,38 24,40 32,40 S44,38 44,38" stroke-width="1.2" stroke-opacity="0.6"/>
-      <path d="M12,22 L12,18 M12,42 L12,46 M52,22 L52,18 M52,42 L52,46" stroke-width="1.2" stroke-linecap="round" stroke-opacity="0.6"/>
-    </svg>
-  `,
-  thermometer: `
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="1.8" fill="none">
-      <rect x="28" y="12" width="8" height="32" rx="4" ry="4"/>
-      <circle cx="32" cy="44" r="6"/>
-      <rect x="22" y="4" width="20" height="8" rx="2" ry="2"/>
-      <line x1="27" y1="8" x2="37" y2="8"/>
-      <line x1="28" y1="20" x2="24" y2="20"/>
-      <line x1="28" y1="28" x2="24" y2="28"/>
-      <line x1="28" y1="36" x2="24" y2="36"/>
-      <circle cx="32" cy="44" r="3" fill="currentColor" fill-opacity="0.1"/>
-      <rect x="30" y="24" width="4" height="16" rx="2" ry="2" fill="currentColor" fill-opacity="0.2"/>
-    </svg>
-  `,
-};
-
-// Keep the existing equipment array structure
-export const kitchenEquipment: Equipment[] = [
-  // Appareils électriques
-  { 
-    id: 'thermomix', 
-    name: 'Thermomix', 
-    svg: svgIcons.thermomix, 
-    category: 'Appareils électriques' 
-  },
-  { 
-    id: 'blender', 
-    name: 'Blender / Mixeur', 
-    svg: svgIcons.blender, 
-    category: 'Appareils électriques' 
-  },
-  { 
-    id: 'robot', 
-    name: 'Robot pâtissier', 
-    svg: svgIcons.robot, 
-    category: 'Appareils électriques' 
-  },
-  { 
-    id: 'airfryer', 
-    name: 'Air Fryer', 
-    svg: svgIcons.airfryer, 
-    category: 'Appareils électriques' 
-  },
-  { 
-    id: 'steamer', 
-    name: 'Cuiseur vapeur', 
-    svg: svgIcons.steamer, 
-    category: 'Appareils électriques' 
-  },
-  { 
-    id: 'microwave', 
-    name: 'Four à micro-ondes', 
-    svg: svgIcons.microwave, 
-    category: 'Appareils électriques' 
-  },
-  { 
-    id: 'oven', 
-    name: 'Four', 
-    svg: svgIcons.oven, 
-    category: 'Appareils électriques' 
-  },
-  { 
-    id: 'stove', 
-    name: 'Plaque de cuisson', 
-    svg: svgIcons.stove, 
-    category: 'Appareils électriques' 
-  },
-  
-  // Ustensiles essentiels
-  { 
-    id: 'knife', 
-    name: 'Couteau de chef', 
-    svg: svgIcons.knife, 
-    category: 'Ustensiles essentiels' 
-  },
-  { 
-    id: 'cuttingboard', 
-    name: 'Planche à découper', 
-    svg: svgIcons.cuttingboard, 
-    category: 'Ustensiles essentiels' 
-  },
-  { 
-    id: 'whisk', 
-    name: 'Fouet', 
-    svg: svgIcons.whisk, 
-    category: 'Ustensiles essentiels' 
-  },
-  { 
-    id: 'spatula', 
-    name: 'Spatule', 
-    svg: svgIcons.spatula, 
-    category: 'Ustensiles essentiels' 
-  },
-  { 
-    id: 'woodenspoons', 
-    name: 'Cuillères en bois', 
-    svg: svgIcons.woodenspoons, 
-    category: 'Ustensiles essentiels' 
-  },
-  { 
-    id: 'strainer', 
-    name: 'Passoire', 
-    svg: svgIcons.strainer, 
-    category: 'Ustensiles essentiels' 
-  },
-  
-  // Équipements de cuisson
-  { 
-    id: 'pan', 
-    name: 'Poêle antiadhésive', 
-    svg: svgIcons.pan, 
-    category: 'Équipements de cuisson' 
-  },
-  { 
-    id: 'saucepan', 
-    name: 'Casserole', 
-    svg: svgIcons.saucepan, 
-    category: 'Équipements de cuisson' 
-  },
-  { 
-    id: 'pot', 
-    name: 'Faitout/marmite', 
-    svg: svgIcons.pot, 
-    category: 'Équipements de cuisson' 
-  },
-  { 
-    id: 'wok', 
-    name: 'Wok', 
-    svg: svgIcons.wok, 
-    category: 'Équipements de cuisson' 
-  },
-  { 
-    id: 'bakingdish', 
-    name: 'Plat à gratin', 
-    svg: svgIcons.bakingdish, 
-    category: 'Équipements de cuisson' 
-  },
-  { 
-    id: 'caketin', 
-    name: 'Moule à gâteau', 
-    svg: svgIcons.caketin, 
-    category: 'Équipements de cuisson' 
-  },
-  
-  // Outils de mesure et préparation
-  { 
-    id: 'scale', 
-    name: 'Balance de cuisine', 
-    svg: svgIcons.scale, 
-    category: 'Outils de mesure et préparation' 
-  },
-  { 
-    id: 'measuringcup', 
-    name: 'Verre doseur', 
-    svg: svgIcons.measuringcup, 
-    category: 'Outils de mesure et préparation' 
-  },
-  { 
-    id: 'mixingbowls', 
-    name: 'Bols mélangeurs', 
-    svg: svgIcons.mixingbowls, 
-    category: 'Outils de mesure et préparation' 
-  },
-  { 
-    id: 'grater', 
-    name: 'Râpe', 
-    svg: svgIcons.grater, 
-    category: 'Outils de mesure et préparation' 
-  },
-  { 
-    id: 'rollingpin', 
-    name: 'Rouleau à pâtisserie', 
-    svg: svgIcons.rollingpin, 
-    category: 'Outils de mesure et préparation' 
-  },
-  { 
-    id: 'thermometer', 
-    name: 'Thermomètre de cuisine', 
-    svg: svgIcons.thermometer, 
-    category: 'Outils de mesure et préparation' 
-  }
-];
