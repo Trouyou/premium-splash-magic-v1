@@ -19,6 +19,7 @@ interface FavoriteRecipesScreenProps {
     dietaryPreferences: string[];
     cookingTime: string;
     nutritionalGoals: string[];
+    kitchenEquipment: string[]; // Added this required property
   };
   onNext: () => void;
   onPrev: () => void;
