@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Info, Shield } from 'lucide-react';
+import { Info, Shield, ExternalLink } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
@@ -12,7 +12,6 @@ interface ConsentDialogProps {
 }
 
 const ConsentDialog: React.FC<ConsentDialogProps> = ({ onAccept, onDecline }) => {
-  const [showMore, setShowMore] = React.useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -35,6 +34,11 @@ const ConsentDialog: React.FC<ConsentDialogProps> = ({ onAccept, onDecline }) =>
     });
     onDecline();
     navigate('/');
+  };
+
+  // Open the links in a new tab
+  const openExternalLink = (url: string) => {
+    window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   return (
@@ -65,23 +69,24 @@ const ConsentDialog: React.FC<ConsentDialogProps> = ({ onAccept, onDecline }) =>
             et améliorer votre expérience culinaire.
           </p>
           
-          <AnimatePresence>
-            {showMore && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: "auto", opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                className="overflow-hidden"
-              >
-                <p className="text-sm opacity-80 bg-gray-50 p-4 rounded-lg">
-                  Vos données sont stockées de manière sécurisée et ne sont jamais partagées avec des tiers 
-                  sans votre consentement explicite. Vous pouvez modifier ou supprimer vos données à tout moment 
-                  depuis vos paramètres.
-                </p>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {/* Links to CGU and Privacy Policy */}
+          <div className="flex flex-col items-center space-y-2 py-2">
+            <button 
+              onClick={() => openExternalLink('/conditions-utilisation.html')}
+              className="flex items-center text-[#D11B19] hover:text-[#B01816] transition-colors text-sm"
+            >
+              <ExternalLink className="mr-1 h-3.5 w-3.5" />
+              📜 Conditions Générales d'Utilisation
+            </button>
+            
+            <button 
+              onClick={() => openExternalLink('/politique-confidentialite.html')}
+              className="flex items-center text-[#D11B19] hover:text-[#B01816] transition-colors text-sm"
+            >
+              <ExternalLink className="mr-1 h-3.5 w-3.5" />
+              🔒 Politique de Confidentialité
+            </button>
+          </div>
         </div>
 
         <div className="flex flex-col gap-3">
@@ -98,15 +103,6 @@ const ConsentDialog: React.FC<ConsentDialogProps> = ({ onAccept, onDecline }) =>
             className="w-full"
           >
             Refuser
-          </Button>
-          
-          <Button
-            variant="ghost"
-            className="w-full text-sm"
-            onClick={() => setShowMore(!showMore)}
-          >
-            <Info className="mr-2 h-4 w-4" />
-            {showMore ? "Masquer les détails" : "En savoir plus"}
           </Button>
         </div>
       </motion.div>
