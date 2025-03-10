@@ -159,25 +159,6 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
           </div>
         </div>
       </div>
-      
-      <div className="p-3 bg-white">
-        <h3 className="font-medium text-[#2D3748] truncate">{recipe.name}</h3>
-        <div className="flex flex-wrap gap-1 mt-1 text-xs text-gray-500">
-          <span>{timeLabel}</span>
-          {dietLabel && <span>• {dietLabel}</span>}
-        </div>
-        
-        <div className="mt-2 flex flex-wrap gap-1 max-h-20 overflow-y-auto">
-          {recipe.mainIngredients.map((ingredient, index) => (
-            <span 
-              key={index} 
-              className="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full"
-            >
-              {ingredient}
-            </span>
-          ))}
-        </div>
-      </div>
     </motion.div>
   );
 };

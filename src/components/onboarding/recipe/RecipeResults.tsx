@@ -5,7 +5,8 @@ import { Loader2, ChevronDown } from 'lucide-react';
 import { Recipe } from './types';
 import RecipeCard from './RecipeCard';
 import { Button } from "@/components/ui/button";
-import { getDietLabel, getTimeLabel, getNutrientLabel, DEFAULT_IMAGE } from './recipeUtils';
+import { getDietLabel, getTimeLabel, getNutrientLabel } from './utils/formatters';
+import { DEFAULT_IMAGE } from './utils/constants';
 
 interface RecipeResultsProps {
   isLoading: boolean;
