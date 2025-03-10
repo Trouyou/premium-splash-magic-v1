@@ -1,14 +1,14 @@
 
 import { Recipe } from '../types';
 
-// Set a local time label based on cooking time
+// Format cooking time with appropriate icon
 export const getTimeLabel = (minutes: number) => {
   if (minutes <= 15) return `🕒 ${minutes} min`;
   if (minutes <= 30) return `🕙 ${minutes} min`;
   return `🕐 ${minutes} min`;
 };
 
-// Get icons for dietary options
+// Get dietary label with icon
 export const getDietLabel = (options: string[]) => {
   const labels = [];
   if (options.includes('vegan')) labels.push('🌱 Vegan');
@@ -21,9 +21,10 @@ export const getDietLabel = (options: string[]) => {
   return labels.length > 0 ? labels[0] : '';
 };
 
-// Get extra nutrient info if available
+// Get nutrient info if available
 export const getNutrientLabel = (recipe: Recipe) => {
   if (recipe.protein && recipe.protein > 20) return `🔥 ${recipe.protein}g protéines`;
   if (recipe.calories && recipe.calories < 300) return `✨ ${recipe.calories} calories`;
   return '';
 };
+

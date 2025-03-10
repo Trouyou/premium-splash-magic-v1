@@ -1,8 +1,8 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
 import { Recipe } from './types';
+import { loadRecipeImage } from './utils/imageUtils';
 
 interface RecipeCardProps {
   recipe: Recipe;
@@ -11,7 +11,6 @@ interface RecipeCardProps {
   dietLabel: string;
   nutrientLabel: string;
   onToggleFavorite: () => void;
-  imageLoaded?: boolean;
   defaultImage: string;
 }
 
@@ -27,39 +26,20 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
   const [isHovering, setIsHovering] = useState(false);
   const [imgSrc, setImgSrc] = useState(recipe.image);
   const [isImgLoaded, setIsImgLoaded] = useState(false);
-  const [retryCount, setRetryCount] = useState(0);
-  const maxRetries = 2;
-  
-  // Reset image loaded state when recipe changes
+
+  // Load and verify image when recipe changes
   useEffect(() => {
     setIsImgLoaded(false);
-    setImgSrc(recipe.image);
+    loadRecipeImage(recipe).then(validatedImage => {
+      setImgSrc(validatedImage);
+    });
   }, [recipe.id, recipe.image]);
-  
-  // Handle image error with retry logic
-  const handleImageError = () => {
-    if (retryCount < maxRetries) {
-      // Try loading the image again after a short delay
-      setTimeout(() => {
-        setRetryCount(prev => prev + 1);
-        setImgSrc(`${recipe.image}?retry=${retryCount + 1}`);
-      }, 500);
-    } else {
-      // After max retries, use fallback image based on recipe category
-      console.log(`Image loading failed for recipe: ${recipe.name}`);
-      const categoryFallback = recipe.categories[0]?.toLowerCase().includes('dessert') 
-        ? `${defaultImage}?category=dessert` 
-        : defaultImage;
-      setImgSrc(categoryFallback);
-    }
-  };
-  
-  // Mark image as loaded
+
+  // Handle image load success
   const handleImageLoaded = () => {
     setIsImgLoaded(true);
-    setRetryCount(0); // Reset retry counter on successful load
   };
-  
+
   return (
     <motion.div
       variants={{
@@ -85,7 +65,6 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
         <img 
           src={imgSrc} 
           alt={recipe.name}
-          onError={handleImageError}
           onLoad={handleImageLoaded}
           className={`w-full h-full object-cover transition-all duration-300 ease-in-out ${
             isImgLoaded ? 'opacity-100' : 'opacity-0'
