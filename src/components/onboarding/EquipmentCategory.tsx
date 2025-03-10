@@ -19,15 +19,15 @@ const EquipmentCategory: React.FC<EquipmentCategoryProps> = ({
 }) => {
   return (
     <motion.div 
-      className="mb-12" // Reduced vertical margin
+      className="mb-10" // Adjusted vertical margin
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <h3 className="font-['AvantGarde_Bk_BT'] text-lg text-[#4A5568] mb-6 sticky top-0 bg-white py-3 z-[5]">
+      <h3 className="font-['AvantGarde_Bk_BT'] text-lg text-[#4A5568] mb-5 sticky top-0 bg-white py-3 z-[5]">
         {category}
       </h3>
-      {/* Updated grid with optimized gap and more columns for better space utilization */}
+      {/* Grid with optimized gap and columns for better display */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
         {items.map(item => (
           <EquipmentBubble

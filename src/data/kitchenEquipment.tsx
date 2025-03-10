@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 export interface Equipment {
@@ -44,7 +43,7 @@ export const groupEquipmentByCategory = () => {
   return grouped;
 };
 
-// Updated SVG icons for each kitchen equipment - Using the new design
+// Updated SVG icons for each kitchen equipment - Using improved realistic designs
 const svgIcons = {
   // Appareils électriques
   thermomix: `
@@ -137,64 +136,63 @@ const svgIcons = {
     </svg>
   `,
 
-  // Ustensiles essentiels with updated designs
+  // Ustensiles essentiels - Improved with more realistic designs
   knife: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="2" fill="none">
       <path d="M20,44 L44,20 M38,14 L50,26 M20,44 L14,50"/>
       <path d="M44,20 L50,14 C52,12 52,8 50,6 C48,4 44,4 42,6 L36,12"/>
+      <path d="M42,22 L46,18" stroke-width="1.5" stroke-dasharray="1,1"/>
     </svg>
   `,
   cuttingboard: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="2" fill="none">
-      <rect x="14" y="14" width="36" height="36" rx="2"/>
-      <line x1="22" y1="14" x2="22" y2="50"/>
-      <line x1="30" y1="14" x2="30" y2="50"/>
-      <line x1="38" y1="14" x2="38" y2="50"/>
+      <rect x="12" y="12" width="40" height="40" rx="2"/>
+      <line x1="22" y1="12" x2="22" y2="52"/>
+      <line x1="32" y1="12" x2="32" y2="52"/>
+      <line x1="42" y1="12" x2="42" y2="52"/>
+      <path d="M16,16 L18,16 M16,20 L18,20 M16,24 L18,24" stroke-width="1.5"/>
     </svg>
   `,
   whisk: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="2" fill="none">
-      <path d="M32,10 L32,20"/>
-      <path d="M32,20 C28,24 26,30 28,36 C30,42 28,48 24,52"/>
-      <path d="M32,20 C36,24 38,30 36,36 C34,42 36,48 40,52"/>
-      <path d="M32,20 C30,24 28,30 30,36 C32,42 30,48 26,52"/>
-      <path d="M32,20 C34,24 36,30 34,36 C32,42 34,48 38,52"/>
+      <path d="M32,8 L32,16"/>
+      <path d="M32,16 C27,22 24,30 27,38 C30,46 27,54 22,58"/>
+      <path d="M32,16 C37,22 40,30 37,38 C34,46 37,54 42,58"/>
+      <path d="M32,16 C29,22 26,30 29,38 C32,46 29,54 24,58"/>
+      <path d="M32,16 C35,22 38,30 35,38 C32,46 35,54 40,58"/>
+      <path d="M32,16 C30,22 28,30 30,38 C32,46 31,54 28,58" stroke-dasharray="1,1" stroke-width="1.5"/>
     </svg>
   `,
   spatula: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="2" fill="none">
-      <rect x="28" y="10" width="8" height="20" rx="4" ry="4"/>
-      <path d="M22,30 L38,30 L38,50 C38,52 36,54 34,54 L26,54 C24,54 22,52 22,50 L22,30 Z"/>
-      <line x1="22" y1="38" x2="38" y2="38"/>
+      <rect x="28" y="8" width="8" height="16" rx="3" ry="3"/>
+      <path d="M28,24 L36,24 L40,30 L40,48 C40,51 37,54 34,54 L30,54 C27,54 24,51 24,48 L24,30 L28,24 Z"/>
+      <path d="M24,38 L40,38" stroke-width="1.5"/>
+      <path d="M30,16 L34,16" stroke-width="1.5" stroke-linecap="round"/>
     </svg>
   `,
   woodenspoons: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="2" fill="none">
       <path d="M24,10 C20,12 18,14 18,18 C18,22 22,24 26,20 C30,16 34,14 34,10 C34,6 30,8 24,10 Z"/>
-      <path d="M26,20 L34,42 C34,46 30,50 24,50 S14,46 14,42 L22,20"/>
+      <path d="M26,20 L30,42 C30,46 26,50 20,50 S10,46 10,42 L14,20"/>
       <path d="M40,10 C44,12 46,14 46,18 C46,22 42,24 38,20 C34,16 30,14 30,10 C30,6 34,8 40,10 Z"/>
-      <path d="M38,20 L30,42 C30,46 34,50 40,50 S50,46 50,42 L42,20"/>
+      <path d="M38,20 L34,42 C34,46 38,50 44,50 S54,46 54,42 L50,20"/>
+      <path d="M23,15 C21,16 20,17 20,18" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M41,15 C43,16 44,17 44,18" stroke-width="1.5" stroke-linecap="round"/>
     </svg>
   `,
   strainer: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="2" fill="none">
-      <path d="M16,24 L48,24 C48,36 40,48 32,48 S16,36 16,24 Z"/>
+      <path d="M16,24 L48,24 C48,38 40,48 32,48 S16,38 16,24 Z"/>
       <path d="M12,24 L52,24"/>
-      <path d="M12,24 L8,18" stroke-linecap="round"/>
-      <path d="M52,24 L56,18" stroke-linecap="round"/>
-      <circle cx="22" cy="30" r="1" fill="currentColor"/>
-      <circle cx="32" cy="30" r="1" fill="currentColor"/>
-      <circle cx="42" cy="30" r="1" fill="currentColor"/>
-      <circle cx="22" cy="36" r="1" fill="currentColor"/>
-      <circle cx="32" cy="36" r="1" fill="currentColor"/>
-      <circle cx="42" cy="36" r="1" fill="currentColor"/>
-      <circle cx="22" cy="42" r="1" fill="currentColor"/>
-      <circle cx="32" cy="42" r="1" fill="currentColor"/>
-      <circle cx="42" cy="42" r="1" fill="currentColor"/>
+      <path d="M12,24 L8,16" stroke-linecap="round"/>
+      <path d="M52,24 L56,16" stroke-linecap="round"/>
+      <path d="M20,30 L44,30" stroke-dasharray="2,2"/>
+      <path d="M22,36 L42,36" stroke-dasharray="2,2"/>
+      <path d="M24,42 L40,42" stroke-dasharray="2,2"/>
     </svg>
   `,
 
-  // Update other categories with their respective new SVG designs
   // Équipements de cuisson
   pan: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="2" fill="none">

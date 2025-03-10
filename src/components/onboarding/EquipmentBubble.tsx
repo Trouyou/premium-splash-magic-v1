@@ -37,7 +37,7 @@ const EquipmentBubble: React.FC<EquipmentBubbleProps> = ({
       }, 300);
       return () => clearTimeout(timer);
     }
-  }, [selected]);
+  }, [selected, justSelected]);
 
   return (
     <TooltipProvider>
@@ -47,7 +47,7 @@ const EquipmentBubble: React.FC<EquipmentBubbleProps> = ({
         onClick={onClick}
         className={cn(
           "relative flex flex-col items-center justify-start p-4 rounded-xl",
-          "bg-white border-2 hover:shadow-md min-h-[160px]",
+          "bg-white border-2 hover:shadow-md min-h-[170px]", // Increased height for better text display
           "transition-all duration-300 ease-in-out",
           selected 
             ? "border-[#D11B19] shadow-md" 
@@ -59,9 +59,9 @@ const EquipmentBubble: React.FC<EquipmentBubbleProps> = ({
         data-name={name}
       >
         {/* Icon container with improved sizing and centering */}
-        <div className="flex items-center justify-center mb-3 h-[80px] w-[80px]">
+        <div className="flex items-center justify-center mb-4 h-[90px] w-[90px]">
           <div 
-            className="text-[#2A5D50] flex items-center justify-center w-full h-full transform scale-110" 
+            className="text-[#2A5D50] flex items-center justify-center w-full h-full transform scale-120" 
             dangerouslySetInnerHTML={{ __html: svg }} 
           />
         </div>
@@ -69,8 +69,8 @@ const EquipmentBubble: React.FC<EquipmentBubbleProps> = ({
         {/* Text container with improved spacing and wrapping */}
         <Tooltip>
           <TooltipTrigger asChild>
-            <div className="equipment-name font-['AvantGarde_Bk_BT'] text-sm text-[#2A5D50] text-center w-full min-h-[48px] flex items-center justify-center px-2">
-              <div className="leading-tight">
+            <div className="equipment-name font-['AvantGarde_Bk_BT'] text-sm text-[#2A5D50] text-center w-full min-h-[52px] flex items-center justify-center px-2">
+              <div className="leading-tight whitespace-pre-line">
                 {formattedName.split('\n').map((line, i) => (
                   <span key={i} className="block whitespace-normal">{line}</span>
                 ))}
