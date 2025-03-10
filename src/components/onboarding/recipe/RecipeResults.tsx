@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Loader2, ChevronDown } from 'lucide-react';
 import { Recipe } from './types';
@@ -25,11 +25,10 @@ const RecipeResults: React.FC<RecipeResultsProps> = ({
   visibleRecipes,
   favoriteRecipes,
   toggleFavoriteRecipe,
-  imagesLoaded,
   handleReset,
   handleLoadMore
 }) => {
-  const containerVariants = {
+  const containerVariants = useMemo(() => ({
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -37,7 +36,7 @@ const RecipeResults: React.FC<RecipeResultsProps> = ({
         staggerChildren: 0.05
       }
     }
-  };
+  }), []);
 
   if (isLoading) {
     return (
@@ -81,7 +80,6 @@ const RecipeResults: React.FC<RecipeResultsProps> = ({
             <RecipeCard
               recipe={{
                 ...recipe,
-                // Ensure each recipe has an image
                 image: recipe.image || DEFAULT_IMAGE
               }}
               isFavorite={favoriteRecipes.includes(recipe.id)}
@@ -111,4 +109,4 @@ const RecipeResults: React.FC<RecipeResultsProps> = ({
   );
 };
 
-export default RecipeResults;
+export default React.memo(RecipeResults);

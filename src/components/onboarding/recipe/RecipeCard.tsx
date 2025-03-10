@@ -1,9 +1,9 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
 import { Recipe } from './types';
-import { loadRecipeImage } from './utils/imageUtils';
+import OptimizedImage from './components/OptimizedImage';
 
 interface RecipeCardProps {
   recipe: Recipe;
@@ -15,9 +15,9 @@ interface RecipeCardProps {
   defaultImage: string;
 }
 
-const RecipeCard: React.FC<RecipeCardProps> = ({ 
-  recipe, 
-  isFavorite, 
+const RecipeCard: React.FC<RecipeCardProps> = ({
+  recipe,
+  isFavorite,
   timeLabel,
   dietLabel,
   nutrientLabel,
@@ -25,60 +25,15 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
   defaultImage
 }) => {
   const [isHovering, setIsHovering] = useState(false);
-  const [imgSrc, setImgSrc] = useState('');
-  const [isImgLoaded, setIsImgLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [loadAttempts, setLoadAttempts] = useState(0);
 
-  useEffect(() => {
-    let isMounted = true;
-    setIsLoading(true);
-    setIsImgLoaded(false);
-    
-    // Load the recipe image immediately without network requests
-    const uniqueImage = loadRecipeImage(recipe);
-    
-    if (isMounted) {
-      setImgSrc(uniqueImage || defaultImage);
-      // Pre-warm the image
-      const img = new Image();
-      img.src = uniqueImage || defaultImage;
-      img.onload = () => {
-        if (isMounted) {
-          setIsImgLoaded(true);
-          setIsLoading(false);
-        }
-      };
-      img.onerror = () => {
-        if (isMounted) {
-          setImgSrc(defaultImage);
-          setIsImgLoaded(true);
-          setIsLoading(false);
-        }
-      };
-    }
-    
-    return () => {
-      isMounted = false;
-    };
-  }, [recipe.id, defaultImage]);
-
-  const handleImageLoaded = () => {
-    setIsImgLoaded(true);
+  const handleImageLoad = useCallback(() => {
     setIsLoading(false);
-    setLoadAttempts(0);
-  };
-  
-  const handleImageError = () => {
-    if (loadAttempts < 2) {
-      setLoadAttempts(prev => prev + 1);
-      setImgSrc(defaultImage);
-    } else {
-      setIsImgLoaded(false);
-      setIsLoading(false);
-      setImgSrc(defaultImage);
-    }
-  };
+  }, []);
+
+  const handleImageError = useCallback(() => {
+    setIsLoading(false);
+  }, []);
 
   return (
     <motion.div
@@ -96,24 +51,20 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
       onMouseLeave={() => setIsHovering(false)}
     >
       <div className="relative aspect-square overflow-hidden bg-gray-100">
-        {(isLoading || !isImgLoaded) && (
+        {isLoading && (
           <div className="absolute inset-0 flex items-center justify-center">
             <Loader2 className="h-8 w-8 text-gray-300 animate-spin" />
           </div>
         )}
         
-        <img 
-          src={imgSrc || defaultImage} 
+        <OptimizedImage
+          src={recipe.image || defaultImage}
           alt={recipe.name}
-          onLoad={handleImageLoaded}
+          onLoad={handleImageLoad}
           onError={handleImageError}
           className={`w-full h-full object-cover transition-all duration-300 ease-in-out ${
-            isImgLoaded ? 'opacity-100' : 'opacity-0'
+            !isLoading ? 'opacity-100' : 'opacity-0'
           }`}
-          style={{
-            transform: isHovering ? 'scale(1.1)' : 'scale(1)'
-          }}
-          loading="lazy"
         />
         
         {isFavorite && (
@@ -129,7 +80,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
         >
           <h3 className="text-white font-medium text-lg mb-1 line-clamp-2">{recipe.name}</h3>
           
-          <div className="flex flex-wrap gap-1 mb-2 max-h-24 overflow-y-auto">
+          <div className="flex flex-wrap gap-1 mb-2">
             {recipe.mainIngredients.map((ingredient, index) => (
               <span 
                 key={index} 
@@ -163,4 +114,4 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
   );
 };
 
-export default RecipeCard;
+export default React.memo(RecipeCard);
