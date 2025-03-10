@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
@@ -28,53 +27,70 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
   const [imgSrc, setImgSrc] = useState('');
   const [isImgLoaded, setIsImgLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadAttempts, setLoadAttempts] = useState(0);
 
-  // Optimized image loading with cleanup and error handling
   useEffect(() => {
     let isMounted = true;
     setIsLoading(true);
     setIsImgLoaded(false);
     
-    // Use a cache-friendly approach
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
     
-    const getImage = async () => {
+    const loadImage = async () => {
       try {
-        // Get a guaranteed unique image for this recipe
+        if (recipe.image) {
+          setImgSrc(recipe.image);
+          return;
+        }
+        
         const uniqueImage = await loadRecipeImage(recipe);
         
         if (isMounted && uniqueImage) {
           setImgSrc(uniqueImage);
+          recipe.image = uniqueImage;
         }
       } catch (error) {
         console.error(`Error loading image for ${recipe.name}:`, error);
         if (isMounted) {
-          setImgSrc(defaultImage);
+          if (loadAttempts >= 2) {
+            setImgSrc(defaultImage);
+          } else {
+            setLoadAttempts(prev => prev + 1);
+            setTimeout(() => loadImage(), 1000);
+          }
+        }
+      } finally {
+        if (isMounted && loadAttempts >= 2) {
           setIsLoading(false);
         }
       }
     };
     
-    getImage();
+    loadImage();
     
     return () => {
       isMounted = false;
       clearTimeout(timeoutId);
       controller.abort();
     };
-  }, [recipe.id, defaultImage]);
+  }, [recipe.id, defaultImage, loadAttempts]);
 
-  // Optimized image handlers
   const handleImageLoaded = () => {
     setIsImgLoaded(true);
     setIsLoading(false);
+    setLoadAttempts(0);
   };
   
   const handleImageError = () => {
-    setIsImgLoaded(false);
-    setIsLoading(false);
-    setImgSrc(defaultImage);
+    if (loadAttempts < 2) {
+      setLoadAttempts(prev => prev + 1);
+      setImgSrc(defaultImage);
+    } else {
+      setIsImgLoaded(false);
+      setIsLoading(false);
+      setImgSrc(defaultImage);
+    }
   };
 
   return (

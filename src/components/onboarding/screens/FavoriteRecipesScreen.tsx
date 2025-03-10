@@ -43,25 +43,51 @@ const FavoriteRecipesScreen: React.FC<FavoriteRecipesScreenProps> = ({
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const [imagesInitialized, setImagesInitialized] = useState(false);
+  const [isImageProcessing, setIsImageProcessing] = useState(true);
   const recipesPerPage = 8;
   
-  // Initialize the used images tracker and ensure unique images - optimized with state tracking
+  // Initialize images only once when component mounts
   useEffect(() => {
+    let isMounted = true;
+    
     const prepareRecipeImages = async () => {
-      // Use a flag to prevent unnecessary re-initialization
-      if (!imagesInitialized) {
-        // Initialize the tracker with existing recipe images
-        initializeUsedImagesTracker(mockRecipes);
-        
-        // Ensure all recipes have unique images
-        await ensureUniqueImages(mockRecipes);
-        
-        setImagesInitialized(true);
+      try {
+        // Use a flag to prevent unnecessary re-initialization
+        if (!imagesInitialized) {
+          setIsImageProcessing(true);
+          
+          // First step: initialize the tracker with existing recipe images
+          console.log("Initializing image tracker...");
+          initializeUsedImagesTracker(mockRecipes);
+          
+          // Second step: ensure all recipes have unique images in batches
+          console.log("Ensuring unique images for all recipes...");
+          await ensureUniqueImages(mockRecipes);
+          
+          if (isMounted) {
+            console.log("Image processing complete");
+            setImagesInitialized(true);
+            setIsImageProcessing(false);
+          }
+        }
+      } catch (error) {
+        console.error("Error preparing recipe images:", error);
+        if (isMounted) {
+          setImagesInitialized(true);
+          setIsImageProcessing(false);
+          
+          // Notify user of error but continue
+          toast.error("Certaines images n'ont pas pu être chargées correctement.");
+        }
       }
     };
     
     prepareRecipeImages();
-  }, [imagesInitialized]);
+    
+    return () => {
+      isMounted = false;
+    };
+  }, []);
   
   // Debounce search input for better performance
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
@@ -151,7 +177,7 @@ const FavoriteRecipesScreen: React.FC<FavoriteRecipesScreenProps> = ({
       
       {/* Recipe Results */}
       <RecipeResults
-        isLoading={isLoading || !imagesInitialized}
+        isLoading={isLoading || isImageProcessing}
         filteredRecipes={filteredRecipes}
         visibleRecipes={visibleRecipes}
         favoriteRecipes={favoriteRecipes}
@@ -167,7 +193,7 @@ const FavoriteRecipesScreen: React.FC<FavoriteRecipesScreenProps> = ({
         isFirstStep={false}
         isLastStep={false}
         nextLabel="Continuer"
-        nextDisabled={isLoading || !imagesInitialized}
+        nextDisabled={isLoading || isImageProcessing}
       />
     </div>
   );

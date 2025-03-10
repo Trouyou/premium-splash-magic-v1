@@ -23,11 +23,11 @@ export const useRecipeFiltering = (
   const [isLoading, setIsLoading] = useState(true);
   const [imagesLoaded, setImagesLoaded] = useState<Record<string, boolean>>({});
   
-  // Optimized filtering with useMemo for better performance
+  // Optimized filtering with useMemo to prevent unnecessary recalculations
   const filteredRecipes = useMemo(() => {
-    // Start with all recipes
+    // Start filtering process
     return recipes
-      // Filter by dietary preferences
+      // Dietary preferences filter
       .filter(recipe => {
         if (onboardingData.dietaryPreferences.length === 0 || onboardingData.dietaryPreferences.includes('omnivore')) {
           return true;
@@ -36,16 +36,18 @@ export const useRecipeFiltering = (
           onboardingData.dietaryPreferences.includes(option)
         );
       })
-      // Filter by equipment
+      // Equipment filter
       .filter(recipe => {
+        // If no equipment requirements, skip this filter
         if (!recipe.requiredEquipment || recipe.requiredEquipment.length === 0 || onboardingData.kitchenEquipment.length === 0) {
           return true;
         }
+        // Recipe requires only equipment that user has
         return recipe.requiredEquipment.every(equipment => 
           onboardingData.kitchenEquipment.includes(equipment)
         );
       })
-      // Filter by cooking time
+      // Cooking time filter - applied based on selected filter or onboarding data
       .filter(recipe => {
         if (selectedTimeFilter === 'quick' || onboardingData.cookingTime === 'quick') {
           return recipe.cookingTime <= 15;
@@ -58,7 +60,7 @@ export const useRecipeFiltering = (
         }
         return true;
       })
-      // Filter by category
+      // Category filter with optimized string comparisons
       .filter(recipe => {
         if (!selectedCategory) return true;
         
@@ -72,29 +74,42 @@ export const useRecipeFiltering = (
           case 'gourmand':
             return recipe.categories.includes('Gourmand');
           case 'monde':
-            return recipe.categories.some(cat => 
-              ['Italien', 'Mexicain', 'Asiatique', 'Indien', 'Méditerranéen', 'Moyen-Orient', 'Thaïlandais', 'Français', 'Hawaïen', 'Suisse'].includes(cat)
-            );
+            // Fixed array of world cuisines for optimization
+            const worldCuisines = ['Italien', 'Mexicain', 'Asiatique', 'Indien', 
+              'Méditerranéen', 'Moyen-Orient', 'Thaïlandais', 'Français', 'Hawaïen', 'Suisse'];
+            return recipe.categories.some(cat => worldCuisines.includes(cat));
           default:
             return true;
         }
       })
-      // Filter by search term
+      // Search term filter with optimized string operations
       .filter(recipe => {
         if (!debouncedSearchTerm) return true;
         
         const searchTermLower = debouncedSearchTerm.toLowerCase();
-        return (
-          recipe.name.toLowerCase().includes(searchTermLower) ||
-          recipe.mainIngredients.some(ingredient => 
-            ingredient.toLowerCase().includes(searchTermLower)
-          ) ||
-          recipe.categories.some(category => 
-            category.toLowerCase().includes(searchTermLower)
-          )
-        );
+        
+        // Check recipe name
+        if (recipe.name.toLowerCase().includes(searchTermLower)) {
+          return true;
+        }
+        
+        // Check ingredients
+        for (const ingredient of recipe.mainIngredients) {
+          if (ingredient.toLowerCase().includes(searchTermLower)) {
+            return true;
+          }
+        }
+        
+        // Check categories
+        for (const category of recipe.categories) {
+          if (category.toLowerCase().includes(searchTermLower)) {
+            return true;
+          }
+        }
+        
+        return false;
       })
-      // Filter by favorites
+      // Favorites filter
       .filter(recipe => 
         !showOnlyFavorites || favoriteRecipes.includes(recipe.id)
       );
@@ -115,7 +130,7 @@ export const useRecipeFiltering = (
     return filteredRecipes.slice(0, page * recipesPerPage);
   }, [filteredRecipes, page, recipesPerPage]);
 
-  // Optimized loading state with useEffect and cleanup
+  // Optimized loading state with delayed resolution for UI
   useEffect(() => {
     setIsLoading(true);
     const timer = setTimeout(() => {
@@ -125,13 +140,19 @@ export const useRecipeFiltering = (
     return () => clearTimeout(timer);
   }, [filteredRecipes.length]);
 
-  // Track loaded images for UI with useMemo to avoid unnecessary re-renders
+  // Track loaded images for UI - optimized with debouncing
   useEffect(() => {
     const newImagesLoaded: Record<string, boolean> = {};
     visibleRecipes.forEach(recipe => {
       newImagesLoaded[recipe.id] = true;
     });
-    setImagesLoaded(newImagesLoaded);
+    
+    // Set with a slight delay to avoid UI flicker
+    const timer = setTimeout(() => {
+      setImagesLoaded(newImagesLoaded);
+    }, 100);
+    
+    return () => clearTimeout(timer);
   }, [visibleRecipes]);
 
   return {
