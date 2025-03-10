@@ -1,8 +1,9 @@
 
 import { Recipe } from '../types';
 
-// Mock recipes data
+// Expanded mock recipes data with 20 recipes per category
 export const mockRecipes: Recipe[] = [
+  // ÉQUILIBRÉ / HEALTHY (20 recipes)
   {
     id: '1',
     name: 'Salade niçoise',
@@ -14,53 +15,6 @@ export const mockRecipes: Recipe[] = [
     calories: 320,
     protein: 18,
     requiredEquipment: ['knife', 'cutting-board']
-  },
-  {
-    id: '2',
-    name: 'Poulet rôti aux herbes',
-    image: 'https://images.unsplash.com/photo-1532550907401-a500c9a57435?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-    mainIngredients: ['Poulet', 'Romarin', 'Thym', 'Ail'],
-    cookingTime: 60,
-    categories: ['Protéiné', 'Classique'],
-    dietaryOptions: ['omnivore'],
-    calories: 380,
-    protein: 35,
-    requiredEquipment: ['oven', 'bakingdish']
-  },
-  {
-    id: '3',
-    name: 'Risotto aux champignons',
-    image: 'https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-    mainIngredients: ['Riz arborio', 'Champignons', 'Parmesan', 'Oignon'],
-    cookingTime: 40,
-    categories: ['Gourmand', 'Italien'],
-    dietaryOptions: ['vegetarian'],
-    calories: 450,
-    protein: 12,
-    requiredEquipment: ['pot', 'woodenspoons']
-  },
-  {
-    id: '4',
-    name: 'Saumon grillé',
-    image: 'https://images.unsplash.com/photo-1485704686097-ed47f7263ca4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-    mainIngredients: ['Saumon', 'Citron', 'Aneth', 'Huile d\'olive'],
-    cookingTime: 25,
-    categories: ['Protéiné', 'Rapide'],
-    dietaryOptions: ['pescatarian', 'keto'],
-    calories: 310,
-    protein: 28,
-    requiredEquipment: ['pan', 'spatula']
-  },
-  {
-    id: '5',
-    name: 'Pâtes à la carbonara',
-    image: 'https://images.unsplash.com/photo-1546549032-9571cd6b27df?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-    mainIngredients: ['Pâtes', 'Œufs', 'Pancetta', 'Parmesan'],
-    cookingTime: 20,
-    categories: ['Gourmand', 'Italien'],
-    dietaryOptions: ['omnivore'],
-    calories: 520,
-    protein: 22
   },
   {
     id: '6',
@@ -85,50 +39,6 @@ export const mockRecipes: Recipe[] = [
     protein: 15
   },
   {
-    id: '8',
-    name: 'Curry de légumes',
-    image: 'https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-    mainIngredients: ['Lait de coco', 'Curry', 'Légumes variés', 'Riz basmati'],
-    cookingTime: 35,
-    categories: ['Épicé', 'Indien'],
-    dietaryOptions: ['vegan', 'vegetarian', 'gluten-free'],
-    calories: 380,
-    protein: 10
-  },
-  {
-    id: '9',
-    name: 'Quiche lorraine',
-    image: 'https://images.unsplash.com/photo-1591985666643-9b27a0cdbc0e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-    mainIngredients: ['Pâte brisée', 'Œufs', 'Crème', 'Lardons'],
-    cookingTime: 45,
-    categories: ['Gourmand', 'Français'],
-    dietaryOptions: ['omnivore'],
-    calories: 480,
-    protein: 18
-  },
-  {
-    id: '10',
-    name: 'Bol de smoothie açaï',
-    image: 'https://images.unsplash.com/photo-1490323948902-e03e4afbee89?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-    mainIngredients: ['Baies d\'açaï', 'Bananes', 'Myrtilles', 'Granola'],
-    cookingTime: 10,
-    categories: ['Rapide', 'Petit-déjeuner', 'Sucré'],
-    dietaryOptions: ['vegan', 'vegetarian'],
-    calories: 320,
-    protein: 8
-  },
-  {
-    id: '11',
-    name: 'Pad thaï au poulet',
-    image: 'https://images.unsplash.com/photo-1626804475297-41608ea09aeb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-    mainIngredients: ['Nouilles de riz', 'Poulet', 'Œufs', 'Cacahuètes'],
-    cookingTime: 25,
-    categories: ['Asiatique', 'Thaïlandais'],
-    dietaryOptions: ['omnivore'],
-    calories: 450,
-    protein: 24
-  },
-  {
     id: '12',
     name: 'Burrito bowl',
     image: 'https://images.unsplash.com/photo-1590081681663-faeeaad3c0ae?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
@@ -140,15 +50,206 @@ export const mockRecipes: Recipe[] = [
     protein: 14
   },
   {
-    id: '13',
-    name: 'Velouté de potiron',
-    image: 'https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-    mainIngredients: ['Potiron', 'Oignon', 'Crème', 'Bouillon'],
+    id: '23',
+    name: 'Poké bowl au saumon',
+    image: 'https://images.unsplash.com/photo-1507471509451-1d05c43f7d0f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Riz', 'Saumon cru', 'Avocat', 'Concombre'],
+    cookingTime: 20,
+    categories: ['Hawaïen', 'Healthy'],
+    dietaryOptions: ['pescatarian', 'gluten-free'],
+    calories: 420,
+    protein: 22
+  },
+  {
+    id: 'eq1',
+    name: 'Salade de lentilles aux légumes',
+    image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Lentilles vertes', 'Carottes', 'Poivrons', 'Oignons rouges'],
+    cookingTime: 25,
+    categories: ['Équilibré', 'Healthy', 'Salade'],
+    dietaryOptions: ['vegan', 'vegetarian', 'gluten-free'],
+    calories: 290,
+    protein: 16
+  },
+  {
+    id: 'eq2',
+    name: 'Dahl de lentilles corail',
+    image: 'https://images.unsplash.com/photo-1585937421612-70a008356c36?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Lentilles corail', 'Lait de coco', 'Curry', 'Épinards'],
     cookingTime: 30,
-    categories: ['Soupe', 'Automne'],
+    categories: ['Indien', 'Équilibré', 'Healthy'],
+    dietaryOptions: ['vegan', 'vegetarian', 'gluten-free'],
+    calories: 320,
+    protein: 14
+  },
+  {
+    id: 'eq3',
+    name: 'Wrap à la dinde et avocat',
+    image: 'https://images.unsplash.com/photo-1550304943-4f24f54ddde9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Tortilla complète', 'Dinde', 'Avocat', 'Tomates'],
+    cookingTime: 10,
+    categories: ['Équilibré', 'Rapide', 'Déjeuner'],
+    dietaryOptions: ['omnivore'],
+    calories: 350,
+    protein: 22
+  },
+  {
+    id: 'eq4',
+    name: 'Boulettes de légumes au four',
+    image: 'https://images.unsplash.com/photo-1529042410759-befb1204b468?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Pois chiches', 'Carottes', 'Courgettes', 'Flocons d\'avoine'],
+    cookingTime: 35,
+    categories: ['Végétarien', 'Équilibré', 'Healthy'],
+    dietaryOptions: ['vegetarian'],
+    calories: 280,
+    protein: 12
+  },
+  {
+    id: 'eq5',
+    name: 'Papillote de cabillaud aux légumes',
+    image: 'https://images.unsplash.com/photo-1553557202-e8e60406a584?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Cabillaud', 'Courgettes', 'Fenouil', 'Citron'],
+    cookingTime: 25,
+    categories: ['Équilibré', 'Poisson', 'Healthy'],
+    dietaryOptions: ['pescatarian', 'gluten-free'],
+    calories: 240,
+    protein: 28
+  },
+  {
+    id: 'eq6',
+    name: 'Risotto aux champignons et épinards',
+    image: 'https://images.unsplash.com/photo-1633790454629-b8b43c427e50?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Riz arborio', 'Champignons', 'Épinards', 'Parmesan allégé'],
+    cookingTime: 30,
+    categories: ['Équilibré', 'Végétarien'],
+    dietaryOptions: ['vegetarian'],
+    calories: 380,
+    protein: 12
+  },
+  {
+    id: 'eq7',
+    name: 'Salade de patates douces rôties',
+    image: 'https://images.unsplash.com/photo-1505576633757-0ac1084af824?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Patates douces', 'Roquette', 'Feta', 'Noix'],
+    cookingTime: 35,
+    categories: ['Équilibré', 'Healthy', 'Salade'],
     dietaryOptions: ['vegetarian', 'gluten-free'],
-    calories: 210,
-    protein: 5
+    calories: 310,
+    protein: 10
+  },
+  {
+    id: 'eq8',
+    name: 'Tofu sauté aux légumes',
+    image: 'https://images.unsplash.com/photo-1611143669185-af224c5e3252?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Tofu ferme', 'Brocolis', 'Carottes', 'Sauce soja allégée'],
+    cookingTime: 20,
+    categories: ['Équilibré', 'Végétarien', 'Asiatique'],
+    dietaryOptions: ['vegan', 'vegetarian'],
+    calories: 260,
+    protein: 18
+  },
+  {
+    id: 'eq9',
+    name: 'Frittata aux épinards et feta',
+    image: 'https://images.unsplash.com/photo-1579696979453-0ef5544634c4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Œufs', 'Épinards', 'Feta', 'Oignon rouge'],
+    cookingTime: 25,
+    categories: ['Équilibré', 'Protéiné', 'Sans glucides'],
+    dietaryOptions: ['vegetarian', 'gluten-free', 'keto'],
+    calories: 320,
+    protein: 24
+  },
+  {
+    id: 'eq10',
+    name: 'Sauté de poulet aux amandes',
+    image: 'https://images.unsplash.com/photo-1633795542038-d07baf3eff7d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Blancs de poulet', 'Poivrons', 'Amandes effilées', 'Sauce soja'],
+    cookingTime: 20,
+    categories: ['Équilibré', 'Protéiné', 'Asiatique'],
+    dietaryOptions: ['omnivore'],
+    calories: 340,
+    protein: 32
+  },
+  {
+    id: 'eq11',
+    name: 'Bar grillé à la méditerranéenne',
+    image: 'https://images.unsplash.com/photo-1559737558-2f5a35f4523b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Filet de bar', 'Tomates cerises', 'Olives', 'Herbes de Provence'],
+    cookingTime: 25,
+    categories: ['Équilibré', 'Méditerranéen', 'Poisson'],
+    dietaryOptions: ['pescatarian', 'gluten-free'],
+    calories: 270,
+    protein: 28
+  },
+  {
+    id: 'eq12',
+    name: 'Curry de légumes au lait de coco léger',
+    image: 'https://images.unsplash.com/photo-1604908177453-7462950a6a3b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Patate douce', 'Pois chiches', 'Lait de coco allégé', 'Curry'],
+    cookingTime: 35,
+    categories: ['Équilibré', 'Végétarien', 'Indien'],
+    dietaryOptions: ['vegan', 'vegetarian', 'gluten-free'],
+    calories: 310,
+    protein: 12
+  },
+  {
+    id: 'eq13',
+    name: 'Taboulé de chou-fleur',
+    image: 'https://images.unsplash.com/photo-1505253716362-afaea1d3d1af?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Chou-fleur', 'Persil', 'Menthe', 'Citron'],
+    cookingTime: 20,
+    categories: ['Équilibré', 'Sans glucides', 'Salade'],
+    dietaryOptions: ['vegan', 'vegetarian', 'gluten-free', 'keto'],
+    calories: 170,
+    protein: 6
+  },
+  {
+    id: 'eq14',
+    name: 'Tacos végétariens à la patate douce',
+    image: 'https://images.unsplash.com/photo-1574343635105-4cf2ea136b8b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Tortillas de maïs', 'Patate douce', 'Haricots noirs', 'Avocat'],
+    cookingTime: 30,
+    categories: ['Équilibré', 'Mexicain', 'Végétarien'],
+    dietaryOptions: ['vegetarian'],
+    calories: 360,
+    protein: 12
+  },
+  {
+    id: 'eq15',
+    name: 'Omelette blanche aux herbes',
+    image: 'https://images.unsplash.com/photo-1568625365131-079e026a927d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Blancs d\'œufs', 'Épinards', 'Fromage frais allégé', 'Herbes fraîches'],
+    cookingTime: 10,
+    categories: ['Équilibré', 'Protéiné', 'Rapide'],
+    dietaryOptions: ['vegetarian', 'gluten-free', 'keto'],
+    calories: 180,
+    protein: 24
+  },
+
+  // PROTÉINÉ (20 recipes)
+  {
+    id: '2',
+    name: 'Poulet rôti aux herbes',
+    image: 'https://images.unsplash.com/photo-1532550907401-a500c9a57435?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Poulet', 'Romarin', 'Thym', 'Ail'],
+    cookingTime: 60,
+    categories: ['Protéiné', 'Classique'],
+    dietaryOptions: ['omnivore'],
+    calories: 380,
+    protein: 35,
+    requiredEquipment: ['oven', 'bakingdish']
+  },
+  {
+    id: '4',
+    name: 'Saumon grillé',
+    image: 'https://images.unsplash.com/photo-1485704686097-ed47f7263ca4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Saumon', 'Citron', 'Aneth', 'Huile d\'olive'],
+    cookingTime: 25,
+    categories: ['Protéiné', 'Rapide'],
+    dietaryOptions: ['pescatarian', 'keto'],
+    calories: 310,
+    protein: 28,
+    requiredEquipment: ['pan', 'spatula']
   },
   {
     id: '14',
@@ -160,28 +261,6 @@ export const mockRecipes: Recipe[] = [
     dietaryOptions: ['pescatarian'],
     calories: 290,
     protein: 32
-  },
-  {
-    id: '15',
-    name: 'Falafels',
-    image: 'https://images.unsplash.com/photo-1593001872095-7d5b3868dd14?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-    mainIngredients: ['Pois chiches', 'Herbes fraîches', 'Épices', 'Ail'],
-    cookingTime: 40,
-    categories: ['Méditerranéen', 'Moyen-Orient'],
-    dietaryOptions: ['vegan', 'vegetarian'],
-    calories: 340,
-    protein: 12
-  },
-  {
-    id: '16',
-    name: 'Pizza margherita',
-    image: 'https://images.unsplash.com/photo-1589840700256-41c5d84af80d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-    mainIngredients: ['Pâte à pizza', 'Sauce tomate', 'Mozzarella', 'Basilic'],
-    cookingTime: 25,
-    categories: ['Italien', 'Classique'],
-    dietaryOptions: ['vegetarian'],
-    calories: 450,
-    protein: 15
   },
   {
     id: '17',
@@ -206,26 +285,182 @@ export const mockRecipes: Recipe[] = [
     protein: 26
   },
   {
-    id: '19',
-    name: 'Taboulé libanais',
-    image: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-    mainIngredients: ['Persil', 'Boulgour', 'Tomates', 'Menthe'],
-    cookingTime: 20,
-    categories: ['Salade', 'Moyen-Orient'],
-    dietaryOptions: ['vegan', 'vegetarian'],
-    calories: 220,
-    protein: 6
+    id: 'pr1',
+    name: 'Bowl protéiné au tempeh',
+    image: 'https://images.unsplash.com/photo-1511690656952-34342bb7c2f2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Tempeh', 'Quinoa', 'Brocolis', 'Sauce tahini'],
+    cookingTime: 25,
+    categories: ['Protéiné', 'Végétarien', 'Healthy'],
+    dietaryOptions: ['vegetarian', 'vegan'],
+    calories: 390,
+    protein: 28
   },
   {
-    id: '20',
-    name: 'Pancakes aux myrtilles',
-    image: 'https://images.unsplash.com/photo-1554520735-0a6b8b6ce8b7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-    mainIngredients: ['Farine', 'Myrtilles', 'Œufs', 'Lait'],
+    id: 'pr2',
+    name: 'Omelette aux blancs d\'œufs',
+    image: 'https://images.unsplash.com/photo-1639667851375-63d51a9d5a15?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Blancs d\'œufs', 'Épinards', 'Champignons', 'Fromage allégé'],
+    cookingTime: 10,
+    categories: ['Rapide', 'Protéiné', 'Petit-déjeuner'],
+    dietaryOptions: ['vegetarian', 'gluten-free', 'keto'],
+    calories: 220,
+    protein: 26
+  },
+  {
+    id: 'pr3',
+    name: 'Tartare de bœuf',
+    image: 'https://images.unsplash.com/photo-1611599539392-0198d25ddb16?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Filet de bœuf', 'Câpres', 'Échalotes', 'Jaune d\'œuf'],
     cookingTime: 15,
-    categories: ['Petit-déjeuner', 'Sucré'],
+    categories: ['Protéiné', 'Gastronomie', 'Sans cuisson'],
+    dietaryOptions: ['omnivore', 'keto', 'gluten-free'],
+    calories: 310,
+    protein: 32
+  },
+  {
+    id: 'pr4',
+    name: 'Chili con carne sans riz',
+    image: 'https://images.unsplash.com/photo-1515516969-d4008cc6241a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Bœuf haché', 'Haricots rouges', 'Poivrons', 'Épices mexicaines'],
+    cookingTime: 40,
+    categories: ['Protéiné', 'Mexicain', 'Épicé'],
+    dietaryOptions: ['omnivore'],
+    calories: 390,
+    protein: 35
+  },
+  {
+    id: 'pr5',
+    name: 'Shake protéiné banane-beurre de cacahuètes',
+    image: 'https://images.unsplash.com/photo-1622270672604-ee257f937763?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Protéine whey', 'Banane', 'Beurre de cacahuètes', 'Lait d\'amande'],
+    cookingTime: 5,
+    categories: ['Protéiné', 'Boisson', 'Petit-déjeuner'],
+    dietaryOptions: ['vegetarian', 'gluten-free'],
+    calories: 340,
+    protein: 30
+  },
+  {
+    id: 'pr6',
+    name: 'Blanc de poulet farci aux épinards',
+    image: 'https://images.unsplash.com/photo-1564671165093-20688ff1fffa?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Blanc de poulet', 'Épinards', 'Féta', 'Ail'],
+    cookingTime: 30,
+    categories: ['Protéiné', 'Volaille', 'Dîner'],
+    dietaryOptions: ['omnivore', 'gluten-free'],
+    calories: 320,
+    protein: 38
+  },
+  {
+    id: 'pr7',
+    name: 'Cottage cheese aux fruits et noix',
+    image: 'https://images.unsplash.com/photo-1535949965290-0532f3be827c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Cottage cheese', 'Myrtilles', 'Fraises', 'Noix'],
+    cookingTime: 5,
+    categories: ['Protéiné', 'Petit-déjeuner', 'Sans cuisson'],
+    dietaryOptions: ['vegetarian', 'gluten-free', 'keto'],
+    calories: 220,
+    protein: 24
+  },
+  {
+    id: 'pr8',
+    name: 'Burgers de dinde à l\'avocat',
+    image: 'https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Steak haché de dinde', 'Avocat', 'Tomate', 'Oignon rouge'],
+    cookingTime: 20,
+    categories: ['Protéiné', 'Burger', 'Volaille'],
+    dietaryOptions: ['omnivore'],
+    calories: 360,
+    protein: 32
+  },
+  {
+    id: 'pr9',
+    name: 'Thon grillé sauce vierge',
+    image: 'https://images.unsplash.com/photo-1606850246029-dd00bd5eff97?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Steak de thon', 'Tomates cerises', 'Basilic', 'Huile d\'olive'],
+    cookingTime: 15,
+    categories: ['Protéiné', 'Poisson', 'Méditerranéen'],
+    dietaryOptions: ['pescatarian', 'gluten-free'],
+    calories: 280,
+    protein: 35
+  },
+  {
+    id: 'pr10',
+    name: 'Tzatziki protéiné au yaourt grec',
+    image: 'https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Yaourt grec', 'Concombre', 'Ail', 'Menthe'],
+    cookingTime: 10,
+    categories: ['Protéiné', 'Sauce', 'Méditerranéen'],
+    dietaryOptions: ['vegetarian', 'gluten-free'],
+    calories: 120,
+    protein: 18
+  },
+  {
+    id: 'pr11',
+    name: 'Ceviche de cabillaud',
+    image: 'https://images.unsplash.com/photo-1599021456807-25db0f974333?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Cabillaud', 'Citron vert', 'Oignon rouge', 'Coriandre'],
+    cookingTime: 20,
+    categories: ['Protéiné', 'Poisson', 'Sans cuisson'],
+    dietaryOptions: ['pescatarian', 'gluten-free'],
+    calories: 180,
+    protein: 28
+  },
+  {
+    id: 'pr12',
+    name: 'Mug cake protéiné',
+    image: 'https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Protéine whey', 'Farine d\'avoine', 'Blanc d\'œuf', 'Cacao'],
+    cookingTime: 5,
+    categories: ['Protéiné', 'Dessert', 'Rapide'],
     dietaryOptions: ['vegetarian'],
-    calories: 380,
-    protein: 10
+    calories: 250,
+    protein: 22
+  },
+  {
+    id: 'pr13',
+    name: 'Salade de bœuf thaï',
+    image: 'https://images.unsplash.com/photo-1593252722333-067d8dd9b763?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Bœuf grillé', 'Concombre', 'Coriandre', 'Sauce nuoc-mâm'],
+    cookingTime: 25,
+    categories: ['Protéiné', 'Thaïlandais', 'Salade'],
+    dietaryOptions: ['omnivore'],
+    calories: 320,
+    protein: 30
+  },
+  {
+    id: 'pr14',
+    name: 'Assiette mezze protéinée',
+    image: 'https://images.unsplash.com/photo-1577906096429-f73c2c312435?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Houmous', 'Poulet grillé', 'Légumes grillés', 'Yaourt grec'],
+    cookingTime: 30,
+    categories: ['Protéiné', 'Moyen-Orient', 'Méditerranéen'],
+    dietaryOptions: ['omnivore'],
+    calories: 410,
+    protein: 32
+  },
+  {
+    id: 'pr15',
+    name: 'Steak d\'espadon grillé',
+    image: 'https://images.unsplash.com/photo-1611599538311-360e527c1d22?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Espadon', 'Romarin', 'Ail', 'Citron'],
+    cookingTime: 15,
+    categories: ['Protéiné', 'Poisson', 'Méditerranéen'],
+    dietaryOptions: ['pescatarian', 'gluten-free'],
+    calories: 270,
+    protein: 36
+  },
+
+  // RAPIDE (<15min) (20 recipes)
+  {
+    id: '10',
+    name: 'Bol de smoothie açaï',
+    image: 'https://images.unsplash.com/photo-1490323948902-e03e4afbee89?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Baies d\'açaï', 'Bananes', 'Myrtilles', 'Granola'],
+    cookingTime: 10,
+    categories: ['Rapide', 'Petit-déjeuner', 'Sucré'],
+    dietaryOptions: ['vegan', 'vegetarian'],
+    calories: 320,
+    protein: 8
   },
   {
     id: '21',
@@ -239,6 +474,473 @@ export const mockRecipes: Recipe[] = [
     protein: 10
   },
   {
+    id: 'ra1',
+    name: 'Toast à l\'avocat et œuf poché',
+    image: 'https://images.unsplash.com/photo-1603046891744-1f74ad9d5d9d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Pain complet', 'Avocat', 'Œuf', 'Piment d\'Espelette'],
+    cookingTime: 10,
+    categories: ['Rapide', 'Petit-déjeuner', 'Brunch'],
+    dietaryOptions: ['vegetarian'],
+    calories: 290,
+    protein: 14
+  },
+  {
+    id: 'ra2',
+    name: 'Salade de concombre à la grecque',
+    image: 'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Concombre', 'Féta', 'Olives kalamata', 'Huile d\'olive'],
+    cookingTime: 10,
+    categories: ['Rapide', 'Salade', 'Grec'],
+    dietaryOptions: ['vegetarian', 'gluten-free'],
+    calories: 180,
+    protein: 8
+  },
+  {
+    id: 'ra3',
+    name: 'Quesadillas express',
+    image: 'https://images.unsplash.com/photo-1628824851008-952ee040a135?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Tortillas', 'Fromage râpé', 'Poulet émincé', 'Poivrons'],
+    cookingTime: 15,
+    categories: ['Rapide', 'Mexicain', 'Snack'],
+    dietaryOptions: ['omnivore'],
+    calories: 380,
+    protein: 20
+  },
+  {
+    id: 'ra4',
+    name: 'Pâtes au pesto express',
+    image: 'https://images.unsplash.com/photo-1501934398334-266c1488d156?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Pâtes', 'Pesto', 'Tomates cerises', 'Parmesan'],
+    cookingTime: 15,
+    categories: ['Rapide', 'Italien', 'Pâtes'],
+    dietaryOptions: ['vegetarian'],
+    calories: 420,
+    protein: 12
+  },
+  {
+    id: 'ra5',
+    name: 'Tacos de thon express',
+    image: 'https://images.unsplash.com/photo-1599974579688-8dbdd335c77f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Thon en boîte', 'Tortillas', 'Avocat', 'Coriandre'],
+    cookingTime: 10,
+    categories: ['Rapide', 'Mexicain', 'Poisson'],
+    dietaryOptions: ['pescatarian'],
+    calories: 320,
+    protein: 22
+  },
+  {
+    id: 'ra6',
+    name: 'Wrap au houmous et légumes',
+    image: 'https://images.unsplash.com/photo-1600850056064-a8b380df8395?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Tortilla', 'Houmous', 'Carottes râpées', 'Concombre'],
+    cookingTime: 5,
+    categories: ['Rapide', 'Végétarien', 'Sans cuisson'],
+    dietaryOptions: ['vegan', 'vegetarian'],
+    calories: 290,
+    protein: 10
+  },
+  {
+    id: 'ra7',
+    name: 'Œufs brouillés à l\'avocat',
+    image: 'https://images.unsplash.com/photo-1608039790095-716ac3590ccf?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Œufs', 'Avocat', 'Ciboulette', 'Pain complet'],
+    cookingTime: 10,
+    categories: ['Rapide', 'Petit-déjeuner', 'Protéiné'],
+    dietaryOptions: ['vegetarian', 'gluten-free'],
+    calories: 310,
+    protein: 18
+  },
+  {
+    id: 'ra8',
+    name: 'Sandwich club au poulet',
+    image: 'https://images.unsplash.com/photo-1550507992-eb63ffee0847?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Pain de mie', 'Poulet', 'Bacon', 'Tomate'],
+    cookingTime: 15,
+    categories: ['Rapide', 'Sandwich', 'Déjeuner'],
+    dietaryOptions: ['omnivore'],
+    calories: 420,
+    protein: 28
+  },
+  {
+    id: 'ra9',
+    name: 'Soupe miso instantanée',
+    image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Pâte miso', 'Tofu', 'Algues', 'Ciboule'],
+    cookingTime: 5,
+    categories: ['Rapide', 'Japonais', 'Soupe'],
+    dietaryOptions: ['vegetarian', 'gluten-free'],
+    calories: 120,
+    protein: 8
+  },
+  {
+    id: 'ra10',
+    name: 'Salade caprese',
+    image: 'https://images.unsplash.com/photo-1592417817098-8fd3d9eb14a5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Tomates', 'Mozzarella', 'Basilic', 'Huile d\'olive'],
+    cookingTime: 10,
+    categories: ['Rapide', 'Italien', 'Salade'],
+    dietaryOptions: ['vegetarian', 'gluten-free'],
+    calories: 260,
+    protein: 14
+  },
+  {
+    id: 'ra11',
+    name: 'Tartines au saumon fumé',
+    image: 'https://images.unsplash.com/photo-1485963631004-f2f00b1d6606?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Pain aux céréales', 'Saumon fumé', 'Fromage frais', 'Aneth'],
+    cookingTime: 5,
+    categories: ['Rapide', 'Brunch', 'Sans cuisson'],
+    dietaryOptions: ['pescatarian'],
+    calories: 280,
+    protein: 20
+  },
+  {
+    id: 'ra12',
+    name: 'Smoothie bowl mangue-passion',
+    image: 'https://images.unsplash.com/photo-1584536286788-78981d6c9e75?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Mangue', 'Fruit de la passion', 'Banane', 'Lait d\'amande'],
+    cookingTime: 5,
+    categories: ['Rapide', 'Petit-déjeuner', 'Boisson'],
+    dietaryOptions: ['vegan', 'vegetarian', 'gluten-free'],
+    calories: 220,
+    protein: 6
+  },
+  {
+    id: 'ra13',
+    name: 'Assiette de fromages et fruits',
+    image: 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Fromages variés', 'Raisins', 'Noix', 'Crackers'],
+    cookingTime: 5,
+    categories: ['Rapide', 'Plateau', 'Sans cuisson'],
+    dietaryOptions: ['vegetarian'],
+    calories: 420,
+    protein: 16
+  },
+  {
+    id: 'ra14',
+    name: 'Pita au poulet et tzatziki',
+    image: 'https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Pain pita', 'Poulet grillé', 'Tzatziki', 'Tomate'],
+    cookingTime: 15,
+    categories: ['Rapide', 'Grec', 'Sandwich'],
+    dietaryOptions: ['omnivore'],
+    calories: 380,
+    protein: 28
+  },
+  {
+    id: 'ra15',
+    name: 'Burrito déjeuner aux œufs',
+    image: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Tortilla', 'Œufs brouillés', 'Avocat', 'Salsa'],
+    cookingTime: 15,
+    categories: ['Rapide', 'Mexicain', 'Petit-déjeuner'],
+    dietaryOptions: ['vegetarian'],
+    calories: 350,
+    protein: 20
+  },
+  {
+    id: 'ra16',
+    name: 'Tartare d\'avocat aux crevettes',
+    image: 'https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Avocat', 'Crevettes', 'Citron vert', 'Coriandre'],
+    cookingTime: 15,
+    categories: ['Rapide', 'Entrée', 'Fruits de mer'],
+    dietaryOptions: ['pescatarian', 'gluten-free'],
+    calories: 250,
+    protein: 18
+  },
+  {
+    id: 'ra17',
+    name: 'Velouté de courgettes express',
+    image: 'https://images.unsplash.com/photo-1616501268209-0ea73744851a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Courgettes', 'Bouillon', 'Crème fraîche', 'Menthe'],
+    cookingTime: 15,
+    categories: ['Rapide', 'Soupe', 'Léger'],
+    dietaryOptions: ['vegetarian', 'gluten-free'],
+    calories: 180,
+    protein: 6
+  },
+
+  // GOURMAND (20 recipes)
+  {
+    id: '3',
+    name: 'Risotto aux champignons',
+    image: 'https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Riz arborio', 'Champignons', 'Parmesan', 'Oignon'],
+    cookingTime: 40,
+    categories: ['Gourmand', 'Italien'],
+    dietaryOptions: ['vegetarian'],
+    calories: 450,
+    protein: 12,
+    requiredEquipment: ['pot', 'woodenspoons']
+  },
+  {
+    id: '5',
+    name: 'Pâtes à la carbonara',
+    image: 'https://images.unsplash.com/photo-1546549032-9571cd6b27df?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Pâtes', 'Œufs', 'Pancetta', 'Parmesan'],
+    cookingTime: 20,
+    categories: ['Gourmand', 'Italien'],
+    dietaryOptions: ['omnivore'],
+    calories: 520,
+    protein: 22
+  },
+  {
+    id: '9',
+    name: 'Quiche lorraine',
+    image: 'https://images.unsplash.com/photo-1591985666643-9b27a0cdbc0e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Pâte brisée', 'Œufs', 'Crème', 'Lardons'],
+    cookingTime: 45,
+    categories: ['Gourmand', 'Français'],
+    dietaryOptions: ['omnivore'],
+    calories: 480,
+    protein: 18
+  },
+  {
+    id: 'go1',
+    name: 'Gratin dauphinois',
+    image: 'https://images.unsplash.com/photo-1633321702518-7feccafb94d5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Pommes de terre', 'Crème fraîche', 'Ail', 'Gruyère'],
+    cookingTime: 60,
+    categories: ['Gourmand', 'Français', 'Accompagnement'],
+    dietaryOptions: ['vegetarian', 'gluten-free'],
+    calories: 460,
+    protein: 12
+  },
+  {
+    id: 'go2',
+    name: 'Lasagnes à la bolognaise',
+    image: 'https://images.unsplash.com/photo-1619895092538-128341789043?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Pâtes à lasagne', 'Viande hachée', 'Sauce tomate', 'Béchamel'],
+    cookingTime: 60,
+    categories: ['Gourmand', 'Italien', 'Plat familial'],
+    dietaryOptions: ['omnivore'],
+    calories: 580,
+    protein: 28
+  },
+  {
+    id: 'go3',
+    name: 'Tiramisu classique',
+    image: 'https://images.unsplash.com/photo-1571877227200-a0d98ea1a71f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Mascarpone', 'Biscuits cuillère', 'Café', 'Cacao'],
+    cookingTime: 30,
+    categories: ['Gourmand', 'Italien', 'Dessert'],
+    dietaryOptions: ['vegetarian'],
+    calories: 420,
+    protein: 8
+  },
+  {
+    id: 'go4',
+    name: 'Bœuf bourguignon',
+    image: 'https://images.unsplash.com/photo-1608835291093-394b0c943a75?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Bœuf à mijoter', 'Vin rouge', 'Carottes', 'Champignons'],
+    cookingTime: 120,
+    categories: ['Gourmand', 'Français', 'Mijoté'],
+    dietaryOptions: ['omnivore'],
+    calories: 520,
+    protein: 35
+  },
+  {
+    id: 'go5',
+    name: 'Gâteau au chocolat fondant',
+    image: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Chocolat noir', 'Beurre', 'Œufs', 'Farine'],
+    cookingTime: 40,
+    categories: ['Gourmand', 'Dessert', 'Pâtisserie'],
+    dietaryOptions: ['vegetarian'],
+    calories: 450,
+    protein: 10
+  },
+  {
+    id: 'go6',
+    name: 'Mac and cheese',
+    image: 'https://images.unsplash.com/photo-1543352634-a1c51d9f1fa7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Macaroni', 'Cheddar', 'Mozzarella', 'Béchamel'],
+    cookingTime: 35,
+    categories: ['Gourmand', 'Américain', 'Comfort food'],
+    dietaryOptions: ['vegetarian'],
+    calories: 490,
+    protein: 18
+  },
+  {
+    id: 'go7',
+    name: 'Flan pâtissier',
+    image: 'https://images.unsplash.com/photo-1614145121029-83a9f7b68bf4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Pâte brisée', 'Œufs', 'Lait', 'Vanille'],
+    cookingTime: 60,
+    categories: ['Gourmand', 'Français', 'Dessert'],
+    dietaryOptions: ['vegetarian'],
+    calories: 380,
+    protein: 8
+  },
+  {
+    id: 'go8',
+    name: 'Moussaka grecque',
+    image: 'https://images.unsplash.com/photo-1595295244661-9092a11b8b16?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Agneau haché', 'Aubergines', 'Pommes de terre', 'Béchamel'],
+    cookingTime: 90,
+    categories: ['Gourmand', 'Grec', 'Mijoté'],
+    dietaryOptions: ['omnivore'],
+    calories: 540,
+    protein: 28
+  },
+  {
+    id: 'go9',
+    name: 'Crêpes sucrées',
+    image: 'https://images.unsplash.com/photo-1519676867240-f03562e64548?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Farine', 'Œufs', 'Lait', 'Beurre'],
+    cookingTime: 30,
+    categories: ['Gourmand', 'Français', 'Dessert'],
+    dietaryOptions: ['vegetarian'],
+    calories: 320,
+    protein: 8
+  },
+  {
+    id: 'go10',
+    name: 'Croissants maison',
+    image: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Farine', 'Beurre', 'Levure', 'Sucre'],
+    cookingTime: 240,
+    categories: ['Gourmand', 'Français', 'Boulangerie'],
+    dietaryOptions: ['vegetarian'],
+    calories: 340,
+    protein: 7
+  },
+  {
+    id: 'go11',
+    name: 'Cassoulet traditionnel',
+    image: 'https://images.unsplash.com/photo-1603048245539-71ada36283df?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Haricots blancs', 'Saucisse de Toulouse', 'Confit de canard', 'Tomates'],
+    cookingTime: 180,
+    categories: ['Gourmand', 'Français', 'Mijoté'],
+    dietaryOptions: ['omnivore'],
+    calories: 680,
+    protein: 40
+  },
+  {
+    id: 'go12',
+    name: 'Crème brûlée',
+    image: 'https://images.unsplash.com/photo-1611174325655-89ab6e1d690a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Crème fraîche', 'Jaunes d\'œufs', 'Sucre', 'Vanille'],
+    cookingTime: 60,
+    categories: ['Gourmand', 'Français', 'Dessert'],
+    dietaryOptions: ['vegetarian', 'gluten-free'],
+    calories: 380,
+    protein: 6
+  },
+  {
+    id: 'go13',
+    name: 'Pizza quatre fromages',
+    image: 'https://images.unsplash.com/photo-1604917877934-07d8d248d396?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Pâte à pizza', 'Mozzarella', 'Gorgonzola', 'Parmesan'],
+    cookingTime: 40,
+    categories: ['Gourmand', 'Italien', 'Fast-food'],
+    dietaryOptions: ['vegetarian'],
+    calories: 560,
+    protein: 22
+  },
+  {
+    id: 'go14',
+    name: 'Soufflé au fromage',
+    image: 'https://images.unsplash.com/photo-1609501676725-7186f017a4b8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Œufs', 'Fromage râpé', 'Béchamel', 'Muscade'],
+    cookingTime: 45,
+    categories: ['Gourmand', 'Français', 'Délicat'],
+    dietaryOptions: ['vegetarian', 'gluten-free'],
+    calories: 320,
+    protein: 18
+  },
+  {
+    id: 'go15',
+    name: 'Millefeuille vanille',
+    image: 'https://images.unsplash.com/photo-1620980776848-84ac10194945?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Pâte feuilletée', 'Crème pâtissière', 'Vanille', 'Sucre glace'],
+    cookingTime: 90,
+    categories: ['Gourmand', 'Français', 'Pâtisserie'],
+    dietaryOptions: ['vegetarian'],
+    calories: 410,
+    protein: 7
+  },
+  {
+    id: 'go16',
+    name: 'Burger gourmet maison',
+    image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Bœuf haché', 'Pain brioche', 'Cheddar', 'Bacon'],
+    cookingTime: 30,
+    categories: ['Gourmand', 'Américain', 'Fast-food'],
+    dietaryOptions: ['omnivore'],
+    calories: 650,
+    protein: 35
+  },
+  {
+    id: 'go17',
+    name: 'Mousse au chocolat',
+    image: 'https://images.unsplash.com/photo-1590080875852-ba44f83ff2db?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Chocolat noir', 'Œufs', 'Sucre', 'Crème'],
+    cookingTime: 25,
+    categories: ['Gourmand', 'Dessert', 'Classique'],
+    dietaryOptions: ['vegetarian', 'gluten-free'],
+    calories: 320,
+    protein: 8
+  },
+
+  // MONDE (20 recipes)
+  {
+    id: '8',
+    name: 'Curry de légumes',
+    image: 'https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Lait de coco', 'Curry', 'Légumes variés', 'Riz basmati'],
+    cookingTime: 35,
+    categories: ['Épicé', 'Indien'],
+    dietaryOptions: ['vegan', 'vegetarian', 'gluten-free'],
+    calories: 380,
+    protein: 10
+  },
+  {
+    id: '11',
+    name: 'Pad thaï au poulet',
+    image: 'https://images.unsplash.com/photo-1626804475297-41608ea09aeb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Nouilles de riz', 'Poulet', 'Œufs', 'Cacahuètes'],
+    cookingTime: 25,
+    categories: ['Asiatique', 'Thaïlandais'],
+    dietaryOptions: ['omnivore'],
+    calories: 450,
+    protein: 24
+  },
+  {
+    id: '15',
+    name: 'Falafels',
+    image: 'https://images.unsplash.com/photo-1593001872095-7d5b3868dd14?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Pois chiches', 'Herbes fraîches', 'Épices', 'Ail'],
+    cookingTime: 40,
+    categories: ['Méditerranéen', 'Moyen-Orient'],
+    dietaryOptions: ['vegan', 'vegetarian'],
+    calories: 340,
+    protein: 12
+  },
+  {
+    id: '16',
+    name: 'Pizza margherita',
+    image: 'https://images.unsplash.com/photo-1589840700256-41c5d84af80d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Pâte à pizza', 'Sauce tomate', 'Mozzarella', 'Basilic'],
+    cookingTime: 25,
+    categories: ['Italien', 'Classique'],
+    dietaryOptions: ['vegetarian'],
+    calories: 450,
+    protein: 15
+  },
+  {
+    id: '19',
+    name: 'Taboulé libanais',
+    image: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Persil', 'Boulgour', 'Tomates', 'Menthe'],
+    cookingTime: 20,
+    categories: ['Salade', 'Moyen-Orient'],
+    dietaryOptions: ['vegan', 'vegetarian'],
+    calories: 220,
+    protein: 6
+  },
+  {
     id: '22',
     name: 'Rösti suisse',
     image: 'https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
@@ -250,17 +952,6 @@ export const mockRecipes: Recipe[] = [
     protein: 8
   },
   {
-    id: '23',
-    name: 'Poké bowl au saumon',
-    image: 'https://images.unsplash.com/photo-1507471509451-1d05c43f7d0f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-    mainIngredients: ['Riz', 'Saumon cru', 'Avocat', 'Concombre'],
-    cookingTime: 20,
-    categories: ['Hawaïen', 'Healthy'],
-    dietaryOptions: ['pescatarian', 'gluten-free'],
-    calories: 420,
-    protein: 22
-  },
-  {
     id: '24',
     name: 'Chili con carne',
     image: 'https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
@@ -270,5 +961,171 @@ export const mockRecipes: Recipe[] = [
     dietaryOptions: ['omnivore'],
     calories: 420,
     protein: 28
+  },
+  {
+    id: 'mo1',
+    name: 'Tacos al pastor',
+    image: 'https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Porc mariné', 'Tortillas', 'Ananas', 'Coriandre'],
+    cookingTime: 40,
+    categories: ['Mexicain', 'Street food', 'Épicé'],
+    dietaryOptions: ['omnivore'],
+    calories: 420,
+    protein: 26
+  },
+  {
+    id: 'mo2',
+    name: 'Paëlla valenciana',
+    image: 'https://images.unsplash.com/photo-1515443961218-a51367888e4b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Riz', 'Poulet', 'Fruits de mer', 'Safran'],
+    cookingTime: 60,
+    categories: ['Espagnol', 'Festif', 'Méditerranéen'],
+    dietaryOptions: ['omnivore'],
+    calories: 520,
+    protein: 28
+  },
+  {
+    id: 'mo3',
+    name: 'Bobun vietnamien',
+    image: 'https://images.unsplash.com/photo-1627308595171-d1b5d67129c4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Vermicelles de riz', 'Bœuf', 'Légumes crus', 'Nems'],
+    cookingTime: 35,
+    categories: ['Vietnamien', 'Asiatique', 'Salade'],
+    dietaryOptions: ['omnivore'],
+    calories: 380,
+    protein: 22
+  },
+  {
+    id: 'mo4',
+    name: 'Couscous royal',
+    image: 'https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Semoule', 'Agneau', 'Merguez', 'Légumes'],
+    cookingTime: 90,
+    categories: ['Maghrébin', 'Festif', 'Méditerranéen'],
+    dietaryOptions: ['omnivore'],
+    calories: 680,
+    protein: 35
+  },
+  {
+    id: 'mo5',
+    name: 'Sushi variés',
+    image: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Riz à sushi', 'Poisson cru', 'Algue nori', 'Avocat'],
+    cookingTime: 60,
+    categories: ['Japonais', 'Asiatique', 'Poisson'],
+    dietaryOptions: ['pescatarian'],
+    calories: 420,
+    protein: 20
+  },
+  {
+    id: 'mo6',
+    name: 'Bortsch ukrainien',
+    image: 'https://images.unsplash.com/photo-1612460426166-c930103da985?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Betteraves', 'Chou', 'Bœuf', 'Crème fraîche'],
+    cookingTime: 70,
+    categories: ['Russe', 'Soupe', 'Hiver'],
+    dietaryOptions: ['omnivore'],
+    calories: 320,
+    protein: 18
+  },
+  {
+    id: 'mo7',
+    name: 'Bœuf sauté thaï au basilic',
+    image: 'https://images.unsplash.com/photo-1627478061382-e1d1737c9659?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Bœuf émincé', 'Basilic thaï', 'Piment', 'Sauce d\'huître'],
+    cookingTime: 20,
+    categories: ['Thaïlandais', 'Épicé', 'Asiatique'],
+    dietaryOptions: ['omnivore'],
+    calories: 380,
+    protein: 32
+  },
+  {
+    id: 'mo8',
+    name: 'Empanadas argentines',
+    image: 'https://images.unsplash.com/photo-1609167830220-7164aa360951?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Pâte à empanadas', 'Bœuf haché', 'Olives', 'Œufs durs'],
+    cookingTime: 45,
+    categories: ['Argentin', 'Street food', 'Amérique du Sud'],
+    dietaryOptions: ['omnivore'],
+    calories: 410,
+    protein: 18
+  },
+  {
+    id: 'mo9',
+    name: 'Shawarma poulet',
+    image: 'https://images.unsplash.com/photo-1530469912745-a215c6b256ea?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Poulet mariné', 'Pain pita', 'Sauce tahini', 'Crudités'],
+    cookingTime: 35,
+    categories: ['Moyen-Orient', 'Street food', 'Sandwich'],
+    dietaryOptions: ['omnivore'],
+    calories: 450,
+    protein: 28
+  },
+  {
+    id: 'mo10',
+    name: 'Gyozas au porc',
+    image: 'https://images.unsplash.com/photo-1611143669185-af224c5e3252?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Pâte à gyoza', 'Porc haché', 'Chou chinois', 'Gingembre'],
+    cookingTime: 40,
+    categories: ['Japonais', 'Asiatique', 'Apéritif'],
+    dietaryOptions: ['omnivore'],
+    calories: 320,
+    protein: 18
+  },
+  {
+    id: 'mo11',
+    name: 'Pho bo vietnamien',
+    image: 'https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Nouilles de riz', 'Bœuf', 'Bouillon', 'Herbes fraîches'],
+    cookingTime: 120,
+    categories: ['Vietnamien', 'Soupe', 'Asiatique'],
+    dietaryOptions: ['omnivore'],
+    calories: 420,
+    protein: 24
+  },
+  {
+    id: 'mo12',
+    name: 'Moussaka grecque',
+    image: 'https://images.unsplash.com/photo-1574484284002-952d92456975?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Aubergines', 'Viande hachée', 'Tomates', 'Béchamel'],
+    cookingTime: 75,
+    categories: ['Grec', 'Méditerranéen', 'Plat principal'],
+    dietaryOptions: ['omnivore'],
+    calories: 480,
+    protein: 26
+  },
+  {
+    id: 'mo13',
+    name: 'Bibimbap coréen',
+    image: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Riz', 'Bœuf', 'Légumes sautés', 'Œuf'],
+    cookingTime: 40,
+    categories: ['Coréen', 'Asiatique', 'Bowl'],
+    dietaryOptions: ['omnivore'],
+    calories: 450,
+    protein: 22
+  },
+  {
+    id: 'mo14',
+    name: 'Gnocchis à la sauce gorgonzola',
+    image: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Gnocchis', 'Gorgonzola', 'Crème', 'Noix'],
+    cookingTime: 25,
+    categories: ['Italien', 'Gourmand', 'Fromage'],
+    dietaryOptions: ['vegetarian'],
+    calories: 520,
+    protein: 14
+  },
+  {
+    id: 'mo15',
+    name: 'Houmous libanais',
+    image: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    mainIngredients: ['Pois chiches', 'Tahini', 'Citron', 'Huile d\'olive'],
+    cookingTime: 15,
+    categories: ['Moyen-Orient', 'Trempette', 'Entrée'],
+    dietaryOptions: ['vegan', 'vegetarian', 'gluten-free'],
+    calories: 280,
+    protein: 12
   }
 ];
+

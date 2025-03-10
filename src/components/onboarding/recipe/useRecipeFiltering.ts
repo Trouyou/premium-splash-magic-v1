@@ -76,7 +76,9 @@ export const useRecipeFiltering = (
           case 'monde':
             // Fixed array of world cuisines for optimization
             const worldCuisines = ['Italien', 'Mexicain', 'Asiatique', 'Indien', 
-              'Méditerranéen', 'Moyen-Orient', 'Thaïlandais', 'Français', 'Hawaïen', 'Suisse'];
+              'Méditerranéen', 'Moyen-Orient', 'Thaïlandais', 'Français', 'Hawaïen', 'Suisse',
+              'Vietnamien', 'Japonais', 'Coréen', 'Espagnol', 'Grec', 'Maghrébin', 'Argentin',
+              'Russe', 'Ukrainien'];
             return recipe.categories.some(cat => worldCuisines.includes(cat));
           default:
             return true;
@@ -142,6 +144,8 @@ export const useRecipeFiltering = (
 
   // Track loaded images for UI - optimized with debouncing
   useEffect(() => {
+    if (visibleRecipes.length === 0) return;
+    
     const newImagesLoaded: Record<string, boolean> = {};
     visibleRecipes.forEach(recipe => {
       newImagesLoaded[recipe.id] = true;
@@ -149,7 +153,7 @@ export const useRecipeFiltering = (
     
     // Set with a slight delay to avoid UI flicker
     const timer = setTimeout(() => {
-      setImagesLoaded(newImagesLoaded);
+      setImagesLoaded(prev => ({...prev, ...newImagesLoaded}));
     }, 100);
     
     return () => clearTimeout(timer);
