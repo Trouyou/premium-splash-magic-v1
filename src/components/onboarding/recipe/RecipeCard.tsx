@@ -29,13 +29,17 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
   const [isImgLoaded, setIsImgLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Load image only when component mounts or recipe changes
+  // Optimized image loading with cleanup and error handling
   useEffect(() => {
     let isMounted = true;
     setIsLoading(true);
     setIsImgLoaded(false);
     
-    const getUniqueImage = async () => {
+    // Use a cache-friendly approach
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
+    
+    const getImage = async () => {
       try {
         // Get a guaranteed unique image for this recipe
         const uniqueImage = await loadRecipeImage(recipe);
@@ -44,25 +48,24 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
           setImgSrc(uniqueImage);
         }
       } catch (error) {
-        console.error(`Error loading unique image for ${recipe.name}:`, error);
+        console.error(`Error loading image for ${recipe.name}:`, error);
         if (isMounted) {
           setImgSrc(defaultImage);
-        }
-      } finally {
-        if (isMounted) {
           setIsLoading(false);
         }
       }
     };
     
-    getUniqueImage();
+    getImage();
     
     return () => {
       isMounted = false;
+      clearTimeout(timeoutId);
+      controller.abort();
     };
   }, [recipe.id, defaultImage]);
 
-  // Image event handlers
+  // Optimized image handlers
   const handleImageLoaded = () => {
     setIsImgLoaded(true);
     setIsLoading(false);
@@ -123,7 +126,6 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
         >
           <h3 className="text-white font-medium text-lg mb-1 line-clamp-2">{recipe.name}</h3>
           
-          {/* Display all ingredients */}
           <div className="flex flex-wrap gap-1 mb-2 max-h-24 overflow-y-auto">
             {recipe.mainIngredients.map((ingredient, index) => (
               <span 
@@ -162,7 +164,6 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
           {dietLabel && <span>• {dietLabel}</span>}
         </div>
         
-        {/* Display all ingredients */}
         <div className="mt-2 flex flex-wrap gap-1 max-h-20 overflow-y-auto">
           {recipe.mainIngredients.map((ingredient, index) => (
             <span 

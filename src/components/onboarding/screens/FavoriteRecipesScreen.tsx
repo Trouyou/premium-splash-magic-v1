@@ -42,20 +42,26 @@ const FavoriteRecipesScreen: React.FC<FavoriteRecipesScreenProps> = ({
   const [selectedTimeFilter, setSelectedTimeFilter] = useState('all');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [page, setPage] = useState(1);
+  const [imagesInitialized, setImagesInitialized] = useState(false);
   const recipesPerPage = 8;
   
-  // Initialize the used images tracker and ensure unique images
+  // Initialize the used images tracker and ensure unique images - optimized with state tracking
   useEffect(() => {
     const prepareRecipeImages = async () => {
-      // Initialize the tracker with existing recipe images
-      initializeUsedImagesTracker(mockRecipes);
-      
-      // Ensure all recipes have unique images
-      await ensureUniqueImages(mockRecipes);
+      // Use a flag to prevent unnecessary re-initialization
+      if (!imagesInitialized) {
+        // Initialize the tracker with existing recipe images
+        initializeUsedImagesTracker(mockRecipes);
+        
+        // Ensure all recipes have unique images
+        await ensureUniqueImages(mockRecipes);
+        
+        setImagesInitialized(true);
+      }
     };
     
     prepareRecipeImages();
-  }, []);
+  }, [imagesInitialized]);
   
   // Debounce search input for better performance
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
@@ -145,7 +151,7 @@ const FavoriteRecipesScreen: React.FC<FavoriteRecipesScreenProps> = ({
       
       {/* Recipe Results */}
       <RecipeResults
-        isLoading={isLoading}
+        isLoading={isLoading || !imagesInitialized}
         filteredRecipes={filteredRecipes}
         visibleRecipes={visibleRecipes}
         favoriteRecipes={favoriteRecipes}
@@ -161,7 +167,7 @@ const FavoriteRecipesScreen: React.FC<FavoriteRecipesScreenProps> = ({
         isFirstStep={false}
         isLastStep={false}
         nextLabel="Continuer"
-        nextDisabled={isLoading}
+        nextDisabled={isLoading || !imagesInitialized}
       />
     </div>
   );

@@ -13,46 +13,54 @@ export const getFallbackImage = (recipe: Recipe): string => {
 
 // Simple verification if an image URL is valid
 export const verifyRecipeImage = async (imageUrl: string): Promise<boolean> => {
+  if (!imageUrl || !imageUrl.startsWith('http')) {
+    return false;
+  }
+  
   try {
-    // Only try to validate actual URLs
-    if (!imageUrl || !imageUrl.startsWith('http')) {
-      return false;
-    }
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 3000);
     
-    const response = await fetch(imageUrl, { method: 'HEAD' });
+    const response = await fetch(imageUrl, { 
+      method: 'HEAD', 
+      signal: controller.signal 
+    });
+    
+    clearTimeout(timeoutId);
     return response.ok && response.headers.get('Content-Type')?.startsWith('image/');
   } catch (error) {
+    console.error("Error verifying image URL:", error);
     return false;
   }
 };
 
-// Fetch a unique recipe image using Unsplash source
+// Fetch a unique recipe image using Unsplash source with optimized caching
 export const fetchUniqueRecipeImage = async (recipeName: string): Promise<string> => {
   try {
-    // Prepare search query from recipe name
+    // Build search query with recipe name and randomization
     const searchTerms = recipeName
       .toLowerCase()
       .replace(/[^\w\s]/gi, '')
       .split(' ')
       .filter(word => word.length > 2)
       .join(' ');
-      
-    // Add descriptive food-related keywords
-    const searchQuery = `${searchTerms} food dish recipe cooking`;
     
-    // Add random seed to ensure we get different images even for similar queries
-    const randomSeed = Math.floor(Math.random() * 10000);
+    // Add food-related keywords for better results
+    const searchQuery = `${searchTerms} food dish recipe`;
     
-    // Construct direct Unsplash source URL with random seed
+    // Add random seed to ensure different images for similar queries
+    const randomSeed = Math.floor(Math.random() * 100000);
+    
+    // Construct direct Unsplash source URL with optimized parameters
     const imageUrl = `https://source.unsplash.com/featured/?${encodeURIComponent(searchQuery)}&random=${randomSeed}`;
     
-    // Check if image is already used
+    // Check if this URL is already used (unlikely with the random seed)
     if (usedImageUrls.has(imageUrl)) {
-      // Try again with a different random seed
+      // Generate a new random seed and try again
       return fetchUniqueRecipeImage(recipeName);
     }
     
-    // If not used, return it and add to used set
+    // Register as used and return
     usedImageUrls.add(imageUrl);
     return imageUrl;
   } catch (error) {
@@ -61,70 +69,72 @@ export const fetchUniqueRecipeImage = async (recipeName: string): Promise<string
   }
 };
 
-// Initialize the image registry from existing recipes
+// Initialize the image registry from existing recipes - optimized for performance
 export const initializeUsedImagesTracker = (recipes: Recipe[]): void => {
   usedImageUrls.clear();
+  
+  // Use Set for O(1) lookup performance
+  const recipeImages = new Set<string>();
+  
   recipes.forEach(recipe => {
     if (recipe.image && recipe.image !== DEFAULT_IMAGE) {
-      usedImageUrls.add(recipe.image);
+      recipeImages.add(recipe.image);
     }
   });
+  
+  // Convert Set to usedImageUrls Set
+  recipeImages.forEach(url => usedImageUrls.add(url));
 };
 
-// Force unique images for all recipes
+// Ensure all recipes have unique images with optimized batching
 export const ensureUniqueImages = async (recipes: Recipe[]): Promise<void> => {
+  // Count image occurrences with a Map for O(1) lookup
   const imageMap = new Map<string, number>();
   
-  // First pass: count image occurrences
+  // First pass: count occurrences O(n)
   recipes.forEach(recipe => {
     if (recipe.image) {
-      const count = imageMap.get(recipe.image) || 0;
-      imageMap.set(recipe.image, count + 1);
+      imageMap.set(recipe.image, (imageMap.get(recipe.image) || 0) + 1);
     }
   });
   
-  // Second pass: fix duplicates
-  const promises = recipes.map(async recipe => {
-    if (!recipe.image || imageMap.get(recipe.image) > 1) {
-      // This image is either missing or duplicated, fetch a new one
+  // Create a list of recipes needing new images
+  const duplicateRecipes = recipes.filter(recipe => 
+    !recipe.image || imageMap.get(recipe.image) > 1
+  );
+  
+  // Use Promise.all for parallel execution
+  await Promise.all(
+    duplicateRecipes.map(async recipe => {
       recipe.image = await fetchUniqueRecipeImage(recipe.name);
-    }
-  });
-  
-  await Promise.all(promises);
+      
+      // If fetch failed, use category fallback
+      if (!recipe.image) {
+        recipe.image = getFallbackImage(recipe);
+      }
+    })
+  );
 };
 
-// Main function to load and verify recipe images
+// Main optimized function to load and verify recipe images
 export const loadRecipeImage = async (recipe: Recipe): Promise<string> => {
   // Case 1: Recipe has no image - get a new unique one
   if (!recipe.image) {
     const newImage = await fetchUniqueRecipeImage(recipe.name);
-    if (newImage) {
-      return newImage;
-    }
-    return getFallbackImage(recipe);
+    return newImage || getFallbackImage(recipe);
   }
   
-  // Case 2: Recipe has an image but it's a duplicate
+  // Case 2: Recipe has a duplicated image
   if (usedImageUrls.has(recipe.image) && recipe.image !== DEFAULT_IMAGE) {
-    // Get a new unique image
     const newImage = await fetchUniqueRecipeImage(recipe.name);
-    if (newImage) {
-      return newImage;
-    }
+    return newImage || getFallbackImage(recipe);
   }
   
-  // Case 3: Recipe has a potentially unique image but needs validation
+  // Case 3: Recipe has a potentially unique image that needs validation
   const isValid = await verifyRecipeImage(recipe.image);
   if (!isValid) {
-    // If invalid, get a new image
     const newImage = await fetchUniqueRecipeImage(recipe.name);
-    if (newImage) {
-      return newImage;
-    }
-    
-    // If new image fetch fails, use category fallback
-    return getFallbackImage(recipe);
+    return newImage || getFallbackImage(recipe);
   }
   
   // Case 4: Recipe has a valid, unique image

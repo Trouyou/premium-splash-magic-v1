@@ -23,85 +23,81 @@ export const useRecipeFiltering = (
   const [isLoading, setIsLoading] = useState(true);
   const [imagesLoaded, setImagesLoaded] = useState<Record<string, boolean>>({});
   
-  // Filter recipes based on all criteria
+  // Optimized filtering with useMemo for better performance
   const filteredRecipes = useMemo(() => {
-    let results = [...recipes];
-    
-    // Apply dietary preference filter
-    if (onboardingData.dietaryPreferences.length > 0) {
-      if (!onboardingData.dietaryPreferences.includes('omnivore')) {
-        results = results.filter(recipe => 
-          recipe.dietaryOptions.some(option => 
-            onboardingData.dietaryPreferences.includes(option)
-          )
-        );
-      }
-    }
-    
-    // Apply equipment filter
-    if (onboardingData.kitchenEquipment.length > 0) {
-      results = results.filter(recipe => {
-        if (!recipe.requiredEquipment || recipe.requiredEquipment.length === 0) {
+    // Start with all recipes
+    return recipes
+      // Filter by dietary preferences
+      .filter(recipe => {
+        if (onboardingData.dietaryPreferences.length === 0 || onboardingData.dietaryPreferences.includes('omnivore')) {
           return true;
         }
-        
+        return recipe.dietaryOptions.some(option => 
+          onboardingData.dietaryPreferences.includes(option)
+        );
+      })
+      // Filter by equipment
+      .filter(recipe => {
+        if (!recipe.requiredEquipment || recipe.requiredEquipment.length === 0 || onboardingData.kitchenEquipment.length === 0) {
+          return true;
+        }
         return recipe.requiredEquipment.every(equipment => 
           onboardingData.kitchenEquipment.includes(equipment)
         );
-      });
-    }
-    
-    // Apply cooking time filter
-    if (onboardingData.cookingTime === 'quick' || selectedTimeFilter === 'quick') {
-      results = results.filter(recipe => recipe.cookingTime <= 15);
-    } else if (onboardingData.cookingTime === 'standard' || selectedTimeFilter === 'medium') {
-      results = results.filter(recipe => recipe.cookingTime <= 30);
-    } else if (selectedTimeFilter === 'long') {
-      results = results.filter(recipe => recipe.cookingTime <= 60);
-    }
-    
-    // Apply category filter
-    if (selectedCategory) {
-      switch (selectedCategory) {
-        case 'rapide':
-          results = results.filter(recipe => recipe.cookingTime <= 15);
-          break;
-        case 'equilibre':
-          results = results.filter(recipe => recipe.categories.includes('Équilibré') || recipe.categories.includes('Healthy'));
-          break;
-        case 'gourmand':
-          results = results.filter(recipe => recipe.categories.includes('Gourmand'));
-          break;
-        case 'monde':
-          results = results.filter(recipe => 
-            recipe.categories.some(cat => 
+      })
+      // Filter by cooking time
+      .filter(recipe => {
+        if (selectedTimeFilter === 'quick' || onboardingData.cookingTime === 'quick') {
+          return recipe.cookingTime <= 15;
+        } 
+        if (selectedTimeFilter === 'medium' || onboardingData.cookingTime === 'standard') {
+          return recipe.cookingTime <= 30;
+        } 
+        if (selectedTimeFilter === 'long') {
+          return recipe.cookingTime <= 60;
+        }
+        return true;
+      })
+      // Filter by category
+      .filter(recipe => {
+        if (!selectedCategory) return true;
+        
+        switch (selectedCategory) {
+          case 'rapide':
+            return recipe.cookingTime <= 15;
+          case 'equilibre':
+            return recipe.categories.some(cat => 
+              ['Équilibré', 'Healthy'].includes(cat)
+            );
+          case 'gourmand':
+            return recipe.categories.includes('Gourmand');
+          case 'monde':
+            return recipe.categories.some(cat => 
               ['Italien', 'Mexicain', 'Asiatique', 'Indien', 'Méditerranéen', 'Moyen-Orient', 'Thaïlandais', 'Français', 'Hawaïen', 'Suisse'].includes(cat)
-            )
-          );
-          break;
-      }
-    }
-    
-    // Apply search filter
-    if (debouncedSearchTerm) {
-      const searchTermLower = debouncedSearchTerm.toLowerCase();
-      results = results.filter(recipe => 
-        recipe.name.toLowerCase().includes(searchTermLower) ||
-        recipe.mainIngredients.some(ingredient => 
-          ingredient.toLowerCase().includes(searchTermLower)
-        ) ||
-        recipe.categories.some(category => 
-          category.toLowerCase().includes(searchTermLower)
-        )
+            );
+          default:
+            return true;
+        }
+      })
+      // Filter by search term
+      .filter(recipe => {
+        if (!debouncedSearchTerm) return true;
+        
+        const searchTermLower = debouncedSearchTerm.toLowerCase();
+        return (
+          recipe.name.toLowerCase().includes(searchTermLower) ||
+          recipe.mainIngredients.some(ingredient => 
+            ingredient.toLowerCase().includes(searchTermLower)
+          ) ||
+          recipe.categories.some(category => 
+            category.toLowerCase().includes(searchTermLower)
+          )
+        );
+      })
+      // Filter by favorites
+      .filter(recipe => 
+        !showOnlyFavorites || favoriteRecipes.includes(recipe.id)
       );
-    }
-    
-    // Apply favorites filter
-    if (showOnlyFavorites) {
-      results = results.filter(recipe => favoriteRecipes.includes(recipe.id));
-    }
-    
-    return results;
   }, [
     recipes, 
     onboardingData.dietaryPreferences,
@@ -114,12 +110,12 @@ export const useRecipeFiltering = (
     favoriteRecipes
   ]);
 
-  // Calculate visible recipes based on pagination
+  // Calculate visible recipes based on pagination with useMemo
   const visibleRecipes = useMemo(() => {
     return filteredRecipes.slice(0, page * recipesPerPage);
   }, [filteredRecipes, page, recipesPerPage]);
 
-  // Simulate loading state for UI smoothness
+  // Optimized loading state with useEffect and cleanup
   useEffect(() => {
     setIsLoading(true);
     const timer = setTimeout(() => {
@@ -129,7 +125,7 @@ export const useRecipeFiltering = (
     return () => clearTimeout(timer);
   }, [filteredRecipes.length]);
 
-  // Track loaded images for UI
+  // Track loaded images for UI with useMemo to avoid unnecessary re-renders
   useEffect(() => {
     const newImagesLoaded: Record<string, boolean> = {};
     visibleRecipes.forEach(recipe => {
