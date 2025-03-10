@@ -65,19 +65,29 @@ const RecipeResults: React.FC<RecipeResultsProps> = ({
         variants={containerVariants}
         initial="hidden"
         animate="visible"
+        layout
       >
         {visibleRecipes.map((recipe) => (
-          <RecipeCard
+          <motion.div
             key={recipe.id}
-            recipe={recipe}
-            isFavorite={favoriteRecipes.includes(recipe.id)}
-            timeLabel={getTimeLabel(recipe.cookingTime)}
-            dietLabel={getDietLabel(recipe.dietaryOptions)}
-            nutrientLabel={getNutrientLabel(recipe)}
-            onToggleFavorite={() => toggleFavoriteRecipe(recipe.id)}
-            imageLoaded={imagesLoaded[recipe.id]}
-            defaultImage={DEFAULT_IMAGE}
-          />
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0 }
+            }}
+            transition={{ duration: 0.3 }}
+            layout
+          >
+            <RecipeCard
+              recipe={recipe}
+              isFavorite={favoriteRecipes.includes(recipe.id)}
+              timeLabel={getTimeLabel(recipe.cookingTime)}
+              dietLabel={getDietLabel(recipe.dietaryOptions)}
+              nutrientLabel={getNutrientLabel(recipe)}
+              onToggleFavorite={() => toggleFavoriteRecipe(recipe.id)}
+              imageLoaded={imagesLoaded[recipe.id]}
+              defaultImage={DEFAULT_IMAGE}
+            />
+          </motion.div>
         ))}
       </motion.div>
       

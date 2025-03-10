@@ -9,6 +9,7 @@ export interface Recipe {
   dietaryOptions: string[];
   calories?: number;
   protein?: number;
+  imageVerified?: boolean; // Flag to indicate if the image has been verified
 }
 
 export interface RecipeFilterOptions {
@@ -27,3 +28,10 @@ export interface TimePresetOption {
   id: string;
   name: string;
 }
+
+// Fallback image configuration
+export interface ImageFallbacks {
+  defaultImage: string;
+  categoryFallbacks: Record<string, string>;
+}
+

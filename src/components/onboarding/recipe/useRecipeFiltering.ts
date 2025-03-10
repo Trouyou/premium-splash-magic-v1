@@ -21,7 +21,8 @@ export const useRecipeFiltering = (
 ) => {
   const [isLoading, setIsLoading] = useState(true);
   const [imagesLoaded, setImagesLoaded] = useState<Record<string, boolean>>({});
-
+  const [imageRetries, setImageRetries] = useState<Record<string, number>>({});
+  
   // Memoize the filtered recipes to avoid recalculation on every render
   const filteredRecipes = useMemo(() => {
     // Start with all recipes
@@ -118,28 +119,70 @@ export const useRecipeFiltering = (
     return () => clearTimeout(timer);
   }, [filteredRecipes.length]); // Only reload when the results count changes
 
-  // Preload recipe images - optimized to run only when filteredRecipes change
+  // Improved image preloading with batch processing and priority loading
   const preloadImages = useCallback(() => {
+    // Prioritize visible recipes first
+    const visibleRecipeIds = new Set(visibleRecipes.map(recipe => recipe.id));
+    const prioritizedRecipes = [
+      ...visibleRecipes,
+      ...filteredRecipes.filter(recipe => !visibleRecipeIds.has(recipe.id))
+    ];
+    
     const newImagesLoadedState: Record<string, boolean> = {};
-    const imagePromises = filteredRecipes.map(recipe => {
-      return new Promise<void>((resolve) => {
-        const img = new Image();
-        img.onload = () => {
-          newImagesLoadedState[recipe.id] = true;
-          resolve();
-        };
-        img.onerror = () => {
-          newImagesLoadedState[recipe.id] = false;
-          resolve();
-        };
-        img.src = recipe.image;
+    const newImageRetriesState: Record<string, number> = {...imageRetries};
+    
+    // Process images in small batches to not overwhelm the browser
+    const batchSize = 5;
+    let currentBatch = 0;
+    
+    const loadNextBatch = () => {
+      const start = currentBatch * batchSize;
+      const end = start + batchSize;
+      const batch = prioritizedRecipes.slice(start, end);
+      
+      if (batch.length === 0) {
+        // All batches processed
+        setImagesLoaded(prev => ({...prev, ...newImagesLoadedState}));
+        setImageRetries(newImageRetriesState);
+        return;
+      }
+      
+      const batchPromises = batch.map(recipe => {
+        return new Promise<void>((resolve) => {
+          const img = new Image();
+          
+          img.onload = () => {
+            newImagesLoadedState[recipe.id] = true;
+            newImageRetriesState[recipe.id] = 0; // Reset retries on success
+            resolve();
+          };
+          
+          img.onerror = () => {
+            const currentRetries = newImageRetriesState[recipe.id] || 0;
+            if (currentRetries < 2) {
+              // Try again with a cache-busting parameter
+              newImageRetriesState[recipe.id] = currentRetries + 1;
+              img.src = `${recipe.image}?retry=${currentRetries + 1}`;
+            } else {
+              // Mark as failed after max retries
+              newImagesLoadedState[recipe.id] = false;
+              console.log(`Failed to load image for recipe: ${recipe.name} after ${currentRetries} retries`);
+              resolve();
+            }
+          };
+          
+          img.src = recipe.image;
+        });
       });
-    });
-
-    Promise.all(imagePromises).then(() => {
-      setImagesLoaded(prev => ({...prev, ...newImagesLoadedState}));
-    });
-  }, [filteredRecipes]);
+      
+      Promise.all(batchPromises).then(() => {
+        currentBatch++;
+        setTimeout(loadNextBatch, 100); // Small delay between batches
+      });
+    };
+    
+    loadNextBatch();
+  }, [filteredRecipes, visibleRecipes, imageRetries]);
     
   useEffect(() => {
     if (!isLoading) {

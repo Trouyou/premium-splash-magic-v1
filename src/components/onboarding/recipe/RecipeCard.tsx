@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
 import { Recipe } from './types';
@@ -27,15 +27,37 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
   const [isHovering, setIsHovering] = useState(false);
   const [imgSrc, setImgSrc] = useState(recipe.image);
   const [isImgLoaded, setIsImgLoaded] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
+  const maxRetries = 2;
   
-  // Handle image error
+  // Reset image loaded state when recipe changes
+  useEffect(() => {
+    setIsImgLoaded(false);
+    setImgSrc(recipe.image);
+  }, [recipe.id, recipe.image]);
+  
+  // Handle image error with retry logic
   const handleImageError = () => {
-    setImgSrc(defaultImage);
+    if (retryCount < maxRetries) {
+      // Try loading the image again after a short delay
+      setTimeout(() => {
+        setRetryCount(prev => prev + 1);
+        setImgSrc(`${recipe.image}?retry=${retryCount + 1}`);
+      }, 500);
+    } else {
+      // After max retries, use fallback image based on recipe category
+      console.log(`Image loading failed for recipe: ${recipe.name}`);
+      const categoryFallback = recipe.categories[0]?.toLowerCase().includes('dessert') 
+        ? `${defaultImage}?category=dessert` 
+        : defaultImage;
+      setImgSrc(categoryFallback);
+    }
   };
   
   // Mark image as loaded
   const handleImageLoaded = () => {
     setIsImgLoaded(true);
+    setRetryCount(0); // Reset retry counter on successful load
   };
   
   return (
@@ -71,6 +93,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
           style={{
             transform: isHovering ? 'scale(1.1)' : 'scale(1)'
           }}
+          loading="lazy"
         />
         
         {isFavorite && (
@@ -81,12 +104,12 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
         
         <div 
           className={`absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex flex-col justify-end p-3 transition-opacity duration-300 ${
-            isHovering ? 'opacity-100' : 'opacity-0'
+            isHovering ? 'opacity-100' : 'opacity-80'
           }`}
         >
-          <h3 className="text-white font-medium text-lg mb-1">{recipe.name}</h3>
+          <h3 className="text-white font-medium text-lg mb-1 line-clamp-2">{recipe.name}</h3>
           <div className="flex flex-wrap gap-1 mb-2">
-            {recipe.mainIngredients.map((ingredient, index) => (
+            {recipe.mainIngredients.slice(0, 3).map((ingredient, index) => (
               <span 
                 key={index} 
                 className="bg-white/20 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full"
@@ -94,6 +117,11 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
                 {ingredient}
               </span>
             ))}
+            {recipe.mainIngredients.length > 3 && (
+              <span className="bg-white/20 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full">
+                +{recipe.mainIngredients.length - 3}
+              </span>
+            )}
           </div>
           
           <div className="flex flex-wrap gap-1 mt-auto">
