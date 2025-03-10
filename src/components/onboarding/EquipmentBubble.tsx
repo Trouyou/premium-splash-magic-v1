@@ -48,8 +48,7 @@ const EquipmentBubble: React.FC<EquipmentBubbleProps> = ({
         onClick={onClick}
         className={cn(
           "equipment-card relative flex flex-col items-center justify-start",
-          // Reduced padding for better proportions
-          "p-3 rounded-xl transition-all duration-300 ease-in-out",
+          "p-4 rounded-xl transition-all duration-300 ease-in-out",
           "bg-white border-2 hover:shadow-md",
           selected 
             ? "border-[#D11B19] transform scale-102 shadow-md" 
@@ -60,17 +59,11 @@ const EquipmentBubble: React.FC<EquipmentBubbleProps> = ({
         data-id={id}
         data-name={name}
       >
-        {/* Cercle contenant l'icône - reduced by ~15-20% */}
-        <div 
-          className={cn(
-            "icon-circle rounded-full flex items-center justify-center mb-2",
-            // Reduced size by ~15-20%
-            "w-[100px] h-[100px] md:w-[110px] md:h-[110px]",
-            "bg-[#F5F3E7]"
-          )}
-        >
-          <div className="text-[#2A5D50] equipment-icon" 
-            style={{ height: '45px', width: '45px' }}
+        {/* Icon container - no background circle */}
+        <div className="flex items-center justify-center mb-4">
+          <div 
+            className="text-[#2A5D50] equipment-icon flex items-center justify-center" 
+            style={{ height: '65px', width: '65px' }} // Increased icon size by ~30%
           >
             <div dangerouslySetInnerHTML={{ __html: svg }} />
           </div>
