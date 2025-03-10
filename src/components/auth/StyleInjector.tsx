@@ -9,9 +9,7 @@ const StyleInjector = () => {
         margin: 0 !important;
         padding: 0 !important;
         box-sizing: border-box !important;
-        overflow: hidden !important;
-        height: 100vh !important;
-        max-height: 100vh !important;
+        height: 100% !important;
         width: 100vw !important;
         max-width: 100vw !important;
       }
@@ -20,9 +18,7 @@ const StyleInjector = () => {
         margin: 0 !important;
         padding: 0 !important;
         width: 100vw !important;
-        height: 100vh !important;
-        max-height: 100vh !important;
-        overflow: hidden !important;
+        min-height: 100vh !important;
         box-sizing: border-box !important;
       }
       
@@ -34,13 +30,11 @@ const StyleInjector = () => {
         box-shadow: none !important;
         overflow: hidden !important;
         height: 100vh !important;
-        max-height: 100vh !important;
       }
       
       /* Force la section droite à être scrollable si nécessaire */
       .w-full.md\\:w-2\\/5 {
-        height: 100vh !important;
-        max-height: 100vh !important;
+        min-height: 100vh !important;
         overflow-y: auto !important;
         display: flex !important;
         flex-direction: column !important;
@@ -49,12 +43,12 @@ const StyleInjector = () => {
     `;
     document.head.appendChild(style);
     
-    // Empêcher le scroll du body
-    document.body.style.overflow = 'hidden';
+    // Ne pas empêcher le scroll du body
+    document.body.style.overflow = '';
     
     return () => {
       // Nettoyage lors du démontage du composant
-      document.body.style.overflow = '';
+      document.head.removeChild(style);
     };
   }, []);
 
