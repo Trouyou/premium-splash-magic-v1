@@ -34,6 +34,7 @@ const OnboardingFlow: React.FC = () => {
       return <WelcomeScreen onStart={nextStep} />;
     }
     
+    // 1. Household Size screen
     if (currentStep === 1) {
       return (
         <HouseholdScreen
@@ -47,6 +48,7 @@ const OnboardingFlow: React.FC = () => {
       );
     }
     
+    // 2. Dietary Preferences screen
     if (currentStep === 2) {
       return (
         <DietaryPreferencesScreen
@@ -60,6 +62,7 @@ const OnboardingFlow: React.FC = () => {
       );
     }
     
+    // 3. Nutritional Goals screen
     if (currentStep === 3) {
       return (
         <NutritionalGoalsScreen
@@ -73,19 +76,21 @@ const OnboardingFlow: React.FC = () => {
       );
     }
     
+    // 4. Cooking Time screen
     if (currentStep === 4) {
       return (
-        <KitchenEquipmentScreen
+        <CookingTimeScreen
           currentStep={currentStep}
           totalSteps={totalSteps}
-          equipment={onboardingData.kitchenEquipment}
-          toggleEquipment={toggleKitchenEquipment}
+          cookingTime={onboardingData.cookingTime}
+          setCookingTime={setCookingTime}
           onNext={nextStep}
           onPrev={prevStep}
         />
       );
     }
     
+    // 5. Favorite Recipes screen
     if (currentStep === 5) {
       return (
         <FavoriteRecipesScreen
@@ -100,19 +105,21 @@ const OnboardingFlow: React.FC = () => {
       );
     }
     
+    // 6. Kitchen Equipment screen
     if (currentStep === 6) {
       return (
-        <CookingTimeScreen
+        <KitchenEquipmentScreen
           currentStep={currentStep}
           totalSteps={totalSteps}
-          cookingTime={onboardingData.cookingTime}
-          setCookingTime={setCookingTime}
+          equipment={onboardingData.kitchenEquipment}
+          toggleEquipment={toggleKitchenEquipment}
           onNext={nextStep}
           onPrev={prevStep}
         />
       );
     }
     
+    // 7. Final screen
     if (currentStep === 7) {
       return <FinalScreen onComplete={completeOnboarding} />;
     }
