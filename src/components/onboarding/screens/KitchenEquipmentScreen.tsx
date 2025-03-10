@@ -1,7 +1,5 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-
 import ProgressBar from '../ProgressBar';
 import NavigationButtons from '../NavigationButtons';
 import EquipmentCategory from '../EquipmentCategory';
@@ -30,7 +28,6 @@ const KitchenEquipmentScreen: React.FC<KitchenEquipmentScreenProps> = ({
   
   const groupedEquipment = groupEquipmentByCategory();
   
-  // Fonction pour gérer la sélection/désélection d'un équipement
   const handleToggleEquipment = (equipmentId: string) => {
     setSelectedEquipment(prev => {
       const isSelected = prev.includes(equipmentId);
@@ -42,17 +39,14 @@ const KitchenEquipmentScreen: React.FC<KitchenEquipmentScreenProps> = ({
     });
   };
 
-  // Assurer que le conteneur est défilable
   useEffect(() => {
     if (containerRef.current) {
       containerRef.current.style.overflowY = 'auto';
-      // Increased viewport height to show more content
       containerRef.current.style.maxHeight = 'calc(100vh - 240px)';
       containerRef.current.style.scrollBehavior = 'smooth';
       
-      // Fix for WebkitOverflowScrolling TypeScript error
-      (containerRef.current.style as any)['-webkit-overflow-scrolling'] = 'touch'; // Pour iOS
-      containerRef.current.style.paddingBottom = '160px'; // Increased padding to avoid overlap with selected bar
+      (containerRef.current.style as any)['-webkit-overflow-scrolling'] = 'touch';
+      containerRef.current.style.paddingBottom = '160px';
     }
   }, []);
   
@@ -64,7 +58,7 @@ const KitchenEquipmentScreen: React.FC<KitchenEquipmentScreenProps> = ({
   };
   
   return (
-    <div className="w-full max-w-4xl mx-auto px-3 pb-20"> {/* Expanded max-width and reduced padding */}
+    <div className="w-full max-w-4xl mx-auto px-3 pb-20">
       <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
       
       <motion.div
@@ -89,7 +83,6 @@ const KitchenEquipmentScreen: React.FC<KitchenEquipmentScreenProps> = ({
           overflowY: 'auto',
           paddingBottom: '160px',
           scrollBehavior: 'smooth',
-          // Fix for WebkitOverflowScrolling TypeScript error
           WebkitOverflowScrolling: 'touch' as any,
         }}
       >
