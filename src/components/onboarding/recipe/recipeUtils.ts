@@ -51,46 +51,50 @@ export const mockRecipes: Recipe[] = [
   {
     id: '1',
     name: 'Salade niçoise',
-    image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    image: 'https://images.unsplash.com/photo-1595573962253-4cb3e47fcaf1?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
     mainIngredients: ['Thon', 'Œufs', 'Tomates', 'Olives'],
     cookingTime: 15,
     categories: ['Équilibré', 'Méditerranéen'],
     dietaryOptions: ['pescatarian'],
     calories: 320,
-    protein: 18
+    protein: 18,
+    requiredEquipment: ['knife', 'cutting-board']
   },
   {
     id: '2',
     name: 'Poulet rôti aux herbes',
-    image: 'https://images.unsplash.com/photo-1598103442097-8b74394b95c6?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    image: 'https://images.unsplash.com/photo-1532550907401-a500c9a57435?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
     mainIngredients: ['Poulet', 'Romarin', 'Thym', 'Ail'],
     cookingTime: 60,
     categories: ['Protéiné', 'Classique'],
     dietaryOptions: ['omnivore'],
     calories: 380,
-    protein: 35
+    protein: 35,
+    requiredEquipment: ['oven', 'bakingdish']
   },
   {
     id: '3',
     name: 'Risotto aux champignons',
-    image: 'https://images.unsplash.com/photo-1476124369491-e7addf5db371?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    image: 'https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
     mainIngredients: ['Riz arborio', 'Champignons', 'Parmesan', 'Oignon'],
     cookingTime: 40,
     categories: ['Gourmand', 'Italien'],
     dietaryOptions: ['vegetarian'],
     calories: 450,
-    protein: 12
+    protein: 12,
+    requiredEquipment: ['pot', 'woodenspoons']
   },
   {
     id: '4',
     name: 'Saumon grillé',
-    image: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    image: 'https://images.unsplash.com/photo-1485704686097-ed47f7263ca4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
     mainIngredients: ['Saumon', 'Citron', 'Aneth', 'Huile d\'olive'],
     cookingTime: 25,
     categories: ['Protéiné', 'Rapide'],
     dietaryOptions: ['pescatarian', 'keto'],
     calories: 310,
-    protein: 28
+    protein: 28,
+    requiredEquipment: ['pan', 'spatula']
   },
   {
     id: '5',
