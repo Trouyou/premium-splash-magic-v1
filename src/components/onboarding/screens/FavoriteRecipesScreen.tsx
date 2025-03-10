@@ -1,15 +1,12 @@
 
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { toast } from "sonner";
-import { useDebounce } from "@/hooks/use-debounce";
+import React from 'react';
 import ProgressBar from '../ProgressBar';
 import NavigationButtons from '../NavigationButtons';
 import RecipeFilters from '../recipe/RecipeFilters';
 import RecipeResults from '../recipe/RecipeResults';
-import { useRecipeFiltering } from '../recipe/useRecipeFiltering';
-import { mockRecipes } from '../recipe/data/mockRecipes';
-import { allCategories, timePresets, DEFAULT_IMAGE } from '../recipe/utils/constants';
+import RecipeScreenHeader from '../recipe/components/RecipeScreenHeader';
+import { useFavoriteRecipes } from '../recipe/hooks/useFavoriteRecipes';
+import { allCategories, timePresets } from '../recipe/utils/constants';
 
 interface FavoriteRecipesScreenProps {
   currentStep: number;
@@ -35,101 +32,43 @@ const FavoriteRecipesScreen: React.FC<FavoriteRecipesScreenProps> = ({
   onNext,
   onPrev,
 }) => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [showFilters, setShowFilters] = useState(false);
-  const [showOnlyFavorites, setShowOnlyFavorites] = useState(false);
-  const [selectedTimeFilter, setSelectedTimeFilter] = useState('all');
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [page, setPage] = useState(1);
-  const [recipesReady, setRecipesReady] = useState(false);
-  const recipesPerPage = 8;
-  
-  // Ensure recipes have valid images
-  useEffect(() => {
-    const prepareRecipes = () => {
-      // Make sure all recipes have a valid default image if their image is missing or invalid
-      const recipesWithValidImages = mockRecipes.map(recipe => {
-        if (!recipe.image || recipe.image === '') {
-          return { ...recipe, image: DEFAULT_IMAGE };
-        }
-        return recipe;
-      });
-      
-      // Set recipes as ready
-      setRecipesReady(true);
-    };
-    
-    // Call function to prepare recipes
-    prepareRecipes();
-  }, []);
-  
-  // Debounce search input for better performance
-  const debouncedSearchTerm = useDebounce(searchTerm, 300);
-
-  // Use the custom hook for recipe filtering
-  const { 
-    filteredRecipes, 
-    visibleRecipes, 
-    isLoading, 
-    imagesLoaded 
-  } = useRecipeFiltering(
-    mockRecipes,
-    onboardingData,
-    favoriteRecipes,
-    debouncedSearchTerm,
-    selectedTimeFilter,
-    selectedCategory,
+  const {
+    searchTerm,
+    setSearchTerm,
+    showFilters,
+    setShowFilters,
     showOnlyFavorites,
-    page,
-    recipesPerPage
-  );
-
-  const handleLoadMore = () => {
-    setPage(prev => prev + 1);
-  };
-
-  const handleReset = () => {
-    setSearchTerm('');
-    setSelectedTimeFilter('all');
-    setSelectedCategory(null);
-    setShowFilters(false);
-    setPage(1);
-  };
+    setShowOnlyFavorites,
+    selectedTimeFilter,
+    setSelectedTimeFilter,
+    selectedCategory,
+    setSelectedCategory,
+    filterOptions,
+    debouncedSearchTerm,
+    filteredRecipes,
+    visibleRecipes,
+    isLoading,
+    imagesLoaded,
+    recipesReady,
+    handleLoadMore,
+    handleReset,
+    validateForNextStep
+  } = useFavoriteRecipes({ favoriteRecipes, onboardingData });
 
   const handleNext = () => {
-    if (favoriteRecipes.length === 0) {
-      toast("Ajoutez au moins une recette pour personnaliser votre expérience.", {
-        position: "top-center",
-      });
-      return;
+    if (validateForNextStep()) {
+      onNext();
     }
-    onNext();
-  };
-
-  const filterOptions = {
-    searchTerm: debouncedSearchTerm,
-    timeFilter: selectedTimeFilter,
-    categoryFilter: selectedCategory,
-    showOnlyFavorites
   };
 
   return (
     <div className="w-full max-w-4xl mx-auto px-4">
       <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
       
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="text-center mb-6"
-      >
-        <h2 className="font-['Playfair_Display'] text-2xl md:text-3xl text-black mb-2">
-          Vos recettes favorites 🍽️
-        </h2>
-        <p className="font-['AvantGarde_Bk_BT'] text-[#4A5568] mb-4">
-          Sélectionnez les plats qui vous font envie pour personnaliser vos recommandations.
-        </p>
-      </motion.div>
+      <RecipeScreenHeader 
+        title="Vos recettes favorites 🍽️"
+        description="Sélectionnez les plats qui vous font envie pour personnaliser vos recommandations."
+      />
       
       {/* Search and Filter Controls */}
       <RecipeFilters 
