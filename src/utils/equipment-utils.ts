@@ -1,4 +1,6 @@
 
+import { Equipment } from '@/types/equipment';
+
 // Function to format equipment names for better display
 export const formatEquipmentName = (name: string) => {
   // If name contains slash or dash, split on that character

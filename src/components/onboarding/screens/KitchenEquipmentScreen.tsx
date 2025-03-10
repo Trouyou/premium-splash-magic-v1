@@ -1,10 +1,11 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import ProgressBar from '../ProgressBar';
 import NavigationButtons from '../NavigationButtons';
 import EquipmentCategory from '../EquipmentCategory';
 import SelectedEquipmentBar from '../SelectedEquipmentBar';
-import { groupEquipmentByCategory } from '@/data/kitchenEquipment';
+import { kitchenEquipment, groupEquipmentByCategory } from '@/data/kitchenEquipment';
 
 interface KitchenEquipmentScreenProps {
   currentStep: number;
@@ -26,7 +27,7 @@ const KitchenEquipmentScreen: React.FC<KitchenEquipmentScreenProps> = ({
   const [selectedEquipment, setSelectedEquipment] = useState<string[]>(equipment || []);
   const containerRef = useRef<HTMLDivElement>(null);
   
-  const groupedEquipment = groupEquipmentByCategory();
+  const groupedEquipment = groupEquipmentByCategory(kitchenEquipment);
   
   const handleToggleEquipment = (equipmentId: string) => {
     setSelectedEquipment(prev => {
