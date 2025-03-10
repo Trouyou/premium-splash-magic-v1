@@ -5,14 +5,3 @@
 @import './styles/legal.css';
 @import './styles/animations.css';
 @import './styles/auth-callback.css';
-
-/* Equipment icon and name styles */
-.equipment-name {
-  font-size: 0.875rem;
-  line-height: 1.4;
-  text-align: center;
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  hyphens: auto;
-  max-width: 100%;
-}
