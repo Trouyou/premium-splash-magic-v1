@@ -1,3 +1,4 @@
+
 import React from 'react';
 
 export interface Equipment {
@@ -43,272 +44,296 @@ export const groupEquipmentByCategory = () => {
   return grouped;
 };
 
-// Updated SVG icons for each kitchen equipment - Using improved realistic designs
+// Updated SVG icons for each kitchen equipment - Using improved realistic designs based on the provided images
 const svgIcons = {
   // Appareils électriques
   thermomix: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="2" fill="none">
-      <path d="M20,12 h24 a2,2 0 0 1 2,2 v36 a2,2 0 0 1-2,2 h-24 a2,2 0 0 1-2-2 v-36 a2,2 0 0 1 2-2 z"/>
-      <rect x="24" y="18" width="16" height="28" rx="1"/>
-      <circle cx="32" y="38" r="4"/>
-      <path d="M28,22 h8 M28,26 h8 M28,30 h8"/>
+      <rect x="16" y="12" width="32" height="40" rx="2" />
+      <rect x="21" y="18" width="22" height="14" rx="1" />
+      <circle cx="32" cy="42" r="6" />
+      <rect x="30" y="36" width="4" height="2" />
+      <rect x="26" y="26" width="12" height="4" rx="1" />
+      <circle cx="32" cy="42" r="3" />
     </svg>
   `,
   blender: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="2" fill="none">
-      <path d="M24,16 L20,44 H44 L40,16 Z"/>
-      <path d="M24,16 C24,14 26,12 32,12 S40,14 40,16"/>
-      <circle cx="32" cy="12" r="2"/>
-      <path d="M23,44 H41 C41,46 37,50 32,50 S23,46 23,44"/>
-      <path d="M32,20 L32,36 M28,24 L36,24 M28,28 L36,28 M28,32 L36,32"/>
+      <path d="M28,46 L36,46 L38,16 L26,16 Z" />
+      <path d="M26,16 A6,2 0 0,1 38,16" />
+      <path d="M24,46 L40,46 A4,2 0 0,1 40,50 L24,50 A4,2 0 0,1 24,46" />
+      <path d="M32,18 L32,40" stroke-dasharray="2,1" />
+      <circle cx="32" cy="12" r="2" />
     </svg>
   `,
   robot: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="2" fill="none">
-      <rect x="15" y="20" width="34" height="30" rx="2" ry="2"/>
-      <path d="M28,20 V14 C28,12 32,10 34,10 L42,10 C44,10 46,12 46,14 V20"/>
-      <circle cx="40" cy="14" r="2"/>
-      <rect x="25" y="34" width="14" height="10" rx="1" ry="1"/>
-      <path d="M20,26 H44 M20,30 H44"/>
-      <circle cx="32" cy="45" r="2"/>
+      <rect x="16" y="34" width="32" height="18" rx="2" />
+      <path d="M20,34 L20,20 C20,14 26,10 32,10 C38,10 44,14 44,20 L44,34" />
+      <rect x="28" y="38" width="8" height="10" rx="1" />
+      <circle cx="32" cy="42" r="2" />
+      <path d="M20,26 L44,26" />
+      <path d="M38,20 C38,14 30,14 30,20" />
     </svg>
   `,
   airfryer: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="2" fill="none">
-      <rect x="16" y="12" width="32" height="40" rx="2" ry="2"/>
-      <rect x="20" y="18" width="24" height="24" rx="2" ry="2"/>
-      <line x1="20" y1="48" x2="44" y2="48"/>
-      <path d="M25,23 H39 M25,27 H39 M25,31 H39 M25,35 H39"/>
-      <rect x="30" y="44" width="4" height="4" rx="2" ry="2"/>
+      <rect x="16" y="10" width="32" height="44" rx="2" />
+      <rect x="22" y="16" width="20" height="28" rx="2" />
+      <path d="M24,50 L40,50" />
+      <circle cx="32" cy="50" r="2" />
+      <line x1="24" y1="22" x2="40" y2="22" />
+      <line x1="24" y1="28" x2="40" y2="28" />
+      <line x1="24" y1="34" x2="40" y2="34" />
     </svg>
   `,
   steamer: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="2" fill="none">
-      <path d="M22,42 H42 C44,42 46,40 46,38 V34 C46,32 44,30 42,30 H22 C20,30 18,32 18,34 V38 C18,40 20,42 22,42 Z"/>
-      <path d="M22,30 H42 C44,30 46,28 46,26 V22 C46,20 44,18 42,18 H22 C20,18 18,20 18,22 V26 C18,28 20,30 22,30 Z"/>
-      <path d="M18,34 L18,42 M46,34 L46,42"/>
-      <path d="M24,12 C24,10 25,9 26,10 C27,11 27,9 28,8 C29,7 29,9 30,10 C31,11 32,10 32,12"/>
-      <path d="M32,12 C32,10 33,9 34,10 C35,11 35,9 36,8 C37,7 37,9 38,10 C39,11 40,10 40,12"/>
-      <circle cx="26" cy="24" r="1"/>
-      <circle cx="32" cy="24" r="1"/>
-      <circle cx="38" cy="24" r="1"/>
-      <circle cx="26" cy="36" r="1"/>
-      <circle cx="32" cy="36" r="1"/>
-      <circle cx="38" cy="36" r="1"/>
-      <rect x="16" y="42" width="32" height="6" rx="1" ry="1"/>
+      <path d="M20,42 H44 C46,42 48,40 48,38 V34 C48,32 46,30 44,30 H20 C18,30 16,32 16,34 V38 C16,40 18,42 20,42 Z" />
+      <path d="M20,30 H44 C46,30 48,28 48,26 V22 C48,20 46,18 44,18 H20 C18,18 16,20 16,22 V26 C16,28 18,30 20,30 Z" />
+      <path d="M26,10 C26,8 28,6 32,8 C36,10 38,8 38,10" />
+      <path d="M26,24 A2,1 0 0,0 26,25" />
+      <path d="M32,24 A2,1 0 0,0 32,25" />
+      <path d="M38,24 A2,1 0 0,0 38,25" />
+      <path d="M26,36 A2,1 0 0,0 26,37" />
+      <path d="M32,36 A2,1 0 0,0 32,37" />
+      <path d="M38,36 A2,1 0 0,0 38,37" />
+      <rect x="16" y="42" width="32" height="8" rx="1" />
     </svg>
   `,
   microwave: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="2" fill="none">
-      <rect x="14" y="18" width="36" height="28" rx="2" ry="2"/>
-      <rect x="18" y="22" width="18" height="20" rx="1" ry="1"/>
-      <line x1="40" y1="26" x2="40" y2="32" stroke-width="3" stroke-linecap="round"/>
-      <circle cx="42" cy="26" r="1.5" fill="currentColor"/>
-      <circle cx="42" cy="30" r="1.5" fill="currentColor"/>
-      <circle cx="42" cy="34" r="1.5" fill="currentColor"/>
-      <path d="M27,32 C27,30 29,28 32,28 S37,30 37,32"/>
-      <path d="M29,32 L35,32"/>
+      <rect x="10" y="16" width="44" height="32" rx="2" />
+      <rect x="14" y="20" width="26" height="24" rx="1" />
+      <circle cx="48" cy="26" r="2" />
+      <circle cx="48" cy="32" r="2" />
+      <circle cx="48" cy="38" r="2" />
+      <path d="M42,24 L44,24" />
+      <path d="M42,28 L44,28" />
+      <path d="M42,32 L44,32" />
+      <path d="M42,36 L44,36" />
+      <path d="M42,40 L44,40" />
+      <path d="M18,32 L36,32" stroke-dasharray="1,1" />
     </svg>
   `,
   oven: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="2" fill="none">
-      <rect x="12" y="12" width="40" height="40" rx="2" ry="2"/>
-      <rect x="16" y="26" width="32" height="22" rx="1" ry="1"/>
-      <line x1="16" y1="20" x2="48" y2="20"/>
-      <circle cx="20" cy="16" r="2"/>
-      <circle cx="28" cy="16" r="2"/>
-      <circle cx="36" cy="16" r="2"/>
-      <circle cx="44" cy="16" r="2"/>
-      <path d="M26,36 L30,32 L34,36 L30,40 Z"/>
+      <rect x="10" y="10" width="44" height="44" rx="2" />
+      <rect x="16" y="26" width="32" height="24" rx="1" />
+      <path d="M10,22 L54,22" />
+      <circle cx="16" cy="16" r="2" />
+      <circle cx="24" cy="16" r="2" />
+      <circle cx="32" cy="16" r="2" />
+      <circle cx="40" cy="16" r="2" />
+      <path d="M24,36 L30,30 L40,36 L34,42 Z" stroke-linecap="round" />
     </svg>
   `,
   stove: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="2" fill="none">
-      <rect x="12" y="12" width="40" height="40" rx="2" ry="2"/>
-      <circle cx="22" cy="22" r="6"/>
-      <circle cx="42" cy="22" r="6"/>
-      <circle cx="22" cy="42" r="6"/>
-      <circle cx="42" cy="42" r="6"/>
-      <line x1="12" y1="52" x2="52" y2="52"/>
-      <rect x="18" y="52" width="4" height="2"/>
-      <rect x="26" y="52" width="12" height="2"/>
-      <rect x="42" y="52" width="4" height="2"/>
+      <rect x="10" y="10" width="44" height="44" rx="2" />
+      <rect x="14" y="44" width="36" height="6" />
+      <circle cx="21" cy="25" r="7" />
+      <circle cx="43" cy="25" r="7" />
+      <circle cx="21" cy="25" r="3" stroke-dasharray="1,1" />
+      <circle cx="43" cy="25" r="3" stroke-dasharray="1,1" />
+      <rect x="16" y="47" width="4" height="2" fill="currentColor" />
+      <rect x="30" y="47" width="4" height="2" fill="currentColor" />
+      <rect x="44" y="47" width="4" height="2" fill="currentColor" />
     </svg>
   `,
 
-  // Ustensiles essentiels - Improved with more realistic designs
+  // Ustensiles essentiels
   knife: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="2" fill="none">
-      <path d="M20,44 L44,20 M38,14 L50,26 M20,44 L14,50"/>
-      <path d="M44,20 L50,14 C52,12 52,8 50,6 C48,4 44,4 42,6 L36,12"/>
-      <path d="M42,22 L46,18" stroke-width="1.5" stroke-dasharray="1,1"/>
+      <path d="M46,18 L18,46" />
+      <path d="M46,18 L50,14 C52,12 52,8 50,6 C48,4 44,4 42,6 L38,10" />
+      <path d="M18,46 L12,52" />
     </svg>
   `,
   cuttingboard: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="2" fill="none">
-      <rect x="12" y="12" width="40" height="40" rx="2"/>
-      <line x1="22" y1="12" x2="22" y2="52"/>
-      <line x1="32" y1="12" x2="32" y2="52"/>
-      <line x1="42" y1="12" x2="42" y2="52"/>
-      <path d="M16,16 L18,16 M16,20 L18,20 M16,24 L18,24" stroke-width="1.5"/>
+      <rect x="16" y="16" width="36" height="32" rx="2" />
+      <path d="M20,16 L20,48" stroke-width="1" stroke-opacity="0.5" />
+      <path d="M26,16 L26,48" stroke-width="1" stroke-opacity="0.5" />
+      <path d="M32,16 L32,48" stroke-width="1" stroke-opacity="0.5" />
+      <path d="M38,16 L38,48" stroke-width="1" stroke-opacity="0.5" />
+      <path d="M44,16 L44,48" stroke-width="1" stroke-opacity="0.5" />
+      <path d="M16,22 L52,22" stroke-width="1" stroke-opacity="0.3" />
+      <path d="M16,28 L52,28" stroke-width="1" stroke-opacity="0.3" />
+      <path d="M16,34 L52,34" stroke-width="1" stroke-opacity="0.3" />
+      <path d="M16,40 L52,40" stroke-width="1" stroke-opacity="0.3" />
+      <path d="M12,30 L14,34" stroke-width="1" stroke-opacity="0.3" />
     </svg>
   `,
   whisk: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="2" fill="none">
-      <path d="M32,8 L32,16"/>
-      <path d="M32,16 C27,22 24,30 27,38 C30,46 27,54 22,58"/>
-      <path d="M32,16 C37,22 40,30 37,38 C34,46 37,54 42,58"/>
-      <path d="M32,16 C29,22 26,30 29,38 C32,46 29,54 24,58"/>
-      <path d="M32,16 C35,22 38,30 35,38 C32,46 35,54 40,58"/>
-      <path d="M32,16 C30,22 28,30 30,38 C32,46 31,54 28,58" stroke-dasharray="1,1" stroke-width="1.5"/>
+      <path d="M32,12 L32,20" />
+      <path d="M32,20 C26,26 22,36 24,46" />
+      <path d="M32,20 C38,26 42,36 40,46" />
+      <path d="M32,20 C29,26 25,36 27,46" />
+      <path d="M32,20 C35,26 39,36 37,46" />
+      <path d="M32,20 C27,26 23,36 25,46" />
+      <path d="M32,20 C37,26 41,36 39,46" />
     </svg>
   `,
   spatula: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="2" fill="none">
-      <rect x="28" y="8" width="8" height="16" rx="3" ry="3"/>
-      <path d="M28,24 L36,24 L40,30 L40,48 C40,51 37,54 34,54 L30,54 C27,54 24,51 24,48 L24,30 L28,24 Z"/>
-      <path d="M24,38 L40,38" stroke-width="1.5"/>
-      <path d="M30,16 L34,16" stroke-width="1.5" stroke-linecap="round"/>
+      <rect x="28" y="10" width="8" height="6" rx="2" />
+      <path d="M28,16 L36,16 L42,24 L42,50 C42,52 40,54 38,54 L26,54 C24,54 22,52 22,50 L22,24 L28,16 Z" />
+      <path d="M22,30 L42,30" />
+      <path d="M22,38 L42,38" />
+      <path d="M26,46 L38,46" />
     </svg>
   `,
   woodenspoons: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="2" fill="none">
-      <path d="M24,10 C20,12 18,14 18,18 C18,22 22,24 26,20 C30,16 34,14 34,10 C34,6 30,8 24,10 Z"/>
-      <path d="M26,20 L30,42 C30,46 26,50 20,50 S10,46 10,42 L14,20"/>
-      <path d="M40,10 C44,12 46,14 46,18 C46,22 42,24 38,20 C34,16 30,14 30,10 C30,6 34,8 40,10 Z"/>
-      <path d="M38,20 L34,42 C34,46 38,50 44,50 S54,46 54,42 L50,20"/>
-      <path d="M23,15 C21,16 20,17 20,18" stroke-width="1.5" stroke-linecap="round"/>
-      <path d="M41,15 C43,16 44,17 44,18" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M22,10 C16,12 12,16 12,20 S16,24 20,22 C24,20 28,16 28,12 S26,8 22,10 Z" />
+      <path d="M20,22 L16,48" />
+      <path d="M42,10 C48,12 52,16 52,20 S48,24 44,22 C40,20 36,16 36,12 S38,8 42,10 Z" />
+      <path d="M44,22 L48,48" />
+      <path d="M32,28 C28,30 24,34 24,38 S28,42 32,40 C36,38 40,34 40,30 S36,26 32,28 Z" />
+      <path d="M32,40 L30,54" />
     </svg>
   `,
   strainer: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="2" fill="none">
-      <path d="M16,24 L48,24 C48,38 40,48 32,48 S16,38 16,24 Z"/>
-      <path d="M12,24 L52,24"/>
-      <path d="M12,24 L8,16" stroke-linecap="round"/>
-      <path d="M52,24 L56,16" stroke-linecap="round"/>
-      <path d="M20,30 L44,30" stroke-dasharray="2,2"/>
-      <path d="M22,36 L42,36" stroke-dasharray="2,2"/>
-      <path d="M24,42 L40,42" stroke-dasharray="2,2"/>
+      <path d="M18,24 C18,22 22,20 32,20 S46,22 46,24" />
+      <path d="M16,24 L48,24 C48,40 40,48 32,48 S16,40 16,24 Z" />
+      <path d="M12,24 L52,24" />
+      <path d="M22,30 L42,30" stroke-dasharray="2,2" />
+      <path d="M24,36 L40,36" stroke-dasharray="2,2" />
+      <path d="M26,42 L38,42" stroke-dasharray="2,2" />
+      <path d="M30,18 C30,16 32,14 34,16" />
     </svg>
   `,
 
   // Équipements de cuisson
   pan: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="2" fill="none">
-      <circle cx="24" cy="32" r="16"/>
-      <path d="M40,32 L54,32" stroke-width="3" stroke-linecap="round"/>
-      <path d="M42,28 L46,28" stroke-linecap="round"/>
-      <path d="M42,36 L46,36" stroke-linecap="round"/>
-      <circle cx="24" cy="32" r="12" stroke-dasharray="2,2"/>
+      <circle cx="24" cy="32" r="16" />
+      <path d="M40,32 L54,32" stroke-width="3" />
+      <path d="M24,32 A8,8 0 0,1 24,32" />
+      <circle cx="24" cy="32" r="12" stroke-dasharray="2,2" />
     </svg>
   `,
   saucepan: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="2" fill="none">
-      <path d="M16,44 L16,24 C16,20 20,16 24,16 L40,16 C44,16 48,20 48,24 L48,44"/>
-      <ellipse cx="32" cy="44" rx="16" ry="4"/>
-      <path d="M48,28 L56,28" stroke-width="3" stroke-linecap="round"/>
-      <path d="M28,10 C28,8 30,6 32,8 C34,10 36,8 38,10" stroke-linecap="round"/>
+      <path d="M18,46 L18,26 C18,22 22,18 26,18 L38,18 C42,18 46,22 46,26 L46,46" />
+      <ellipse cx="32" cy="46" rx="14" ry="4" />
+      <path d="M46,30 L54,30" stroke-width="3" />
+      <ellipse cx="32" cy="30" rx="10" ry="2" fill="none" stroke-dasharray="2,2" />
     </svg>
   `,
   pot: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="2" fill="none">
-      <path d="M16,44 L16,24 C16,20 20,16 24,16 L40,16 C44,16 48,20 48,24 L48,44"/>
-      <ellipse cx="32" cy="44" rx="16" ry="4"/>
-      <ellipse cx="32" cy="16" rx="16" ry="4"/>
-      <path d="M16,28 C12,28 12,32 16,32" stroke-linecap="round"/>
-      <path d="M48,28 C52,28 52,32 48,32" stroke-linecap="round"/>
-      <circle cx="32" cy="12" r="2" fill="currentColor"/>
+      <path d="M14,46 L14,20 C14,16 18,12 22,12 L42,12 C46,12 50,16 50,20 L50,46" />
+      <ellipse cx="32" cy="46" rx="18" ry="4" />
+      <path d="M14,28 C10,28 10,32 14,32" />
+      <path d="M50,28 C54,28 54,32 50,32" />
+      <path d="M32,16 C32,14 33,12 36,14" />
+      <path d="M22,12 L22,46" stroke-dasharray="2,2" />
+      <path d="M42,12 L42,46" stroke-dasharray="2,2" />
     </svg>
   `,
   wok: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="2" fill="none">
-      <path d="M12,48 C12,36 20,24 32,24 S52,36 52,48"/>
-      <ellipse cx="32" cy="48" rx="20" ry="4"/>
-      <path d="M16,40 C12,40 12,44 16,44" stroke-linecap="round"/>
-      <path d="M48,40 C52,40 52,44 48,44" stroke-linecap="round"/>
+      <path d="M12,48 C12,36 20,24 32,24 S52,36 52,48" />
+      <ellipse cx="32" cy="48" rx="20" ry="4" />
+      <path d="M12,40 C8,40 8,44 12,44" />
+      <path d="M52,40 C56,40 56,44 52,44" />
+      <path d="M22,36 C22,34 26,32 32,32 S42,34 42,36" />
     </svg>
   `,
   bakingdish: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="2" fill="none">
-      <rect x="12" y="22" width="40" height="24" rx="4" ry="4"/>
-      <rect x="16" y="26" width="32" height="16" rx="2" ry="2"/>
-      <path d="M12,30 C8,30 8,34 12,34" stroke-linecap="round"/>
-      <path d="M52,30 C56,30 56,34 52,34" stroke-linecap="round"/>
+      <rect x="14" y="24" width="36" height="20" rx="2" />
+      <rect x="18" y="28" width="28" height="12" rx="1" />
+      <path d="M14,32 C10,32 10,36 14,36" />
+      <path d="M50,32 C54,32 54,36 50,36" />
     </svg>
   `,
   caketin: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="2" fill="none">
-      <circle cx="32" cy="32" r="20"/>
-      <circle cx="32" cy="32" r="6"/>
-      <circle cx="32" cy="32" r="13" stroke-dasharray="2,2"/>
-      <path d="M32,12 L32,16 M42,14 L40,18 M50,22 L46,24 M52,32 L48,32 M50,42 L46,40 M42,50 L40,46 M32,52 L32,48 M22,50 L24,46 M14,42 L18,40 M12,32 L16,32 M14,22 L18,24 M22,14 L24,18" stroke-linecap="round" stroke-opacity="0.6"/>
+      <path d="M18,48 C18,36 24,24 32,24 S46,36 46,48" />
+      <ellipse cx="32" cy="48" rx="14" ry="2" />
+      <path d="M20,40 A24,16 0 0,1 44,40" />
+      <path d="M24,32 A16,10 0 0,1 40,32" />
+      <path d="M28,24 A8,6 0 0,1 36,24" />
     </svg>
   `,
 
   // Outils de mesure et préparation
   scale: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="2" fill="none">
-      <rect x="10" y="36" width="44" height="12" rx="2" ry="2"/>
-      <rect x="16" y="24" width="32" height="12" rx="1" ry="1"/>
-      <rect x="20" y="40" width="16" height="4" rx="1" ry="1" fill="currentColor" fill-opacity="0.4"/>
-      <circle cx="44" cy="42" r="2" fill="currentColor"/>
-      <path d="M26,32 L38,32 M32,28 L32,36"/>
+      <rect x="12" y="40" width="40" height="10" rx="2" />
+      <path d="M16,40 L16,36" />
+      <path d="M24,40 L24,36" />
+      <path d="M32,40 L32,36" />
+      <path d="M40,40 L40,36" />
+      <path d="M48,40 L48,36" />
+      <rect x="18" y="18" width="28" height="18" rx="2" />
+      <circle cx="32" cy="27" r="6" />
+      <path d="M32,21 L32,23" />
+      <path d="M32,31 L32,33" />
+      <path d="M26,27 L28,27" />
+      <path d="M36,27 L38,27" />
     </svg>
   `,
   measuringcup: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="2" fill="none">
-      <path d="M20,52 L28,16 L44,16 L52,52 Z"/>
-      <line x1="24" y1="34" x2="28" y2="34"/>
-      <line x1="26" y1="25" x2="30" y2="25"/>
-      <line x1="38" y1="34" x2="42" y2="34"/>
-      <line x1="38" y1="25" x2="42" y2="25"/>
-      <path d="M52,42 L56,42" stroke-linecap="round"/>
+      <path d="M20,52 L28,16 L44,16 L52,52 Z" />
+      <line x1="24" y1="34" x2="28" y2="34" />
+      <line x1="26" y1="25" x2="30" y2="25" />
+      <line x1="38" y1="34" x2="42" y2="34" />
+      <line x1="38" y1="25" x2="42" y2="25" />
+      <path d="M52,42 L56,42" />
+      <path d="M22,42 L48,42" />
     </svg>
   `,
   mixingbowls: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="2" fill="none">
-      <path d="M14,46 C14,34 22,22 32,22 S50,34 50,46"/>
-      <ellipse cx="32" cy="46" rx="18" ry="6"/>
-      <path d="M20,38 C20,30 26,22 32,22 S44,30 44,38" stroke-opacity="0.7"/>
-      <ellipse cx="32" cy="38" rx="12" ry="4" stroke-opacity="0.7"/>
-      <path d="M26,30 C26,26 28,22 32,22 S38,26 38,30" stroke-opacity="0.5"/>
-      <ellipse cx="32" cy="30" rx="6" ry="2" stroke-opacity="0.5"/>
+      <ellipse cx="32" cy="36" rx="18" ry="8" />
+      <path d="M14,36 A18,8 0 0,1 50,36" />
+      <ellipse cx="32" cy="36" rx="22" ry="2" />
     </svg>
   `,
   grater: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="2" fill="none">
-      <path d="M24,16 L36,16 L36,48 L24,48 C20,48 16,44 16,40 L16,24 C16,20 20,16 24,16 Z"/>
-      <line x1="24" y1="24" x2="30" y2="24"/>
-      <line x1="24" y1="30" x2="30" y2="30"/>
-      <line x1="24" y1="36" x2="30" y2="36"/>
-      <line x1="24" y1="42" x2="30" y2="42"/>
-      <rect x="36" y="16" width="12" height="12" rx="2" ry="2"/>
+      <path d="M24,16 L40,16 L40,48 L24,48 C20,48 16,44 16,40 L16,24 C16,20 20,16 24,16 Z" />
+      <line x1="24" y1="24" x2="32" y2="24" />
+      <line x1="24" y1="30" x2="32" y2="30" />
+      <line x1="24" y1="36" x2="32" y2="36" />
+      <line x1="24" y1="42" x2="32" y2="42" />
+      <path d="M24,24 L22,26" />
+      <path d="M24,30 L22,32" />
+      <path d="M24,36 L22,38" />
+      <path d="M24,42 L22,44" />
+      <rect x="36" y="16" width="8" height="8" />
     </svg>
   `,
   rollingpin: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="2" fill="none">
-      <rect x="20" y="26" width="24" height="12" rx="6" ry="6"/>
-      <rect x="8" y="22" width="12" height="20" rx="4" ry="4"/>
-      <rect x="44" y="22" width="12" height="20" rx="4" ry="4"/>
-      <line x1="20" y1="32" x2="8" y2="32"/>
-      <line x1="44" y1="32" x2="56" y2="32"/>
+      <path d="M12,24 L52,24" />
+      <rect x="20" y="22" width="24" height="4" rx="2" />
+      <rect x="8" y="18" width="12" height="12" rx="2" />
+      <rect x="44" y="18" width="12" height="12" rx="2" />
     </svg>
   `,
   thermometer: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="2" fill="none">
-      <rect x="28" y="12" width="8" height="32" rx="4" ry="4"/>
-      <circle cx="32" cy="44" r="6"/>
-      <rect x="22" y="4" width="20" height="8" rx="2" ry="2"/>
-      <line x1="27" y1="8" x2="37" y2="8"/>
-      <line x1="28" y1="20" x2="24" y2="20"/>
-      <line x1="28" y1="28" x2="24" y2="28"/>
-      <line x1="28" y1="36" x2="24" y2="36"/>
+      <path d="M32,12 L32,44" />
+      <circle cx="32" cy="50" r="6" />
+      <path d="M32,44 L32,50" />
+      <circle cx="32" cy="50" r="2" fill="currentColor" />
+      <path d="M32,12 L32,6" stroke-width="4" />
+      <path d="M26,34 L32,34" />
+      <path d="M26,26 L32,26" />
+      <path d="M26,18 L32,18" />
     </svg>
   `,
 };
 
-// Keep the existing equipment array structure
+// Export the kitchen equipment array
 export const kitchenEquipment: Equipment[] = [
   // Appareils électriques
   { 

@@ -42,12 +42,12 @@ const EquipmentBubble: React.FC<EquipmentBubbleProps> = ({
   return (
     <TooltipProvider>
       <motion.div
-        whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
+        whileHover={{ scale: 1.02 }}
         onClick={onClick}
         className={cn(
           "relative flex flex-col items-center justify-start p-4 rounded-xl",
-          "bg-white border-2 hover:shadow-md min-h-[170px]", // Increased height for better text display
+          "bg-white border-2 hover:shadow-md min-h-[170px]",
           "transition-all duration-300 ease-in-out",
           selected 
             ? "border-[#D11B19] shadow-md" 
