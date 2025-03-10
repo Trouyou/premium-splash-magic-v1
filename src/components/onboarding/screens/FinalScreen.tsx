@@ -40,13 +40,13 @@ const FinalScreen: React.FC<FinalScreenProps> = ({ onComplete }) => {
     <div className="flex flex-col items-center justify-center min-h-[80vh] text-center px-4">
       {/* Logo en haut et centré */}
       <motion.div 
-        className="fixed top-8 left-0 right-0 mx-auto w-32 h-32 flex items-center justify-center"
+        className="fixed top-8 left-0 right-0 mx-auto w-40 h-auto flex items-center justify-center"
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.2 }}
       >
         <OptimizedImage 
-          src="/lovable-uploads/6a4af3aa-1beb-41d9-830e-823931a137d0.png"
+          src="/lovable-uploads/c1be783b-9b2b-44ce-9e6c-deea409157bd.png"
           alt="Eatly"
           className={`w-full h-auto object-contain transition-opacity duration-300 ${logoLoaded ? 'opacity-100' : 'opacity-0'}`}
           onLoad={handleLogoLoad}
