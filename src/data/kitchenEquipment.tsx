@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 export interface Equipment {
@@ -265,70 +264,77 @@ const svgIcons = {
   // Outils de mesure et préparation
   scale: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="2" fill="none">
-      <rect x="12" y="40" width="40" height="10" rx="2" />
-      <path d="M16,40 L16,36" />
-      <path d="M24,40 L24,36" />
-      <path d="M32,40 L32,36" />
-      <path d="M40,40 L40,36" />
-      <path d="M48,40 L48,36" />
-      <rect x="18" y="18" width="28" height="18" rx="2" />
-      <circle cx="32" cy="27" r="6" />
-      <path d="M32,21 L32,23" />
-      <path d="M32,31 L32,33" />
-      <path d="M26,27 L28,27" />
-      <path d="M36,27 L38,27" />
+      <path d="M16,48 h32 c2,0 4,-2 4,-4 v-8 c0,-2 -2,-4 -4,-4 h-32 c-2,0 -4,2 -4,4 v8 c0,2 2,4 4,4 z" />
+      <path d="M12,40 L52,40" />
+      <rect x="20" y="24" width="24" height="8" rx="2" />
+      <circle cx="32" cy="36" r="8" />
+      <circle cx="32" cy="36" r="6" stroke-dasharray="2,2" />
+      <path d="M32,30 L32,32" />
+      <path d="M38,36 L36,36" />
+      <path d="M32,42 L32,40" />
+      <path d="M26,36 L28,36" />
+      <circle cx="32" cy="36" r="1" fill="currentColor" />
     </svg>
   `,
   measuringcup: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="2" fill="none">
-      <path d="M20,52 L28,16 L44,16 L52,52 Z" />
-      <line x1="24" y1="34" x2="28" y2="34" />
-      <line x1="26" y1="25" x2="30" y2="25" />
-      <line x1="38" y1="34" x2="42" y2="34" />
-      <line x1="38" y1="25" x2="42" y2="25" />
-      <path d="M52,42 L56,42" />
-      <path d="M22,42 L48,42" />
+      <path d="M16,46 L16,14 L50,14 L50,24 C54,24 56,32 48,32 L48,46 Z" />
+      <path d="M20,20 L44,20" />
+      <path d="M20,28 L44,28" />
+      <path d="M20,36 L44,36" />
+      <path d="M20,44 L44,44" />
+      <path d="M48,24 L44,28" />
     </svg>
   `,
   mixingbowls: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="2" fill="none">
-      <ellipse cx="32" cy="36" rx="18" ry="8" />
-      <path d="M14,36 A18,8 0 0,1 50,36" />
-      <ellipse cx="32" cy="36" rx="22" ry="2" />
+      <ellipse cx="32" cy="32" rx="24" ry="12" />
+      <ellipse cx="32" cy="32" rx="22" ry="10" />
+      <path d="M12,32 C16,36 24,40 32,40 S48,36 52,32" />
+      <path d="M32,20 L32,44" stroke-opacity="0.4" />
     </svg>
   `,
   grater: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="2" fill="none">
-      <path d="M24,16 L40,16 L40,48 L24,48 C20,48 16,44 16,40 L16,24 C16,20 20,16 24,16 Z" />
-      <line x1="24" y1="24" x2="32" y2="24" />
-      <line x1="24" y1="30" x2="32" y2="30" />
-      <line x1="24" y1="36" x2="32" y2="36" />
-      <line x1="24" y1="42" x2="32" y2="42" />
-      <path d="M24,24 L22,26" />
-      <path d="M24,30 L22,32" />
-      <path d="M24,36 L22,38" />
-      <path d="M24,42 L22,44" />
-      <rect x="36" y="16" width="8" height="8" />
+      <path d="M22,12 L42,12 L42,52 L22,52 Z" />
+      <path d="M22,12 C20,12 18,14 18,16 L18,48 C18,50 20,52 22,52" />
+      <path d="M25,18 L27,20" />
+      <path d="M31,18 L33,20" />
+      <path d="M37,18 L39,20" />
+      <path d="M25,24 L27,26" />
+      <path d="M31,24 L33,26" />
+      <path d="M37,24 L39,26" />
+      <path d="M25,30 L27,32" />
+      <path d="M31,30 L33,32" />
+      <path d="M37,30 L39,32" />
+      <path d="M25,36 L27,38" />
+      <path d="M31,36 L33,38" />
+      <path d="M37,36 L39,38" />
+      <path d="M25,42 L27,44" />
+      <path d="M31,42 L33,44" />
+      <path d="M37,42 L39,44" />
+      <path d="M26,12 L26,52" stroke-opacity="0.4" />
+      <path d="M32,12 L32,52" stroke-opacity="0.4" />
+      <path d="M38,12 L38,52" stroke-opacity="0.4" />
     </svg>
   `,
   rollingpin: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="2" fill="none">
-      <path d="M12,24 L52,24" />
-      <rect x="20" y="22" width="24" height="4" rx="2" />
-      <rect x="8" y="18" width="12" height="12" rx="2" />
-      <rect x="44" y="18" width="12" height="12" rx="2" />
+      <path d="M12,32 L52,32" />
+      <rect x="16" y="28" width="32" height="8" rx="4" />
+      <rect x="8" y="28" width="8" height="8" rx="2" />
+      <rect x="48" y="28" width="8" height="8" rx="2" />
     </svg>
   `,
   thermometer: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="2" fill="none">
-      <path d="M32,12 L32,44" />
+      <line x1="32" y1="12" x2="32" y2="40" />
+      <circle cx="32" cy="50" r="10" />
       <circle cx="32" cy="50" r="6" />
-      <path d="M32,44 L32,50" />
-      <circle cx="32" cy="50" r="2" fill="currentColor" />
-      <path d="M32,12 L32,6" stroke-width="4" />
-      <path d="M26,34 L32,34" />
-      <path d="M26,26 L32,26" />
-      <path d="M26,18 L32,18" />
+      <line x1="24" y1="18" x2="28" y2="18" />
+      <line x1="24" y1="26" x2="28" y2="26" />
+      <line x1="24" y1="34" x2="28" y2="34" />
+      <circle cx="32" cy="50" r="3" fill="currentColor" />
     </svg>
   `,
 };
