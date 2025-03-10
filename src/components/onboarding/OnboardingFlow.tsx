@@ -9,6 +9,7 @@ import HouseholdScreen from './screens/HouseholdScreen';
 import DietaryPreferencesScreen from './screens/DietaryPreferencesScreen';
 import NutritionalGoalsScreen from './screens/NutritionalGoalsScreen';
 import KitchenEquipmentScreen from './screens/KitchenEquipmentScreen';
+import FavoriteRecipesScreen from './screens/FavoriteRecipesScreen';
 import CookingTimeScreen from './screens/CookingTimeScreen';
 import FinalScreen from './screens/FinalScreen';
 
@@ -20,6 +21,7 @@ const OnboardingFlow: React.FC = () => {
     setHouseholdSize,
     toggleDietaryPreference,
     toggleKitchenEquipment,
+    toggleFavoriteRecipe,
     setCookingTime,
     toggleNutritionalGoal,
     nextStep,
@@ -86,6 +88,19 @@ const OnboardingFlow: React.FC = () => {
     
     if (currentStep === 5) {
       return (
+        <FavoriteRecipesScreen
+          currentStep={currentStep}
+          totalSteps={totalSteps}
+          favoriteRecipes={onboardingData.favoriteRecipes}
+          toggleFavoriteRecipe={toggleFavoriteRecipe}
+          onNext={nextStep}
+          onPrev={prevStep}
+        />
+      );
+    }
+    
+    if (currentStep === 6) {
+      return (
         <CookingTimeScreen
           currentStep={currentStep}
           totalSteps={totalSteps}
@@ -97,7 +112,7 @@ const OnboardingFlow: React.FC = () => {
       );
     }
     
-    if (currentStep === 6) {
+    if (currentStep === 7) {
       return <FinalScreen onComplete={completeOnboarding} />;
     }
     

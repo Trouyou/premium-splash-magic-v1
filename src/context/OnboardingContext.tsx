@@ -10,6 +10,7 @@ interface OnboardingData {
   kitchenEquipment: string[];
   cookingTime: string;
   nutritionalGoals: string[];
+  favoriteRecipes: string[];
   onboardingCompleted: boolean;
 }
 
@@ -22,6 +23,7 @@ interface OnboardingContextType {
   toggleKitchenEquipment: (equipment: string) => void;
   setCookingTime: (time: string) => void;
   toggleNutritionalGoal: (goal: string) => void;
+  toggleFavoriteRecipe: (recipeId: string) => void;
   nextStep: () => void;
   prevStep: () => void;
   completeOnboarding: () => void;
@@ -34,6 +36,7 @@ const defaultOnboardingData: OnboardingData = {
   kitchenEquipment: [],
   cookingTime: 'standard',
   nutritionalGoals: [],
+  favoriteRecipes: [],
   onboardingCompleted: false,
 };
 
@@ -42,7 +45,7 @@ const OnboardingContext = createContext<OnboardingContextType | undefined>(undef
 export const OnboardingProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [onboardingData, setOnboardingData] = useState<OnboardingData>(defaultOnboardingData);
   const [currentStep, setCurrentStep] = useState(1);
-  const totalSteps = 6;
+  const totalSteps = 7; // Updated to include the new favorites screen
   const navigate = useNavigate();
   const { user } = useAuth();
   const { toast } = useToast();
@@ -100,6 +103,21 @@ export const OnboardingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     });
   };
 
+  const toggleFavoriteRecipe = (recipeId: string) => {
+    setOnboardingData(prev => {
+      const favorites = [...prev.favoriteRecipes];
+      const index = favorites.indexOf(recipeId);
+      
+      if (index === -1) {
+        favorites.push(recipeId);
+      } else {
+        favorites.splice(index, 1);
+      }
+      
+      return { ...prev, favoriteRecipes: favorites };
+    });
+  };
+
   const nextStep = () => {
     if (currentStep < totalSteps) {
       setCurrentStep(prev => prev + 1);
@@ -151,6 +169,7 @@ export const OnboardingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         toggleKitchenEquipment,
         setCookingTime,
         toggleNutritionalGoal,
+        toggleFavoriteRecipe,
         nextStep,
         prevStep,
         completeOnboarding,
