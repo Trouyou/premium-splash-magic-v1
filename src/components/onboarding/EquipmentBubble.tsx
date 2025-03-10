@@ -3,6 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { 
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { formatEquipmentName } from '@/data/kitchenEquipment';
 
 interface EquipmentBubbleProps {
@@ -21,8 +27,6 @@ const EquipmentBubble: React.FC<EquipmentBubbleProps> = ({
   onClick,
 }) => {
   const [justSelected, setJustSelected] = useState(false);
-  
-  // Format the name to ensure no truncation - add line breaks for long names
   const formattedName = formatEquipmentName(name);
 
   // Animation effect when selected
@@ -37,48 +41,68 @@ const EquipmentBubble: React.FC<EquipmentBubbleProps> = ({
   }, [selected]);
 
   return (
-    <motion.div
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.97 }}
-      onClick={onClick}
-      className={cn(
-        "flex flex-col items-center justify-center p-4 cursor-pointer",
-        "transition-all duration-300 ease-in-out",
-        "rounded-full w-[100px] h-[100px] md:w-[115px] md:h-[115px]", // Increased circle size by ~15%
-        "border-2 shadow-sm hover:shadow",
-        selected 
-          ? "bg-[#EDE6D6] border-[#D11B19] border-[3px] transform scale-105 shadow-md" 
-          : "bg-white border-[#EDE6D6]",
-        justSelected && "animate-[selectPop_0.3s_forwards]"
-      )}
-      style={selected ? { boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1), 0 0 0 2px rgba(209, 27, 25, 0.2)" } : {}}
-      data-id={id}
-      data-name={name}
-    >
-      <div className="text-[#2A5D50] mb-2 equipment-icon" style={{ 
-        height: '42px', // Slightly increased icon container height
-        display: 'flex', 
-        alignItems: 'center' 
-      }}>
-        <div dangerouslySetInnerHTML={{ __html: svg }} />
-      </div>
-      
-      <div className="equipment-name font-['AvantGarde_Bk_BT'] text-xs md:text-sm text-[#2A5D50] text-center w-full mt-2 flex flex-col justify-center min-h-[40px] overflow-visible break-words px-2">
-        {formattedName.split('\n').map((line, i) => (
-          <span key={i} className="leading-tight whitespace-normal">{line}</span>
-        ))}
-      </div>
-      
-      {selected && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="absolute top-1 right-1 bg-[#D11B19] text-white rounded-full p-1"
+    <TooltipProvider>
+      <motion.div
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        onClick={onClick}
+        className={cn(
+          "equipment-card relative flex flex-col items-center justify-start",
+          "p-4 rounded-xl transition-all duration-300 ease-in-out",
+          "bg-white border-2 hover:shadow-md",
+          selected 
+            ? "border-[#D11B19] transform scale-102 shadow-md" 
+            : "border-[#EDE6D6]",
+          justSelected && "animate-[selectPop_0.3s_forwards]"
+        )}
+        style={selected ? { boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)" } : {}}
+        data-id={id}
+        data-name={name}
+      >
+        {/* Cercle contenant l'icône */}
+        <div 
+          className={cn(
+            "icon-circle rounded-full flex items-center justify-center mb-3",
+            "w-[120px] h-[120px] md:w-[130px] md:h-[130px]",
+            "bg-[#F5F3E7]"
+          )}
         >
-          <Check size={14} />
-        </motion.div>
-      )}
-    </motion.div>
+          <div className="text-[#2A5D50] equipment-icon" 
+            style={{ height: '50px', width: '50px' }}
+          >
+            <div dangerouslySetInnerHTML={{ __html: svg }} />
+          </div>
+        </div>
+
+        {/* Tooltip pour le texte long sur desktop */}
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div className="equipment-name font-['AvantGarde_Bk_BT'] text-sm md:text-base text-[#2A5D50] text-center w-full">
+              {formattedName.split('\n').map((line, i) => (
+                <span key={i} className="leading-snug block">{line}</span>
+              ))}
+            </div>
+          </TooltipTrigger>
+          <TooltipContent 
+            side="bottom" 
+            className="bg-white text-[#2A5D50] border border-[#EDE6D6]"
+          >
+            {name}
+          </TooltipContent>
+        </Tooltip>
+
+        {/* Indicateur de sélection */}
+        {selected && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="absolute top-2 right-2 bg-[#D11B19] text-white rounded-full p-1"
+          >
+            <Check size={16} />
+          </motion.div>
+        )}
+      </motion.div>
+    </TooltipProvider>
   );
 };
 
