@@ -12,6 +12,7 @@ const StyleInjector = () => {
         height: 100% !important;
         width: 100vw !important;
         max-width: 100vw !important;
+        overflow-x: visible !important;
       }
       
       body > div, #root, .app-container {
@@ -20,6 +21,7 @@ const StyleInjector = () => {
         width: 100vw !important;
         min-height: 100vh !important;
         box-sizing: border-box !important;
+        overflow-x: visible !important;
       }
       
       .hidden.md\\:block.md\\:w-3\\/5 {
@@ -28,8 +30,9 @@ const StyleInjector = () => {
         border: none !important;
         border-radius: 0 !important;
         box-shadow: none !important;
-        overflow: hidden !important;
+        overflow: visible !important;
         height: 100vh !important;
+        width: 60% !important;
       }
       
       /* Force la section droite à être scrollable si nécessaire */
@@ -39,6 +42,7 @@ const StyleInjector = () => {
         display: flex !important;
         flex-direction: column !important;
         justify-content: center !important;
+        width: 40% !important;
       }
     `;
     document.head.appendChild(style);
