@@ -66,6 +66,7 @@ html, body {
   position: relative;
 }
 
+/* Error container for terms and conditions */
 .terms-error-container {
   position: absolute;
   left: 7px;
@@ -74,4 +75,16 @@ html, body {
   color: #D11B19;
   font-size: 14px;
   min-height: 20px;
+}
+
+/* Fix for terms and conditions error positioning */
+div:has(#terms-accept) {
+  position: relative;
+  margin-bottom: 25px;
+}
+
+/* Ensure all form fields have consistent spacing for error messages */
+.form-group {
+  position: relative;
+  margin-bottom: 1.5rem;
 }

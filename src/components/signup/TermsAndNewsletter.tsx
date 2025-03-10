@@ -45,7 +45,7 @@ const TermsAndNewsletter = ({
   };
 
   return (
-    <div className="relative">
+    <div className="relative" id="terms-accept-container">
       <div className="flex items-start my-5 w-full">
         <div className="flex-shrink-0 mt-[3px]">
           <input
@@ -79,8 +79,9 @@ const TermsAndNewsletter = ({
           </a>
         </label>
       </div>
+      
       {termsError && (
-        <div className="absolute left-7 -bottom-5">
+        <div className="terms-error-container">
           <FormErrorDisplay error={termsError} />
         </div>
       )}

@@ -1,5 +1,9 @@
 
-// SCRIPT DE CORRECTION DES MESSAGES D'ERREUR - PAGE SIGNUP UNIQUEMENT
+/**
+ * SCRIPT DE CORRECTION DES MESSAGES D'ERREUR - PAGE SIGNUP
+ * - Empêche les messages d'erreur en doublon
+ * - Stabilise le positionnement du message d'erreur des conditions d'utilisation
+ */
 (function() {
   // Vérifier si nous sommes bien sur la page signup
   if (!window.location.pathname.includes('/signup')) {
@@ -8,76 +12,146 @@
   
   console.log('[EATLY-FIX] Initialisation des corrections pour la page signup...');
   
-  // Attendre que le DOM soit complètement chargé
-  function runWhenReady() {
-    // FONCTION POUR SUPPRIMER LES MESSAGES D'ERREUR EN DOUBLON
-    function removeDuplicateErrors() {
-      // Sélectionner tous les messages d'erreur
-      const errorMessages = document.querySelectorAll('.error-message');
+  // Fonction pour supprimer les messages d'erreur en doublon
+  function removeDuplicateErrors() {
+    // Chercher tous les messages d'erreur
+    const errorMessages = document.querySelectorAll('.error-message');
+    const processedParents = new Set();
+    
+    errorMessages.forEach(errorEl => {
+      const parent = errorEl.parentElement;
       
-      // Créer un Map pour suivre les messages par parent et texte
-      const uniqueMessages = new Map();
-      
-      errorMessages.forEach(error => {
-        // Créer une clé basée sur le parent et le texte
-        const parent = error.parentElement;
-        const text = error.textContent.trim();
-        const key = `${parent ? parent.id || parent.className : 'noparent'}-${text}`;
+      if (parent && !processedParents.has(parent)) {
+        processedParents.add(parent);
         
-        // Si nous avons déjà vu ce message, vérifier lequel garder
-        if (uniqueMessages.has(key)) {
-          const existingError = uniqueMessages.get(key);
+        // Chercher tous les messages d'erreur dans ce parent
+        const siblingErrors = parent.querySelectorAll('.error-message');
+        
+        if (siblingErrors.length > 1) {
+          // Garder seulement le premier message d'erreur visible
+          let hasVisibleError = false;
           
-          // Garder le message sans icône SVG si possible
-          const currentHasSvg = error.querySelector('svg');
-          const existingHasSvg = existingError.querySelector('svg');
-          
-          if (currentHasSvg && !existingHasSvg) {
-            // Cacher le message actuel (avec SVG)
-            error.style.display = 'none';
-          } else if (!currentHasSvg && existingHasSvg) {
-            // Cacher le message existant (avec SVG) et mettre à jour la référence
-            existingError.style.display = 'none';
-            uniqueMessages.set(key, error);
-          }
-        } else {
-          // Premier message de ce type, l'ajouter au Map
-          uniqueMessages.set(key, error);
+          siblingErrors.forEach((siblingError, index) => {
+            if (!hasVisibleError) {
+              siblingError.style.display = 'flex';
+              hasVisibleError = true;
+            } else {
+              siblingError.style.display = 'none';
+            }
+          });
         }
+      }
+    });
+  }
+  
+  // Fonction pour stabiliser l'affichage des erreurs de conditions
+  function stabilizeTermsErrors() {
+    // Chercher le conteneur des conditions
+    const termsContainer = document.querySelector('#terms-accept-container, div:has(#terms-accept)');
+    
+    if (termsContainer) {
+      // S'assurer que le conteneur a une position relative
+      termsContainer.style.position = 'relative';
+      
+      // Chercher s'il existe déjà un conteneur pour les erreurs
+      let errorContainer = termsContainer.querySelector('.terms-error-container');
+      
+      // S'il n'existe pas, le créer
+      if (!errorContainer) {
+        errorContainer = document.createElement('div');
+        errorContainer.className = 'terms-error-container';
+        termsContainer.appendChild(errorContainer);
+      }
+      
+      // Observer les changements dans les messages d'erreur
+      const observer = new MutationObserver(() => {
+        // Chercher les messages d'erreur pour les conditions
+        const termsErrors = Array.from(document.querySelectorAll('.error-message')).filter(el => 
+          el.textContent && el.textContent.includes('conditions')
+        );
+        
+        // Déplacer les messages d'erreur dans notre conteneur dédié
+        termsErrors.forEach(error => {
+          if (error.parentElement !== errorContainer) {
+            const errorText = error.textContent;
+            error.style.display = 'none';
+            
+            // Mettre à jour notre conteneur d'erreur
+            errorContainer.innerHTML = '';
+            const newError = document.createElement('div');
+            newError.className = 'error-message';
+            newError.textContent = errorText;
+            errorContainer.appendChild(newError);
+          }
+        });
+      });
+      
+      // Observer les changements dans le DOM
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+        characterData: true
       });
     }
+  }
+  
+  // Fonction pour corriger le style des messages d'erreur
+  function fixErrorStyles() {
+    const style = document.createElement('style');
+    style.textContent = `
+      /* Masquer les messages d'erreur en double */
+      .error-message + .error-message {
+        display: none !important;
+      }
+      
+      /* Positionnement spécifique pour les erreurs des conditions */
+      #terms-accept-container .terms-error-container,
+      div:has(#terms-accept) .terms-error-container {
+        position: absolute;
+        left: 28px;
+        bottom: -20px;
+        color: #D11B19;
+        font-size: 14px;
+      }
+      
+      /* S'assurer que le conteneur des conditions a une marge inférieure suffisante */
+      #terms-accept-container,
+      div:has(#terms-accept) {
+        margin-bottom: 25px !important;
+      }
+    `;
     
-    // EXÉCUTER LA FONCTION IMMÉDIATEMENT
+    document.head.appendChild(style);
+  }
+  
+  // Exécuter nos fonctions de correction
+  function applyFixes() {
     removeDuplicateErrors();
+    stabilizeTermsErrors();
+    fixErrorStyles();
     
-    // OBSERVER LES CHANGEMENTS POUR CONTINUER À SUPPRIMER LES DOUBLONS
-    const observer = new MutationObserver(mutations => {
-      // Vérifier si des messages d'erreur ont été ajoutés
-      let hasErrorChanges = false;
+    // Observer les changements futurs dans le DOM
+    const observer = new MutationObserver((mutations) => {
+      let shouldFix = false;
       
       mutations.forEach(mutation => {
         if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-          // Vérifier si les nœuds ajoutés sont ou contiennent des messages d'erreur
+          // Vérifier si des messages d'erreur ont été ajoutés
           mutation.addedNodes.forEach(node => {
-            if (node.classList && node.classList.contains('error-message')) {
-              hasErrorChanges = true;
-            } else if (node.querySelectorAll) {
-              const errorMessages = node.querySelectorAll('.error-message');
-              if (errorMessages.length > 0) {
-                hasErrorChanges = true;
-              }
+            if (node.nodeType === 1 && 
+                (node.classList?.contains('error-message') || 
+                 node.querySelector?.('.error-message'))) {
+              shouldFix = true;
             }
           });
         }
       });
       
-      // Si des messages d'erreur ont été modifiés, exécuter à nouveau notre fonction
-      if (hasErrorChanges) {
+      if (shouldFix) {
         removeDuplicateErrors();
       }
     });
     
-    // Observer tout le document pour les changements
     observer.observe(document.body, {
       childList: true,
       subtree: true
@@ -86,10 +160,22 @@
     console.log('[EATLY-FIX] Corrections appliquées avec succès à la page signup');
   }
   
-  // Exécuter lorsque le DOM est prêt
+  // Exécuter nos corrections quand le DOM est prêt
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', runWhenReady);
+    document.addEventListener('DOMContentLoaded', applyFixes);
   } else {
-    runWhenReady();
+    applyFixes();
   }
+  
+  // Réappliquer les corrections lors des changements de formulaire
+  document.addEventListener('submit', () => {
+    setTimeout(removeDuplicateErrors, 100);
+  });
+  
+  // Réappliquer les corrections lors des changements de champs
+  document.addEventListener('change', (e) => {
+    if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA')) {
+      setTimeout(removeDuplicateErrors, 100);
+    }
+  });
 })();
