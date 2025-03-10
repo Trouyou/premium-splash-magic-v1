@@ -9,8 +9,8 @@ import HouseholdScreen from './screens/HouseholdScreen';
 import DietaryPreferencesScreen from './screens/DietaryPreferencesScreen';
 import NutritionalGoalsScreen from './screens/NutritionalGoalsScreen';
 import KitchenEquipmentScreen from './screens/KitchenEquipmentScreen';
-import FavoriteRecipesScreen from './screens/FavoriteRecipesScreen';
 import CookingTimeScreen from './screens/CookingTimeScreen';
+import FavoriteRecipesScreen from './screens/FavoriteRecipesScreen';
 import FinalScreen from './screens/FinalScreen';
 
 const OnboardingFlow: React.FC = () => {
@@ -30,6 +30,7 @@ const OnboardingFlow: React.FC = () => {
   } = useOnboarding();
 
   const renderScreen = () => {
+    // Welcome screen (step 0)
     if (currentStep === 0) {
       return <WelcomeScreen onStart={nextStep} />;
     }
@@ -76,8 +77,22 @@ const OnboardingFlow: React.FC = () => {
       );
     }
     
-    // 4. Cooking Time screen
+    // 4. Kitchen Equipment screen (moved here)
     if (currentStep === 4) {
+      return (
+        <KitchenEquipmentScreen
+          currentStep={currentStep}
+          totalSteps={totalSteps}
+          equipment={onboardingData.kitchenEquipment}
+          toggleEquipment={toggleKitchenEquipment}
+          onNext={nextStep}
+          onPrev={prevStep}
+        />
+      );
+    }
+    
+    // 5. Cooking Time screen (after equipment)
+    if (currentStep === 5) {
       return (
         <CookingTimeScreen
           currentStep={currentStep}
@@ -90,8 +105,8 @@ const OnboardingFlow: React.FC = () => {
       );
     }
     
-    // 5. Favorite Recipes screen
-    if (currentStep === 5) {
+    // 6. Favorite Recipes screen
+    if (currentStep === 6) {
       return (
         <FavoriteRecipesScreen
           currentStep={currentStep}
@@ -99,20 +114,6 @@ const OnboardingFlow: React.FC = () => {
           favoriteRecipes={onboardingData.favoriteRecipes}
           toggleFavoriteRecipe={toggleFavoriteRecipe}
           onboardingData={onboardingData}
-          onNext={nextStep}
-          onPrev={prevStep}
-        />
-      );
-    }
-    
-    // 6. Kitchen Equipment screen
-    if (currentStep === 6) {
-      return (
-        <KitchenEquipmentScreen
-          currentStep={currentStep}
-          totalSteps={totalSteps}
-          equipment={onboardingData.kitchenEquipment}
-          toggleEquipment={toggleKitchenEquipment}
           onNext={nextStep}
           onPrev={prevStep}
         />

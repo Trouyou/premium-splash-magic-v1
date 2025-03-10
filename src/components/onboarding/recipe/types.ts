@@ -1,4 +1,3 @@
-
 export interface Recipe {
   id: string;
   name: string;
@@ -7,9 +6,10 @@ export interface Recipe {
   cookingTime: number; // in minutes
   categories: string[];
   dietaryOptions: string[];
+  requiredEquipment?: string[]; // Added field for required equipment
   calories?: number;
   protein?: number;
-  imageVerified?: boolean; // Flag to indicate if the image has been verified
+  imageVerified?: boolean;
 }
 
 export interface RecipeFilterOptions {
@@ -34,4 +34,3 @@ export interface ImageFallbacks {
   defaultImage: string;
   categoryFallbacks: Record<string, string>;
 }
-
