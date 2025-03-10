@@ -316,3 +316,15 @@ const svgIcons = {
   rollingpin: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="1.8" fill="none">
       <rect x="20" y="26" width="24" height="12" rx="6" ry="6"/>
+      <circle cx="16" cy="32" r="4"/>
+      <circle cx="48" cy="32" r="4"/>
+      <path d="M16,28 L16,36"/>
+      <path d="M48,28 L48,36"/>
+      <path d="M24,26 L40,26" stroke-opacity="0.6"/>
+      <path d="M24,32 L40,32" stroke-opacity="0.4"/>
+      <path d="M24,38 L40,38" stroke-opacity="0.6"/>
+    </svg>
+  `,
+};
+
+// ... keep existing code (exports and other content)
