@@ -1,19 +1,29 @@
-
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import ConsentDialog from './ConsentDialog';
 
 interface FinalScreenProps {
   onComplete: () => void;
 }
 
 const FinalScreen: React.FC<FinalScreenProps> = ({ onComplete }) => {
+  const [showConsent, setShowConsent] = useState(false);
+  
   useEffect(() => {
     const timer = setTimeout(() => {
-      onComplete();
-    }, 3000); // Redirect after 3 seconds
+      setShowConsent(true);
+    }, 3000);
     
     return () => clearTimeout(timer);
-  }, [onComplete]);
+  }, []);
+
+  const handleAcceptConsent = () => {
+    onComplete();
+  };
+
+  const handleDeclineConsent = () => {
+    onComplete();
+  };
   
   return (
     <div className="flex flex-col items-center justify-center min-h-[80vh] text-center px-4">
@@ -74,6 +84,13 @@ const FinalScreen: React.FC<FinalScreenProps> = ({ onComplete }) => {
           transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
         />
       </motion.div>
+      
+      {showConsent && (
+        <ConsentDialog
+          onAccept={handleAcceptConsent}
+          onDecline={handleDeclineConsent}
+        />
+      )}
     </div>
   );
 };
