@@ -82,8 +82,12 @@ html, body {
   flex-direction: column !important;
   gap: 12px !important;
   margin-bottom: 24px !important;
-  padding-top: 10px !important; /* Add padding to ensure the first button is visible */
+  padding-top: 0 !important; /* Remove padding to show all buttons */
+  padding-bottom: 10px !important;
   overflow: visible !important;
+  position: relative !important;
+  z-index: 10 !important;
+  max-height: none !important;
 }
 
 /* Ensure all social buttons are visible */
@@ -94,4 +98,13 @@ html, body {
   opacity: 1 !important;
   visibility: visible !important;
   display: flex !important;
+  position: relative !important;
+  z-index: 5 !important;
+}
+
+/* Ensure Apple button is always visible first */
+.space-y-3.mb-6 > button:first-child,
+.space-y-3.mb-6 > div:first-child > button {
+  position: relative !important;
+  z-index: 10 !important;
 }
