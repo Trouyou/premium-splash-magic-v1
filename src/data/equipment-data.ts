@@ -1,4 +1,4 @@
-<lov-code>
+
 import { Equipment } from '@/types/equipment';
 import { kitchenIcons } from './kitchen-icons';
 
@@ -423,3 +423,53 @@ export const kitchenEquipment: Equipment[] = [
     category: 'Équipements de cuisson' 
   },
   { 
+    id: 'bakingdish', 
+    name: 'Plat à four', 
+    svg: getSvgStringFromComponent('bakingdish'), 
+    category: 'Équipements de cuisson' 
+  },
+  { 
+    id: 'caketin', 
+    name: 'Moule à gâteau', 
+    svg: getSvgStringFromComponent('caketin'), 
+    category: 'Équipements de cuisson' 
+  },
+  
+  // Outils de mesure et préparation
+  { 
+    id: 'scale', 
+    name: 'Balance de cuisine', 
+    svg: getSvgStringFromComponent('scale'), 
+    category: 'Outils de mesure et préparation' 
+  },
+  { 
+    id: 'measuringcup', 
+    name: 'Verre doseur', 
+    svg: getSvgStringFromComponent('measuringcup'), 
+    category: 'Outils de mesure et préparation' 
+  },
+  { 
+    id: 'mixingbowls', 
+    name: 'Bols mélangeurs', 
+    svg: getSvgStringFromComponent('mixingbowls'), 
+    category: 'Outils de mesure et préparation' 
+  },
+  { 
+    id: 'grater', 
+    name: 'Râpe', 
+    svg: getSvgStringFromComponent('grater'), 
+    category: 'Outils de mesure et préparation' 
+  },
+  { 
+    id: 'rollingpin', 
+    name: 'Rouleau à pâtisserie', 
+    svg: getSvgStringFromComponent('rollingpin'), 
+    category: 'Outils de mesure et préparation' 
+  },
+  { 
+    id: 'thermometer', 
+    name: 'Thermomètre de cuisine', 
+    svg: getSvgStringFromComponent('thermometer'), 
+    category: 'Outils de mesure et préparation' 
+  }
+];
