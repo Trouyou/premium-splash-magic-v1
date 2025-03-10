@@ -22,12 +22,6 @@ const Signup = () => {
     rgpdScript.async = true;
     document.body.appendChild(rgpdScript);
     
-    // Load the signup error fix script
-    const errorFixScript = document.createElement('script');
-    errorFixScript.src = '/js/signup-error-fix.js';
-    errorFixScript.async = true;
-    document.body.appendChild(errorFixScript);
-    
     // Add custom styles to prevent duplicate error messages
     const styleEl = document.createElement('style');
     styleEl.textContent = `
@@ -38,16 +32,8 @@ const Signup = () => {
       }
       
       /* Add bottom margin to terms container for error message space */
-      #terms-accept, #terms-accept-container {
+      #terms-accept {
         position: relative;
-      }
-      
-      /* Position error message for terms */
-      #terms-accept-container .terms-error-container {
-        position: absolute;
-        left: 28px;
-        bottom: -20px;
-        margin-top: 4px;
       }
 
       /* Ensure form field bottom margin is consistent */
@@ -66,9 +52,6 @@ const Signup = () => {
       // Clean up on unmount
       if (rgpdScript.parentNode) {
         document.body.removeChild(rgpdScript);
-      }
-      if (errorFixScript.parentNode) {
-        document.body.removeChild(errorFixScript);
       }
       if (styleEl.parentNode) {
         document.head.removeChild(styleEl);
