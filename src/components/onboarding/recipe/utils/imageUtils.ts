@@ -2,7 +2,7 @@
 import { CATEGORY_FALLBACKS, DEFAULT_IMAGE } from './constants';
 import { Recipe } from '../types';
 
-// Track which images have been used to prevent duplicates
+// Global registry to track which images are used across recipes
 const usedImageUrls = new Set<string>();
 
 // Get a fallback image based on recipe category
@@ -11,109 +11,89 @@ export const getFallbackImage = (recipe: Recipe): string => {
   return CATEGORY_FALLBACKS[category] || DEFAULT_IMAGE;
 };
 
-// Verify if an image URL is valid for a recipe
+// Simple verification if an image URL is valid
 export const verifyRecipeImage = async (imageUrl: string): Promise<boolean> => {
   try {
+    // Only try to validate actual URLs
+    if (!imageUrl || !imageUrl.startsWith('http')) {
+      return false;
+    }
+    
+    // Simple HEAD request to check if the image exists
     const response = await fetch(imageUrl, { method: 'HEAD' });
     return response.ok && response.headers.get('Content-Type')?.startsWith('image/');
   } catch (error) {
-    console.error(`Failed to verify image: ${imageUrl}`, error);
     return false;
   }
 };
 
-// Fetch a new image from Unsplash based on recipe name
+// Fetch a new recipe image using Unsplash source (client-side friendly)
 export const fetchNewRecipeImage = async (recipeName: string): Promise<string> => {
   try {
-    // Convert recipe name to search query (e.g., "Pad Thaï au poulet" -> "authentic pad thai chicken dish")
-    const searchQuery = recipeName
+    // Prepare search query from recipe name
+    const searchTerms = recipeName
       .toLowerCase()
-      .replace(/[^\w\s]/gi, '') // Remove special characters
+      .replace(/[^\w\s]/gi, '')
       .split(' ')
-      .filter(word => word.length > 2) // Remove short words
+      .filter(word => word.length > 2)
       .join(' ');
       
-    // Add descriptive keywords for better image results
-    const enhancedQuery = `${searchQuery} food dish recipe authentic`;
+    // Add descriptive food-related keywords
+    const searchQuery = `${searchTerms} food dish recipe`;
     
-    // Use Unsplash source URL directly with search query
-    // Format: https://source.unsplash.com/featured/?query
-    const unsplashUrl = `https://source.unsplash.com/featured/?${encodeURIComponent(enhancedQuery)}`;
+    // Construct direct Unsplash source URL (doesn't require API key)
+    const cacheBuster = `&cb=${Date.now()}`;
+    const imageUrl = `https://source.unsplash.com/featured/?${encodeURIComponent(searchQuery)}${cacheBuster}`;
     
-    // Force Unsplash to give us a random image by adding a cache-busting parameter
-    const uniqueUrl = `${unsplashUrl}&random=${Date.now()}`;
-    
-    // Fetch the image to get the final URL after redirects
-    const response = await fetch(uniqueUrl);
-    
-    // Get the final URL after redirects (this will be a unique image URL)
-    const finalImageUrl = response.url;
-    
-    // Check if this image has been used for another recipe
-    if (usedImageUrls.has(finalImageUrl)) {
-      console.log(`Image duplicate detected for ${recipeName}, trying again...`);
-      // Try again with a different random parameter
-      return fetchNewRecipeImage(recipeName);
-    }
-    
-    // Add this image to our used images set
-    usedImageUrls.add(finalImageUrl);
-    
-    return finalImageUrl;
+    // Return the URL directly - the actual image will be fetched when rendered
+    return imageUrl;
   } catch (error) {
-    console.error(`Failed to fetch new image for recipe: ${recipeName}`, error);
     return '';
   }
 };
 
-// Initialize the set of used images from existing recipes
+// Initialize the image registry from existing recipes
 export const initializeUsedImagesTracker = (recipes: Recipe[]): void => {
+  usedImageUrls.clear();
   recipes.forEach(recipe => {
     if (recipe.image && recipe.image !== DEFAULT_IMAGE) {
       usedImageUrls.add(recipe.image);
     }
   });
-  console.log(`Initialized used images tracker with ${usedImageUrls.size} images`);
 };
 
-// Load and verify recipe image with fallback
+// Main function to load and verify recipe images
 export const loadRecipeImage = async (recipe: Recipe): Promise<string> => {
-  // If the recipe has no image, get a fallback
+  // Case 1: Recipe has no image - use fallback
   if (!recipe.image) {
     return getFallbackImage(recipe);
   }
   
-  // Check if this image is a duplicate (used by another recipe)
-  // We can't check this perfectly without knowing all recipes, but we can check against our tracked set
-  if (usedImageUrls.has(recipe.image) && usedImageUrls.size > 1) {
-    console.log(`Duplicate image detected for recipe: ${recipe.name}, fetching new image...`);
+  // Case 2: Recipe has an image but it's a duplicate
+  if (usedImageUrls.has(recipe.image) && recipe.image !== DEFAULT_IMAGE) {
+    // Try to get a new unique image
     const newImage = await fetchNewRecipeImage(recipe.name);
-    
     if (newImage) {
-      // Update the recipe's image in our app state (this doesn't modify the original data)
-      recipe.image = newImage;
+      usedImageUrls.add(newImage);
       return newImage;
     }
   }
   
-  // If not a duplicate, verify the image is valid
+  // Case 3: Recipe has a unique image but needs validation
   const isValid = await verifyRecipeImage(recipe.image);
-  
   if (!isValid) {
-    console.warn(`Invalid image for recipe ${recipe.name}, fetching new image...`);
+    // If invalid, try to get a new image
     const newImage = await fetchNewRecipeImage(recipe.name);
-    
     if (newImage) {
-      // Update the recipe's image in our app state
-      recipe.image = newImage;
+      usedImageUrls.add(newImage);
       return newImage;
     }
     
-    // If we couldn't get a new image, use a fallback
+    // If new image fetch fails, use category fallback
     return getFallbackImage(recipe);
   }
   
-  // Image is valid and not a duplicate, add it to used images
+  // Case 4: Recipe has a valid, unique image
   usedImageUrls.add(recipe.image);
   return recipe.image;
 };

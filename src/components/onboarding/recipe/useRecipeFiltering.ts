@@ -1,3 +1,4 @@
+
 import { useCallback, useEffect, useState, useMemo } from 'react';
 import { Recipe } from './types';
 
@@ -21,11 +22,12 @@ export const useRecipeFiltering = (
 ) => {
   const [isLoading, setIsLoading] = useState(true);
   const [imagesLoaded, setImagesLoaded] = useState<Record<string, boolean>>({});
-  const [imageRetries, setImageRetries] = useState<Record<string, number>>({});
   
+  // Filter recipes based on all criteria
   const filteredRecipes = useMemo(() => {
     let results = [...recipes];
     
+    // Apply dietary preference filter
     if (onboardingData.dietaryPreferences.length > 0) {
       if (!onboardingData.dietaryPreferences.includes('omnivore')) {
         results = results.filter(recipe => 
@@ -36,6 +38,7 @@ export const useRecipeFiltering = (
       }
     }
     
+    // Apply equipment filter
     if (onboardingData.kitchenEquipment.length > 0) {
       results = results.filter(recipe => {
         if (!recipe.requiredEquipment || recipe.requiredEquipment.length === 0) {
@@ -48,6 +51,7 @@ export const useRecipeFiltering = (
       });
     }
     
+    // Apply cooking time filter
     if (onboardingData.cookingTime === 'quick' || selectedTimeFilter === 'quick') {
       results = results.filter(recipe => recipe.cookingTime <= 15);
     } else if (onboardingData.cookingTime === 'standard' || selectedTimeFilter === 'medium') {
@@ -56,6 +60,7 @@ export const useRecipeFiltering = (
       results = results.filter(recipe => recipe.cookingTime <= 60);
     }
     
+    // Apply category filter
     if (selectedCategory) {
       switch (selectedCategory) {
         case 'rapide':
@@ -77,6 +82,7 @@ export const useRecipeFiltering = (
       }
     }
     
+    // Apply search filter
     if (debouncedSearchTerm) {
       const searchTermLower = debouncedSearchTerm.toLowerCase();
       results = results.filter(recipe => 
@@ -90,6 +96,7 @@ export const useRecipeFiltering = (
       );
     }
     
+    // Apply favorites filter
     if (showOnlyFavorites) {
       results = results.filter(recipe => favoriteRecipes.includes(recipe.id));
     }
@@ -107,83 +114,29 @@ export const useRecipeFiltering = (
     favoriteRecipes
   ]);
 
+  // Calculate visible recipes based on pagination
   const visibleRecipes = useMemo(() => {
     return filteredRecipes.slice(0, page * recipesPerPage);
   }, [filteredRecipes, page, recipesPerPage]);
 
+  // Simulate loading state for UI smoothness
   useEffect(() => {
     setIsLoading(true);
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 800);
+    }, 600);
     
     return () => clearTimeout(timer);
   }, [filteredRecipes.length]);
 
-  const preloadImages = useCallback(() => {
-    const visibleRecipeIds = new Set(visibleRecipes.map(recipe => recipe.id));
-    const prioritizedRecipes = [
-      ...visibleRecipes,
-      ...filteredRecipes.filter(recipe => !visibleRecipeIds.has(recipe.id))
-    ];
-    
-    const newImagesLoadedState: Record<string, boolean> = {};
-    const newImageRetriesState: Record<string, number> = {...imageRetries};
-    
-    const batchSize = 5;
-    let currentBatch = 0;
-    
-    const loadNextBatch = () => {
-      const start = currentBatch * batchSize;
-      const end = start + batchSize;
-      const batch = prioritizedRecipes.slice(start, end);
-      
-      if (batch.length === 0) {
-        setImagesLoaded(prev => ({...prev, ...newImagesLoadedState}));
-        setImageRetries(newImageRetriesState);
-        return;
-      }
-      
-      const batchPromises = batch.map(recipe => {
-        return new Promise<void>((resolve) => {
-          const img = new Image();
-          
-          img.onload = () => {
-            newImagesLoadedState[recipe.id] = true;
-            newImageRetriesState[recipe.id] = 0;
-            resolve();
-          };
-          
-          img.onerror = () => {
-            const currentRetries = newImageRetriesState[recipe.id] || 0;
-            if (currentRetries < 2) {
-              newImageRetriesState[recipe.id] = currentRetries + 1;
-              img.src = `${recipe.image}?retry=${currentRetries + 1}`;
-            } else {
-              newImagesLoadedState[recipe.id] = false;
-              console.log(`Failed to load image for recipe: ${recipe.name} after ${currentRetries} retries`);
-              resolve();
-            }
-          };
-          
-          img.src = recipe.image;
-        });
-      });
-      
-      Promise.all(batchPromises).then(() => {
-        currentBatch++;
-        setTimeout(loadNextBatch, 100);
-      });
-    };
-    
-    loadNextBatch();
-  }, [filteredRecipes, visibleRecipes, imageRetries]);
-
+  // Track loaded images for UI
   useEffect(() => {
-    if (!isLoading) {
-      preloadImages();
-    }
-  }, [isLoading, preloadImages]);
+    const newImagesLoaded: Record<string, boolean> = {};
+    visibleRecipes.forEach(recipe => {
+      newImagesLoaded[recipe.id] = true;
+    });
+    setImagesLoaded(newImagesLoaded);
+  }, [visibleRecipes]);
 
   return {
     filteredRecipes,

@@ -25,37 +25,33 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
   defaultImage
 }) => {
   const [isHovering, setIsHovering] = useState(false);
-  const [imgSrc, setImgSrc] = useState(recipe.image);
+  const [imgSrc, setImgSrc] = useState(recipe.image || defaultImage);
   const [isImgLoaded, setIsImgLoaded] = useState(false);
-  const [showAllIngredients, setShowAllIngredients] = useState(false);
 
-  // Load and verify image when recipe changes
+  // Load image only when component mounts or recipe changes
   useEffect(() => {
     setIsImgLoaded(false);
     
-    // Use our enhanced image loading function
-    loadRecipeImage(recipe).then(validatedImage => {
-      if (validatedImage !== imgSrc) {
-        console.log(`Updated image for ${recipe.name}: ${validatedImage}`);
-        setImgSrc(validatedImage);
-      } else {
-        console.log(`Using existing image for ${recipe.name}: ${validatedImage}`);
+    const getValidImage = async () => {
+      try {
+        const validImage = await loadRecipeImage(recipe);
+        if (validImage && validImage !== imgSrc) {
+          setImgSrc(validImage);
+        }
+      } catch (error) {
+        console.error(`Error loading image for ${recipe.name}:`, error);
       }
-    });
-  }, [recipe.id, recipe.image]);
+    };
+    
+    getValidImage();
+  }, [recipe.id]);
 
-  // Handle image load success
-  const handleImageLoaded = () => {
-    setIsImgLoaded(true);
-  };
-
-  // Handle image load error
+  // Image event handlers
+  const handleImageLoaded = () => setIsImgLoaded(true);
+  
   const handleImageError = () => {
-    console.error(`Failed to load image for ${recipe.name}`);
-    // If image fails to load, try to get a new one
-    loadRecipeImage({...recipe, image: ''}).then(fallbackImage => {
-      setImgSrc(fallbackImage);
-    });
+    setIsImgLoaded(false);
+    setImgSrc(defaultImage);
   };
 
   return (
@@ -107,7 +103,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
         >
           <h3 className="text-white font-medium text-lg mb-1 line-clamp-2">{recipe.name}</h3>
           
-          {/* Display all ingredients without limitation */}
+          {/* Display all ingredients */}
           <div className="flex flex-wrap gap-1 mb-2 max-h-24 overflow-y-auto">
             {recipe.mainIngredients.map((ingredient, index) => (
               <span 
@@ -146,7 +142,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
           {dietLabel && <span>• {dietLabel}</span>}
         </div>
         
-        {/* Display all ingredients on small screens or when not hovering */}
+        {/* Display all ingredients */}
         <div className="mt-2 flex flex-wrap gap-1">
           {recipe.mainIngredients.map((ingredient, index) => (
             <span 

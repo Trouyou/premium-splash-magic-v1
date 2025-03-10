@@ -8,7 +8,8 @@ import NavigationButtons from '../NavigationButtons';
 import RecipeFilters from '../recipe/RecipeFilters';
 import RecipeResults from '../recipe/RecipeResults';
 import { useRecipeFiltering } from '../recipe/useRecipeFiltering';
-import { mockRecipes, allCategories, timePresets } from '../recipe/recipeUtils';
+import { mockRecipes } from '../recipe/data/mockRecipes';
+import { allCategories, timePresets } from '../recipe/utils/constants';
 import { initializeUsedImagesTracker } from '../recipe/utils/imageUtils';
 
 interface FavoriteRecipesScreenProps {
@@ -20,7 +21,7 @@ interface FavoriteRecipesScreenProps {
     dietaryPreferences: string[];
     cookingTime: string;
     nutritionalGoals: string[];
-    kitchenEquipment: string[]; // Added this required property
+    kitchenEquipment: string[];
   };
   onNext: () => void;
   onPrev: () => void;
@@ -43,7 +44,7 @@ const FavoriteRecipesScreen: React.FC<FavoriteRecipesScreenProps> = ({
   const [page, setPage] = useState(1);
   const recipesPerPage = 8;
   
-  // Initialize the used images tracker on component mount
+  // Initialize the used images tracker only once on component mount
   useEffect(() => {
     initializeUsedImagesTracker(mockRecipes);
   }, []);
