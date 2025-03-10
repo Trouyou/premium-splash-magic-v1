@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { motion } from 'framer-motion';
 import { Equipment } from '@/data/kitchenEquipment';
 import EquipmentBubble from './EquipmentBubble';
 
@@ -17,8 +18,13 @@ const EquipmentCategory: React.FC<EquipmentCategoryProps> = ({
   onToggleEquipment,
 }) => {
   return (
-    <div className="mb-8">
-      <h3 className="font-['AvantGarde_Bk_BT'] text-lg text-[#4A5568] mb-4">
+    <motion.div 
+      className="mb-8"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+    >
+      <h3 className="font-['AvantGarde_Bk_BT'] text-lg text-[#4A5568] mb-4 sticky top-0 bg-white py-2 z-[5]">
         {category}
       </h3>
       <div className="grid grid-cols-3 md:grid-cols-4 gap-4">
@@ -33,7 +39,7 @@ const EquipmentCategory: React.FC<EquipmentCategoryProps> = ({
           />
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

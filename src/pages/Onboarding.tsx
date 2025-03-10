@@ -6,6 +6,15 @@ import OnboardingFlow from '@/components/onboarding/OnboardingFlow';
 import { useAuth } from '@/context/AuthContext';
 import { Toaster } from '@/components/ui/toaster';
 
+// Ajout des styles pour l'animation de sélection
+const selectPopKeyframe = `
+@keyframes selectPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+  100% { transform: scale(1.08); }
+}
+`;
+
 const Onboarding: React.FC = () => {
   const { isAuthenticated, isLoading, user } = useAuth();
   const navigate = useNavigate();
@@ -30,6 +39,7 @@ const Onboarding: React.FC = () => {
   
   return (
     <OnboardingProvider>
+      <style>{selectPopKeyframe}</style>
       <div className="min-h-screen bg-white">
         <Toaster />
         <OnboardingFlow />

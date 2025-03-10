@@ -23,6 +23,7 @@ const EquipmentBubble: React.FC<EquipmentBubbleProps> = ({
   const [justSelected, setJustSelected] = useState(false);
   const formattedName = formatEquipmentName(name);
 
+  // Effet d'animation lors de la sélection
   useEffect(() => {
     if (selected && !justSelected) {
       setJustSelected(true);
@@ -40,7 +41,7 @@ const EquipmentBubble: React.FC<EquipmentBubbleProps> = ({
       onClick={onClick}
       className={cn(
         "flex flex-col items-center justify-center p-4 cursor-pointer",
-        "transition all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
+        "transition-all duration-300 ease-in-out",
         "rounded-full w-[90px] h-[90px] md:w-[100px] md:h-[100px]",
         "border-2 shadow-sm hover:shadow",
         selected 
@@ -49,11 +50,14 @@ const EquipmentBubble: React.FC<EquipmentBubbleProps> = ({
         justSelected && "animate-[selectPop_0.3s_forwards]"
       )}
       style={selected ? { boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1), 0 0 0 2px rgba(209, 27, 25, 0.2)" } : {}}
+      data-id={id}
+      data-name={name}
     >
-      <div className="text-[#2A5D50] mb-2">
+      <div className="text-[#2A5D50] mb-2 equipment-icon" style={{ height: '40px', display: 'flex', alignItems: 'center' }}>
         <div dangerouslySetInnerHTML={{ __html: svg }} />
       </div>
-      <div className="equipment-name font-['AvantGarde_Bk_BT'] text-xs text-black text-center w-full h-[32px] flex flex-col justify-center white-space-pre-line overflow-hidden mt-1">
+      
+      <div className="equipment-name font-['AvantGarde_Bk_BT'] text-xs text-[#2A5D50] text-center w-full h-[32px] flex flex-col justify-center mt-1 leading-tight">
         {formattedName.split('\n').map((line, i) => (
           <span key={i} className="line-clamp-1">{line}</span>
         ))}
