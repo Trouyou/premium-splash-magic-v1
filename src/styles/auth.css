@@ -3,20 +3,16 @@
 .min-h-screen.w-screen {
   max-width: 100vw !important;
   width: 100vw !important;
-  height: 100vh !important;
-  max-height: 100vh !important;
+  min-height: 100vh !important;
   margin: 0 !important;
   padding: 0 !important;
-  overflow: hidden !important;
 }
 
 html, body {
   margin: 0 !important;
   padding: 0 !important;
-  overflow: hidden !important;
   width: 100% !important;
   height: 100% !important;
-  max-height: 100vh !important;
   box-sizing: border-box !important;
 }
 
@@ -27,11 +23,10 @@ html, body {
   padding: 0 !important;
   width: 100vw !important;
   max-width: 100% !important;
-  height: 100vh !important;
-  max-height: 100vh !important;
-  overflow: hidden !important;
+  min-height: 100vh !important;
   display: flex !important;
   box-sizing: border-box !important;
+  overflow-x: hidden !important;
 }
 
 /* Left section styling to ensure no borders */
@@ -40,34 +35,15 @@ html, body {
   margin: 0 !important;
   padding: 0 !important;
   height: 100vh !important;
-  max-height: 100vh !important;
   overflow: hidden !important;
   box-shadow: none !important;
 }
 
 /* Right section styling to ensure proper content scrolling */
 .w-full.md\:w-2\/5 {
-  height: 100vh !important;
-  max-height: 100vh !important;
+  min-height: 100vh !important;
   overflow-y: auto !important;
   display: flex !important;
   flex-direction: column !important;
   justify-content: center !important;
-}
-
-/* Prevent duplicate error messages */
-.error-message:not(:only-of-type) {
-  display: none;
-}
-
-/* Fix for terms checkbox error message position */
-.flex.items-start.my-5.w-full {
-  position: relative;
-  margin-bottom: 30px !important;
-}
-
-.flex.items-start.my-5.w-full .error-message {
-  position: absolute;
-  bottom: -20px;
-  left: 28px;
 }
