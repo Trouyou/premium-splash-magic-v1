@@ -17,15 +17,24 @@ const Signup = () => {
     setupFormValidation();
     
     // Load the RGPD redirection fix script
-    const script = document.createElement('script');
-    script.src = '/js/rgpd-redirection-fix.js';
-    script.async = true;
-    document.body.appendChild(script);
+    const rgpdScript = document.createElement('script');
+    rgpdScript.src = '/js/rgpd-redirection-fix.js';
+    rgpdScript.async = true;
+    document.body.appendChild(rgpdScript);
+    
+    // Load the error message fix script
+    const errorFixScript = document.createElement('script');
+    errorFixScript.src = '/js/error-message-fix.js';
+    errorFixScript.async = true;
+    document.body.appendChild(errorFixScript);
     
     return () => {
       // Clean up on unmount
-      if (script.parentNode) {
-        document.body.removeChild(script);
+      if (rgpdScript.parentNode) {
+        document.body.removeChild(rgpdScript);
+      }
+      if (errorFixScript.parentNode) {
+        document.body.removeChild(errorFixScript);
       }
     };
   }, []);

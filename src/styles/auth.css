@@ -54,3 +54,20 @@ html, body {
   flex-direction: column !important;
   justify-content: center !important;
 }
+
+/* Prevent duplicate error messages */
+.error-message:not(:only-of-type) {
+  display: none;
+}
+
+/* Fix for terms checkbox error message position */
+.flex.items-start.my-5.w-full {
+  position: relative;
+  margin-bottom: 30px !important;
+}
+
+.flex.items-start.my-5.w-full .error-message {
+  position: absolute;
+  bottom: -20px;
+  left: 28px;
+}
