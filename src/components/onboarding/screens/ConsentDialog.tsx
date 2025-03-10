@@ -64,28 +64,32 @@ const ConsentDialog: React.FC<ConsentDialogProps> = ({ onAccept, onDecline }) =>
         </h2>
 
         <div className="space-y-4 text-[#4A5568] mb-6">
-          <p className="text-center">
+          <p className="text-center font-medium">
+            Êtes-vous d'accord pour partager vos données avec Eatly afin d'affiner la personnalisation proposée ?
+          </p>
+          
+          <p className="text-center text-sm">
             Eatly utilise vos préférences alimentaires pour vous proposer des recommandations personnalisées 
             et améliorer votre expérience culinaire.
           </p>
           
-          {/* Links to CGU and Privacy Policy */}
-          <div className="flex flex-col items-center space-y-2 py-2">
-            <button 
-              onClick={() => openExternalLink('/conditions-utilisation.html')}
-              className="flex items-center text-[#D11B19] hover:text-[#B01816] transition-colors text-sm"
-            >
-              <ExternalLink className="mr-1 h-3.5 w-3.5" />
-              📜 Conditions Générales d'Utilisation
-            </button>
-            
-            <button 
-              onClick={() => openExternalLink('/politique-confidentialite.html')}
-              className="flex items-center text-[#D11B19] hover:text-[#B01816] transition-colors text-sm"
-            >
-              <ExternalLink className="mr-1 h-3.5 w-3.5" />
-              🔒 Politique de Confidentialité
-            </button>
+          <div className="text-center text-sm py-2">
+            <p>
+              En continuant, vous acceptez nos{" "}
+              <button 
+                onClick={() => openExternalLink('/conditions-utilisation.html')}
+                className="font-medium text-[#D11B19] hover:text-[#B01816] transition-colors"
+              >
+                Conditions Générales d'Utilisation
+              </button>{" "}
+              et notre{" "}
+              <button 
+                onClick={() => openExternalLink('/politique-confidentialite.html')}
+                className="font-medium text-[#D11B19] hover:text-[#B01816] transition-colors"
+              >
+                Politique de Confidentialité
+              </button>.
+            </p>
           </div>
         </div>
 
