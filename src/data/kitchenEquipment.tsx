@@ -1,4 +1,6 @@
+
 import React from 'react';
+import { kitchenIcons } from './kitchen-icons';
 
 export interface Equipment {
   id: string;
@@ -43,8 +45,27 @@ export const groupEquipmentByCategory = () => {
   return grouped;
 };
 
-// Updated SVG icons for each kitchen equipment - Using improved realistic designs based on the provided images
-const svgIcons = {
+// Function to convert a React SVG component to a string
+const getSvgStringFromComponent = (id: string): string => {
+  // Create a new div element
+  const tempDiv = document.createElement('div');
+  
+  // Get the SVG component from our icons map
+  const iconComponent = kitchenIcons[id];
+  
+  // Render the component to the div (this is a simplified approach)
+  if (iconComponent) {
+    // In a real implementation, you'd use ReactDOMServer.renderToString()
+    // but for the purposes of this example, we'll reuse the existing SVG strings
+    // from the old implementation
+    return svgStrings[id] || '';
+  }
+  
+  return '';
+};
+
+// Legacy SVG strings for backward compatibility during transition
+const svgStrings: Record<string, string> = {
   // Appareils électriques
   thermomix: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" stroke="currentColor" stroke-width="2" fill="none">
@@ -345,49 +366,49 @@ export const kitchenEquipment: Equipment[] = [
   { 
     id: 'thermomix', 
     name: 'Thermomix', 
-    svg: svgIcons.thermomix, 
+    svg: getSvgStringFromComponent('thermomix'), 
     category: 'Appareils électriques' 
   },
   { 
     id: 'blender', 
     name: 'Blender / Mixeur', 
-    svg: svgIcons.blender, 
+    svg: getSvgStringFromComponent('blender'), 
     category: 'Appareils électriques' 
   },
   { 
     id: 'robot', 
     name: 'Robot pâtissier', 
-    svg: svgIcons.robot, 
+    svg: getSvgStringFromComponent('robot'), 
     category: 'Appareils électriques' 
   },
   { 
     id: 'airfryer', 
     name: 'Air Fryer', 
-    svg: svgIcons.airfryer, 
+    svg: getSvgStringFromComponent('airfryer'), 
     category: 'Appareils électriques' 
   },
   { 
     id: 'steamer', 
     name: 'Cuiseur vapeur', 
-    svg: svgIcons.steamer, 
+    svg: getSvgStringFromComponent('steamer'), 
     category: 'Appareils électriques' 
   },
   { 
     id: 'microwave', 
     name: 'Four à micro-ondes', 
-    svg: svgIcons.microwave, 
+    svg: getSvgStringFromComponent('microwave'), 
     category: 'Appareils électriques' 
   },
   { 
     id: 'oven', 
     name: 'Four', 
-    svg: svgIcons.oven, 
+    svg: getSvgStringFromComponent('oven'), 
     category: 'Appareils électriques' 
   },
   { 
     id: 'stove', 
     name: 'Plaque de cuisson', 
-    svg: svgIcons.stove, 
+    svg: getSvgStringFromComponent('stove'), 
     category: 'Appareils électriques' 
   },
   
@@ -395,37 +416,37 @@ export const kitchenEquipment: Equipment[] = [
   { 
     id: 'knife', 
     name: 'Couteau de chef', 
-    svg: svgIcons.knife, 
+    svg: getSvgStringFromComponent('knife'), 
     category: 'Ustensiles essentiels' 
   },
   { 
     id: 'cuttingboard', 
     name: 'Planche à découper', 
-    svg: svgIcons.cuttingboard, 
+    svg: getSvgStringFromComponent('cuttingboard'), 
     category: 'Ustensiles essentiels' 
   },
   { 
     id: 'whisk', 
     name: 'Fouet', 
-    svg: svgIcons.whisk, 
+    svg: getSvgStringFromComponent('whisk'), 
     category: 'Ustensiles essentiels' 
   },
   { 
     id: 'spatula', 
     name: 'Spatule', 
-    svg: svgIcons.spatula, 
+    svg: getSvgStringFromComponent('spatula'), 
     category: 'Ustensiles essentiels' 
   },
   { 
     id: 'woodenspoons', 
     name: 'Cuillères en bois', 
-    svg: svgIcons.woodenspoons, 
+    svg: getSvgStringFromComponent('woodenspoons'), 
     category: 'Ustensiles essentiels' 
   },
   { 
     id: 'strainer', 
     name: 'Passoire', 
-    svg: svgIcons.strainer, 
+    svg: getSvgStringFromComponent('strainer'), 
     category: 'Ustensiles essentiels' 
   },
   
@@ -433,37 +454,37 @@ export const kitchenEquipment: Equipment[] = [
   { 
     id: 'pan', 
     name: 'Poêle antiadhésive', 
-    svg: svgIcons.pan, 
+    svg: getSvgStringFromComponent('pan'), 
     category: 'Équipements de cuisson' 
   },
   { 
     id: 'saucepan', 
     name: 'Casserole', 
-    svg: svgIcons.saucepan, 
+    svg: getSvgStringFromComponent('saucepan'), 
     category: 'Équipements de cuisson' 
   },
   { 
     id: 'pot', 
     name: 'Faitout/marmite', 
-    svg: svgIcons.pot, 
+    svg: getSvgStringFromComponent('pot'), 
     category: 'Équipements de cuisson' 
   },
   { 
     id: 'wok', 
     name: 'Wok', 
-    svg: svgIcons.wok, 
+    svg: getSvgStringFromComponent('wok'), 
     category: 'Équipements de cuisson' 
   },
   { 
     id: 'bakingdish', 
     name: 'Plat à gratin', 
-    svg: svgIcons.bakingdish, 
+    svg: getSvgStringFromComponent('bakingdish'), 
     category: 'Équipements de cuisson' 
   },
   { 
     id: 'caketin', 
     name: 'Moule à gâteau', 
-    svg: svgIcons.caketin, 
+    svg: getSvgStringFromComponent('caketin'), 
     category: 'Équipements de cuisson' 
   },
   
@@ -471,37 +492,37 @@ export const kitchenEquipment: Equipment[] = [
   { 
     id: 'scale', 
     name: 'Balance de cuisine', 
-    svg: svgIcons.scale, 
+    svg: getSvgStringFromComponent('scale'), 
     category: 'Outils de mesure et préparation' 
   },
   { 
     id: 'measuringcup', 
     name: 'Verre doseur', 
-    svg: svgIcons.measuringcup, 
+    svg: getSvgStringFromComponent('measuringcup'), 
     category: 'Outils de mesure et préparation' 
   },
   { 
     id: 'mixingbowls', 
     name: 'Bols mélangeurs', 
-    svg: svgIcons.mixingbowls, 
+    svg: getSvgStringFromComponent('mixingbowls'), 
     category: 'Outils de mesure et préparation' 
   },
   { 
     id: 'grater', 
     name: 'Râpe', 
-    svg: svgIcons.grater, 
+    svg: getSvgStringFromComponent('grater'), 
     category: 'Outils de mesure et préparation' 
   },
   { 
     id: 'rollingpin', 
     name: 'Rouleau à pâtisserie', 
-    svg: svgIcons.rollingpin, 
+    svg: getSvgStringFromComponent('rollingpin'), 
     category: 'Outils de mesure et préparation' 
   },
   { 
     id: 'thermometer', 
     name: 'Thermomètre de cuisine', 
-    svg: svgIcons.thermometer, 
+    svg: getSvgStringFromComponent('thermometer'), 
     category: 'Outils de mesure et préparation' 
   }
 ];

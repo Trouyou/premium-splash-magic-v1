@@ -10,6 +10,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { formatEquipmentName } from '@/data/kitchenEquipment';
+import { kitchenIcons } from '@/data/kitchen-icons';
 
 interface EquipmentBubbleProps {
   id: string;
@@ -39,6 +40,9 @@ const EquipmentBubble: React.FC<EquipmentBubbleProps> = ({
     }
   }, [selected, justSelected]);
 
+  // Use React component icons if available, fallback to SVG string
+  const iconComponent = kitchenIcons[id];
+
   return (
     <TooltipProvider>
       <motion.div
@@ -60,10 +64,16 @@ const EquipmentBubble: React.FC<EquipmentBubbleProps> = ({
       >
         {/* Icon container with improved sizing and centering */}
         <div className="flex items-center justify-center mb-4 h-[90px] w-[90px]">
-          <div 
-            className="text-[#2A5D50] flex items-center justify-center w-full h-full transform scale-120" 
-            dangerouslySetInnerHTML={{ __html: svg }} 
-          />
+          {iconComponent ? (
+            <div className="text-[#2A5D50] flex items-center justify-center w-full h-full transform scale-120">
+              {iconComponent}
+            </div>
+          ) : (
+            <div 
+              className="text-[#2A5D50] flex items-center justify-center w-full h-full transform scale-120" 
+              dangerouslySetInnerHTML={{ __html: svg }} 
+            />
+          )}
         </div>
 
         {/* Text container with improved spacing and wrapping */}
