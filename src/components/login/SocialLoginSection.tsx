@@ -26,8 +26,10 @@ const SocialLoginSection = () => {
       const socialContainer = document.querySelector('.space-y-3.mb-6');
       if (socialContainer) {
         // Ensure it has no max-height limitation
-        socialContainer.style.maxHeight = 'none';
-        socialContainer.style.overflow = 'visible';
+        if (socialContainer instanceof HTMLElement) {
+          socialContainer.style.maxHeight = 'none';
+          socialContainer.style.overflow = 'visible';
+        }
         
         // Find Apple button
         const appleButton = document.querySelector('[provider="Apple"], [providerName="Apple"]');
@@ -40,9 +42,8 @@ const SocialLoginSection = () => {
             parent.insertBefore(firstButton.parentElement || firstButton, parent.firstChild);
           }
           
-          // Scroll to ensure it's in view
+          // Make sure the entire section is visible
           setTimeout(() => {
-            appleButton.scrollIntoView({ behavior: 'auto', block: 'start' });
             window.scrollTo(0, 0); // Ensure we're at the top of the page
           }, 50);
         }
