@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { translateErrorMessage, getSignupFormError, setupFormValidation } from '@/utils/error-messages';
+import { isPreviewEnvironment, simulateSignUp } from '@/utils/auth-simulator';
 import BirthdateSelector from './BirthdateSelector';
 import FormErrorDisplay from './FormErrorDisplay';
 import PasswordInput from './PasswordInput';
@@ -28,6 +29,7 @@ const SignupForm = () => {
   const { signUp, isLoading, error } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const inPreviewMode = isPreviewEnvironment();
 
   useEffect(() => {
     setupFormValidation();
@@ -65,13 +67,28 @@ const SignupForm = () => {
     
     setFormError('');
     setBirthdateError('');
+    
     try {
-      await signUp(email, password, firstName, lastName);
-      
-      // Après une inscription réussie, rediriger vers la page d'onboarding
-      navigate('/onboarding');
-    } catch (error) {
+      if (inPreviewMode) {
+        // Utiliser simulateSignUp en mode prévisualisation
+        await simulateSignUp(email, password, firstName, lastName, birthdate);
+        
+        // Afficher un toast de confirmation
+        toast({
+          title: "Inscription simulée réussie",
+          description: "Mode prévisualisation - redirection vers l'onboarding",
+        });
+        
+        // Rediriger vers l'onboarding en mode prévisualisation
+        navigate('/onboarding');
+      } else {
+        // Utiliser l'authentification normale
+        await signUp(email, password, firstName, lastName, birthdate);
+        navigate('/onboarding');
+      }
+    } catch (error: any) {
       console.error("Erreur d'inscription:", error);
+      setFormError(error.message || "Une erreur s'est produite lors de l'inscription");
     }
   };
 

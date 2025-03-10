@@ -5,6 +5,7 @@ import { OnboardingProvider } from '@/context/OnboardingContext';
 import OnboardingFlow from '@/components/onboarding/OnboardingFlow';
 import { useAuth } from '@/context/AuthContext';
 import { Toaster } from '@/components/ui/toaster';
+import { isPreviewEnvironment, getAuthenticatedUser } from '@/utils/auth-simulator';
 
 // Ajout des styles pour l'animation de sélection
 const selectPopKeyframe = `
@@ -18,11 +19,22 @@ const selectPopKeyframe = `
 const Onboarding: React.FC = () => {
   const { isAuthenticated, isLoading, user } = useAuth();
   const navigate = useNavigate();
+  const inPreviewMode = isPreviewEnvironment();
   
   // Check if user is authenticated and new
   useEffect(() => {
     if (!isLoading) {
-      // If user is not authenticated, redirect to login
+      // Si nous sommes en mode prévisualisation, vérifier si un utilisateur simulé existe
+      if (inPreviewMode) {
+        const mockUser = getAuthenticatedUser();
+        if (!mockUser) {
+          navigate('/login');
+        }
+        // Utilisateur simulé existe, continuer avec l'onboarding
+        return;
+      }
+      
+      // En mode normal, vérifier l'authentification
       if (!isAuthenticated) {
         navigate('/login');
         return;
@@ -31,7 +43,7 @@ const Onboarding: React.FC = () => {
       // Later we can add logic to check if the user is new
       // For now, we assume all users accessing this page are new
     }
-  }, [isAuthenticated, isLoading, navigate]);
+  }, [isAuthenticated, isLoading, navigate, inPreviewMode]);
   
   if (isLoading) {
     return <div className="min-h-screen flex items-center justify-center">Chargement...</div>;
