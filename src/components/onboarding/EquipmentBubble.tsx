@@ -59,23 +59,25 @@ const EquipmentBubble: React.FC<EquipmentBubbleProps> = ({
         data-id={id}
         data-name={name}
       >
-        {/* Icon container - no background circle */}
-        <div className="flex items-center justify-center mb-4">
+        {/* Icon container - increased size and no background */}
+        <div className="flex items-center justify-center mb-4 h-[70px]">
           <div 
             className="text-[#2A5D50] equipment-icon flex items-center justify-center" 
-            style={{ height: '65px', width: '65px' }} // Increased icon size by ~30%
+            style={{ height: '70px', width: '70px' }}
           >
             <div dangerouslySetInnerHTML={{ __html: svg }} />
           </div>
         </div>
 
-        {/* Tooltip pour le texte long sur desktop */}
+        {/* Text container with improved spacing and height */}
         <Tooltip>
           <TooltipTrigger asChild>
-            <div className="equipment-name font-['AvantGarde_Bk_BT'] text-sm md:text-base text-[#2A5D50] text-center w-full">
-              {formattedName.split('\n').map((line, i) => (
-                <span key={i} className="leading-snug block">{line}</span>
-              ))}
+            <div className="equipment-name font-['AvantGarde_Bk_BT'] text-sm md:text-base text-[#2A5D50] text-center w-full min-h-[42px] flex items-center justify-center">
+              <div>
+                {formattedName.split('\n').map((line, i) => (
+                  <span key={i} className="leading-tight block">{line}</span>
+                ))}
+              </div>
             </div>
           </TooltipTrigger>
           <TooltipContent 
@@ -86,7 +88,7 @@ const EquipmentBubble: React.FC<EquipmentBubbleProps> = ({
           </TooltipContent>
         </Tooltip>
 
-        {/* Indicateur de sélection */}
+        {/* Selection indicator */}
         {selected && (
           <motion.div
             initial={{ opacity: 0, scale: 0.5 }}
