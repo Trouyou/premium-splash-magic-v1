@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
@@ -12,6 +11,7 @@ import TermsAndNewsletter from './TermsAndNewsletter';
 import SignupButton from './SignupButton';
 import InputField from './InputField';
 import { useToast } from '@/hooks/use-toast';
+import { Button } from '@/components/ui/button';
 
 const SignupForm = () => {
   const [email, setEmail] = useState('');
@@ -70,19 +70,15 @@ const SignupForm = () => {
     
     try {
       if (inPreviewMode) {
-        // Utiliser simulateSignUp en mode prévisualisation
         await simulateSignUp(email, password, firstName, lastName, birthdate);
         
-        // Afficher un toast de confirmation
         toast({
           title: "Inscription simulée réussie",
           description: "Mode prévisualisation - redirection vers l'onboarding",
         });
         
-        // Rediriger vers l'onboarding en mode prévisualisation
         navigate('/onboarding');
       } else {
-        // Utiliser l'authentification normale
         await signUp(email, password, firstName, lastName, birthdate);
         navigate('/onboarding');
       }
@@ -108,9 +104,41 @@ const SignupForm = () => {
     }
   };
 
+  const handleQuickSignup = async () => {
+    try {
+      await simulateSignUp(
+        'test@example.com',
+        'password123',
+        'John',
+        'Doe',
+        '1990-01-01'
+      );
+      
+      toast({
+        title: "Inscription rapide simulée",
+        description: "Mode prévisualisation - redirection vers l'onboarding",
+      });
+      
+      navigate('/onboarding');
+    } catch (error: any) {
+      console.error("Erreur d'inscription rapide:", error);
+      setFormError(error.message || "Une erreur s'est produite lors de l'inscription");
+    }
+  };
+
   return (
     <>
       <FormErrorDisplay error={formError} className="bg-red-50 p-3 rounded-md mb-4" />
+
+      {inPreviewMode && (
+        <Button
+          onClick={handleQuickSignup}
+          className="w-full mb-4 bg-yellow-500 hover:bg-yellow-600 text-white"
+          type="button"
+        >
+          Simulation Rapide (Mode Dev)
+        </Button>
+      )}
 
       <form onSubmit={handleSignup} className="space-y-4" noValidate>
         <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
