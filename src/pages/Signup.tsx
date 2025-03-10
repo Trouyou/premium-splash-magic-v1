@@ -22,19 +22,39 @@ const Signup = () => {
     rgpdScript.async = true;
     document.body.appendChild(rgpdScript);
     
-    // Load the signup error fix script
-    const errorFixScript = document.createElement('script');
-    errorFixScript.src = '/js/signup-error-fix.js';
-    errorFixScript.async = true;
-    document.body.appendChild(errorFixScript);
+    // Add custom styles to prevent duplicate error messages
+    const styleEl = document.createElement('style');
+    styleEl.textContent = `
+      /* Hide duplicate error messages with exclamation mark */
+      .error-message:has(svg) + .error-message:not(:has(svg)),
+      .error-message:not(:has(svg)) + .error-message:has(svg) {
+        display: none !important;
+      }
+      
+      /* Add bottom margin to terms container for error message space */
+      #terms-accept {
+        position: relative;
+      }
+
+      /* Ensure form field bottom margin is consistent */
+      .space-y-4 > div {
+        margin-bottom: 1.5rem;
+      }
+      
+      /* Error messages positioning */
+      .error-message {
+        margin-top: 0.25rem !important;
+      }
+    `;
+    document.head.appendChild(styleEl);
     
     return () => {
       // Clean up on unmount
       if (rgpdScript.parentNode) {
         document.body.removeChild(rgpdScript);
       }
-      if (errorFixScript.parentNode) {
-        document.body.removeChild(errorFixScript);
+      if (styleEl.parentNode) {
+        document.head.removeChild(styleEl);
       }
     };
   }, []);

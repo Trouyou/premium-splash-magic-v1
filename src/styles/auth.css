@@ -54,3 +54,24 @@ html, body {
   flex-direction: column !important;
   justify-content: center !important;
 }
+
+/* Fix for duplicate error messages */
+.error-message:has(svg) + .error-message:not(:has(svg)),
+.error-message:not(:has(svg)) + .error-message:has(svg) {
+  display: none !important;
+}
+
+/* Terms and conditions error styling */
+#terms-accept {
+  position: relative;
+}
+
+.terms-error-container {
+  position: absolute;
+  left: 7px;
+  bottom: -20px;
+  margin-top: 4px;
+  color: #D11B19;
+  font-size: 14px;
+  min-height: 20px;
+}

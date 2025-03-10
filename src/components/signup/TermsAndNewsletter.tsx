@@ -45,7 +45,7 @@ const TermsAndNewsletter = ({
   };
 
   return (
-    <>
+    <div className="relative">
       <div className="flex items-start my-5 w-full">
         <div className="flex-shrink-0 mt-[3px]">
           <input
@@ -79,11 +79,13 @@ const TermsAndNewsletter = ({
           </a>
         </label>
       </div>
-      <div className="pl-7 -mt-3">
-        <FormErrorDisplay error={termsError} />
-      </div>
+      {termsError && (
+        <div className="absolute left-7 -bottom-5">
+          <FormErrorDisplay error={termsError} />
+        </div>
+      )}
 
-      <div className="flex items-start my-5 w-full">
+      <div className="flex items-start mt-8 mb-5 w-full">
         <div className="flex-shrink-0 mt-[3px]">
           <input
             type="checkbox"
@@ -101,7 +103,7 @@ const TermsAndNewsletter = ({
           Oui, je souhaite recevoir des offres personnalisées et des conseils nutritionnels
         </label>
       </div>
-    </>
+    </div>
   );
 };
 
