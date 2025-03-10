@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
@@ -34,47 +35,33 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
     setIsLoading(true);
     setIsImgLoaded(false);
     
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
+    // Load the recipe image immediately without network requests
+    const uniqueImage = loadRecipeImage(recipe);
     
-    const loadImage = async () => {
-      try {
-        if (recipe.image) {
-          setImgSrc(recipe.image);
-          return;
-        }
-        
-        const uniqueImage = await loadRecipeImage(recipe);
-        
-        if (isMounted && uniqueImage) {
-          setImgSrc(uniqueImage);
-          recipe.image = uniqueImage;
-        }
-      } catch (error) {
-        console.error(`Error loading image for ${recipe.name}:`, error);
+    if (isMounted) {
+      setImgSrc(uniqueImage || defaultImage);
+      // Pre-warm the image
+      const img = new Image();
+      img.src = uniqueImage || defaultImage;
+      img.onload = () => {
         if (isMounted) {
-          if (loadAttempts >= 2) {
-            setImgSrc(defaultImage);
-          } else {
-            setLoadAttempts(prev => prev + 1);
-            setTimeout(() => loadImage(), 1000);
-          }
-        }
-      } finally {
-        if (isMounted && loadAttempts >= 2) {
+          setIsImgLoaded(true);
           setIsLoading(false);
         }
-      }
-    };
-    
-    loadImage();
+      };
+      img.onerror = () => {
+        if (isMounted) {
+          setImgSrc(defaultImage);
+          setIsImgLoaded(true);
+          setIsLoading(false);
+        }
+      };
+    }
     
     return () => {
       isMounted = false;
-      clearTimeout(timeoutId);
-      controller.abort();
     };
-  }, [recipe.id, defaultImage, loadAttempts]);
+  }, [recipe.id, defaultImage]);
 
   const handleImageLoaded = () => {
     setIsImgLoaded(true);
