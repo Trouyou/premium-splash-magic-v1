@@ -19,7 +19,6 @@ export const verifyRecipeImage = async (imageUrl: string): Promise<boolean> => {
       return false;
     }
     
-    // Simple HEAD request to check if the image exists
     const response = await fetch(imageUrl, { method: 'HEAD' });
     return response.ok && response.headers.get('Content-Type')?.startsWith('image/');
   } catch (error) {
@@ -27,8 +26,8 @@ export const verifyRecipeImage = async (imageUrl: string): Promise<boolean> => {
   }
 };
 
-// Fetch a new recipe image using Unsplash source (client-side friendly)
-export const fetchNewRecipeImage = async (recipeName: string): Promise<string> => {
+// Fetch a unique recipe image using Unsplash source
+export const fetchUniqueRecipeImage = async (recipeName: string): Promise<string> => {
   try {
     // Prepare search query from recipe name
     const searchTerms = recipeName
@@ -39,15 +38,25 @@ export const fetchNewRecipeImage = async (recipeName: string): Promise<string> =
       .join(' ');
       
     // Add descriptive food-related keywords
-    const searchQuery = `${searchTerms} food dish recipe`;
+    const searchQuery = `${searchTerms} food dish recipe cooking`;
     
-    // Construct direct Unsplash source URL (doesn't require API key)
-    const cacheBuster = `&cb=${Date.now()}`;
-    const imageUrl = `https://source.unsplash.com/featured/?${encodeURIComponent(searchQuery)}${cacheBuster}`;
+    // Add random seed to ensure we get different images even for similar queries
+    const randomSeed = Math.floor(Math.random() * 10000);
     
-    // Return the URL directly - the actual image will be fetched when rendered
+    // Construct direct Unsplash source URL with random seed
+    const imageUrl = `https://source.unsplash.com/featured/?${encodeURIComponent(searchQuery)}&random=${randomSeed}`;
+    
+    // Check if image is already used
+    if (usedImageUrls.has(imageUrl)) {
+      // Try again with a different random seed
+      return fetchUniqueRecipeImage(recipeName);
+    }
+    
+    // If not used, return it and add to used set
+    usedImageUrls.add(imageUrl);
     return imageUrl;
   } catch (error) {
+    console.error("Error fetching unique image:", error);
     return '';
   }
 };
@@ -62,30 +71,55 @@ export const initializeUsedImagesTracker = (recipes: Recipe[]): void => {
   });
 };
 
+// Force unique images for all recipes
+export const ensureUniqueImages = async (recipes: Recipe[]): Promise<void> => {
+  const imageMap = new Map<string, number>();
+  
+  // First pass: count image occurrences
+  recipes.forEach(recipe => {
+    if (recipe.image) {
+      const count = imageMap.get(recipe.image) || 0;
+      imageMap.set(recipe.image, count + 1);
+    }
+  });
+  
+  // Second pass: fix duplicates
+  const promises = recipes.map(async recipe => {
+    if (!recipe.image || imageMap.get(recipe.image) > 1) {
+      // This image is either missing or duplicated, fetch a new one
+      recipe.image = await fetchUniqueRecipeImage(recipe.name);
+    }
+  });
+  
+  await Promise.all(promises);
+};
+
 // Main function to load and verify recipe images
 export const loadRecipeImage = async (recipe: Recipe): Promise<string> => {
-  // Case 1: Recipe has no image - use fallback
+  // Case 1: Recipe has no image - get a new unique one
   if (!recipe.image) {
+    const newImage = await fetchUniqueRecipeImage(recipe.name);
+    if (newImage) {
+      return newImage;
+    }
     return getFallbackImage(recipe);
   }
   
   // Case 2: Recipe has an image but it's a duplicate
   if (usedImageUrls.has(recipe.image) && recipe.image !== DEFAULT_IMAGE) {
-    // Try to get a new unique image
-    const newImage = await fetchNewRecipeImage(recipe.name);
+    // Get a new unique image
+    const newImage = await fetchUniqueRecipeImage(recipe.name);
     if (newImage) {
-      usedImageUrls.add(newImage);
       return newImage;
     }
   }
   
-  // Case 3: Recipe has a unique image but needs validation
+  // Case 3: Recipe has a potentially unique image but needs validation
   const isValid = await verifyRecipeImage(recipe.image);
   if (!isValid) {
-    // If invalid, try to get a new image
-    const newImage = await fetchNewRecipeImage(recipe.name);
+    // If invalid, get a new image
+    const newImage = await fetchUniqueRecipeImage(recipe.name);
     if (newImage) {
-      usedImageUrls.add(newImage);
       return newImage;
     }
     

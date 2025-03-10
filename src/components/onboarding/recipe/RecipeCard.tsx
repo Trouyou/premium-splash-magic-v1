@@ -25,32 +25,52 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
   defaultImage
 }) => {
   const [isHovering, setIsHovering] = useState(false);
-  const [imgSrc, setImgSrc] = useState(recipe.image || defaultImage);
+  const [imgSrc, setImgSrc] = useState('');
   const [isImgLoaded, setIsImgLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Load image only when component mounts or recipe changes
   useEffect(() => {
+    let isMounted = true;
+    setIsLoading(true);
     setIsImgLoaded(false);
     
-    const getValidImage = async () => {
+    const getUniqueImage = async () => {
       try {
-        const validImage = await loadRecipeImage(recipe);
-        if (validImage && validImage !== imgSrc) {
-          setImgSrc(validImage);
+        // Get a guaranteed unique image for this recipe
+        const uniqueImage = await loadRecipeImage(recipe);
+        
+        if (isMounted && uniqueImage) {
+          setImgSrc(uniqueImage);
         }
       } catch (error) {
-        console.error(`Error loading image for ${recipe.name}:`, error);
+        console.error(`Error loading unique image for ${recipe.name}:`, error);
+        if (isMounted) {
+          setImgSrc(defaultImage);
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
       }
     };
     
-    getValidImage();
-  }, [recipe.id]);
+    getUniqueImage();
+    
+    return () => {
+      isMounted = false;
+    };
+  }, [recipe.id, defaultImage]);
 
   // Image event handlers
-  const handleImageLoaded = () => setIsImgLoaded(true);
+  const handleImageLoaded = () => {
+    setIsImgLoaded(true);
+    setIsLoading(false);
+  };
   
   const handleImageError = () => {
     setIsImgLoaded(false);
+    setIsLoading(false);
     setImgSrc(defaultImage);
   };
 
@@ -70,14 +90,14 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
       onMouseLeave={() => setIsHovering(false)}
     >
       <div className="relative aspect-square overflow-hidden bg-gray-100">
-        {!isImgLoaded && (
+        {(isLoading || !isImgLoaded) && (
           <div className="absolute inset-0 flex items-center justify-center">
             <Loader2 className="h-8 w-8 text-gray-300 animate-spin" />
           </div>
         )}
         
         <img 
-          src={imgSrc} 
+          src={imgSrc || defaultImage} 
           alt={recipe.name}
           onLoad={handleImageLoaded}
           onError={handleImageError}
@@ -143,7 +163,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
         </div>
         
         {/* Display all ingredients */}
-        <div className="mt-2 flex flex-wrap gap-1">
+        <div className="mt-2 flex flex-wrap gap-1 max-h-20 overflow-y-auto">
           {recipe.mainIngredients.map((ingredient, index) => (
             <span 
               key={index} 

@@ -10,7 +10,7 @@ import RecipeResults from '../recipe/RecipeResults';
 import { useRecipeFiltering } from '../recipe/useRecipeFiltering';
 import { mockRecipes } from '../recipe/data/mockRecipes';
 import { allCategories, timePresets } from '../recipe/utils/constants';
-import { initializeUsedImagesTracker } from '../recipe/utils/imageUtils';
+import { initializeUsedImagesTracker, ensureUniqueImages } from '../recipe/utils/imageUtils';
 
 interface FavoriteRecipesScreenProps {
   currentStep: number;
@@ -44,9 +44,17 @@ const FavoriteRecipesScreen: React.FC<FavoriteRecipesScreenProps> = ({
   const [page, setPage] = useState(1);
   const recipesPerPage = 8;
   
-  // Initialize the used images tracker only once on component mount
+  // Initialize the used images tracker and ensure unique images
   useEffect(() => {
-    initializeUsedImagesTracker(mockRecipes);
+    const prepareRecipeImages = async () => {
+      // Initialize the tracker with existing recipe images
+      initializeUsedImagesTracker(mockRecipes);
+      
+      // Ensure all recipes have unique images
+      await ensureUniqueImages(mockRecipes);
+    };
+    
+    prepareRecipeImages();
   }, []);
   
   // Debounce search input for better performance
