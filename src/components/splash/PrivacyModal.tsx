@@ -72,7 +72,7 @@ const PrivacyModal = ({ isVisible, onAccept, onRefuse }: PrivacyModalProps) => {
           <h3 className="font-avantgarde text-xl text-[#B22222] mb-2 text-center">Confidentialité</h3>
           <div className="w-full h-px bg-eatly-light my-3" />
           <p className="font-playfair text-base leading-relaxed opacity-90 mb-7 text-center max-w-[85%]">
-            Eatly respecte votre vie privée. Voulez-vous partager des données d'utilisation anonymes pour améliorer votre expérience?
+            Eatly accorde une importance primordiale à la protection des données personnelles de ses utilisateurs. Souhaitez-vous partager des données d'utilisation anonymes pour améliorer votre expérience?
           </p>
           <div className="flex gap-6 sm:flex-row flex-col w-full justify-center">
             <motion.button 
