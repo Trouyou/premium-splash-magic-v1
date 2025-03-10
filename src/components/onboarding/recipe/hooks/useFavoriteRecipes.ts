@@ -72,38 +72,53 @@ export const useFavoriteRecipes = ({ favoriteRecipes, onboardingData }: UseFavor
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
   // Custom handler for setting time filter (pending)
-  const setSelectedTimeFilter = (value: string) => {
+  // Renamed from setSelectedTimeFilter to handleTimeFilterChange
+  const handleTimeFilterChange = (value: string) => {
     setPendingTimeFilter(value);
   };
 
   // Custom handler for setting category (pending)
-  const setSelectedCategory = (value: string | null) => {
+  // Renamed from setSelectedCategory to handleCategoryChange
+  const handleCategoryChange = (value: string | null) => {
     setPendingCategory(value);
   };
 
   // Custom handler for setting dietary filter (pending)
-  const setSelectedDietary = (value: string | null) => {
+  // Renamed from setSelectedDietary to handleDietaryChange
+  const handleDietaryChange = (value: string | null) => {
     setPendingDietary(value);
   };
 
   // Custom handler for setting difficulty filter (pending)
-  const setSelectedDifficulty = (value: string | null) => {
+  // Renamed from setSelectedDifficulty to handleDifficultyChange
+  const handleDifficultyChange = (value: string | null) => {
     setPendingDifficulty(value);
   };
 
   // Custom handler for setting calorie filter (pending)
-  const setSelectedCalorie = (value: string | null) => {
+  // Renamed from setSelectedCalorie to handleCalorieChange
+  const handleCalorieChange = (value: string | null) => {
     setPendingCalorie(value);
   };
 
   // Apply pending filters to active filters
   const applyFilters = () => {
     // Apply all pending filters
-    selectedTimeFilter !== pendingTimeFilter && setSelectedTimeFilter(pendingTimeFilter);
-    selectedCategory !== pendingCategory && setSelectedCategory(pendingCategory);
-    selectedDietary !== pendingDietary && setSelectedDietary(pendingDietary);
-    selectedDifficulty !== pendingDifficulty && setSelectedDifficulty(pendingDifficulty);
-    selectedCalorie !== pendingCalorie && setSelectedCalorie(pendingCalorie);
+    if (selectedTimeFilter !== pendingTimeFilter) {
+      setSelectedTimeFilter(pendingTimeFilter);
+    }
+    if (selectedCategory !== pendingCategory) {
+      setSelectedCategory(pendingCategory);
+    }
+    if (selectedDietary !== pendingDietary) {
+      setSelectedDietary(pendingDietary);
+    }
+    if (selectedDifficulty !== pendingDifficulty) {
+      setSelectedDifficulty(pendingDifficulty);
+    }
+    if (selectedCalorie !== pendingCalorie) {
+      setSelectedCalorie(pendingCalorie);
+    }
     
     // Hide filters after applying
     setShowFilters(false);
@@ -201,15 +216,16 @@ export const useFavoriteRecipes = ({ favoriteRecipes, onboardingData }: UseFavor
     showOnlyFavorites,
     setShowOnlyFavorites,
     selectedTimeFilter,
-    setSelectedTimeFilter,
+    // Return the new handler names
+    setSelectedTimeFilter: handleTimeFilterChange, 
     selectedCategory,
-    setSelectedCategory,
+    setSelectedCategory: handleCategoryChange,
     selectedDietary,
-    setSelectedDietary,
+    setSelectedDietary: handleDietaryChange,
     selectedDifficulty,
-    setSelectedDifficulty,
+    setSelectedDifficulty: handleDifficultyChange,
     selectedCalorie,
-    setSelectedCalorie,
+    setSelectedCalorie: handleCalorieChange,
     pendingFilterOptions,
     filterOptions,
     debouncedSearchTerm,

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Filter, ChevronDown, ChevronUp, Check, X } from 'lucide-react';
