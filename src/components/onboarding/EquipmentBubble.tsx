@@ -29,7 +29,6 @@ const EquipmentBubble: React.FC<EquipmentBubbleProps> = ({
   const [justSelected, setJustSelected] = useState(false);
   const formattedName = formatEquipmentName(name);
 
-  // Animation effect when selected
   useEffect(() => {
     if (selected && !justSelected) {
       setJustSelected(true);
@@ -47,11 +46,11 @@ const EquipmentBubble: React.FC<EquipmentBubbleProps> = ({
         whileTap={{ scale: 0.98 }}
         onClick={onClick}
         className={cn(
-          "equipment-card relative flex flex-col items-center justify-start",
-          "p-4 rounded-xl transition-all duration-300 ease-in-out",
-          "bg-white border-2 hover:shadow-md",
+          "relative flex flex-col items-center justify-start p-4 rounded-xl",
+          "bg-white border-2 hover:shadow-md min-h-[160px]",
+          "transition-all duration-300 ease-in-out",
           selected 
-            ? "border-[#D11B19] transform scale-102 shadow-md" 
+            ? "border-[#D11B19] shadow-md" 
             : "border-[#EDE6D6]",
           justSelected && "animate-[selectPop_0.3s_forwards]"
         )}
@@ -59,23 +58,21 @@ const EquipmentBubble: React.FC<EquipmentBubbleProps> = ({
         data-id={id}
         data-name={name}
       >
-        {/* Icon container - increased size and no background */}
-        <div className="flex items-center justify-center mb-4 h-[70px]">
+        {/* Icon container with improved sizing and centering */}
+        <div className="flex items-center justify-center mb-3 h-[80px] w-[80px]">
           <div 
-            className="text-[#2A5D50] equipment-icon flex items-center justify-center" 
-            style={{ height: '70px', width: '70px' }}
-          >
-            <div dangerouslySetInnerHTML={{ __html: svg }} />
-          </div>
+            className="text-[#2A5D50] flex items-center justify-center w-full h-full transform scale-110" 
+            dangerouslySetInnerHTML={{ __html: svg }} 
+          />
         </div>
 
-        {/* Text container with improved spacing and height */}
+        {/* Text container with improved spacing and wrapping */}
         <Tooltip>
           <TooltipTrigger asChild>
-            <div className="equipment-name font-['AvantGarde_Bk_BT'] text-sm md:text-base text-[#2A5D50] text-center w-full min-h-[42px] flex items-center justify-center">
-              <div>
+            <div className="equipment-name font-['AvantGarde_Bk_BT'] text-sm text-[#2A5D50] text-center w-full min-h-[48px] flex items-center justify-center px-2">
+              <div className="leading-tight">
                 {formattedName.split('\n').map((line, i) => (
-                  <span key={i} className="leading-tight block">{line}</span>
+                  <span key={i} className="block whitespace-normal">{line}</span>
                 ))}
               </div>
             </div>
