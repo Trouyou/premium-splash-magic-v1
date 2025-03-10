@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { useDebounce } from "@/hooks/use-debounce";
 import { mockRecipes } from '../data/mockRecipes';
 import { DEFAULT_IMAGE } from '../utils/constants';
-import { useRecipeFiltering } from '../useRecipeFiltering';
+import { useRecipeFiltering } from './useRecipeFiltering';
 import { RecipeFilterOptions } from '../types';
 
 interface UseFavoriteRecipesProps {

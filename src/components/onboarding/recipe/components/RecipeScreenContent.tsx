@@ -1,4 +1,3 @@
-
 import React from 'react';
 import RecipeFilters from '../RecipeFilters';
 import RecipeResults from '../RecipeResults';
