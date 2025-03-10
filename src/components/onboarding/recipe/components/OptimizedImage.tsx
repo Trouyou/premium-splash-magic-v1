@@ -22,6 +22,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
 }) => {
   const [imgSrc, setImgSrc] = useState<string>(src);
   const [hasLoaded, setHasLoaded] = useState<boolean>(false);
+  const [hasError, setHasError] = useState<boolean>(false);
   
   const handleLoad = () => {
     setHasLoaded(true);
@@ -29,7 +30,8 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   };
   
   const handleError = () => {
-    if (imgSrc !== fallbackSrc) {
+    if (!hasError && imgSrc !== fallbackSrc) {
+      setHasError(true);
       setImgSrc(fallbackSrc);
     }
     if (onError) onError();
