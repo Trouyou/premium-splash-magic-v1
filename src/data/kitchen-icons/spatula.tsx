@@ -8,5 +8,9 @@ export const SpatulaIcon = () => (
     <path d="M22,30 L42,30" />
     <path d="M22,38 L42,38" />
     <path d="M26,46 L38,46" />
+    <path d="M32,16 L32,54" strokeWidth="1" strokeOpacity="0.3" />
+    <path d="M27,16 L27,30" strokeWidth="1" strokeOpacity="0.4" />
+    <path d="M37,16 L37,30" strokeWidth="1" strokeOpacity="0.4" />
+    <path d="M28,52 C28,50 36,50 36,52" strokeWidth="1" strokeOpacity="0.5" />
   </svg>
 );

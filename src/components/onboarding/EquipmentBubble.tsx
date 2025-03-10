@@ -62,15 +62,15 @@ const EquipmentBubble: React.FC<EquipmentBubbleProps> = ({
         data-id={id}
         data-name={name}
       >
-        {/* Icon container with improved sizing and centering */}
-        <div className="flex items-center justify-center mb-4 h-[90px] w-[90px]">
+        {/* Icon container with improved sizing and centering - increased scale for better visibility */}
+        <div className="flex items-center justify-center mb-4 h-[100px] w-[100px]">
           {iconComponent ? (
-            <div className="text-[#2A5D50] flex items-center justify-center w-full h-full transform scale-120">
+            <div className="text-[#2A5D50] flex items-center justify-center w-full h-full transform scale-125">
               {iconComponent}
             </div>
           ) : (
             <div 
-              className="text-[#2A5D50] flex items-center justify-center w-full h-full transform scale-120" 
+              className="text-[#2A5D50] flex items-center justify-center w-full h-full transform scale-125" 
               dangerouslySetInnerHTML={{ __html: svg }} 
             />
           )}

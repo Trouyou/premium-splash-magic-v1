@@ -12,5 +12,10 @@ export const StoveIcon = () => (
     <rect x="16" y="47" width="4" height="2" fill="currentColor" />
     <rect x="30" y="47" width="4" height="2" fill="currentColor" />
     <rect x="44" y="47" width="4" height="2" fill="currentColor" />
+    <path d="M14,38 L50,38" strokeWidth="1" strokeOpacity="0.5" />
+    <path d="M21,19 L21,31" strokeWidth="1" strokeOpacity="0.5" />
+    <path d="M43,19 L43,31" strokeWidth="1" strokeOpacity="0.5" />
+    <path d="M15,25 L27,25" strokeWidth="1" strokeOpacity="0.5" />
+    <path d="M37,25 L49,25" strokeWidth="1" strokeOpacity="0.5" />
   </svg>
 );
