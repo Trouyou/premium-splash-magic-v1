@@ -46,19 +46,21 @@ const TermsAndNewsletter = ({
 
   return (
     <>
-      <div className="terms-checkbox-container flex items-start my-5 w-full">
-        <input
-          type="checkbox"
-          id="terms-accept"
-          checked={acceptTerms}
-          onChange={handleTermsChange}
-          className={`mt-[3px] mr-[10px] min-w-[18px] h-[18px] text-eatly-primary rounded focus:ring-eatly-primary flex-shrink-0 ${
-            termsError ? 'border-eatly-primary bg-red-50' : 'border-gray-300'
-          }`}
-          required
-          aria-invalid={!!termsError}
-        />
-        <label htmlFor="terms-accept" className="font-avantgarde text-sm leading-relaxed text-[#333333] flex-1 text-left">
+      <div className="flex items-start my-5 w-full">
+        <div className="flex-shrink-0 mt-[3px]">
+          <input
+            type="checkbox"
+            id="terms-accept"
+            checked={acceptTerms}
+            onChange={handleTermsChange}
+            className={`min-w-[18px] h-[18px] text-eatly-primary rounded focus:ring-eatly-primary ${
+              termsError ? 'border-eatly-primary bg-red-50' : 'border-gray-300'
+            }`}
+            required
+            aria-invalid={!!termsError}
+          />
+        </div>
+        <label htmlFor="terms-accept" className="font-avantgarde text-sm leading-relaxed text-[#333333] ml-[10px] flex-1 text-left">
           J'accepte les {" "}
           <a 
             href={`/conditions-utilisation.html?returnTo=${encodeURIComponent(currentPath)}`} 
@@ -81,18 +83,20 @@ const TermsAndNewsletter = ({
         <FormErrorDisplay error={termsError} />
       </div>
 
-      <div className="newsletter-container flex items-start my-5 w-full">
-        <input
-          type="checkbox"
-          id="newsletter-signup"
-          name="newsletter-signup"
-          checked={newsletter}
-          onChange={() => onNewsletterChange(!newsletter)}
-          className="newsletter-checkbox mt-[3px] mr-[10px] min-w-[18px] h-[18px] text-eatly-primary border-gray-300 rounded focus:ring-eatly-primary flex-shrink-0 cursor-pointer"
-        />
+      <div className="flex items-start my-5 w-full">
+        <div className="flex-shrink-0 mt-[3px]">
+          <input
+            type="checkbox"
+            id="newsletter-signup"
+            name="newsletter-signup"
+            checked={newsletter}
+            onChange={() => onNewsletterChange(!newsletter)}
+            className="min-w-[18px] h-[18px] text-eatly-primary border-gray-300 rounded focus:ring-eatly-primary cursor-pointer"
+          />
+        </div>
         <label
           htmlFor="newsletter-signup"
-          className="newsletter-text font-avantgarde text-sm leading-relaxed text-[#333333] flex-1 text-left cursor-pointer"
+          className="font-avantgarde text-sm leading-relaxed text-[#333333] ml-[10px] flex-1 text-left cursor-pointer"
         >
           Oui, je souhaite recevoir des offres personnalisées et des conseils nutritionnels
         </label>
