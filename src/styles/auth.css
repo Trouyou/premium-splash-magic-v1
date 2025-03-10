@@ -75,3 +75,23 @@ html, body {
   font-size: 14px;
   min-height: 20px;
 }
+
+/* Fix for social login buttons to ensure they're all visible */
+.space-y-3.mb-6 {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  margin-bottom: 24px !important;
+  padding-top: 10px !important; /* Add padding to ensure the first button is visible */
+  overflow: visible !important;
+}
+
+/* Ensure all social buttons are visible */
+.space-y-3.mb-6 > button, 
+.space-y-3.mb-6 > div > button {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: flex !important;
+}

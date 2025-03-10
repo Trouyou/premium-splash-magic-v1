@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import SocialButton from './SocialButton';
 import { useAuth } from '@/context/AuthContext';
@@ -18,6 +19,14 @@ const SocialLoginSection = () => {
         hostname: window.location.hostname
       });
     }
+    
+    // Ensure Apple button is visible
+    setTimeout(() => {
+      const appleButton = document.querySelector('[provider="Apple"], [providerName="Apple"]');
+      if (appleButton) {
+        appleButton.scrollIntoView({ behavior: 'auto', block: 'nearest' });
+      }
+    }, 100);
   }, []);
 
   const AppleLogo = () => (
