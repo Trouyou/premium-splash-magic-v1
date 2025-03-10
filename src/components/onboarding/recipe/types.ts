@@ -1,3 +1,4 @@
+
 export interface Recipe {
   id: string;
   name: string;
@@ -10,6 +11,7 @@ export interface Recipe {
   calories?: number;
   protein?: number;
   imageVerified?: boolean;
+  difficulty?: string; // Added field for difficulty
 }
 
 export interface RecipeFilterOptions {
@@ -17,6 +19,9 @@ export interface RecipeFilterOptions {
   timeFilter: string;
   categoryFilter: string | null;
   showOnlyFavorites: boolean;
+  dietaryFilter: string | null;    // New filter for dietary preferences
+  difficultyFilter: string | null; // New filter for difficulty level
+  calorieFilter: string | null;    // New filter for calorie range
 }
 
 export interface CategoryOption {
@@ -27,6 +32,23 @@ export interface CategoryOption {
 export interface TimePresetOption {
   id: string;
   name: string;
+}
+
+export interface DietaryOption {
+  id: string;
+  name: string;
+}
+
+export interface DifficultyOption {
+  id: string;
+  name: string;
+}
+
+export interface CalorieOption {
+  id: string;
+  name: string;
+  min?: number;
+  max?: number;
 }
 
 // Fallback image configuration

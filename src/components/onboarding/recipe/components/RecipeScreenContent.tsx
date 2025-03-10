@@ -3,7 +3,13 @@ import React from 'react';
 import RecipeFilters from '../RecipeFilters';
 import RecipeResults from '../RecipeResults';
 import { useFavoriteRecipes } from '../hooks/useFavoriteRecipes';
-import { allCategories, timePresets } from '../utils/constants';
+import { 
+  allCategories, 
+  timePresets, 
+  dietaryOptions, 
+  difficultyOptions, 
+  calorieOptions 
+} from '../utils/constants';
 
 interface RecipeScreenContentProps {
   favoriteRecipes: string[];
@@ -34,6 +40,13 @@ const RecipeScreenContent: React.FC<RecipeScreenContentProps> = ({
     setSelectedTimeFilter,
     selectedCategory,
     setSelectedCategory,
+    selectedDietary,
+    setSelectedDietary,
+    selectedDifficulty,
+    setSelectedDifficulty,
+    selectedCalorie,
+    setSelectedCalorie,
+    pendingFilterOptions,
     filterOptions,
     debouncedSearchTerm,
     filteredRecipes,
@@ -43,7 +56,8 @@ const RecipeScreenContent: React.FC<RecipeScreenContentProps> = ({
     recipesReady,
     handleLoadMore,
     handleReset,
-    validateForNextStep
+    validateForNextStep,
+    applyFilters
   } = useFavoriteRecipes({ favoriteRecipes, onboardingData });
 
   const handleNext = () => {
@@ -57,17 +71,25 @@ const RecipeScreenContent: React.FC<RecipeScreenContentProps> = ({
       {/* Search and Filter Controls */}
       <RecipeFilters 
         filterOptions={filterOptions}
+        pendingFilterOptions={pendingFilterOptions}
         setSearchTerm={setSearchTerm}
         setSelectedTimeFilter={setSelectedTimeFilter}
         setSelectedCategory={setSelectedCategory}
+        setSelectedDietary={setSelectedDietary}
+        setSelectedDifficulty={setSelectedDifficulty}
+        setSelectedCalorie={setSelectedCalorie}
         setShowFilters={setShowFilters}
         setShowOnlyFavorites={setShowOnlyFavorites}
         showFilters={showFilters}
         showOnlyFavorites={showOnlyFavorites}
         handleReset={handleReset}
+        applyFilters={applyFilters}
         favoriteRecipesCount={favoriteRecipes.length}
         timePresets={timePresets}
         categories={allCategories}
+        dietaryOptions={dietaryOptions}
+        difficultyOptions={difficultyOptions}
+        calorieOptions={calorieOptions}
         totalResults={filteredRecipes.length}
         searchTerm={debouncedSearchTerm}
       />

@@ -17,6 +17,9 @@ export const useRecipeFiltering = (
   debouncedSearchTerm: string,
   selectedTimeFilter: string,
   selectedCategory: string | null,
+  selectedDietary: string | null,
+  selectedDifficulty: string | null,
+  selectedCalorie: string | null,
   showOnlyFavorites: boolean,
   page: number,
   recipesPerPage: number
@@ -28,7 +31,7 @@ export const useRecipeFiltering = (
   const filteredRecipes = useMemo(() => {
     // Start filtering process
     return recipes
-      // Dietary preferences filter
+      // Dietary preferences filter (from onboarding data)
       .filter(recipe => {
         if (onboardingData.dietaryPreferences.length === 0 || onboardingData.dietaryPreferences.includes('omnivore')) {
           return true;
@@ -48,18 +51,20 @@ export const useRecipeFiltering = (
           onboardingData.kitchenEquipment.includes(equipment)
         );
       })
-      // Cooking time filter - applied based on selected filter or onboarding data
+      // Cooking time filter - applied based on selected filter
       .filter(recipe => {
-        if (selectedTimeFilter === 'quick' || onboardingData.cookingTime === 'quick') {
-          return recipe.cookingTime <= 15;
-        } 
-        if (selectedTimeFilter === 'medium' || onboardingData.cookingTime === 'standard') {
-          return recipe.cookingTime <= 30;
-        } 
-        if (selectedTimeFilter === 'long') {
-          return recipe.cookingTime <= 60;
+        switch (selectedTimeFilter) {
+          case 'ultra-quick':
+            return recipe.cookingTime <= 10;
+          case 'quick':
+            return recipe.cookingTime <= 15;
+          case 'medium':
+            return recipe.cookingTime >= 15 && recipe.cookingTime <= 30;
+          case 'long':
+            return recipe.cookingTime > 30;
+          default:
+            return true;
         }
-        return true;
       })
       // Category filter with optimized string comparisons
       .filter(recipe => {
@@ -81,6 +86,61 @@ export const useRecipeFiltering = (
               'Vietnamien', 'Japonais', 'Coréen', 'Espagnol', 'Grec', 'Maghrébin', 'Argentin',
               'Russe', 'Ukrainien'];
             return recipe.categories.some(cat => worldCuisines.includes(cat));
+          case 'plat-principal':
+            const mainDishCategories = ['Plat principal', 'Plat', 'Repas complet'];
+            return recipe.categories.some(cat => mainDishCategories.includes(cat));
+          case 'dessert':
+            const dessertCategories = ['Dessert', 'Gourmandise', 'Pâtisserie', 'Sucré'];
+            return recipe.categories.some(cat => dessertCategories.includes(cat));
+          default:
+            return true;
+        }
+      })
+      // Dietary filter (from explicit selection)
+      .filter(recipe => {
+        if (!selectedDietary) return true;
+        
+        switch (selectedDietary) {
+          case 'vegetarian':
+            return recipe.dietaryOptions.includes('vegetarien');
+          case 'vegan':
+            return recipe.dietaryOptions.includes('vegan');
+          case 'gluten-free':
+            return recipe.dietaryOptions.includes('sans-gluten');
+          case 'keto':
+            return recipe.dietaryOptions.includes('keto') || recipe.dietaryOptions.includes('low-carb');
+          case 'high-protein':
+            return recipe.dietaryOptions.includes('proteine') || (recipe.protein && recipe.protein > 20);
+          default:
+            return true;
+        }
+      })
+      // Difficulty filter
+      .filter(recipe => {
+        if (!selectedDifficulty || !recipe.difficulty) return true;
+        
+        switch (selectedDifficulty) {
+          case 'easy':
+            return recipe.difficulty === 'facile' || recipe.difficulty === 'easy';
+          case 'medium':
+            return recipe.difficulty === 'moyen' || recipe.difficulty === 'medium';
+          case 'advanced':
+            return recipe.difficulty === 'difficile' || recipe.difficulty === 'advanced' || recipe.difficulty === 'hard';
+          default:
+            return true;
+        }
+      })
+      // Calorie filter
+      .filter(recipe => {
+        if (!selectedCalorie || !recipe.calories) return true;
+        
+        switch (selectedCalorie) {
+          case 'light':
+            return recipe.calories < 300;
+          case 'medium':
+            return recipe.calories >= 300 && recipe.calories <= 600;
+          case 'high':
+            return recipe.calories > 600;
           default:
             return true;
         }
@@ -120,10 +180,12 @@ export const useRecipeFiltering = (
     recipes, 
     onboardingData.dietaryPreferences,
     onboardingData.kitchenEquipment,
-    onboardingData.cookingTime,
     debouncedSearchTerm, 
     selectedTimeFilter, 
-    selectedCategory, 
+    selectedCategory,
+    selectedDietary,
+    selectedDifficulty,
+    selectedCalorie,
     showOnlyFavorites, 
     favoriteRecipes
   ]);

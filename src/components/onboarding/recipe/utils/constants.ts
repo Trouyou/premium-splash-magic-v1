@@ -28,12 +28,38 @@ export const allCategories = [
   { id: 'equilibre', name: 'Plats équilibrés' },
   { id: 'gourmand', name: 'Plats gourmands' },
   { id: 'monde', name: 'Spécialités du monde' },
+  { id: 'plat-principal', name: 'Plats principaux' },
+  { id: 'dessert', name: 'Desserts & gourmandises' },
 ];
 
 // Time presets for filtering
 export const timePresets = [
   { id: 'all', name: 'Tous' },
+  { id: 'ultra-quick', name: '< 10 min' },
   { id: 'quick', name: '< 15 min' },
-  { id: 'medium', name: '< 30 min' },
-  { id: 'long', name: '< 60 min' },
+  { id: 'medium', name: '15-30 min' },
+  { id: 'long', name: '> 30 min' },
+];
+
+// Dietary options for filtering
+export const dietaryOptions = [
+  { id: 'vegetarian', name: 'Végétarien' },
+  { id: 'vegan', name: 'Vegan' },
+  { id: 'gluten-free', name: 'Sans gluten' },
+  { id: 'keto', name: 'Keto / Low Carb' },
+  { id: 'high-protein', name: 'Riche en protéines' },
+];
+
+// Difficulty options for filtering
+export const difficultyOptions = [
+  { id: 'easy', name: 'Facile' },
+  { id: 'medium', name: 'Moyenne' },
+  { id: 'advanced', name: 'Avancée' },
+];
+
+// Calorie options for filtering
+export const calorieOptions = [
+  { id: 'light', name: 'Léger (< 300 kcal)', max: 300 },
+  { id: 'medium', name: 'Moyen (300-600 kcal)', min: 300, max: 600 },
+  { id: 'high', name: 'Copieux (> 600 kcal)', min: 600 },
 ];

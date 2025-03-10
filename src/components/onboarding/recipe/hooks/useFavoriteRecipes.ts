@@ -5,6 +5,7 @@ import { useDebounce } from "@/hooks/use-debounce";
 import { mockRecipes } from '../data/mockRecipes';
 import { DEFAULT_IMAGE } from '../utils/constants';
 import { useRecipeFiltering } from '../useRecipeFiltering';
+import { RecipeFilterOptions } from '../types';
 
 interface UseFavoriteRecipesProps {
   favoriteRecipes: string[];
@@ -20,11 +21,33 @@ export const useFavoriteRecipes = ({ favoriteRecipes, onboardingData }: UseFavor
   const [searchTerm, setSearchTerm] = useState('');
   const [showFilters, setShowFilters] = useState(false);
   const [showOnlyFavorites, setShowOnlyFavorites] = useState(false);
+  
+  // Active filter options (applied)
   const [selectedTimeFilter, setSelectedTimeFilter] = useState('all');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedDietary, setSelectedDietary] = useState<string | null>(null);
+  const [selectedDifficulty, setSelectedDifficulty] = useState<string | null>(null);
+  const [selectedCalorie, setSelectedCalorie] = useState<string | null>(null);
+  
+  // Pending filter options (not yet applied)
+  const [pendingTimeFilter, setPendingTimeFilter] = useState('all');
+  const [pendingCategory, setPendingCategory] = useState<string | null>(null);
+  const [pendingDietary, setPendingDietary] = useState<string | null>(null);
+  const [pendingDifficulty, setPendingDifficulty] = useState<string | null>(null);
+  const [pendingCalorie, setPendingCalorie] = useState<string | null>(null);
+  
   const [page, setPage] = useState(1);
   const [recipesReady, setRecipesReady] = useState(false);
   const recipesPerPage = 8;
+  
+  // Initialize pending filters from active filters
+  useEffect(() => {
+    setPendingTimeFilter(selectedTimeFilter);
+    setPendingCategory(selectedCategory);
+    setPendingDietary(selectedDietary);
+    setPendingDifficulty(selectedDifficulty);
+    setPendingCalorie(selectedCalorie);
+  }, [selectedTimeFilter, selectedCategory, selectedDietary, selectedDifficulty, selectedCalorie]);
   
   // Ensure recipes have valid images
   useEffect(() => {
@@ -48,6 +71,51 @@ export const useFavoriteRecipes = ({ favoriteRecipes, onboardingData }: UseFavor
   // Debounce search input for better performance
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
+  // Custom handler for setting time filter (pending)
+  const setSelectedTimeFilter = (value: string) => {
+    setPendingTimeFilter(value);
+  };
+
+  // Custom handler for setting category (pending)
+  const setSelectedCategory = (value: string | null) => {
+    setPendingCategory(value);
+  };
+
+  // Custom handler for setting dietary filter (pending)
+  const setSelectedDietary = (value: string | null) => {
+    setPendingDietary(value);
+  };
+
+  // Custom handler for setting difficulty filter (pending)
+  const setSelectedDifficulty = (value: string | null) => {
+    setPendingDifficulty(value);
+  };
+
+  // Custom handler for setting calorie filter (pending)
+  const setSelectedCalorie = (value: string | null) => {
+    setPendingCalorie(value);
+  };
+
+  // Apply pending filters to active filters
+  const applyFilters = () => {
+    // Apply all pending filters
+    selectedTimeFilter !== pendingTimeFilter && setSelectedTimeFilter(pendingTimeFilter);
+    selectedCategory !== pendingCategory && setSelectedCategory(pendingCategory);
+    selectedDietary !== pendingDietary && setSelectedDietary(pendingDietary);
+    selectedDifficulty !== pendingDifficulty && setSelectedDifficulty(pendingDifficulty);
+    selectedCalorie !== pendingCalorie && setSelectedCalorie(pendingCalorie);
+    
+    // Hide filters after applying
+    setShowFilters(false);
+    
+    // If there are filters applied, show a toast confirmation
+    if (pendingTimeFilter !== 'all' || pendingCategory || pendingDietary || pendingDifficulty || pendingCalorie) {
+      toast("Filtres appliqués avec succès", {
+        position: "top-center",
+      });
+    }
+  };
+
   // Use the custom hook for recipe filtering
   const { 
     filteredRecipes, 
@@ -61,6 +129,9 @@ export const useFavoriteRecipes = ({ favoriteRecipes, onboardingData }: UseFavor
     debouncedSearchTerm,
     selectedTimeFilter,
     selectedCategory,
+    selectedDietary,
+    selectedDifficulty,
+    selectedCalorie,
     showOnlyFavorites,
     page,
     recipesPerPage
@@ -71,9 +142,21 @@ export const useFavoriteRecipes = ({ favoriteRecipes, onboardingData }: UseFavor
   };
 
   const handleReset = () => {
+    // Reset active filters
     setSearchTerm('');
     setSelectedTimeFilter('all');
     setSelectedCategory(null);
+    setSelectedDietary(null);
+    setSelectedDifficulty(null);
+    setSelectedCalorie(null);
+    
+    // Reset pending filters
+    setPendingTimeFilter('all');
+    setPendingCategory(null);
+    setPendingDietary(null);
+    setPendingDifficulty(null);
+    setPendingCalorie(null);
+    
     setShowFilters(false);
     setPage(1);
   };
@@ -88,10 +171,25 @@ export const useFavoriteRecipes = ({ favoriteRecipes, onboardingData }: UseFavor
     return true;
   };
 
-  const filterOptions = {
+  // Active filter options
+  const filterOptions: RecipeFilterOptions = {
     searchTerm: debouncedSearchTerm,
     timeFilter: selectedTimeFilter,
     categoryFilter: selectedCategory,
+    dietaryFilter: selectedDietary,
+    difficultyFilter: selectedDifficulty,
+    calorieFilter: selectedCalorie,
+    showOnlyFavorites
+  };
+
+  // Pending filter options
+  const pendingFilterOptions: RecipeFilterOptions = {
+    searchTerm: debouncedSearchTerm,
+    timeFilter: pendingTimeFilter,
+    categoryFilter: pendingCategory,
+    dietaryFilter: pendingDietary,
+    difficultyFilter: pendingDifficulty,
+    calorieFilter: pendingCalorie,
     showOnlyFavorites
   };
 
@@ -106,6 +204,13 @@ export const useFavoriteRecipes = ({ favoriteRecipes, onboardingData }: UseFavor
     setSelectedTimeFilter,
     selectedCategory,
     setSelectedCategory,
+    selectedDietary,
+    setSelectedDietary,
+    selectedDifficulty,
+    setSelectedDifficulty,
+    selectedCalorie,
+    setSelectedCalorie,
+    pendingFilterOptions,
     filterOptions,
     debouncedSearchTerm,
     filteredRecipes,
@@ -115,6 +220,7 @@ export const useFavoriteRecipes = ({ favoriteRecipes, onboardingData }: UseFavor
     recipesReady,
     handleLoadMore,
     handleReset,
-    validateForNextStep
+    validateForNextStep,
+    applyFilters
   };
 };
