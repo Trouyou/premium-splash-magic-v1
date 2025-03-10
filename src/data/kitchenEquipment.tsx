@@ -1,4 +1,4 @@
-<lov-code>
+
 import React from 'react';
 
 export interface Equipment {
@@ -28,6 +28,20 @@ export const formatEquipmentName = (name: string) => {
   }
   
   return name;
+};
+
+// Helper function to group equipment by category
+export const groupEquipmentByCategory = () => {
+  const grouped: Record<string, Equipment[]> = {};
+  
+  kitchenEquipment.forEach(item => {
+    if (!grouped[item.category]) {
+      grouped[item.category] = [];
+    }
+    grouped[item.category].push(item);
+  });
+  
+  return grouped;
 };
 
 // Updated SVG icons for each kitchen equipment - Using the new design
@@ -433,3 +447,32 @@ export const kitchenEquipment: Equipment[] = [
   },
   { 
     id: 'measuringcup', 
+    name: 'Verre doseur', 
+    svg: svgIcons.measuringcup, 
+    category: 'Outils de mesure et préparation' 
+  },
+  { 
+    id: 'mixingbowls', 
+    name: 'Bols mélangeurs', 
+    svg: svgIcons.mixingbowls, 
+    category: 'Outils de mesure et préparation' 
+  },
+  { 
+    id: 'grater', 
+    name: 'Râpe', 
+    svg: svgIcons.grater, 
+    category: 'Outils de mesure et préparation' 
+  },
+  { 
+    id: 'rollingpin', 
+    name: 'Rouleau à pâtisserie', 
+    svg: svgIcons.rollingpin, 
+    category: 'Outils de mesure et préparation' 
+  },
+  { 
+    id: 'thermometer', 
+    name: 'Thermomètre de cuisine', 
+    svg: svgIcons.thermometer, 
+    category: 'Outils de mesure et préparation' 
+  }
+];
