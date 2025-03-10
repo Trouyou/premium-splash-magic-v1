@@ -31,24 +31,14 @@ export const useSignUp = () => {
     setError(null);
     setIsLoading(true);
     
-    // Safety timeout to reset loading state after 10 seconds in case of hang
-    const safetyTimeout = setTimeout(() => {
-      console.log("Safety timeout triggered: resetting loading state");
-      setIsLoading(false);
-    }, 10000);
-    
     try {
       if (inPreviewMode) {
         // Simulation mode - use fake authentication
         await simulateSignUp(email, password, firstName, lastName, birthdate);
-        clearTimeout(safetyTimeout);
-        setIsLoading(false); // Assurez-vous que isLoading est remis à false
         return undefined;
       } else {
         // Real authentication with Clerk
         if (!clerkSignUp || !signUpLoaded) {
-          clearTimeout(safetyTimeout);
-          setIsLoading(false); // Réinitialiser l'état de chargement en cas d'erreur
           throw new Error("L'authentification n'est pas disponible pour le moment");
         }
         
@@ -63,23 +53,19 @@ export const useSignUp = () => {
         // For the signup process, continue with any needed verification
         if (signUpAttempt.status === "complete") {
           console.log("Signup successful and complete");
-          clearTimeout(safetyTimeout);
-          setIsLoading(false); // Réinitialiser l'état de chargement après succès
           return signUpAttempt;
         } else {
           // Changed from 'needs_verification' to check for non-complete status
           console.log("Signup: additional action needed", signUpAttempt.status);
-          clearTimeout(safetyTimeout);
-          setIsLoading(false); // Réinitialiser l'état de chargement même si vérification nécessaire
           return signUpAttempt;
         }
       }
     } catch (err: any) {
       console.error("Sign up error:", err);
       setError(err.message || "Erreur lors de l'inscription");
-      clearTimeout(safetyTimeout);
-      setIsLoading(false); // Assurez-vous que isLoading est remis à false même en cas d'erreur
       throw err;
+    } finally {
+      setIsLoading(false);
     }
   };
   

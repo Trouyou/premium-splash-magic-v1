@@ -1,7 +1,6 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Check } from 'lucide-react';
 
 import ProgressBar from '../ProgressBar';
 import NavigationButtons from '../NavigationButtons';
@@ -42,7 +41,7 @@ const KitchenEquipmentScreen: React.FC<KitchenEquipmentScreenProps> = ({
   };
   
   return (
-    <div className="w-full max-w-2xl mx-auto px-4 pb-16">
+    <div className="w-full max-w-2xl mx-auto px-4">
       <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
       
       <motion.div
@@ -59,39 +58,25 @@ const KitchenEquipmentScreen: React.FC<KitchenEquipmentScreenProps> = ({
         </p>
       </motion.div>
       
-      <div className="overflow-y-auto max-h-[calc(100vh-200px)] pb-8">
-        {Object.entries(groupedEquipment).map(([category, items]) => (
-          <EquipmentCategory
-            key={category}
-            category={category}
-            items={items}
-            selectedEquipment={selectedEquipment}
-            onToggleEquipment={handleToggleEquipment}
-          />
-        ))}
-      </div>
+      {Object.entries(groupedEquipment).map(([category, items]) => (
+        <EquipmentCategory
+          key={category}
+          category={category}
+          items={items}
+          selectedEquipment={selectedEquipment}
+          onToggleEquipment={handleToggleEquipment}
+        />
+      ))}
       
-      <div className="fixed bottom-0 left-0 right-0 bg-white py-4 border-t border-gray-200">
-        <div className="container max-w-2xl mx-auto px-4">
-          <EquipmentCounter count={selectedEquipment.length} />
-          
-          <NavigationButtons
-            onNext={onNext}
-            onPrev={onPrev}
-            isFirstStep={false}
-            isLastStep={false}
-            nextLabel="Continuer"
-          />
-        </div>
-      </div>
+      <EquipmentCounter count={selectedEquipment.length} />
       
-      <style dangerouslySetInnerHTML={{ __html: `
-        @keyframes selectPop {
-          0% { transform: scale(1); }
-          50% { transform: scale(1.12); }
-          100% { transform: scale(1.08); }
-        }
-      `}} />
+      <NavigationButtons
+        onNext={onNext}
+        onPrev={onPrev}
+        isFirstStep={false}
+        isLastStep={false}
+        nextLabel="Continuer"
+      />
     </div>
   );
 };

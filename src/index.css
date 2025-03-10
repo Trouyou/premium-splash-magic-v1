@@ -104,25 +104,10 @@
 @layer base {
   * {
     @apply border-border;
-    box-sizing: border-box;
   }
 
-  html, body {
+  body {
     @apply bg-background text-foreground;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior: none;
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    font-size: 16px;
-  }
-  
-  /* Fix 100vh on mobile browsers */
-  @supports (-webkit-touch-callout: none) {
-    .min-h-screen {
-      min-height: -webkit-fill-available;
-    }
   }
 }
 
@@ -161,25 +146,6 @@
   
   .no-reflow {
     contain: layout;
-  }
-  
-  /* Scrolling utilities */
-  .scroll-container {
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior: contain;
-    overflow-y: auto;
-  }
-  
-  .touch-scrolling {
-    touch-action: pan-y;
-  }
-  
-  /* Mobile optimizations */
-  @media (max-width: 768px) {
-    .mobile-touch-target {
-      min-height: 44px;
-      min-width: 44px;
-    }
   }
 }
 
@@ -228,19 +194,6 @@ input:invalid:not(:focus),
 [class*="input-wrapper"] {
   margin-bottom: 16px !important;
   position: relative !important;
-  contain: layout !important;
-}
-
-/* Form responsiveness improvements */
-@media screen and (max-width: 768px) {
-  input, select, textarea, button {
-    font-size: 16px !important;
-    min-height: 44px !important;
-  }
-  
-  .error-message {
-    font-size: 13px !important;
-  }
 }
 
 /* ============================== */
@@ -298,44 +251,12 @@ input:invalid:not(:focus),
 .equipment-name {
   font-size: 12px;
   line-height: 16px;
-  height: 36px;
+  height: 32px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   text-align: center;
   white-space: pre-line;
   width: 100%;
-  overflow: visible;
-  margin-top: 6px;
-}
-
-/* ============================== */
-/* RESPONSIVE OPTIMIZATIONS      */
-/* ============================== */
-@media screen and (max-width: 768px) {
-  /* Better touch targets */
-  a, button, input[type="button"], input[type="submit"], [role="button"], .clickable {
-    min-height: 44px;
-    min-width: 44px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    position: relative;
-    z-index: 1;
-  }
-  
-  /* Fix hover states on touch devices */
-  @media (hover: none) {
-    a:hover, button:hover, input[type="button"]:hover, input[type="submit"]:hover {
-      opacity: 1 !important;
-      transform: none !important;
-    }
-  }
-  
-  /* Prevent content from being cut off */
-  .overflow-hidden-except-y {
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
+  overflow: hidden;
 }
