@@ -1,8 +1,7 @@
-
 import React from 'react';
 import RecipeFilters from '../RecipeFilters';
 import RecipeResults from '../RecipeResults';
-import { useFavoriteRecipes } from '../hooks/favoriteRecipes';
+import { useFavoriteRecipes } from '../hooks/useFavoriteRecipes';
 import { 
   allCategories, 
   timePresets, 
