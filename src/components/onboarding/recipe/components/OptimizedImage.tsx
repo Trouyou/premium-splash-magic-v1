@@ -1,6 +1,7 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { DEFAULT_IMAGE } from '../utils/constants';
 
 interface OptimizedImageProps {
   src: string;
@@ -8,6 +9,7 @@ interface OptimizedImageProps {
   onLoad?: () => void;
   onError?: () => void;
   className?: string;
+  fallbackSrc?: string;
 }
 
 const OptimizedImage: React.FC<OptimizedImageProps> = ({
@@ -15,17 +17,33 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   alt,
   onLoad,
   onError,
-  className
+  className,
+  fallbackSrc = DEFAULT_IMAGE
 }) => {
+  const [imgSrc, setImgSrc] = useState<string>(src);
+  const [hasLoaded, setHasLoaded] = useState<boolean>(false);
+  
+  const handleLoad = () => {
+    setHasLoaded(true);
+    if (onLoad) onLoad();
+  };
+  
+  const handleError = () => {
+    if (imgSrc !== fallbackSrc) {
+      setImgSrc(fallbackSrc);
+    }
+    if (onError) onError();
+  };
+
   return (
     <motion.img
-      src={src}
+      src={imgSrc}
       alt={alt}
       loading="lazy"
       decoding="async"
-      onLoad={onLoad}
-      onError={onError}
-      className={className}
+      onLoad={handleLoad}
+      onError={handleError}
+      className={`${className} ${hasLoaded ? 'opacity-100' : 'opacity-0'}`}
     />
   );
 };

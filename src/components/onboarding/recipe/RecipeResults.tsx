@@ -67,30 +67,35 @@ const RecipeResults: React.FC<RecipeResultsProps> = ({
         animate="visible"
         layout
       >
-        {visibleRecipes.map((recipe) => (
-          <motion.div
-            key={recipe.id}
-            variants={{
-              hidden: { opacity: 0, y: 20 },
-              visible: { opacity: 1, y: 0 }
-            }}
-            transition={{ duration: 0.3 }}
-            layout
-          >
-            <RecipeCard
-              recipe={{
-                ...recipe,
-                image: recipe.image || DEFAULT_IMAGE
+        {visibleRecipes.map((recipe) => {
+          // Ensure recipe has an image (even if it's a default one)
+          const safeRecipe = {
+            ...recipe,
+            image: recipe.image || ''
+          };
+
+          return (
+            <motion.div
+              key={recipe.id}
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0 }
               }}
-              isFavorite={favoriteRecipes.includes(recipe.id)}
-              timeLabel={getTimeLabel(recipe.cookingTime)}
-              dietLabel={getDietLabel(recipe.dietaryOptions)}
-              nutrientLabel={getNutrientLabel(recipe)}
-              onToggleFavorite={() => toggleFavoriteRecipe(recipe.id)}
-              defaultImage={DEFAULT_IMAGE}
-            />
-          </motion.div>
-        ))}
+              transition={{ duration: 0.3 }}
+              layout
+            >
+              <RecipeCard
+                recipe={safeRecipe}
+                isFavorite={favoriteRecipes.includes(recipe.id)}
+                timeLabel={getTimeLabel(recipe.cookingTime)}
+                dietLabel={getDietLabel(recipe.dietaryOptions)}
+                nutrientLabel={getNutrientLabel(recipe)}
+                onToggleFavorite={() => toggleFavoriteRecipe(recipe.id)}
+                defaultImage={DEFAULT_IMAGE}
+              />
+            </motion.div>
+          );
+        })}
       </motion.div>
       
       {visibleRecipes.length < filteredRecipes.length && (

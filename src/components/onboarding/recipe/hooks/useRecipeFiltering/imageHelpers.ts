@@ -1,3 +1,4 @@
+
 import { Recipe } from '../../types';
 import { DEFAULT_IMAGE, CATEGORY_FALLBACKS } from '../../utils/constants';
 
@@ -77,9 +78,18 @@ export const ensureUniqueImages = (recipes: Recipe[]): Recipe[] => {
  * Attempts to find an alternative image for a recipe that hasn't been used yet.
  */
 const findAlternativeImage = (recipe: Recipe, usedImages: string[]): string | null => {
-  // This is a simplified version - in a production app, you would have
-  // multiple fallback images per category to choose from
+  if (!recipe.categories || recipe.categories.length === 0) {
+    return null;
+  }
   
-  // For now, we'll return null and let the main function handle the duplicate case
-  return null;
+  // Get all potential category matches
+  const categoryOptions = recipe.categories
+    .map(category => category.toLowerCase())
+    .filter(category => CATEGORY_FALLBACKS[category])
+    .map(category => CATEGORY_FALLBACKS[category]);
+  
+  // Find first alternative that hasn't been used
+  const alternative = categoryOptions.find(image => !usedImages.includes(image));
+  
+  return alternative || null;
 };

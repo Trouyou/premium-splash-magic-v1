@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
 import { Recipe } from './types';
 import OptimizedImage from './components/OptimizedImage';
+import { DEFAULT_IMAGE, CATEGORY_FALLBACKS } from './utils/constants';
 
 interface RecipeCardProps {
   recipe: Recipe;
@@ -26,7 +27,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
 }) => {
   const [isHovering, setIsHovering] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-
+  
   const handleImageLoad = useCallback(() => {
     setIsLoading(false);
   }, []);
@@ -34,6 +35,15 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
   const handleImageError = useCallback(() => {
     setIsLoading(false);
   }, []);
+  
+  // Get a category-based fallback if available
+  const getCategoryFallback = () => {
+    if (recipe.categories && recipe.categories.length > 0) {
+      const categoryLower = recipe.categories[0].toLowerCase();
+      return CATEGORY_FALLBACKS[categoryLower] || defaultImage;
+    }
+    return defaultImage;
+  };
 
   return (
     <motion.div
@@ -58,13 +68,12 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
         )}
         
         <OptimizedImage
-          src={recipe.image || defaultImage}
+          src={recipe.image || ''}
           alt={recipe.name}
           onLoad={handleImageLoad}
           onError={handleImageError}
-          className={`w-full h-full object-cover transition-all duration-300 ease-in-out ${
-            !isLoading ? 'opacity-100' : 'opacity-0'
-          }`}
+          fallbackSrc={getCategoryFallback()}
+          className="w-full h-full object-cover transition-all duration-300 ease-in-out"
         />
         
         {isFavorite && (
