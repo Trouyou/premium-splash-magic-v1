@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Loader2, ChevronDown } from 'lucide-react';
@@ -84,7 +83,6 @@ const RecipeResults: React.FC<RecipeResultsProps> = ({
               dietLabel={getDietLabel(recipe.dietaryOptions)}
               nutrientLabel={getNutrientLabel(recipe)}
               onToggleFavorite={() => toggleFavoriteRecipe(recipe.id)}
-              imageLoaded={imagesLoaded[recipe.id]}
               defaultImage={DEFAULT_IMAGE}
             />
           </motion.div>

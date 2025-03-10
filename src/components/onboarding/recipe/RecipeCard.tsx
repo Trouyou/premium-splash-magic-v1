@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
@@ -26,6 +27,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
   const [isHovering, setIsHovering] = useState(false);
   const [imgSrc, setImgSrc] = useState(recipe.image);
   const [isImgLoaded, setIsImgLoaded] = useState(false);
+  const [showAllIngredients, setShowAllIngredients] = useState(false);
 
   // Load and verify image when recipe changes
   useEffect(() => {
@@ -87,8 +89,10 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
           }`}
         >
           <h3 className="text-white font-medium text-lg mb-1 line-clamp-2">{recipe.name}</h3>
-          <div className="flex flex-wrap gap-1 mb-2">
-            {recipe.mainIngredients.slice(0, 3).map((ingredient, index) => (
+          
+          {/* Display all ingredients without limitation */}
+          <div className="flex flex-wrap gap-1 mb-2 max-h-24 overflow-y-auto">
+            {recipe.mainIngredients.map((ingredient, index) => (
               <span 
                 key={index} 
                 className="bg-white/20 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full"
@@ -96,11 +100,6 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
                 {ingredient}
               </span>
             ))}
-            {recipe.mainIngredients.length > 3 && (
-              <span className="bg-white/20 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full">
-                +{recipe.mainIngredients.length - 3}
-              </span>
-            )}
           </div>
           
           <div className="flex flex-wrap gap-1 mt-auto">
@@ -128,6 +127,18 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
         <div className="flex flex-wrap gap-1 mt-1 text-xs text-gray-500">
           <span>{timeLabel}</span>
           {dietLabel && <span>• {dietLabel}</span>}
+        </div>
+        
+        {/* Display all ingredients on small screens or when not hovering */}
+        <div className="mt-2 flex flex-wrap gap-1">
+          {recipe.mainIngredients.map((ingredient, index) => (
+            <span 
+              key={index} 
+              className="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full"
+            >
+              {ingredient}
+            </span>
+          ))}
         </div>
       </div>
     </motion.div>
