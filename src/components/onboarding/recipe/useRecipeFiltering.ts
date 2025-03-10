@@ -1,5 +1,5 @@
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useMemo } from 'react';
 import { Recipe } from './types';
 
 interface OnboardingData {
@@ -19,22 +19,18 @@ export const useRecipeFiltering = (
   page: number,
   recipesPerPage: number
 ) => {
-  const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>([]);
-  const [visibleRecipes, setVisibleRecipes] = useState<Recipe[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [imagesLoaded, setImagesLoaded] = useState<Record<string, boolean>>({});
 
-  // Function to filter recipes based on diet, time, and search term
-  const filterRecipesByUserPreferences = useCallback(() => {
+  // Memoize the filtered recipes to avoid recalculation on every render
+  const filteredRecipes = useMemo(() => {
     // Start with all recipes
     let results = [...recipes];
     
     // Filter by dietary preferences if any are selected
     if (onboardingData.dietaryPreferences.length > 0) {
       // Special case: if omnivore is selected, include all options
-      if (onboardingData.dietaryPreferences.includes('omnivore')) {
-        // No filtering needed for omnivore
-      } else {
+      if (!onboardingData.dietaryPreferences.includes('omnivore')) {
         // Filter to include only recipes that match at least one of the selected preferences
         results = results.filter(recipe => 
           recipe.dietaryOptions.some(option => 
@@ -44,22 +40,15 @@ export const useRecipeFiltering = (
       }
     }
     
-    // Filter by cooking time preference
-    if (onboardingData.cookingTime === 'quick') {
+    // Apply time filters - combine onboarding cooking time with selected time filter
+    if (onboardingData.cookingTime === 'quick' || selectedTimeFilter === 'quick') {
       results = results.filter(recipe => recipe.cookingTime <= 15);
-    } else if (onboardingData.cookingTime === 'standard') {
-      results = results.filter(recipe => recipe.cookingTime <= 30);
-    }
-    // For 'extended' time, include all recipes
-    
-    // Apply time preset filter
-    if (selectedTimeFilter === 'quick') {
-      results = results.filter(recipe => recipe.cookingTime <= 15);
-    } else if (selectedTimeFilter === 'medium') {
+    } else if (onboardingData.cookingTime === 'standard' || selectedTimeFilter === 'medium') {
       results = results.filter(recipe => recipe.cookingTime <= 30);
     } else if (selectedTimeFilter === 'long') {
       results = results.filter(recipe => recipe.cookingTime <= 60);
     }
+    // For 'extended' time or 'all', include all recipes
     
     // Apply category filter
     if (selectedCategory) {
@@ -105,7 +94,8 @@ export const useRecipeFiltering = (
     return results;
   }, [
     recipes, 
-    onboardingData, 
+    onboardingData.dietaryPreferences, 
+    onboardingData.cookingTime,
     debouncedSearchTerm, 
     selectedTimeFilter, 
     selectedCategory, 
@@ -113,14 +103,12 @@ export const useRecipeFiltering = (
     favoriteRecipes
   ]);
 
-  // Update filtered recipes when search term or filters change
-  useEffect(() => {
-    const filtered = filterRecipesByUserPreferences();
-    setFilteredRecipes(filtered);
-    setVisibleRecipes(filtered.slice(0, page * recipesPerPage));
-  }, [filterRecipesByUserPreferences, page, recipesPerPage]);
+  // Memoize visible recipes to avoid recalculation when other state changes
+  const visibleRecipes = useMemo(() => {
+    return filteredRecipes.slice(0, page * recipesPerPage);
+  }, [filteredRecipes, page, recipesPerPage]);
 
-  // Simulate loading data
+  // Simulate loading data - only changes when the filteredRecipes actually change
   useEffect(() => {
     setIsLoading(true);
     const timer = setTimeout(() => {
@@ -128,27 +116,36 @@ export const useRecipeFiltering = (
     }, 800);
     
     return () => clearTimeout(timer);
-  }, []);
+  }, [filteredRecipes.length]); // Only reload when the results count changes
 
-  // Preload recipe images
-  useEffect(() => {
-    const preloadImages = () => {
-      filteredRecipes.forEach(recipe => {
+  // Preload recipe images - optimized to run only when filteredRecipes change
+  const preloadImages = useCallback(() => {
+    const newImagesLoadedState: Record<string, boolean> = {};
+    const imagePromises = filteredRecipes.map(recipe => {
+      return new Promise<void>((resolve) => {
         const img = new Image();
         img.onload = () => {
-          setImagesLoaded(prev => ({ ...prev, [recipe.id]: true }));
+          newImagesLoadedState[recipe.id] = true;
+          resolve();
         };
         img.onerror = () => {
-          setImagesLoaded(prev => ({ ...prev, [recipe.id]: false }));
+          newImagesLoadedState[recipe.id] = false;
+          resolve();
         };
         img.src = recipe.image;
       });
-    };
+    });
+
+    Promise.all(imagePromises).then(() => {
+      setImagesLoaded(prev => ({...prev, ...newImagesLoadedState}));
+    });
+  }, [filteredRecipes]);
     
+  useEffect(() => {
     if (!isLoading) {
       preloadImages();
     }
-  }, [filteredRecipes, isLoading]);
+  }, [isLoading, preloadImages]);
 
   return {
     filteredRecipes,
