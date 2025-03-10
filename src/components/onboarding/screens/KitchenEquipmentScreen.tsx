@@ -46,12 +46,13 @@ const KitchenEquipmentScreen: React.FC<KitchenEquipmentScreenProps> = ({
   useEffect(() => {
     if (containerRef.current) {
       containerRef.current.style.overflowY = 'auto';
-      containerRef.current.style.maxHeight = 'calc(100vh - 280px)';
+      // Increased viewport height to show more content
+      containerRef.current.style.maxHeight = 'calc(100vh - 240px)';
       containerRef.current.style.scrollBehavior = 'smooth';
       
       // Fix for WebkitOverflowScrolling TypeScript error
       (containerRef.current.style as any)['-webkit-overflow-scrolling'] = 'touch'; // Pour iOS
-      containerRef.current.style.paddingBottom = '140px'; // Increased bottom padding for larger bubbles
+      containerRef.current.style.paddingBottom = '120px'; // Reduced padding for better space usage
     }
   }, []);
   
@@ -63,7 +64,7 @@ const KitchenEquipmentScreen: React.FC<KitchenEquipmentScreenProps> = ({
   };
   
   return (
-    <div className="w-full max-w-2xl mx-auto px-4 pb-24">
+    <div className="w-full max-w-4xl mx-auto px-3 pb-20"> {/* Expanded max-width and reduced padding */}
       <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
       
       <motion.div
@@ -84,9 +85,9 @@ const KitchenEquipmentScreen: React.FC<KitchenEquipmentScreenProps> = ({
         ref={containerRef} 
         className="equipment-container" 
         style={{
-          maxHeight: 'calc(100vh - 280px)',
+          maxHeight: 'calc(100vh - 240px)',
           overflowY: 'auto',
-          paddingBottom: '140px',
+          paddingBottom: '120px',
           scrollBehavior: 'smooth',
           // Fix for WebkitOverflowScrolling TypeScript error
           WebkitOverflowScrolling: 'touch' as any,

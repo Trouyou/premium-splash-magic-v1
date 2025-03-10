@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { OnboardingProvider } from '@/context/OnboardingContext';
@@ -51,7 +52,7 @@ const Onboarding: React.FC = () => {
   return (
     <OnboardingProvider>
       <style>{selectPopKeyframe}</style>
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen bg-white overflow-x-hidden"> {/* Added overflow-x-hidden to prevent horizontal scrolling */}
         <Toaster />
         <OnboardingFlow />
       </div>
