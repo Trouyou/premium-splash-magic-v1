@@ -93,6 +93,7 @@ const OnboardingFlow: React.FC = () => {
           totalSteps={totalSteps}
           favoriteRecipes={onboardingData.favoriteRecipes}
           toggleFavoriteRecipe={toggleFavoriteRecipe}
+          onboardingData={onboardingData}
           onNext={nextStep}
           onPrev={prevStep}
         />
