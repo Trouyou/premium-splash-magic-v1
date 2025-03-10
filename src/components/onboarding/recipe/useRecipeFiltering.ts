@@ -1,6 +1,7 @@
 
 import { useCallback, useEffect, useState, useMemo } from 'react';
 import { Recipe } from './types';
+import { DEFAULT_IMAGE } from './utils/constants';
 
 interface OnboardingData {
   dietaryPreferences: string[];
@@ -127,22 +128,37 @@ export const useRecipeFiltering = (
     favoriteRecipes
   ]);
 
+  // Ensure each recipe has a valid image
+  const enhancedRecipes = useMemo(() => {
+    return filteredRecipes.map(recipe => {
+      if (!recipe.image || recipe.image === '') {
+        return {
+          ...recipe,
+          image: DEFAULT_IMAGE
+        };
+      }
+      return recipe;
+    });
+  }, [filteredRecipes]);
+
   // Calculate visible recipes based on pagination with useMemo
   const visibleRecipes = useMemo(() => {
-    return filteredRecipes.slice(0, page * recipesPerPage);
-  }, [filteredRecipes, page, recipesPerPage]);
+    return enhancedRecipes.slice(0, page * recipesPerPage);
+  }, [enhancedRecipes, page, recipesPerPage]);
 
   // Optimized loading state with delayed resolution for UI
   useEffect(() => {
     setIsLoading(true);
+    
+    // Reduced loading time to improve user experience
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 600);
+    }, 300);
     
     return () => clearTimeout(timer);
   }, [filteredRecipes.length]);
 
-  // Track loaded images for UI - optimized with debouncing
+  // Mark all images as loaded to prevent infinite loading states
   useEffect(() => {
     if (visibleRecipes.length === 0) return;
     
@@ -151,16 +167,12 @@ export const useRecipeFiltering = (
       newImagesLoaded[recipe.id] = true;
     });
     
-    // Set with a slight delay to avoid UI flicker
-    const timer = setTimeout(() => {
-      setImagesLoaded(prev => ({...prev, ...newImagesLoaded}));
-    }, 100);
-    
-    return () => clearTimeout(timer);
+    // Set without delay to avoid UI flicker
+    setImagesLoaded(prev => ({...prev, ...newImagesLoaded}));
   }, [visibleRecipes]);
 
   return {
-    filteredRecipes,
+    filteredRecipes: enhancedRecipes,
     visibleRecipes,
     isLoading,
     imagesLoaded

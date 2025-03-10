@@ -9,8 +9,7 @@ import RecipeFilters from '../recipe/RecipeFilters';
 import RecipeResults from '../recipe/RecipeResults';
 import { useRecipeFiltering } from '../recipe/useRecipeFiltering';
 import { mockRecipes } from '../recipe/data/mockRecipes';
-import { allCategories, timePresets } from '../recipe/utils/constants';
-import { initializeUsedImagesTracker, ensureUniqueImages } from '../recipe/utils/imageUtils';
+import { allCategories, timePresets, DEFAULT_IMAGE } from '../recipe/utils/constants';
 
 interface FavoriteRecipesScreenProps {
   currentStep: number;
@@ -42,51 +41,26 @@ const FavoriteRecipesScreen: React.FC<FavoriteRecipesScreenProps> = ({
   const [selectedTimeFilter, setSelectedTimeFilter] = useState('all');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [page, setPage] = useState(1);
-  const [imagesInitialized, setImagesInitialized] = useState(false);
-  const [isImageProcessing, setIsImageProcessing] = useState(true);
+  const [recipesReady, setRecipesReady] = useState(false);
   const recipesPerPage = 8;
   
-  // Initialize images only once when component mounts
+  // Ensure recipes have valid images
   useEffect(() => {
-    let isMounted = true;
-    
-    const prepareRecipeImages = async () => {
-      try {
-        // Use a flag to prevent unnecessary re-initialization
-        if (!imagesInitialized) {
-          setIsImageProcessing(true);
-          
-          // First step: initialize the tracker with existing recipe images
-          console.log("Initializing image tracker...");
-          initializeUsedImagesTracker(mockRecipes);
-          
-          // Second step: ensure all recipes have unique images in batches
-          console.log("Ensuring unique images for all recipes...");
-          await ensureUniqueImages(mockRecipes);
-          
-          if (isMounted) {
-            console.log("Image processing complete");
-            setImagesInitialized(true);
-            setIsImageProcessing(false);
-          }
+    const prepareRecipes = () => {
+      // Make sure all recipes have a valid default image if their image is missing or invalid
+      const recipesWithValidImages = mockRecipes.map(recipe => {
+        if (!recipe.image || recipe.image === '') {
+          return { ...recipe, image: DEFAULT_IMAGE };
         }
-      } catch (error) {
-        console.error("Error preparing recipe images:", error);
-        if (isMounted) {
-          setImagesInitialized(true);
-          setIsImageProcessing(false);
-          
-          // Notify user of error but continue
-          toast.error("Certaines images n'ont pas pu être chargées correctement.");
-        }
-      }
+        return recipe;
+      });
+      
+      // Set recipes as ready
+      setRecipesReady(true);
     };
     
-    prepareRecipeImages();
-    
-    return () => {
-      isMounted = false;
-    };
+    // Call function to prepare recipes
+    prepareRecipes();
   }, []);
   
   // Debounce search input for better performance
@@ -177,7 +151,7 @@ const FavoriteRecipesScreen: React.FC<FavoriteRecipesScreenProps> = ({
       
       {/* Recipe Results */}
       <RecipeResults
-        isLoading={isLoading || isImageProcessing}
+        isLoading={isLoading || !recipesReady}
         filteredRecipes={filteredRecipes}
         visibleRecipes={visibleRecipes}
         favoriteRecipes={favoriteRecipes}
@@ -193,7 +167,7 @@ const FavoriteRecipesScreen: React.FC<FavoriteRecipesScreenProps> = ({
         isFirstStep={false}
         isLastStep={false}
         nextLabel="Continuer"
-        nextDisabled={isLoading || isImageProcessing}
+        nextDisabled={isLoading || !recipesReady}
       />
     </div>
   );

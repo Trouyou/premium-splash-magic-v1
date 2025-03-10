@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Loader2, ChevronDown } from 'lucide-react';
@@ -77,7 +78,11 @@ const RecipeResults: React.FC<RecipeResultsProps> = ({
             layout
           >
             <RecipeCard
-              recipe={recipe}
+              recipe={{
+                ...recipe,
+                // Ensure each recipe has an image
+                image: recipe.image || DEFAULT_IMAGE
+              }}
               isFavorite={favoriteRecipes.includes(recipe.id)}
               timeLabel={getTimeLabel(recipe.cookingTime)}
               dietLabel={getDietLabel(recipe.dietaryOptions)}
