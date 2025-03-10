@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { OnboardingProvider } from '@/context/OnboardingContext';
@@ -7,7 +6,7 @@ import { useAuth } from '@/context/AuthContext';
 import { Toaster } from '@/components/ui/toaster';
 import { isPreviewEnvironment, getAuthenticatedUser } from '@/utils/auth-simulator';
 
-// Ajout des styles pour l'animation de sélection
+// Animation style for equipment selection
 const selectPopKeyframe = `
 @keyframes selectPop {
   0% { transform: scale(1); }

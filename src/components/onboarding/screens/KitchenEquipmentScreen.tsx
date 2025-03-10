@@ -51,7 +51,7 @@ const KitchenEquipmentScreen: React.FC<KitchenEquipmentScreenProps> = ({
       
       // Fix for WebkitOverflowScrolling TypeScript error
       (containerRef.current.style as any)['-webkit-overflow-scrolling'] = 'touch'; // Pour iOS
-      containerRef.current.style.paddingBottom = '120px'; // Espace pour éviter que le dernier élément soit caché
+      containerRef.current.style.paddingBottom = '140px'; // Increased bottom padding for larger bubbles
     }
   }, []);
   
@@ -86,7 +86,7 @@ const KitchenEquipmentScreen: React.FC<KitchenEquipmentScreenProps> = ({
         style={{
           maxHeight: 'calc(100vh - 280px)',
           overflowY: 'auto',
-          paddingBottom: '120px',
+          paddingBottom: '140px',
           scrollBehavior: 'smooth',
           // Fix for WebkitOverflowScrolling TypeScript error
           WebkitOverflowScrolling: 'touch' as any,

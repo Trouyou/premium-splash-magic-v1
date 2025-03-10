@@ -44,7 +44,7 @@ const EquipmentBubble: React.FC<EquipmentBubbleProps> = ({
       className={cn(
         "flex flex-col items-center justify-center p-4 cursor-pointer",
         "transition-all duration-300 ease-in-out",
-        "rounded-full w-[90px] h-[90px] md:w-[100px] md:h-[100px]",
+        "rounded-full w-[100px] h-[100px] md:w-[115px] md:h-[115px]", // Increased circle size by ~15%
         "border-2 shadow-sm hover:shadow",
         selected 
           ? "bg-[#EDE6D6] border-[#D11B19] border-[3px] transform scale-105 shadow-md" 
@@ -56,14 +56,14 @@ const EquipmentBubble: React.FC<EquipmentBubbleProps> = ({
       data-name={name}
     >
       <div className="text-[#2A5D50] mb-2 equipment-icon" style={{ 
-        height: '40px', 
+        height: '42px', // Slightly increased icon container height
         display: 'flex', 
         alignItems: 'center' 
       }}>
         <div dangerouslySetInnerHTML={{ __html: svg }} />
       </div>
       
-      <div className="equipment-name font-['AvantGarde_Bk_BT'] text-xs text-[#2A5D50] text-center w-full mt-1 flex flex-col justify-center min-h-[36px] overflow-visible break-words px-1">
+      <div className="equipment-name font-['AvantGarde_Bk_BT'] text-xs md:text-sm text-[#2A5D50] text-center w-full mt-2 flex flex-col justify-center min-h-[40px] overflow-visible break-words px-2">
         {formattedName.split('\n').map((line, i) => (
           <span key={i} className="leading-tight whitespace-normal">{line}</span>
         ))}

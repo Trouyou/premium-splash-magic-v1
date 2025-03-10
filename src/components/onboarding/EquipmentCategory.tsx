@@ -19,7 +19,7 @@ const EquipmentCategory: React.FC<EquipmentCategoryProps> = ({
 }) => {
   return (
     <motion.div 
-      className="mb-10"
+      className="mb-12" // Increased bottom margin for better spacing
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
@@ -27,7 +27,7 @@ const EquipmentCategory: React.FC<EquipmentCategoryProps> = ({
       <h3 className="font-['AvantGarde_Bk_BT'] text-lg text-[#4A5568] mb-6 sticky top-0 bg-white py-2 z-[5]">
         {category}
       </h3>
-      <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5 md:gap-6"> {/* Adjusted grid and gap */}
         {items.map(item => (
           <EquipmentBubble
             key={item.id}
