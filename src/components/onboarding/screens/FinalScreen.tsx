@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import ConsentDialog from './ConsentDialog';
+import OptimizedImage from '../recipe/components/OptimizedImage';
 
 interface FinalScreenProps {
   onComplete: () => void;
@@ -9,6 +10,7 @@ interface FinalScreenProps {
 
 const FinalScreen: React.FC<FinalScreenProps> = ({ onComplete }) => {
   const [showConsent, setShowConsent] = useState(false);
+  const [logoLoaded, setLogoLoaded] = useState(false);
   
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -26,20 +28,29 @@ const FinalScreen: React.FC<FinalScreenProps> = ({ onComplete }) => {
     onComplete();
   };
   
+  const handleLogoLoad = () => {
+    setLogoLoaded(true);
+  };
+  
+  const handleLogoError = () => {
+    console.error("Failed to load Eatly logo");
+  };
+  
   return (
     <div className="flex flex-col items-center justify-center min-h-[80vh] text-center px-4">
       <motion.div 
-        className="mb-8 relative"
+        className="mb-8 relative w-32 h-32 flex items-center justify-center"
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.6 }}
       >
-        <img 
+        <OptimizedImage 
           src="/images/marmite-logo.png"
           alt="Eatly"
-          width={120}
-          height={120}
-          className="mx-auto"
+          className={`w-full h-auto object-contain ${logoLoaded ? 'opacity-100' : 'opacity-0'}`}
+          onLoad={handleLogoLoad}
+          onError={handleLogoError}
+          fallbackSrc="/placeholder.svg"
         />
         
         <motion.div
