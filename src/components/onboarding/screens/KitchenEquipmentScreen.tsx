@@ -48,6 +48,8 @@ const KitchenEquipmentScreen: React.FC<KitchenEquipmentScreenProps> = ({
       containerRef.current.style.overflowY = 'auto';
       containerRef.current.style.maxHeight = 'calc(100vh - 280px)';
       containerRef.current.style.scrollBehavior = 'smooth';
+      containerRef.current.style.WebkitOverflowScrolling = 'touch'; // Pour iOS
+      containerRef.current.style.paddingBottom = '120px'; // Espace pour éviter que le dernier élément soit caché
     }
   }, []);
   
@@ -82,8 +84,9 @@ const KitchenEquipmentScreen: React.FC<KitchenEquipmentScreenProps> = ({
         style={{
           maxHeight: 'calc(100vh - 280px)',
           overflowY: 'auto',
-          paddingBottom: '20px',
-          scrollBehavior: 'smooth'
+          paddingBottom: '120px',
+          scrollBehavior: 'smooth',
+          WebkitOverflowScrolling: 'touch'
         }}
       >
         {Object.entries(groupedEquipment).map(([category, items]) => (

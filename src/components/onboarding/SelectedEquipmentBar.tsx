@@ -17,13 +17,13 @@ const SelectedEquipmentBar: React.FC<SelectedEquipmentBarProps> = ({
 }) => {
   const [expanded, setExpanded] = useState(false);
   
-  // Mapping des IDs aux noms pour l'affichage
+  // Get equipment name from ID for display
   const getEquipmentNameById = (id: string): string => {
     const item = kitchenEquipment.find(item => item.id === id);
     return item ? item.name : id;
   };
   
-  // Basculer l'état ouvert/fermé quand la sélection change
+  // Toggle expanded state when selection changes
   useEffect(() => {
     if (selectedEquipment.length > 0 && !expanded) {
       setExpanded(true);

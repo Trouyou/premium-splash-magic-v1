@@ -21,9 +21,11 @@ const EquipmentBubble: React.FC<EquipmentBubbleProps> = ({
   onClick,
 }) => {
   const [justSelected, setJustSelected] = useState(false);
+  
+  // Format the name to ensure no truncation - add line breaks for long names
   const formattedName = formatEquipmentName(name);
 
-  // Effet d'animation lors de la sélection
+  // Animation effect when selected
   useEffect(() => {
     if (selected && !justSelected) {
       setJustSelected(true);
@@ -53,7 +55,11 @@ const EquipmentBubble: React.FC<EquipmentBubbleProps> = ({
       data-id={id}
       data-name={name}
     >
-      <div className="text-[#2A5D50] mb-2 equipment-icon" style={{ height: '40px', display: 'flex', alignItems: 'center' }}>
+      <div className="text-[#2A5D50] mb-2 equipment-icon" style={{ 
+        height: '40px', 
+        display: 'flex', 
+        alignItems: 'center' 
+      }}>
         <div dangerouslySetInnerHTML={{ __html: svg }} />
       </div>
       
