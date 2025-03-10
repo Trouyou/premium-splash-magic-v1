@@ -32,14 +32,30 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
   // Load and verify image when recipe changes
   useEffect(() => {
     setIsImgLoaded(false);
+    
+    // Use our enhanced image loading function
     loadRecipeImage(recipe).then(validatedImage => {
-      setImgSrc(validatedImage);
+      if (validatedImage !== imgSrc) {
+        console.log(`Updated image for ${recipe.name}: ${validatedImage}`);
+        setImgSrc(validatedImage);
+      } else {
+        console.log(`Using existing image for ${recipe.name}: ${validatedImage}`);
+      }
     });
   }, [recipe.id, recipe.image]);
 
   // Handle image load success
   const handleImageLoaded = () => {
     setIsImgLoaded(true);
+  };
+
+  // Handle image load error
+  const handleImageError = () => {
+    console.error(`Failed to load image for ${recipe.name}`);
+    // If image fails to load, try to get a new one
+    loadRecipeImage({...recipe, image: ''}).then(fallbackImage => {
+      setImgSrc(fallbackImage);
+    });
   };
 
   return (
@@ -68,6 +84,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
           src={imgSrc} 
           alt={recipe.name}
           onLoad={handleImageLoaded}
+          onError={handleImageError}
           className={`w-full h-full object-cover transition-all duration-300 ease-in-out ${
             isImgLoaded ? 'opacity-100' : 'opacity-0'
           }`}

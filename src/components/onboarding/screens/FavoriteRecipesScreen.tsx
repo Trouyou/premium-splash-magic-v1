@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { toast } from "sonner";
 import { useDebounce } from "@/hooks/use-debounce";
@@ -9,6 +9,7 @@ import RecipeFilters from '../recipe/RecipeFilters';
 import RecipeResults from '../recipe/RecipeResults';
 import { useRecipeFiltering } from '../recipe/useRecipeFiltering';
 import { mockRecipes, allCategories, timePresets } from '../recipe/recipeUtils';
+import { initializeUsedImagesTracker } from '../recipe/utils/imageUtils';
 
 interface FavoriteRecipesScreenProps {
   currentStep: number;
@@ -41,6 +42,11 @@ const FavoriteRecipesScreen: React.FC<FavoriteRecipesScreenProps> = ({
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const recipesPerPage = 8;
+  
+  // Initialize the used images tracker on component mount
+  useEffect(() => {
+    initializeUsedImagesTracker(mockRecipes);
+  }, []);
   
   // Debounce search input for better performance
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
