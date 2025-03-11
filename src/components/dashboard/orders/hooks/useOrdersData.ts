@@ -10,15 +10,15 @@ export const useOrdersData = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simuler un chargement depuis une API
     const loadOrders = async () => {
       setIsLoading(true);
       try {
         // Simuler un délai réseau
         await new Promise(resolve => setTimeout(resolve, 1000));
         setOrders(mockOrders);
+        console.log('Orders loaded:', mockOrders.length);
         
-        // Définir la première commande active par défaut
+        // Définir la première commande active par défaut si elle existe
         if (mockOrders.length > 0) {
           setActiveOrder(mockOrders[0]);
         }
@@ -40,7 +40,6 @@ export const useOrdersData = () => {
       )
     );
     
-    // Mettre à jour l'ordre actif si c'est celui qui a été modifié
     if (activeOrder?.id === updatedOrder.id) {
       setActiveOrder(updatedOrder);
     }

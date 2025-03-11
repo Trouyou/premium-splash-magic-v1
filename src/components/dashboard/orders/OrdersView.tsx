@@ -12,8 +12,16 @@ import { OrderStatus, ViewMode } from './types';
 
 const OrdersView: React.FC = () => {
   const isMobile = useIsMobile();
-  const { orders, activeOrder, setActiveOrder, updateOrder } = useOrdersData();
+  const { orders, activeOrder, setActiveOrder, updateOrder, isLoading } = useOrdersData();
   const [viewMode, setViewMode] = useState<ViewMode>('current');
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[300px]">
+        <div className="w-8 h-8 border-4 border-[#D11B19] border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
   
   return (
     <motion.div 
