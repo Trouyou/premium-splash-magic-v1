@@ -8,6 +8,21 @@ export const getTimeLabel = (minutes: number) => {
   return `🕐 ${minutes} min`;
 };
 
+// Format cooking time in a readable format
+export const formatCookingTime = (minutes: number): string => {
+  if (minutes < 60) {
+    return `${minutes} min`;
+  } else {
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+    if (remainingMinutes === 0) {
+      return `${hours} h`;
+    } else {
+      return `${hours} h ${remainingMinutes} min`;
+    }
+  }
+};
+
 // Get dietary label with icon
 export const getDietLabel = (options: string[]) => {
   const labels = [];
@@ -27,4 +42,3 @@ export const getNutrientLabel = (recipe: Recipe) => {
   if (recipe.calories && recipe.calories < 300) return `✨ ${recipe.calories} calories`;
   return '';
 };
-
