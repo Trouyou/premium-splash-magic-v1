@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { useMediaQuery } from '@/hooks/use-mobile';
+import { useIsMobile } from '@/hooks/use-mobile';
 import OrdersHeader from './OrdersHeader';
 import CurrentOrders from './CurrentOrders';
 import OrderDetails from './OrderDetails';
@@ -11,7 +11,7 @@ import { useOrdersData } from './hooks/useOrdersData';
 import { OrderStatus, ViewMode } from './types';
 
 const OrdersView: React.FC = () => {
-  const isMobile = useMediaQuery('(max-width: 768px)');
+  const isMobile = useIsMobile();
   const { orders, activeOrder, setActiveOrder, updateOrder } = useOrdersData();
   const [viewMode, setViewMode] = useState<ViewMode>('current');
   

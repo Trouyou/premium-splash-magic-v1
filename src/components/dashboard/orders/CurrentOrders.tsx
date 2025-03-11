@@ -143,7 +143,7 @@ const CurrentOrders: React.FC<CurrentOrdersProps> = ({
                       <ChevronRight size={16} />
                     </Button>
                     
-                    {order.status === OrderStatus.SHIPPING || order.status === OrderStatus.DELIVERING ? (
+                    {(order.status === OrderStatus.SHIPPED || order.status === OrderStatus.DELIVERING) ? (
                       <Button className="bg-[#2A5D50] hover:bg-[#2A5D50]/90">
                         Suivre
                         <MapPin size={16} className="ml-1" />
