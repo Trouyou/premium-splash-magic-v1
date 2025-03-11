@@ -6,13 +6,13 @@ import { isPreviewEnvironment, getAuthenticatedUser } from '@/utils/auth-simulat
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
 import DashboardHome from '@/components/dashboard/DashboardHome';
 import OrdersView from '@/components/dashboard/OrdersView';
+import RecipesView from '@/components/dashboard/RecipesView';
 import { Toaster } from '@/components/ui/toaster';
 import { Toaster as Sonner } from '@/components/ui/sonner';
 import { motion } from 'framer-motion';
 
 // Placeholder components for the other tabs
 const BobView = () => <div className="p-4"><h2 className="text-2xl font-avantgarde mb-4">BOB - Votre assistant culinaire</h2><p>L'assistant BOB est en cours de développement et sera bientôt à votre service.</p></div>;
-const RecipesView = () => <div className="p-4"><h2 className="text-2xl font-avantgarde mb-4">Mes recettes</h2><p>Vos recettes sauvegardées et favoris seront bientôt disponibles.</p></div>;
 const ProfileView = () => <div className="p-4"><h2 className="text-2xl font-avantgarde mb-4">Profil</h2><p>Gérez vos informations personnelles et préférences de compte.</p></div>;
 
 const Dashboard: React.FC = () => {

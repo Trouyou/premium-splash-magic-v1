@@ -35,3 +35,37 @@
 .animate-rotate-loader {
   animation: rotate-loader 1s linear infinite;
 }
+
+/* Recipe animations */
+@keyframes fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out forwards;
+}
+
+@keyframes pulse-heart {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+.heart-favorite {
+  animation: pulse-heart 0.4s ease-in-out;
+}
+
+@keyframes card-hover {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-5px); }
+}
+
+.recipe-card-hover {
+  transition: all 0.3s ease;
+}
+
+.recipe-card-hover:hover {
+  animation: card-hover 0.3s ease forwards;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
