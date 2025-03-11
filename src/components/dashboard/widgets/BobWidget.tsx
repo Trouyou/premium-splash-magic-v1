@@ -8,9 +8,10 @@ import { Input } from '@/components/ui/input';
 interface BobWidgetProps {
   id: string;
   onRemove?: (id: string) => void;
+  bobColor?: string;
 }
 
-const BobWidget: React.FC<BobWidgetProps> = ({ id, onRemove }) => {
+const BobWidget: React.FC<BobWidgetProps> = ({ id, onRemove, bobColor = '#D11B19' }) => {
   const [query, setQuery] = useState('');
   
   const handleSubmit = (e: React.FormEvent) => {
@@ -24,7 +25,10 @@ const BobWidget: React.FC<BobWidgetProps> = ({ id, onRemove }) => {
     <Widget id={id} title="BOB - Assistant Culinaire" onRemove={onRemove}>
       <div className="space-y-4">
         <div className="flex items-start gap-3 bg-gray-50 rounded-lg p-3">
-          <div className="bg-[#D11B19] rounded-full p-2 flex-shrink-0">
+          <div 
+            className="rounded-full p-2 flex-shrink-0"
+            style={{ backgroundColor: bobColor }}
+          >
             <Bot size={18} className="text-white" />
           </div>
           <div>
@@ -44,8 +48,9 @@ const BobWidget: React.FC<BobWidgetProps> = ({ id, onRemove }) => {
           />
           <Button 
             type="submit" 
-            size="icon" 
-            className="bg-[#D11B19] hover:bg-[#b01815]"
+            size="icon"
+            style={{ backgroundColor: bobColor }}
+            className="hover:opacity-90"
           >
             <Send size={16} />
           </Button>
