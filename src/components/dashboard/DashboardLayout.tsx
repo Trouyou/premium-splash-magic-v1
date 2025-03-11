@@ -33,12 +33,12 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
         <div className="flex items-center justify-between w-full max-w-screen-lg mx-auto">
           <Link 
             to="/dashboard" 
-            className="flex items-center justify-center h-16 w-32 relative transition-opacity duration-200 hover:opacity-80"
+            className="flex items-center h-16 w-40 pl-2 relative transition-opacity duration-200 hover:opacity-80"
           >
             <OptimizedImage 
               src="/lovable-uploads/c1be783b-9b2b-44ce-9e6c-deea409157bd.png"
               alt="Eatly"
-              className="h-16 w-auto object-contain transform-gpu"
+              className="h-[52px] w-auto object-contain transform-gpu"
               fallbackSrc="/placeholder.svg"
             />
           </Link>
