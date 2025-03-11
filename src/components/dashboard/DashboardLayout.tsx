@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -20,6 +21,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const { user } = useAuth();
+  
+  // Determine if we're on the home view
+  const isHomeView = activeView === 'home';
 
   return (
     <div className={cn(
@@ -43,16 +47,19 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             />
           </Link>
           
-          <div className="w-full max-w-md relative mx-4">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-            <Input 
-              placeholder="Rechercher des recettes, ingrédients..." 
-              className={cn(
-                "pl-10 h-9 w-full",
-                isDarkMode ? "bg-gray-700 border-gray-600" : "bg-gray-100 border-transparent"
-              )}
-            />
-          </div>
+          {/* Conditionally render the search bar only when not on the home view */}
+          {!isHomeView && (
+            <div className="w-full max-w-md relative mx-4">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+              <Input 
+                placeholder="Rechercher des recettes, ingrédients..." 
+                className={cn(
+                  "pl-10 h-9 w-full",
+                  isDarkMode ? "bg-gray-700 border-gray-600" : "bg-gray-100 border-transparent"
+                )}
+              />
+            </div>
+          )}
           
           <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 font-medium">
             {user?.email?.charAt(0).toUpperCase() || "U"}
