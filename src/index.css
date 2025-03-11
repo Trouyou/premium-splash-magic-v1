@@ -280,3 +280,29 @@ input:invalid:not(:focus),
 .animate-rotate-loader {
   animation: rotate-loader 1s linear infinite;
 }
+
+/* ============================== */
+/* WIDGET MENU CLEANUP           */
+/* ============================== */
+/* Fix for any unwanted background images in dropdowns */
+[data-radix-popper-content-wrapper] {
+  background-image: none !important;
+}
+
+/* Ensure proper background for all dropdown content */
+.radix-dropdown-content {
+  background-color: white !important;
+  background-image: none !important;
+}
+
+/* Fix specifically for widget menu dropdown items */
+[role="menuitem"] {
+  background-image: none !important;
+}
+
+/* Ensure all dropdown menus have clean backgrounds */
+[role="menu"] {
+  background-color: white !important;
+  background-image: none !important;
+  backdrop-filter: none !important;
+}

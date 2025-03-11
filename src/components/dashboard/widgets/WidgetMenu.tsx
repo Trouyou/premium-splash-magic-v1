@@ -33,11 +33,15 @@ const WidgetMenu: React.FC<WidgetMenuProps> = ({ onAddWidget }) => {
           <span>Ajouter un widget</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent 
+        align="end"
+        className="bg-white border-gray-200 shadow-md" 
+      >
         {availableWidgets.map((widget) => (
           <DropdownMenuItem
             key={widget.id}
             onClick={() => onAddWidget(widget.id as WidgetType)}
+            className="cursor-pointer hover:bg-gray-50"
           >
             {widget.label}
           </DropdownMenuItem>
