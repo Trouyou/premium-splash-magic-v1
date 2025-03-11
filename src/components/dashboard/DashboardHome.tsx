@@ -66,9 +66,10 @@ const DashboardHome: React.FC = () => {
     setInspirationRecipes(inspirations);
     
     // Recettes tendance
+    // Plutôt que d'utiliser likes qui n'existe pas, nous allons sélectionner 
+    // aléatoirement quelques recettes pour simuler les tendances
     const trending = mockRecipes
-      .filter(recipe => recipe.likes > 50) // Filtrer les plus populaires
-      .sort((a, b) => b.likes - a.likes) // Trier par popularité
+      .sort(() => 0.5 - Math.random()) // Mélange aléatoire 
       .slice(0, 8);
     setTrendingRecipes(trending);
     
