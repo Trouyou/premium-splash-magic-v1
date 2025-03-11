@@ -22,7 +22,6 @@ const ConsentDialog: React.FC<ConsentDialogProps> = ({ onAccept, onDecline }) =>
       description: "Vos préférences de confidentialité ont été sauvegardées.",
     });
     onAccept();
-    navigate('/dashboard');
   };
 
   const handleDecline = () => {
@@ -33,7 +32,6 @@ const ConsentDialog: React.FC<ConsentDialogProps> = ({ onAccept, onDecline }) =>
       variant: "destructive",
     });
     onDecline();
-    navigate('/dashboard');
   };
 
   // Open the legal pages in a new tab with a return parameter

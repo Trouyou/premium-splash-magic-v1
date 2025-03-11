@@ -315,6 +315,12 @@
       backButton.addEventListener('click', function(event) {
         event.preventDefault();
         
+        // If returnTo parameter is onboarding-consent, just close the tab/window
+        if (returnTo === 'onboarding-consent') {
+          window.close();
+          return;
+        }
+        
         // If returnTo parameter exists, redirect to that page
         if (returnTo) {
           window.location.href = returnTo;
