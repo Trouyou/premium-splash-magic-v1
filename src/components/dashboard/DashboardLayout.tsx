@@ -24,10 +24,10 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   return (
     <div className={cn(
       "flex flex-col h-screen overflow-hidden",
-      isDarkMode ? "bg-gray-900 text-white" : "bg-white text-gray-900"
+      isDarkMode ? "bg-gray-900 text-white" : "bg-[#F8F8F8] text-gray-900"
     )}>
       <header className={cn(
-        "w-full fixed top-0 left-0 right-0 z-30 px-4 flex items-center h-16 border-b",
+        "w-full fixed top-0 left-0 right-0 z-30 px-4 flex items-center h-16 border-b shadow-sm",
         isDarkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"
       )}>
         <div className="flex items-center justify-between w-full max-w-screen-lg mx-auto">
@@ -43,8 +43,8 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             />
           </Link>
           
-          <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 font-medium">
-            {user?.email?.charAt(0).toUpperCase() || "U"}
+          <div className="w-10 h-10 rounded-full bg-[#EDE6D6] flex items-center justify-center text-[#9C1B1A] font-medium border-2 border-[#9C1B1A] transition-transform hover:scale-105">
+            {user?.firstName?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || "U"}
           </div>
         </div>
       </header>
