@@ -6,10 +6,36 @@ import { Recipe } from '@/components/onboarding/recipe/types';
 import { mockRecipes } from '@/components/onboarding/recipe/data/mockRecipes';
 import WelcomeMessage from './WelcomeMessage';
 import FilterButtons from './filters/FilterButtons';
-import TabNavigation from './navigation/TabNavigation';
 import RecipeGrid from './recipes/RecipeGrid';
 import CollapsibleRecipeSection from './recipes/CollapsibleRecipeSection';
 import { motion } from 'framer-motion';
+
+// Custom TabNavigation just for recipe tabs (not the main app tabs)
+const RecipeTabNavigation: React.FC<{
+  activeTab: 'recommandations' | 'tendances';
+  setActiveTab: (tab: 'recommandations' | 'tendances') => void;
+}> = ({ activeTab, setActiveTab }) => {
+  return (
+    <div className="flex border-b border-gray-200 mb-4">
+      <button
+        className={`px-4 py-2 font-avantgarde text-sm ${
+          activeTab === 'recommandations' ? 'text-[#D11B19] border-b-2 border-[#D11B19]' : 'text-gray-500'
+        }`}
+        onClick={() => setActiveTab('recommandations')}
+      >
+        Recommandations
+      </button>
+      <button
+        className={`px-4 py-2 font-avantgarde text-sm ${
+          activeTab === 'tendances' ? 'text-[#D11B19] border-b-2 border-[#D11B19]' : 'text-gray-500'
+        }`}
+        onClick={() => setActiveTab('tendances')}
+      >
+        Tendances
+      </button>
+    </div>
+  );
+};
 
 const DashboardHome: React.FC = () => {
   const { user } = useAuth();
@@ -102,7 +128,7 @@ const DashboardHome: React.FC = () => {
       />
       
       {/* Tabs pour Recommandations/Tendances */}
-      <TabNavigation 
+      <RecipeTabNavigation 
         activeTab={activeTab} 
         setActiveTab={setActiveTab} 
       />
