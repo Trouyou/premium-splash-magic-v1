@@ -47,19 +47,6 @@ const RecipeGrid: React.FC<RecipeGridProps> = ({
             />
           </motion.div>
         ))}
-        
-        {recipes.length === 0 && (
-          <div className="col-span-full py-12 text-center text-gray-500">
-            <p className="text-lg font-avantgarde">Aucune recette ne correspond à vos filtres actuels.</p>
-            <Button 
-              variant="outline" 
-              className="mt-4 font-avantgarde"
-              onClick={() => {/* This will be handled by parent component */}}
-            >
-              Réinitialiser les filtres
-            </Button>
-          </div>
-        )}
       </div>
     </motion.section>
   );
