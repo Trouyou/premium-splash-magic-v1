@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Home, Calendar, MessageCircle, BarChart, Settings } from 'lucide-react';
+import { Home, Bot, Package, ClipboardList, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 
@@ -12,10 +12,10 @@ interface TabNavigationProps {
 const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, setActiveTab }) => {
   const tabs = [
     { id: 'home', label: 'Accueil', icon: Home },
-    { id: 'planning', label: 'Planning', icon: Calendar },
-    { id: 'bob', label: 'BOB', icon: MessageCircle },
-    { id: 'nutrition', label: 'Nutrition', icon: BarChart },
-    { id: 'settings', label: 'Réglages', icon: Settings },
+    { id: 'bob', label: 'BOB', icon: Bot },
+    { id: 'orders', label: 'Mes commandes', icon: Package },
+    { id: 'recipes', label: 'Mes recettes', icon: ClipboardList },
+    { id: 'profile', label: 'Profil', icon: User },
   ];
 
   return (
