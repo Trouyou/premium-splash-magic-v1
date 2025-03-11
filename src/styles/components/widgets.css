@@ -1,0 +1,21 @@
+
+/* Widget Menu Cleanup */
+[data-radix-popper-content-wrapper] {
+  background-image: none !important;
+}
+
+.radix-dropdown-content {
+  background-color: white !important;
+  background-image: none !important;
+}
+
+[role="menuitem"] {
+  background-image: none !important;
+}
+
+[role="menu"] {
+  background-color: white !important;
+  background-image: none !important;
+  backdrop-filter: none !important;
+}
+

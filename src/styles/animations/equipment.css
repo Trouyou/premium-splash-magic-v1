@@ -1,0 +1,23 @@
+
+/* Equipment bubble selection animation */
+@keyframes selectPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+  100% { transform: scale(1.08); }
+}
+
+/* Equipment name styling */
+.equipment-name {
+  font-size: 14px;
+  line-height: 1.2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  white-space: normal;
+  width: 100%;
+  overflow: hidden;
+  word-wrap: break-word;
+  hyphens: auto;
+}
+

@@ -1,0 +1,11 @@
+
+/* Tab navigation animations */
+@keyframes tab-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+.tab-active {
+  animation: tab-bounce 0.5s ease;
+}
+

@@ -1,0 +1,43 @@
+
+/* Legal Content Formatting */
+.prose p {
+  text-align: justify;
+  hyphens: auto;
+  margin-bottom: 1rem;
+}
+
+.prose h2, 
+.prose h3, 
+.prose h4 {
+  color: #1a1a1a;
+  font-weight: 600;
+}
+
+.prose ul, 
+.prose ol {
+  margin-bottom: 1rem;
+}
+
+.prose li {
+  margin-bottom: 0.5rem;
+}
+
+/* Custom scrollbar for legal content */
+.scrollbar-legal::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollbar-legal::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.scrollbar-legal::-webkit-scrollbar-thumb {
+  background: #D6D6D6;
+  border-radius: 4px;
+}
+
+.scrollbar-legal::-webkit-scrollbar-thumb:hover {
+  background: #9C1B1A;
+}
+
