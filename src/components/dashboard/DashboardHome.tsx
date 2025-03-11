@@ -1,17 +1,13 @@
 
 import React, { useState, useEffect } from 'react';
-import { Zap, Heart, Sparkle, Flame, Settings } from 'lucide-react';
+import { Zap, Heart, Sparkle, Flame } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
-import { useOnboarding } from '@/context/OnboardingContext';
-import { useNavigate } from 'react-router-dom';
 import { Recipe } from '@/components/onboarding/recipe/types';
 import { mockRecipes } from '@/components/onboarding/recipe/data/mockRecipes';
-import { Button } from '@/components/ui/button';
-import { useToast } from '@/hooks/use-toast';
+import WelcomeMessage from './WelcomeMessage';
 import RecipeGrid from './recipes/RecipeGrid';
 import CollapsibleRecipeSection from './recipes/CollapsibleRecipeSection';
 import { motion } from 'framer-motion';
-import { filterByDietaryPreferences, filterByTime, filterByEquipment } from '@/components/onboarding/recipe/hooks/useRecipeFiltering/filterHelpers';
 
 // Custom TabNavigation just for recipe tabs (not the main app tabs)
 const RecipeTabNavigation: React.FC<{
@@ -46,33 +42,8 @@ const RecipeTabNavigation: React.FC<{
   );
 };
 
-// New component for empty state with option to modify preferences
-const EmptyRecipeState: React.FC<{ navigateToOnboarding: () => void }> = ({ navigateToOnboarding }) => {
-  return (
-    <motion.div 
-      className="flex flex-col items-center justify-center py-12 text-center text-gray-500"
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      <p className="text-lg font-avantgarde mb-4">
-        Oups ! Aucune tendance ne correspond à vos choix. Essayez d'élargir vos préférences ou de les modifier.
-      </p>
-      <Button 
-        variant="outline" 
-        className="mt-2 font-avantgarde"
-        onClick={navigateToOnboarding}
-      >
-        <Settings size={16} className="mr-2" />
-        Modifier mes choix
-      </Button>
-    </motion.div>
-  );
-};
-
 const DashboardHome: React.FC = () => {
   const { user } = useAuth();
-  const { onboardingData } = useOnboarding();
   const [activeTab, setActiveTab] = useState<'inspirations' | 'tendances'>('inspirations');
   const [inspirationRecipes, setInspirationRecipes] = useState<Recipe[]>([]);
   const [trendingRecipes, setTrendingRecipes] = useState<Recipe[]>([]);
@@ -82,8 +53,6 @@ const DashboardHome: React.FC = () => {
     'favorites': true,
     'quick': true
   });
-  const navigate = useNavigate();
-  const { toast } = useToast();
 
   // Simuler le chargement des recettes
   useEffect(() => {
@@ -96,24 +65,12 @@ const DashboardHome: React.FC = () => {
       .slice(0, 8);
     setInspirationRecipes(inspirations);
     
-    // Recettes tendance basées sur les préférences d'onboarding
-    let trending = [...mockRecipes];
-    
-    // Appliquer les filtres selon les préférences d'onboarding
-    if (onboardingData) {
-      trending = filterByDietaryPreferences(trending, onboardingData.dietaryPreferences);
-      trending = filterByTime(trending, onboardingData.cookingTime);
-      trending = filterByEquipment(trending, onboardingData.kitchenEquipment);
-    }
-    
-    // Si après filtrage il reste des recettes, les afficher
-    // Sinon, afficher des recettes aléatoires pour éviter une page vide
-    if (trending.length === 0) {
-      trending = mockRecipes.sort(() => 0.5 - Math.random()).slice(0, 8);
-    } else {
-      trending = trending.sort(() => 0.5 - Math.random()).slice(0, 8);
-    }
-    
+    // Recettes tendance
+    // Plutôt que d'utiliser likes qui n'existe pas, nous allons sélectionner 
+    // aléatoirement quelques recettes pour simuler les tendances
+    const trending = mockRecipes
+      .sort(() => 0.5 - Math.random()) // Mélange aléatoire 
+      .slice(0, 8);
     setTrendingRecipes(trending);
     
     // Favoris (simuler quelques favoris)
@@ -128,7 +85,7 @@ const DashboardHome: React.FC = () => {
       .sort(() => 0.5 - Math.random())
       .slice(0, 4);
     setQuickRecipes(quick);
-  }, [onboardingData]);
+  }, []);
 
   // Obtenir les recettes selon l'onglet actif
   const getActiveTabRecipes = () => {
@@ -139,11 +96,6 @@ const DashboardHome: React.FC = () => {
     // Simuler l'ajout/suppression des favoris
     // Dans une vraie app, vous feriez un appel API ici
     console.log('Toggle favorite for recipe:', recipeId);
-    
-    toast({
-      title: "Favori modifié",
-      description: "Votre liste de favoris a été mise à jour.",
-    });
   };
   
   const toggleSection = (section: string) => {
@@ -151,14 +103,6 @@ const DashboardHome: React.FC = () => {
       ...prev,
       [section]: !prev[section]
     }));
-  };
-  
-  const navigateToOnboarding = () => {
-    navigate('/onboarding');
-    toast({
-      title: "Modification des préférences",
-      description: "Vous allez pouvoir ajuster vos préférences alimentaires.",
-    });
   };
 
   return (
@@ -194,16 +138,12 @@ const DashboardHome: React.FC = () => {
         setActiveTab={setActiveTab} 
       />
       
-      {/* Grille de recettes ou message d'absence de recettes */}
-      {getActiveTabRecipes().length > 0 ? (
-        <RecipeGrid 
-          recipes={getActiveTabRecipes()} 
-          favoriteRecipes={favoriteRecipes}
-          toggleFavorite={toggleFavorite}
-        />
-      ) : (
-        <EmptyRecipeState navigateToOnboarding={navigateToOnboarding} />
-      )}
+      {/* Grille de recettes */}
+      <RecipeGrid 
+        recipes={getActiveTabRecipes()} 
+        favoriteRecipes={favoriteRecipes}
+        toggleFavorite={toggleFavorite}
+      />
       
       {/* Recettes rapides */}
       {quickRecipes.length > 0 && (
