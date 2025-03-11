@@ -1,41 +1,52 @@
 
 import React from 'react';
-import { Sparkles, Flame } from 'lucide-react';
+import { Home, Calendar, MessageCircle, BarChart, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
 
 interface TabNavigationProps {
-  activeTab: 'recommandations' | 'tendances';
-  setActiveTab: (tab: 'recommandations' | 'tendances') => void;
+  activeTab: string;
+  setActiveTab: (tab: string) => void;
 }
 
 const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, setActiveTab }) => {
+  const tabs = [
+    { id: 'home', label: 'Accueil', icon: Home },
+    { id: 'planning', label: 'Planning', icon: Calendar },
+    { id: 'bob', label: 'BOB', icon: MessageCircle },
+    { id: 'nutrition', label: 'Nutrition', icon: BarChart },
+    { id: 'settings', label: 'Réglages', icon: Settings },
+  ];
+
   return (
-    <div className="border-b border-gray-200">
-      <div className="flex space-x-8">
-        <button
-          className={cn(
-            "py-2 border-b-2 font-medium text-sm transition-colors font-avantgarde",
-            activeTab === 'recommandations'
-              ? "border-[#D11B19] text-[#D11B19]"
-              : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-          )}
-          onClick={() => setActiveTab('recommandations')}
-        >
-          <Sparkles size={18} className="inline-block mr-2" />
-          Recommandations
-        </button>
-        <button
-          className={cn(
-            "py-2 border-b-2 font-medium text-sm transition-colors font-avantgarde",
-            activeTab === 'tendances'
-              ? "border-[#D11B19] text-[#D11B19]"
-              : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-          )}
-          onClick={() => setActiveTab('tendances')}
-        >
-          <Flame size={18} className="inline-block mr-2" />
-          Tendances
-        </button>
+    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-1 z-50">
+      <div className="flex justify-around items-center max-w-screen-lg mx-auto">
+        {tabs.map((tab) => (
+          <button
+            key={tab.id}
+            className={cn(
+              "flex flex-col items-center justify-center py-2 px-3 rounded-lg transition-colors",
+              "focus:outline-none focus:ring-2 focus:ring-[#D11B19] focus:ring-opacity-50",
+              activeTab === tab.id ? "text-[#D11B19]" : "text-gray-500"
+            )}
+            onClick={() => setActiveTab(tab.id)}
+          >
+            <div className="relative">
+              <tab.icon size={24} />
+              {activeTab === tab.id && (
+                <motion.div
+                  layoutId="tabIndicator"
+                  className="absolute -bottom-1 left-0 right-0 h-1 bg-[#D11B19] rounded-t-full"
+                  initial={false}
+                  transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                />
+              )}
+            </div>
+            <span className="text-xs mt-1 font-avantgarde">
+              {tab.label}
+            </span>
+          </button>
+        ))}
       </div>
     </div>
   );

@@ -9,6 +9,12 @@ import { Toaster } from '@/components/ui/toaster';
 import { Toaster as Sonner } from '@/components/ui/sonner';
 import { motion } from 'framer-motion';
 
+// Placeholder components for the other tabs
+const PlanningView = () => <div className="p-4"><h2 className="text-2xl font-avantgarde mb-4">Planning des repas</h2><p>Cette fonctionnalité sera bientôt disponible.</p></div>;
+const BobView = () => <div className="p-4"><h2 className="text-2xl font-avantgarde mb-4">BOB - Votre assistant culinaire</h2><p>L'assistant BOB est en cours de développement et sera bientôt à votre service.</p></div>;
+const NutritionView = () => <div className="p-4"><h2 className="text-2xl font-avantgarde mb-4">Suivi nutritionnel</h2><p>Votre tableau de bord nutritionnel sera bientôt disponible.</p></div>;
+const SettingsView = () => <div className="p-4"><h2 className="text-2xl font-avantgarde mb-4">Paramètres</h2><p>Gérez vos préférences et paramètres de compte.</p></div>;
+
 const Dashboard: React.FC = () => {
   const { isAuthenticated, isLoading, user } = useAuth();
   const navigate = useNavigate();
@@ -58,6 +64,14 @@ const Dashboard: React.FC = () => {
     switch (activeView) {
       case 'home':
         return <DashboardHome />;
+      case 'planning':
+        return <PlanningView />;
+      case 'bob':
+        return <BobView />;
+      case 'nutrition':
+        return <NutritionView />;
+      case 'settings':
+        return <SettingsView />;
       default:
         return <DashboardHome />;
     }

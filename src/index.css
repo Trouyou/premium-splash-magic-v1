@@ -165,6 +165,16 @@
   filter: drop-shadow(0px 25px 25px rgba(0, 0, 0, 0.15));
 }
 
+/* Tab navigation animations */
+@keyframes tab-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+.tab-active {
+  animation: tab-bounce 0.5s ease;
+}
+
 /* ============================== */
 /* FORM STYLING & VALIDATION     */
 /* ============================== */
@@ -259,4 +269,14 @@ input:invalid:not(:focus),
   overflow: hidden;
   word-wrap: break-word;
   hyphens: auto;
+}
+
+/* Custom animation for loading spinner */
+@keyframes rotate-loader {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.animate-rotate-loader {
+  animation: rotate-loader 1s linear infinite;
 }
