@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
@@ -7,13 +6,12 @@ import DashboardLayout from '@/components/dashboard/DashboardLayout';
 import DashboardHome from '@/components/dashboard/DashboardHome';
 import OrdersView from '@/components/dashboard/OrdersView';
 import RecipesView from '@/components/dashboard/RecipesView';
+import ProfileView from '@/components/dashboard/profile/ProfileView';
 import { Toaster } from '@/components/ui/toaster';
 import { Toaster as Sonner } from '@/components/ui/sonner';
 import { motion } from 'framer-motion';
 
-// Placeholder components for the other tabs
 const BobView = () => <div className="p-4"><h2 className="text-2xl font-avantgarde mb-4">BOB - Votre assistant culinaire</h2><p>L'assistant BOB est en cours de développement et sera bientôt à votre service.</p></div>;
-const ProfileView = () => <div className="p-4"><h2 className="text-2xl font-avantgarde mb-4">Profil</h2><p>Gérez vos informations personnelles et préférences de compte.</p></div>;
 
 const Dashboard: React.FC = () => {
   const { isAuthenticated, isLoading, user } = useAuth();
@@ -23,24 +21,20 @@ const Dashboard: React.FC = () => {
   
   useEffect(() => {
     if (!isLoading) {
-      // Si nous sommes en mode prévisualisation, vérifier si un utilisateur simulé existe
       if (inPreviewMode) {
         const mockUser = getAuthenticatedUser();
         if (!mockUser) {
           navigate('/login');
         }
-        // Utilisateur simulé existe, continuer
         return;
       }
       
-      // En mode normal, vérifier l'authentification
       if (!isAuthenticated) {
         navigate('/login');
       }
     }
   }, [isAuthenticated, isLoading, navigate, inPreviewMode]);
   
-  // Afficher un écran de chargement pendant la vérification
   if (isLoading) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-[#F8F8F8]">
@@ -59,7 +53,6 @@ const Dashboard: React.FC = () => {
     );
   }
 
-  // Sélectionner le contenu à afficher en fonction de la vue active
   const renderContent = () => {
     switch (activeView) {
       case 'home':
