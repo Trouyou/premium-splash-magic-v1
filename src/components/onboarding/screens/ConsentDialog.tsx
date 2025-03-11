@@ -22,7 +22,7 @@ const ConsentDialog: React.FC<ConsentDialogProps> = ({ onAccept, onDecline }) =>
       description: "Vos préférences de confidentialité ont été sauvegardées.",
     });
     onAccept();
-    navigate('/');
+    navigate('/dashboard');
   };
 
   const handleDecline = () => {
@@ -33,12 +33,14 @@ const ConsentDialog: React.FC<ConsentDialogProps> = ({ onAccept, onDecline }) =>
       variant: "destructive",
     });
     onDecline();
-    navigate('/');
+    navigate('/dashboard');
   };
 
-  // Open the links in a new tab
-  const openExternalLink = (url: string) => {
-    window.open(url, '_blank', 'noopener,noreferrer');
+  // Open the legal pages in a new tab with a return parameter
+  const openLegalPage = (url: string) => {
+    // Add a 'returnTo' parameter to indicate where to return
+    const returnUrl = `${url}?returnTo=onboarding-consent`;
+    window.open(returnUrl, '_blank', 'noopener,noreferrer');
   };
   
   // Navigate to settings page
@@ -97,14 +99,14 @@ const ConsentDialog: React.FC<ConsentDialogProps> = ({ onAccept, onDecline }) =>
             <p className="text-[#4A5568]">
               En continuant, vous acceptez nos{" "}
               <button 
-                onClick={() => openExternalLink('/conditions-utilisation.html')}
+                onClick={() => openLegalPage('/conditions-utilisation.html')}
                 className="font-medium text-[#D11B19] hover:text-[#B01816] transition-colors"
               >
                 Conditions Générales d'Utilisation
               </button>{" "}
               et notre{" "}
               <button 
-                onClick={() => openExternalLink('/politique-confidentialite.html')}
+                onClick={() => openLegalPage('/politique-confidentialite.html')}
                 className="font-medium text-[#D11B19] hover:text-[#B01816] transition-colors"
               >
                 Politique de Confidentialité

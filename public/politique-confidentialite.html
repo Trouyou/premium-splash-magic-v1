@@ -244,6 +244,13 @@
         backButton.addEventListener('click', function(event) {
             event.preventDefault();
             
+            // Handle return to onboarding consent dialog
+            if (returnTo === 'onboarding-consent') {
+                // Closing this tab/window will return to the onboarding
+                window.close();
+                return;
+            }
+            
             // Special case for popup-rgpd - redirect to index with parameter
             if (returnTo === 'popup-rgpd') {
                 window.location.href = '/?returnTo=popup-rgpd';
