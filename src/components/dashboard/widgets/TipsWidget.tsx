@@ -17,16 +17,16 @@ interface TipsWidgetProps {
 
 const mockTips: Tip[] = [
   {
-    id: 'tip-1',
-    title: 'Comment conserver vos légumes plus longtemps',
-    excerpt: 'Découvrez des astuces simples pour garder vos légumes frais pendant des semaines.',
-    imageUrl: '/lovable-uploads/76f1327b-1b0e-40de-8959-98f93dad884d.png'
+    id: "tip-1",
+    title: "Comment conserver vos légumes plus longtemps",
+    excerpt: "Découvrez des astuces simples pour garder vos légumes frais pendant des semaines.",
+    imageUrl: "/lovable-uploads/76f1327b-1b0e-40de-8959-98f93dad884d.png"
   },
   {
-    id: 'tip-2',
-    title: '5 façons d'utiliser vos restes de pain',
-    excerpt: 'Ne jetez plus votre pain rassis, transformez-le en délicieuses recettes!',
-    imageUrl: '/lovable-uploads/440a22d0-927c-46b3-b178-70ab93968b95.png'
+    id: "tip-2",
+    title: "5 façons d'utiliser vos restes de pain",
+    excerpt: "Ne jetez plus votre pain rassis, transformez-le en délicieuses recettes!",
+    imageUrl: "/lovable-uploads/440a22d0-927c-46b3-b178-70ab93968b95.png"
   }
 ];
 
