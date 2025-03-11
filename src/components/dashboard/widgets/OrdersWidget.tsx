@@ -13,6 +13,7 @@ interface Order {
 interface OrdersWidgetProps {
   id: string;
   onRemove?: (id: string) => void;
+  setActiveView?: (view: string) => void;
 }
 
 const mockOrders: Order[] = [
@@ -36,7 +37,7 @@ const mockOrders: Order[] = [
   }
 ];
 
-const OrdersWidget: React.FC<OrdersWidgetProps> = ({ id, onRemove }) => {
+const OrdersWidget: React.FC<OrdersWidgetProps> = ({ id, onRemove, setActiveView }) => {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'preparation': 
@@ -59,6 +60,14 @@ const OrdersWidget: React.FC<OrdersWidgetProps> = ({ id, onRemove }) => {
     }
   };
   
+  // Function to handle navigation to orders tab
+  const handleViewAllOrders = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (setActiveView) {
+      setActiveView('orders');
+    }
+  };
+  
   return (
     <Widget id={id} title="Suivi de mes commandes" onRemove={onRemove}>
       <div className="space-y-3">
@@ -76,7 +85,7 @@ const OrdersWidget: React.FC<OrdersWidgetProps> = ({ id, onRemove }) => {
         ))}
         
         <div className="pt-2">
-          <a href="#" className="text-[#D11B19] text-sm font-medium hover:underline">
+          <a href="#" className="text-[#D11B19] text-sm font-medium hover:underline" onClick={handleViewAllOrders}>
             Voir toutes mes commandes
           </a>
         </div>

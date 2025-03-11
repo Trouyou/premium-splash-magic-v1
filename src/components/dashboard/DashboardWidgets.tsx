@@ -12,11 +12,13 @@ import WidgetRenderer from './widgets/WidgetRenderer';
 interface DashboardWidgetsProps {
   favoriteRecipes: Recipe[];
   toggleFavorite: (recipeId: string) => void;
+  setActiveView?: (view: string) => void;
 }
 
 const DashboardWidgets: React.FC<DashboardWidgetsProps> = ({ 
   favoriteRecipes, 
-  toggleFavorite 
+  toggleFavorite,
+  setActiveView
 }) => {
   const {
     userWidgets,
@@ -61,6 +63,7 @@ const DashboardWidgets: React.FC<DashboardWidgetsProps> = ({
                 allRecipes={mockRecipes}
                 onFavoriteToggle={toggleFavorite}
                 onRemoveWidget={removeWidget}
+                setActiveView={setActiveView}
               />
             ))}
           </div>

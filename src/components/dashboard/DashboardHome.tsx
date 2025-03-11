@@ -7,7 +7,11 @@ import { motion } from 'framer-motion';
 import DashboardWidgets from './DashboardWidgets';
 import DashboardHeader from './header/DashboardHeader';
 
-const DashboardHome: React.FC = () => {
+interface DashboardHomeProps {
+  setActiveView?: (view: string) => void;
+}
+
+const DashboardHome: React.FC<DashboardHomeProps> = ({ setActiveView }) => {
   const { user } = useAuth();
   const [favoriteRecipes, setFavoriteRecipes] = useState<Recipe[]>([]);
   
@@ -45,7 +49,8 @@ const DashboardHome: React.FC = () => {
       
       <DashboardWidgets 
         favoriteRecipes={favoriteRecipes} 
-        toggleFavorite={toggleFavorite} 
+        toggleFavorite={toggleFavorite}
+        setActiveView={setActiveView}
       />
     </motion.div>
   );

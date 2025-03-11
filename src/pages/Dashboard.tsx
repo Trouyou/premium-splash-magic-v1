@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
@@ -56,7 +57,7 @@ const Dashboard: React.FC = () => {
   const renderContent = () => {
     switch (activeView) {
       case 'home':
-        return <DashboardHome />;
+        return <DashboardHome setActiveView={setActiveView} />;
       case 'bob':
         return <BobView />;
       case 'orders':
@@ -66,7 +67,7 @@ const Dashboard: React.FC = () => {
       case 'profile':
         return <ProfileView />;
       default:
-        return <DashboardHome />;
+        return <DashboardHome setActiveView={setActiveView} />;
     }
   };
 

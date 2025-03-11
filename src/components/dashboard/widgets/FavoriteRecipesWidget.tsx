@@ -11,6 +11,7 @@ interface FavoriteRecipesWidgetProps {
   onFavoriteToggle: (recipeId: string) => void;
   favoriteRecipes: Recipe[];
   onRemove?: (id: string) => void;
+  setActiveView?: (view: string) => void;
 }
 
 const FavoriteRecipesWidget: React.FC<FavoriteRecipesWidgetProps> = ({ 
@@ -18,8 +19,17 @@ const FavoriteRecipesWidget: React.FC<FavoriteRecipesWidgetProps> = ({
   recipes, 
   favoriteRecipes, 
   onFavoriteToggle,
-  onRemove
+  onRemove,
+  setActiveView
 }) => {
+  // Function to handle navigation to recipes tab
+  const handleViewAllRecipes = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (setActiveView) {
+      setActiveView('recipes');
+    }
+  };
+
   return (
     <Widget id={id} title="Mes recettes enregistrées" onRemove={onRemove}>
       <div className="space-y-3">
@@ -48,7 +58,7 @@ const FavoriteRecipesWidget: React.FC<FavoriteRecipesWidgetProps> = ({
         )}
         
         <div className="pt-2">
-          <a href="#" className="text-[#D11B19] text-sm font-medium hover:underline">
+          <a href="#" className="text-[#D11B19] text-sm font-medium hover:underline" onClick={handleViewAllRecipes}>
             Voir toutes mes recettes
           </a>
         </div>
