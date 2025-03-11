@@ -1,5 +1,4 @@
-
-import { MockUser } from './types';
+import { MockUser } from '.';
 import { MOCK_USERS } from './mock-users';
 import { showAuthConfirmationToast } from './ui-utils';
 

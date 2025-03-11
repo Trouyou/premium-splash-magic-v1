@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useUser } from '@clerk/clerk-react';
 import { 
@@ -33,7 +32,7 @@ export const useAuthState = () => {
         usingSimulation: true
       });
     }
-  }, []);
+  }, [inPreviewMode]);
 
   // Déterminer si l'utilisateur est authentifié (réel ou simulé)
   const isUserAuthenticated = inPreviewMode 

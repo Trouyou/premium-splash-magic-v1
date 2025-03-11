@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   isPreviewEnvironment, 
@@ -14,6 +14,21 @@ import FormErrorBanner from './signup/FormErrorBanner';
 import SubmitButton from './signup/SubmitButton';
 import { validateSignUpForm, hasErrors, ValidationErrors } from './signup/FormValidator';
 import { SignUpFormProps } from './signup/types';
+import { SignUpResource } from '@clerk/types';
+
+interface FormData {
+  email: string;
+  password: string;
+  firstName?: string;
+  lastName?: string;
+  birthdate?: string;
+}
+
+interface SimulatedSignUpFormProps {
+  onSubmit: (data: FormData) => Promise<SignUpResource>;
+  onSuccess?: (result: SignUpResource) => void;
+  onError?: (error: Error) => void;
+}
 
 export const SimulatedSignUpForm = ({ 
   onSuccess,

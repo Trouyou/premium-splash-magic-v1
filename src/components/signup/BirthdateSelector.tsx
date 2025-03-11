@@ -126,8 +126,8 @@ const BirthdateSelector = ({ onChange, onValidate, errorMessage }: BirthdateSele
   const parseInputDate = (input: string): DateValue | null => {
     // Accepter les formats: JJ/MM/AAAA, JJ-MM-AAAA, JJ.MM.AAAA
     const formats = [
-      /^(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{4})$/, // JJ/MM/AAAA
-      /^(\d{4})[\/\-\.](\d{1,2})[\/\-\.](\d{1,2})$/  // AAAA/MM/JJ
+      /^(\d{1,2})([/\-\.])(\d{1,2})([/\-\.])(\d{4})$/, // JJ/MM/AAAA
+      /^(\d{4})([/\-\.])(\d{1,2})([/\-\.])(\d{1,2})$/  // AAAA/MM/JJ
     ];
     
     for (const format of formats) {
@@ -137,15 +137,15 @@ const BirthdateSelector = ({ onChange, onValidate, errorMessage }: BirthdateSele
           // Format JJ/MM/AAAA
           return {
             day: parseInt(match[1], 10),
-            month: parseInt(match[2], 10),
-            year: parseInt(match[3], 10)
+            month: parseInt(match[3], 10),
+            year: parseInt(match[4], 10)
           };
         } else {
           // Format AAAA/MM/JJ
           return {
             year: parseInt(match[1], 10),
-            month: parseInt(match[2], 10),
-            day: parseInt(match[3], 10)
+            month: parseInt(match[3], 10),
+            day: parseInt(match[4], 10)
           };
         }
       }

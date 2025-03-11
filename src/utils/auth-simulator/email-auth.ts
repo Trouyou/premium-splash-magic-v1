@@ -1,5 +1,20 @@
-import { MockUser } from './types';
+import { MockUser } from '.';
 import { showAuthConfirmationToast } from './ui-utils';
+import { SignInResource } from '@clerk/types';
+
+/**
+ * Convertit un MockUser en SignInResource
+ */
+export const mockUserToSignInResource = (user: MockUser): SignInResource => {
+  return {
+    status: 'complete',
+    createdSessionId: `mock-session-${Date.now()}`,
+    createdUserId: user.id,
+    identifier: user.email,
+    firstName: user.firstName,
+    lastName: user.lastName
+  } as unknown as SignInResource;
+};
 
 /**
  * Simule une connexion par email avec mot de passe

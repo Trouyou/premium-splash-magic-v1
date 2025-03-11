@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
@@ -6,23 +5,25 @@ import {
   simulateSignIn
 } from '@/utils/auth-simulator';
 import { useToast } from '@/hooks/use-toast';
+import { SignInResource } from '@clerk/types';
+import { Button } from '@/components/ui/button';
 
-interface SocialAuthButtonProps {
-  provider: 'oauth_google' | 'oauth_facebook' | 'oauth_apple';
-  onSuccess?: (user: any) => void;
+interface SocialAuthProvider {
+  id: string;
+  name: string;
   icon: React.ReactNode;
-  providerName: string;
-  className?: string;
-  disabled?: boolean;
 }
 
-export const SimulatedSocialButton: React.FC<SocialAuthButtonProps> = ({ 
+interface SimulatedSocialButtonProps {
+  provider: SocialAuthProvider;
+  onSuccess?: (result: SignInResource) => void;
+  onError?: (error: Error) => void;
+}
+
+export const SimulatedSocialButton: React.FC<SimulatedSocialButtonProps> = ({ 
   provider, 
   onSuccess, 
-  icon, 
-  providerName, 
-  className,
-  disabled = false 
+  onError 
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -33,21 +34,25 @@ export const SimulatedSocialButton: React.FC<SocialAuthButtonProps> = ({
     
     setIsLoading(true);
     try {
-      simulateSignIn(provider, (user) => {
-        setIsLoading(false);
-        
-        toast({
-          title: "Connexion réussie",
-          description: `Bienvenue ${user.firstName} (simulation)`,
-        });
-        
-        if (typeof onSuccess === 'function') {
-          onSuccess(user);
-        } else {
-          // Redirection par défaut
-          navigate("/");
-        }
-      });
+      simulateSignIn(
+        provider.id,
+        (result) => {
+          setIsLoading(false);
+          
+          toast({
+            title: "Connexion réussie",
+            description: `Bienvenue ${result.firstName} (simulation)`,
+          });
+          
+          if (typeof onSuccess === 'function') {
+            onSuccess(result);
+          } else {
+            // Redirection par défaut
+            navigate("/");
+          }
+        },
+        onError
+      );
     } catch (error) {
       setIsLoading(false);
       toast({
@@ -59,18 +64,14 @@ export const SimulatedSocialButton: React.FC<SocialAuthButtonProps> = ({
   };
   
   return (
-    <button
+    <Button
+      variant="outline"
+      className="w-full flex items-center justify-center gap-2 py-6"
       onClick={handleClick}
-      disabled={isLoading || disabled}
-      className={className || "w-full flex items-center justify-center gap-2 bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-50 transition-colors"}
     >
-      <div className="flex items-center justify-center">
-        <span className="flex items-center justify-center w-5 h-5 mr-3">{icon}</span>
-        <span className="font-avantgarde text-gray-700 text-sm">
-          {isLoading ? 'Chargement...' : `Continuer avec ${providerName}`}
-        </span>
-      </div>
-    </button>
+      {provider.icon}
+      <span>Continuer avec {provider.name}</span>
+    </Button>
   );
 };
 

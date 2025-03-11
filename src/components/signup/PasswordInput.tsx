@@ -1,5 +1,4 @@
-
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import FormErrorDisplay from './FormErrorDisplay';
 import { defaultErrorMessages } from '@/utils/error-messages';
@@ -25,43 +24,46 @@ const PasswordInput = ({
   const [confirmError, setConfirmError] = useState('');
   const [isDirty, setIsDirty] = useState({ password: false, confirm: false });
 
+  // Définir les fonctions de validation avec useCallback
+  const validatePassword = useCallback(() => {
+    if (!password) {
+      setPasswordError('Ce champ est requis');
+      return false;
+    }
+    if (password.length < 8) {
+      setPasswordError('Le mot de passe doit contenir au moins 8 caractères');
+      return false;
+    }
+    setPasswordError('');
+    return true;
+  }, [password]);
+
+  const validateConfirmPassword = useCallback(() => {
+    if (!confirmPassword) {
+      setConfirmError('Ce champ est requis');
+      return false;
+    }
+    if (password !== confirmPassword) {
+      setConfirmError('Les mots de passe ne correspondent pas');
+      return false;
+    }
+    setConfirmError('');
+    return true;
+  }, [confirmPassword, password]);
+
   // Validate password when it changes (only if dirty)
   useEffect(() => {
     if (isDirty.password) {
       validatePassword();
     }
-  }, [password]);
+  }, [password, isDirty.password, validatePassword]);
 
   // Validate confirm password when either password changes (only if dirty)
   useEffect(() => {
     if (isDirty.confirm) {
       validateConfirmPassword();
     }
-  }, [confirmPassword, password]);
-
-  const validatePassword = () => {
-    if (!password) {
-      setPasswordError('Ce champ est requis');
-      return false;
-    } else if (password.length < 8) {
-      setPasswordError('Le mot de passe doit contenir au moins 8 caractères');
-      return false;
-    }
-    setPasswordError('');
-    return true;
-  };
-
-  const validateConfirmPassword = () => {
-    if (!confirmPassword) {
-      setConfirmError('Ce champ est requis');
-      return false;
-    } else if (password !== confirmPassword) {
-      setConfirmError('Les mots de passe ne correspondent pas');
-      return false;
-    }
-    setConfirmError('');
-    return true;
-  };
+  }, [confirmPassword, password, isDirty.confirm, validateConfirmPassword]);
 
   const handlePasswordBlur = () => {
     setIsDirty(prev => ({ ...prev, password: true }));

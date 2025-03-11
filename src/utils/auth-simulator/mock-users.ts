@@ -1,5 +1,4 @@
-
-import { MockUser } from './types';
+import { MockUser } from '.';
 
 // Simulation des utilisateurs préenregistrés
 export const MOCK_USERS: Record<string, MockUser> = {

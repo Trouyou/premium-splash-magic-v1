@@ -1,5 +1,4 @@
-
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import FormErrorDisplay from './FormErrorDisplay';
 import { defaultErrorMessages } from '@/utils/error-messages';
@@ -24,20 +23,20 @@ const TermsAndNewsletter = ({
   // Get current path for returnTo parameter
   const currentPath = location.pathname;
 
-  useEffect(() => {
-    if (isDirty) {
-      validateTerms();
-    }
-  }, [acceptTerms, isDirty]);
-
-  const validateTerms = () => {
+  const validateTerms = useCallback(() => {
     if (!acceptTerms) {
       setTermsError('Veuillez accepter les conditions d\'utilisation');
       return false;
     }
     setTermsError('');
     return true;
-  };
+  }, [acceptTerms]);
+
+  useEffect(() => {
+    if (isDirty) {
+      validateTerms();
+    }
+  }, [acceptTerms, isDirty, validateTerms]);
 
   const handleTermsChange = () => {
     setIsDirty(true);

@@ -1,4 +1,20 @@
 /* ============================== */
+/* TYPOGRAPHY & FONTS            */
+/* ============================== */
+
+/* Playfair Display font */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&display=swap');
+
+/* Avant Garde font */
+@font-face {
+  font-family: 'AvantGarde Bk BT';
+  src: url('/fonts/AvantGardeBkBT.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ============================== */
 /* TAILWIND BASE CONFIGURATION   */
 /* ============================== */
 @tailwind base;
@@ -109,22 +125,6 @@
     @apply bg-background text-foreground;
   }
 }
-
-/* ============================== */
-/* TYPOGRAPHY & FONTS            */
-/* ============================== */
-
-/* Avant Garde font */
-@font-face {
-  font-family: 'AvantGarde Bk BT';
-  src: url('/fonts/AvantGardeBkBT.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Playfair Display font */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&display=swap');
 
 /* ============================== */
 /* PERFORMANCE OPTIMIZATIONS     */

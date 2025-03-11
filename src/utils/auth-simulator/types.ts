@@ -1,19 +1,3 @@
-
-/**
- * Type pour représenter un utilisateur de test
- */
-export interface MockUser {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  fullName: string;
-  imageUrl: string;
-  provider: string;
-  birthdate?: string;  // Date de naissance (optionnelle)
-  loggedInAt: string;
-}
-
 /**
  * Configuration pour le bouton de connexion sociale
  */
@@ -27,4 +11,7 @@ export interface SocialLoginConfig {
  * Types de fournisseurs d'authentification sociale
  */
 export type SocialProvider = 'oauth_google' | 'oauth_facebook' | 'oauth_apple';
+
+// Import MockUser pour l'utiliser dans SocialLoginConfig
+import { MockUser } from '.';
 

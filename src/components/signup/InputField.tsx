@@ -1,5 +1,4 @@
-
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import FormErrorDisplay from './FormErrorDisplay';
 
 interface InputFieldProps {
@@ -29,41 +28,27 @@ const InputField = ({
   pattern,
   name
 }: InputFieldProps) => {
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string | null>(null);
   const [isDirty, setIsDirty] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
 
-  // Clear errors when value changes
-  useEffect(() => {
-    if (isDirty) {
-      validateInput();
-    }
-  }, [value]);
-
-  const validateInput = () => {
+  // Définir validateInput avec useCallback avant de l'utiliser dans useEffect
+  const validateInput = useCallback(() => {
     // Required validation
     if (required && !value.trim()) {
       setError('Ce champ est requis');
       return false;
     }
     
-    // Minimum length validation
+    // Min length validation
     if (minLength && value.trim().length < minLength) {
       setError(`Ce champ doit contenir au moins ${minLength} caractères`);
       return false;
     }
     
-    // Email validation
-    if (type === 'email' && value.trim()) {
-      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailPattern.test(value)) {
-        setError('Veuillez entrer une adresse email valide');
-        return false;
-      }
-    }
-    
-    // Password validation
-    if (type === 'password' && value.trim() && value.length < 8) {
-      setError('Le mot de passe doit contenir au moins 8 caractères');
+    // Pattern validation
+    if (pattern && !new RegExp(pattern).test(value)) {
+      setError('Format invalide');
       return false;
     }
     
@@ -76,18 +61,16 @@ const InputField = ({
       }
     }
     
-    // Sanitize input for security (remove potentially harmful code)
-    if (type === 'text' || type === 'textarea') {
-      const sanitizedValue = value.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
-      if (sanitizedValue !== value) {
-        onChange(sanitizedValue);
-      }
-    }
-    
-    // No errors
-    setError('');
+    setError(null);
     return true;
-  };
+  }, [required, value, minLength, pattern, validate]);
+
+  // Clear errors when value changes
+  useEffect(() => {
+    if (isDirty) {
+      validateInput();
+    }
+  }, [value, isDirty, validateInput]);
 
   const handleBlur = () => {
     setIsDirty(true);
