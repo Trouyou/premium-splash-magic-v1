@@ -1,75 +1,66 @@
 
-/* Animation pour les transitions de commandes */
-@keyframes slide-in-right {
-  0% { 
-    transform: translateX(30px);
-    opacity: 0;
-  }
-  100% { 
-    transform: translateX(0);
-    opacity: 1;
-  }
+/* Orders animations */
+.order-card-enter {
+  opacity: 0;
+  transform: translateY(20px);
 }
 
-@keyframes slide-in-left {
-  0% { 
-    transform: translateX(-30px);
-    opacity: 0;
-  }
-  100% { 
-    transform: translateX(0);
-    opacity: 1;
-  }
+.order-card-enter-active {
+  opacity: 1;
+  transform: translateY(0px);
+  transition: opacity 300ms, transform 300ms;
 }
 
-@keyframes fade-in-up {
-  0% { 
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  100% { 
-    opacity: 1;
-    transform: translateY(0);
-  }
+.order-card-exit {
+  opacity: 1;
 }
 
-@keyframes pulse-dot {
+.order-card-exit-active {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.timeline-dot {
+  transition: all 0.3s ease;
+}
+
+.timeline-dot.active {
+  transform: scale(1.2);
+  box-shadow: 0 0 0 4px rgba(209, 27, 25, 0.2);
+}
+
+.tracking-map-container {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  height: 250px;
+}
+
+.courier-marker {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  margin-left: -20px;
+  margin-top: -20px;
+  background-color: #2A5D50;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: 0 0 0 4px rgba(42, 93, 80, 0.3);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
   0% {
-    transform: scale(0.8);
-    opacity: 0.7;
+    box-shadow: 0 0 0 0 rgba(42, 93, 80, 0.7);
   }
-  50% {
-    transform: scale(1.2);
-    opacity: 1;
+  70% {
+    box-shadow: 0 0 0 10px rgba(42, 93, 80, 0);
   }
   100% {
-    transform: scale(0.8);
-    opacity: 0.7;
+    box-shadow: 0 0 0 0 rgba(42, 93, 80, 0);
   }
-}
-
-.courier-dot {
-  animation: pulse-dot 1.5s ease-in-out infinite;
-}
-
-.animate-slide-in-right {
-  animation: slide-in-right 0.5s ease-out forwards;
-}
-
-.animate-slide-in-left {
-  animation: slide-in-left 0.5s ease-out forwards;
-}
-
-.animate-fade-in-up {
-  animation: fade-in-up 0.5s ease-out forwards;
-}
-
-/* Masquer les barres de défilement tout en permettant le scrolling */
-.hide-scrollbar {
-  -ms-overflow-style: none;  /* IE et Edge */
-  scrollbar-width: none;  /* Firefox */
-}
-
-.hide-scrollbar::-webkit-scrollbar {
-  display: none; /* Chrome, Safari et Opera */
 }
