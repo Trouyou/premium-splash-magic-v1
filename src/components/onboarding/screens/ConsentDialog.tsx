@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Shield, Settings } from 'lucide-react';
@@ -21,7 +22,7 @@ const ConsentDialog: React.FC<ConsentDialogProps> = ({ onAccept, onDecline }) =>
       description: "Vos préférences de confidentialité ont été sauvegardées.",
     });
     onAccept();
-    navigate('/');
+    navigate('/dashboard');
   };
 
   const handleDecline = () => {
@@ -32,7 +33,7 @@ const ConsentDialog: React.FC<ConsentDialogProps> = ({ onAccept, onDecline }) =>
       variant: "destructive",
     });
     onDecline();
-    navigate('/');
+    navigate('/dashboard');
   };
 
   const openExternalLink = (url: string) => {

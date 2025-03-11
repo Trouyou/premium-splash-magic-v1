@@ -23,12 +23,16 @@ const FinalScreen: React.FC<FinalScreenProps> = ({ onComplete }) => {
   }, []);
 
   const handleAcceptConsent = () => {
+    // Call onComplete to mark onboarding as finished
     onComplete();
+    // Direct navigation to dashboard from component
     navigate('/dashboard');
   };
 
   const handleDeclineConsent = () => {
+    // Call onComplete to mark onboarding as finished
     onComplete();
+    // Direct navigation to dashboard from component
     navigate('/dashboard');
   };
   
