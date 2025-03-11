@@ -1,37 +1,42 @@
 
 import React, { useState, useEffect } from 'react';
-import { Zap, Heart } from 'lucide-react';
+import { Zap, Heart, Sparkle, Flame } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { Recipe } from '@/components/onboarding/recipe/types';
 import { mockRecipes } from '@/components/onboarding/recipe/data/mockRecipes';
 import WelcomeMessage from './WelcomeMessage';
-import FilterButtons from './filters/FilterButtons';
 import RecipeGrid from './recipes/RecipeGrid';
 import CollapsibleRecipeSection from './recipes/CollapsibleRecipeSection';
 import { motion } from 'framer-motion';
 
 // Custom TabNavigation just for recipe tabs (not the main app tabs)
 const RecipeTabNavigation: React.FC<{
-  activeTab: 'recommandations' | 'tendances';
-  setActiveTab: (tab: 'recommandations' | 'tendances') => void;
+  activeTab: 'inspirations' | 'tendances';
+  setActiveTab: (tab: 'inspirations' | 'tendances') => void;
 }> = ({ activeTab, setActiveTab }) => {
   return (
-    <div className="flex border-b border-gray-200 mb-4">
+    <div className="flex justify-center border-b border-gray-200 mb-6">
       <button
-        className={`px-4 py-2 font-avantgarde text-sm ${
-          activeTab === 'recommandations' ? 'text-[#D11B19] border-b-2 border-[#D11B19]' : 'text-gray-500'
+        className={`px-6 py-2 font-avantgarde text-sm ${
+          activeTab === 'inspirations' ? 'text-[#D11B19] border-b-2 border-[#D11B19]' : 'text-gray-600'
         }`}
-        onClick={() => setActiveTab('recommandations')}
+        onClick={() => setActiveTab('inspirations')}
       >
-        Recommandations
+        <span className="flex items-center">
+          <Sparkle size={16} className="mr-1.5" />
+          Inspirations du jour
+        </span>
       </button>
       <button
-        className={`px-4 py-2 font-avantgarde text-sm ${
-          activeTab === 'tendances' ? 'text-[#D11B19] border-b-2 border-[#D11B19]' : 'text-gray-500'
+        className={`px-6 py-2 font-avantgarde text-sm ${
+          activeTab === 'tendances' ? 'text-[#D11B19] border-b-2 border-[#D11B19]' : 'text-gray-600'
         }`}
         onClick={() => setActiveTab('tendances')}
       >
-        Tendances
+        <span className="flex items-center">
+          <Flame size={16} className="mr-1.5" />
+          Tendances actuelles
+        </span>
       </button>
     </div>
   );
@@ -39,12 +44,11 @@ const RecipeTabNavigation: React.FC<{
 
 const DashboardHome: React.FC = () => {
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState<'recommandations' | 'tendances'>('recommandations');
-  const [recommendedRecipes, setRecommendedRecipes] = useState<Recipe[]>([]);
+  const [activeTab, setActiveTab] = useState<'inspirations' | 'tendances'>('inspirations');
+  const [inspirationRecipes, setInspirationRecipes] = useState<Recipe[]>([]);
   const [trendingRecipes, setTrendingRecipes] = useState<Recipe[]>([]);
   const [favoriteRecipes, setFavoriteRecipes] = useState<Recipe[]>([]);
   const [quickRecipes, setQuickRecipes] = useState<Recipe[]>([]);
-  const [quickFilterTime, setQuickFilterTime] = useState<string | null>(null);
   const [expandedSections, setExpandedSections] = useState<{[key: string]: boolean}>({
     'favorites': true,
     'quick': true
@@ -55,15 +59,16 @@ const DashboardHome: React.FC = () => {
     // Pour cet exemple, nous allons utiliser les données mockées
     // Dans une vraie app, vous feriez un appel API ici
     
-    // Recettes recommandées (filtrer selon préférences utilisateur)
-    const recommended = mockRecipes
+    // Recettes inspiration
+    const inspirations = mockRecipes
       .sort(() => 0.5 - Math.random()) // Mélange aléatoire
       .slice(0, 8);
-    setRecommendedRecipes(recommended);
+    setInspirationRecipes(inspirations);
     
     // Recettes tendance
     const trending = mockRecipes
-      .sort(() => 0.5 - Math.random()) // Différent tri aléatoire
+      .filter(recipe => recipe.likes > 50) // Filtrer les plus populaires
+      .sort((a, b) => b.likes - a.likes) // Trier par popularité
       .slice(0, 8);
     setTrendingRecipes(trending);
     
@@ -81,22 +86,9 @@ const DashboardHome: React.FC = () => {
     setQuickRecipes(quick);
   }, []);
 
-  // Filtrer les recettes par temps de cuisson
-  const getFilteredRecipes = () => {
-    if (!quickFilterTime) return activeTab === 'recommandations' ? recommendedRecipes : trendingRecipes;
-    
-    const recipes = activeTab === 'recommandations' ? recommendedRecipes : trendingRecipes;
-    
-    return recipes.filter(recipe => {
-      if (quickFilterTime === 'quick') {
-        return recipe.cookingTime <= 15;
-      } else if (quickFilterTime === 'medium') {
-        return recipe.cookingTime > 15 && recipe.cookingTime <= 40;
-      } else if (quickFilterTime === 'long') {
-        return recipe.cookingTime > 40;
-      }
-      return true;
-    });
+  // Obtenir les recettes selon l'onglet actif
+  const getActiveTabRecipes = () => {
+    return activeTab === 'inspirations' ? inspirationRecipes : trendingRecipes;
   };
 
   const toggleFavorite = (recipeId: string) => {
@@ -112,22 +104,34 @@ const DashboardHome: React.FC = () => {
     }));
   };
 
-  const resetFilters = () => {
-    setQuickFilterTime(null);
-  };
-
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Message de bienvenue */}
-      <WelcomeMessage userName={user?.firstName || "Gourmand"} />
+      <motion.div 
+        className="text-center mb-8 pt-2"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <motion.h1 
+          className="text-2xl md:text-3xl font-bold font-playfair mb-3"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          Bonjour, <span className="text-[#D11B19]">{user?.firstName || "Gourmand"}</span> 👋
+        </motion.h1>
+        <motion.p 
+          className="text-lg text-gray-600 font-avantgarde"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          Découvrez de nouvelles inspirations et les tendances du jour !
+        </motion.p>
+      </motion.div>
       
-      {/* Boutons de filtre rapide */}
-      <FilterButtons 
-        quickFilterTime={quickFilterTime} 
-        setQuickFilterTime={setQuickFilterTime} 
-      />
-      
-      {/* Tabs pour Recommandations/Tendances */}
+      {/* Tabs pour Inspirations/Tendances */}
       <RecipeTabNavigation 
         activeTab={activeTab} 
         setActiveTab={setActiveTab} 
@@ -135,7 +139,7 @@ const DashboardHome: React.FC = () => {
       
       {/* Grille de recettes */}
       <RecipeGrid 
-        recipes={getFilteredRecipes()} 
+        recipes={getActiveTabRecipes()} 
         favoriteRecipes={favoriteRecipes}
         toggleFavorite={toggleFavorite}
       />
