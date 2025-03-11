@@ -15,12 +15,14 @@ interface SimulatedSocialButtonProps {
   provider: SocialAuthProvider;
   onSuccess?: (result: any) => void;
   onError?: (error: Error) => void;
+  disabled?: boolean;
 }
 
 export const SimulatedSocialButton: React.FC<SimulatedSocialButtonProps> = ({ 
   provider, 
   onSuccess, 
-  onError 
+  onError,
+  disabled = false
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -36,9 +38,12 @@ export const SimulatedSocialButton: React.FC<SimulatedSocialButtonProps> = ({
         (result) => {
           setIsLoading(false);
           
+          // Use a safe approach to get the username part from the result
+          const username = result.identifier ? result.identifier.split('@')[0] : 'user';
+          
           toast({
             title: "Connexion réussie",
-            description: `Bienvenue ${result.email?.split('@')[0]} (simulation)`,
+            description: `Bienvenue ${username} (simulation)`,
           });
           
           if (typeof onSuccess === 'function') {
@@ -64,6 +69,7 @@ export const SimulatedSocialButton: React.FC<SimulatedSocialButtonProps> = ({
       variant="outline"
       className="w-full flex items-center justify-center gap-2 py-6"
       onClick={handleClick}
+      disabled={disabled || isLoading}
     >
       {provider.icon}
       <span>Continuer avec {provider.name}</span>

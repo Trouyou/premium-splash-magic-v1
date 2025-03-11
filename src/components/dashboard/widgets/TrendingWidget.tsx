@@ -33,9 +33,8 @@ const TrendingWidget: React.FC<TrendingWidgetProps> = ({
             <RecipeCard
               key={recipe.id}
               recipe={recipe}
-              onFavoriteToggle={() => onFavoriteToggle(recipe.id)}
+              onToggleFavorite={() => onFavoriteToggle(recipe.id)}
               isFavorite={favoriteRecipes.some(fav => fav.id === recipe.id)}
-              compact={true}
             />
           ))}
         </div>

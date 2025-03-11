@@ -34,9 +34,8 @@ const FavoriteRecipesWidget: React.FC<FavoriteRecipesWidgetProps> = ({
               <RecipeCard
                 key={recipe.id}
                 recipe={recipe}
-                onFavoriteToggle={() => onFavoriteToggle(recipe.id)}
+                onToggleFavorite={() => onFavoriteToggle(recipe.id)}
                 isFavorite={true}
-                compact={true}
               />
             ))}
           </div>

@@ -42,7 +42,7 @@ const RecipeGrid: React.FC<RecipeGridProps> = ({
           <motion.div key={recipe.id} variants={item}>
             <RecipeCard 
               recipe={recipe} 
-              onFavoriteToggle={() => toggleFavorite(recipe.id)}
+              onToggleFavorite={() => toggleFavorite(recipe.id)}
               isFavorite={favoriteRecipes.some(fav => fav.id === recipe.id)}
             />
           </motion.div>

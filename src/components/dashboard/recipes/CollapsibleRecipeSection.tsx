@@ -64,7 +64,7 @@ const CollapsibleRecipeSection: React.FC<CollapsibleRecipeSectionProps> = ({
             <RecipeCard 
               key={recipe.id} 
               recipe={recipe} 
-              onFavoriteToggle={() => toggleFavorite(recipe.id)}
+              onToggleFavorite={() => toggleFavorite(recipe.id)}
               isFavorite={favoriteRecipes.some(fav => fav.id === recipe.id)}
             />
           ))}

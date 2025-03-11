@@ -25,21 +25,16 @@ const SocialLoginSection = () => {
       });
     }
     
-    // Force display of Apple button first, before any other content is processed
     const ensureAppleButtonVisibility = () => {
-      // Find the container of social buttons
       const socialContainer = document.querySelector('.space-y-3.mb-6');
       if (socialContainer) {
-        // Ensure it has no max-height limitation
         if (socialContainer instanceof HTMLElement) {
           socialContainer.style.maxHeight = 'none';
           socialContainer.style.overflow = 'visible';
         }
         
-        // Find Apple button
         const appleButton = document.querySelector('[provider="Apple"], [providerName="Apple"]');
         if (appleButton && appleButton.parentElement) {
-          // Move Apple button to the beginning of the container
           const parent = appleButton.closest('.space-y-3.mb-6') || socialContainer;
           const firstButton = appleButton.closest('button') || appleButton.closest('div > button');
           
@@ -47,15 +42,13 @@ const SocialLoginSection = () => {
             parent.insertBefore(firstButton.parentElement || firstButton, parent.firstChild);
           }
           
-          // Make sure the entire section is visible
           setTimeout(() => {
-            window.scrollTo(0, 0); // Ensure we're at the top of the page
+            window.scrollTo(0, 0);
           }, 50);
         }
       }
     };
 
-    // Run immediately and after a delay
     ensureAppleButtonVisibility();
     setTimeout(ensureAppleButtonVisibility, 100);
     setTimeout(ensureAppleButtonVisibility, 500);
@@ -131,17 +124,14 @@ const SocialLoginSection = () => {
         <>
           <SimulatedSocialButton 
             provider={appleSocialProvider}
-            disabled={isLoading}
           />
           
           <SimulatedSocialButton 
             provider={googleSocialProvider}
-            disabled={isLoading}
           />
           
           <SimulatedSocialButton 
             provider={facebookSocialProvider}
-            disabled={isLoading}
           />
         </>
       ) : (

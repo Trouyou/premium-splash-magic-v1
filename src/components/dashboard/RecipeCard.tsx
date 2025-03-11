@@ -1,29 +1,26 @@
+
 import React, { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
 import { Recipe } from '@/components/onboarding/recipe/types';
 import OptimizedImage from '@/components/onboarding/recipe/components/OptimizedImage';
-import { formatMinutes, formatDifficulty } from '@/components/onboarding/recipe/utils/formatters';
+import { getTimeLabel, getDietLabel, getNutrientLabel } from '@/components/onboarding/recipe/utils/formatters';
 import { DEFAULT_IMAGE, CATEGORY_FALLBACKS } from '@/components/onboarding/recipe/utils/constants';
 
 interface RecipeCardProps {
   recipe: Recipe;
   isFavorite: boolean;
-  timeLabel: string;
-  dietLabel: string;
-  nutrientLabel: string;
   onToggleFavorite: () => void;
-  defaultImage: string;
+  compact?: boolean;
+  defaultImage?: string;
 }
 
 const RecipeCard: React.FC<RecipeCardProps> = ({
   recipe,
   isFavorite,
-  timeLabel,
-  dietLabel,
-  nutrientLabel,
   onToggleFavorite,
-  defaultImage
+  compact = false,
+  defaultImage = DEFAULT_IMAGE
 }) => {
   const [isHovering, setIsHovering] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -44,6 +41,11 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
     }
     return defaultImage;
   };
+  
+  // Get labels for the recipe
+  const timeLabel = getTimeLabel(recipe.cookingTime);
+  const dietLabel = getDietLabel(recipe.dietaryOptions || []);
+  const nutrientLabel = getNutrientLabel(recipe);
 
   return (
     <motion.div
