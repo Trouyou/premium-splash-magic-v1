@@ -5,10 +5,12 @@ import {
   isPreviewEnvironment, 
   simulateEmailSignIn
 } from '@/utils/auth-simulator';
+import { useNavigate } from 'react-router-dom';
 
 export const useSignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
   
   // Use Clerk hooks
   const { signIn: clerkSignIn, isLoaded: signInLoaded } = useClerkSignIn();
@@ -29,6 +31,8 @@ export const useSignIn = () => {
       if (inPreviewMode) {
         // Simulation mode - use fake authentication
         await simulateEmailSignIn(email, password);
+        // Redirect to dashboard instead of index
+        navigate('/dashboard');
         return undefined;
       } else {
         // Real authentication with Clerk
@@ -45,6 +49,8 @@ export const useSignIn = () => {
         // Handle necessary actions after signin
         if (result.status === 'complete') {
           console.log("Authentication successful");
+          // Redirect to dashboard instead of index
+          navigate('/dashboard');
           return undefined;
         } else {
           console.log("Additional verification needed:", result);

@@ -1,3 +1,4 @@
+
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useClerk } from '@clerk/clerk-react';
@@ -18,7 +19,7 @@ const AuthCallback = () => {
     const preloadLink = document.createElement('link');
     preloadLink.rel = 'preload';
     preloadLink.as = 'document';
-    preloadLink.href = '/'; // Page de redirection après authentification
+    preloadLink.href = '/dashboard'; // Modifié pour précharger le dashboard
     document.head.appendChild(preloadLink);
     
     // Traiter le callback de redirection après l'authentification sociale
@@ -44,8 +45,8 @@ const AuthCallback = () => {
         // Traiter le callback d'authentification
         await handleRedirectCallback({
           redirectUrl: window.location.origin + "/auth/callback",
-          afterSignInUrl: window.location.origin,
-          afterSignUpUrl: window.location.origin
+          afterSignInUrl: window.location.origin + "/dashboard", // Rediriger vers dashboard
+          afterSignUpUrl: window.location.origin + "/dashboard"  // Rediriger vers dashboard
         });
         
         // Démarrer l'animation de redirection
@@ -91,8 +92,8 @@ const AuthCallback = () => {
             containerRef.current.classList.add('fade-out');
           }
           
-          // Redirection après l'animation complète
-          setTimeout(() => navigate('/'), 300);
+          // Redirection vers dashboard après l'animation complète
+          setTimeout(() => navigate('/dashboard'), 300);
         }
       };
       
