@@ -43,21 +43,12 @@ const defaultOnboardingData: OnboardingData = {
 const OnboardingContext = createContext<OnboardingContextType | undefined>(undefined);
 
 export const OnboardingProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [onboardingData, setOnboardingData] = useState<OnboardingData>(() => {
-    // Try to load from localStorage on initial load
-    const savedData = localStorage.getItem('onboardingData');
-    return savedData ? JSON.parse(savedData) : defaultOnboardingData;
-  });
+  const [onboardingData, setOnboardingData] = useState<OnboardingData>(defaultOnboardingData);
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 7; // Updated to include the new favorites screen
   const navigate = useNavigate();
   const { user } = useAuth();
   const { toast } = useToast();
-
-  // Save onboarding data to localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem('onboardingData', JSON.stringify(onboardingData));
-  }, [onboardingData]);
 
   const setHouseholdSize = (size: number) => {
     setOnboardingData(prev => ({ ...prev, householdSize: size }));
@@ -151,8 +142,7 @@ export const OnboardingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       description: "Vos préférences ont été enregistrées avec succès.",
     });
     
-    // Explicitly navigate to dashboard after marking onboarding as complete
-    navigate('/dashboard');
+    navigate('/');
   };
 
   const resetOnboarding = () => {

@@ -9,23 +9,21 @@ import { DEFAULT_IMAGE, CATEGORY_FALLBACKS } from './utils/constants';
 interface RecipeCardProps {
   recipe: Recipe;
   isFavorite: boolean;
+  timeLabel: string;
+  dietLabel: string;
+  nutrientLabel: string;
   onToggleFavorite: () => void;
-  showDetails?: boolean; // Added this prop
-  timeLabel?: string;
-  dietLabel?: string;
-  nutrientLabel?: string;
-  defaultImage?: string;
+  defaultImage: string;
 }
 
 const RecipeCard: React.FC<RecipeCardProps> = ({
   recipe,
   isFavorite,
-  onToggleFavorite,
-  showDetails = true,
   timeLabel,
   dietLabel,
   nutrientLabel,
-  defaultImage = DEFAULT_IMAGE
+  onToggleFavorite,
+  defaultImage
 }) => {
   const [isHovering, setIsHovering] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -91,38 +89,34 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
         >
           <h3 className="text-white font-medium text-lg mb-1 line-clamp-2">{recipe.name}</h3>
           
-          {showDetails && (
-            <div className="flex flex-wrap gap-1 mb-2">
-              {recipe.mainIngredients.map((ingredient, index) => (
-                <span 
-                  key={index} 
-                  className="bg-white/20 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full"
-                >
-                  {ingredient}
-                </span>
-              ))}
-            </div>
-          )}
+          <div className="flex flex-wrap gap-1 mb-2">
+            {recipe.mainIngredients.map((ingredient, index) => (
+              <span 
+                key={index} 
+                className="bg-white/20 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full"
+              >
+                {ingredient}
+              </span>
+            ))}
+          </div>
           
-          {showDetails && (
-            <div className="flex flex-wrap gap-1 mt-auto">
-              {timeLabel && (
-                <span className="bg-white/30 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full">
-                  {timeLabel}
-                </span>
-              )}
-              {dietLabel && (
-                <span className="bg-white/30 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full">
-                  {dietLabel}
-                </span>
-              )}
-              {nutrientLabel && (
-                <span className="bg-white/30 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full">
-                  {nutrientLabel}
-                </span>
-              )}
-            </div>
-          )}
+          <div className="flex flex-wrap gap-1 mt-auto">
+            {timeLabel && (
+              <span className="bg-white/30 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full">
+                {timeLabel}
+              </span>
+            )}
+            {dietLabel && (
+              <span className="bg-white/30 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full">
+                {dietLabel}
+              </span>
+            )}
+            {nutrientLabel && (
+              <span className="bg-white/30 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full">
+                {nutrientLabel}
+              </span>
+            )}
+          </div>
         </div>
       </div>
     </motion.div>
