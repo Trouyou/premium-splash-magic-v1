@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Info, Shield, Settings, ExternalLink } from 'lucide-react';
+import { Shield, Settings, ExternalLink } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
@@ -80,7 +80,6 @@ const ConsentDialog: React.FC<ConsentDialogProps> = ({ onAccept, onDecline }) =>
           
           <div className="text-center text-sm py-2 px-3 bg-[#F9F5EB] rounded-md border border-[#EDE6D6]">
             <p className="flex items-center justify-center gap-1">
-              <Info size={16} className="text-[#D11B19]" />
               <span>
                 <strong>Vous pouvez modifier ces préférences à tout moment</strong> depuis{' '}
                 <button 
