@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './AuthContext';
@@ -46,7 +47,7 @@ export const OnboardingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 7;
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, setHasCompletedOnboarding } = useAuth();
   const { toast } = useToast();
 
   const setHouseholdSize = (size: number) => {
@@ -133,6 +134,9 @@ export const OnboardingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     setOnboardingData(prev => ({ ...prev, onboardingCompleted: true }));
     
     console.log('Onboarding data saved:', onboardingData);
+    
+    // Mettre à jour l'état d'onboarding dans le contexte d'auth
+    setHasCompletedOnboarding(true);
     
     toast({
       title: "Profil complété !",

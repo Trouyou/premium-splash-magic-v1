@@ -6,6 +6,7 @@ import {
 } from '@/utils/auth-simulator';
 import { useToast } from '@/hooks/use-toast';
 import { translateErrorMessage, setupFormValidation, defaultErrorMessages } from '@/utils/error-messages';
+import { useAuth } from '@/context/AuthContext';
 
 export const SimulatedEmailAuth = ({ 
   onSuccess,
@@ -22,6 +23,7 @@ export const SimulatedEmailAuth = ({
   const [formErrors, setFormErrors] = useState<{[key: string]: string}>({});
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { hasCompletedOnboarding } = useAuth();
   
   useEffect(() => {
     setupFormValidation();
@@ -71,8 +73,12 @@ export const SimulatedEmailAuth = ({
       if (typeof onSuccess === 'function') {
         onSuccess(user);
       } else {
-        // Redirection par défaut
-        navigate("/");
+        const hasCompleted = localStorage.getItem(`onboarding_completed_${user.id}`);
+        if (hasCompleted === 'true') {
+          navigate("/dashboard");
+        } else {
+          navigate("/onboarding");
+        }
       }
     } catch (error: any) {
       const translatedError = translateErrorMessage(error.message || "Erreur lors de la connexion");
@@ -94,7 +100,6 @@ export const SimulatedEmailAuth = ({
       setPassword(value);
     }
     
-    // Clear error for this field
     if (formErrors[field]) {
       setFormErrors(prev => {
         const newErrors = {...prev};

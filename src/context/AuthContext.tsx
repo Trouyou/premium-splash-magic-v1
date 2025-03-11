@@ -7,11 +7,13 @@ type AuthContextType = {
   isAuthenticated: boolean;
   isLoading: boolean;
   user: any;
+  hasCompletedOnboarding: boolean;
   signInWithEmail: (email: string, password: string) => Promise<SignInResource | void>;
   signInWithSocial: (provider: 'oauth_google' | 'oauth_facebook' | 'oauth_apple') => Promise<void>;
   signUp: (email: string, password: string, firstName?: string, lastName?: string, birthdate?: string) => Promise<SignUpResource | void>;
   signOut: () => Promise<void>;
   error: string | null;
+  setHasCompletedOnboarding: (value: boolean) => void;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
