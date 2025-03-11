@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './AuthContext';
@@ -45,7 +44,7 @@ const OnboardingContext = createContext<OnboardingContextType | undefined>(undef
 export const OnboardingProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [onboardingData, setOnboardingData] = useState<OnboardingData>(defaultOnboardingData);
   const [currentStep, setCurrentStep] = useState(1);
-  const totalSteps = 7; // Updated to include the new favorites screen
+  const totalSteps = 7;
   const navigate = useNavigate();
   const { user } = useAuth();
   const { toast } = useToast();
@@ -133,8 +132,6 @@ export const OnboardingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   const completeOnboarding = () => {
     setOnboardingData(prev => ({ ...prev, onboardingCompleted: true }));
     
-    // Ici, nous simulons l'envoi des données à la base de données
-    // Dans une implémentation réelle, vous utiliseriez Firebase/Supabase
     console.log('Onboarding data saved:', onboardingData);
     
     toast({
@@ -142,7 +139,7 @@ export const OnboardingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       description: "Vos préférences ont été enregistrées avec succès.",
     });
     
-    navigate('/');
+    navigate('/dashboard');
   };
 
   const resetOnboarding = () => {
@@ -150,10 +147,8 @@ export const OnboardingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     setCurrentStep(1);
   };
 
-  // Simuler le chargement des données d'un utilisateur existant
   useEffect(() => {
     if (user) {
-      // Dans une implémentation réelle, vous chargeriez les données depuis Firebase/Supabase
       console.log('User authenticated, onboarding context initialized');
     }
   }, [user]);
