@@ -41,24 +41,29 @@ const WelcomeMessage: React.FC<WelcomeMessageProps> = ({ userName }) => {
   }, []);
   
   return (
-    <div className="mb-6">
+    <motion.div 
+      className="mb-8"
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+    >
       <motion.h1 
-        className="text-2xl md:text-3xl font-bold font-playfair mb-2"
+        className="text-3xl md:text-4xl font-bold font-playfair mb-3"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        {greeting}, <span className="text-[#D11B19]">{userName}</span> !
+        {greeting}, <span className="text-eatly-primary">{userName}</span> !
       </motion.h1>
       <motion.p 
-        className="text-gray-600"
+        className="text-lg text-gray-600 font-avantgarde"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
         {timePhrase}
       </motion.p>
-    </div>
+    </motion.div>
   );
 };
 

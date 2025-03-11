@@ -7,6 +7,7 @@ import DashboardLayout from '@/components/dashboard/DashboardLayout';
 import DashboardHome from '@/components/dashboard/DashboardHome';
 import { Toaster } from '@/components/ui/toaster';
 import { Toaster as Sonner } from '@/components/ui/sonner';
+import { motion } from 'framer-motion';
 
 const Dashboard: React.FC = () => {
   const { isAuthenticated, isLoading, user } = useAuth();
@@ -36,10 +37,18 @@ const Dashboard: React.FC = () => {
   // Afficher un écran de chargement pendant la vérification
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="relative w-16 h-16">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[#F8F8F8]">
+        <div className="relative w-16 h-16 mb-4">
           <div className="absolute inset-0 border-4 border-[#EDE6D6] border-t-[#D11B19] rounded-full animate-rotate-loader" />
         </div>
+        <motion.p 
+          className="text-lg font-avantgarde text-gray-600 mt-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+        >
+          Préparation de votre cuisine personnalisée...
+        </motion.p>
       </div>
     );
   }
