@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { useAuth } from '@/context/AuthContext';
@@ -14,7 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Paintbrush, Bot } from 'lucide-react';
+import { Paintbrush, Bot, Upload, Camera } from 'lucide-react';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -32,6 +32,8 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   const [avatarColor, setAvatarColor] = useState('#9C1B1A');
   const [avatarBgColor, setAvatarBgColor] = useState('#EDE6D6');
   const [bobColor, setBobColor] = useState('#D11B19');
+  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Couleurs disponibles pour la personnalisation
   const colorOptions = [
@@ -50,6 +52,34 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   // Fonction pour changer la couleur de BOB
   const handleBobColorChange = (color: string) => {
     setBobColor(color);
+  };
+
+  // Fonction pour ouvrir le sélecteur de fichier
+  const triggerFileInput = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  // Fonction pour gérer le changement de l'image de profil
+  const handleProfileImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const result = e.target?.result as string;
+        setProfileImage(result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Fonction pour supprimer l'image de profil
+  const removeProfileImage = () => {
+    setProfileImage(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   };
 
   return (
@@ -77,15 +107,19 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           <DropdownMenu>
             <DropdownMenuTrigger className="focus:outline-none">
               <div 
-                className="w-10 h-10 rounded-full flex items-center justify-center text-center transition-transform hover:scale-105"
+                className="w-10 h-10 rounded-full flex items-center justify-center text-center transition-transform hover:scale-105 overflow-hidden"
                 style={{ 
-                  backgroundColor: avatarBgColor,
+                  backgroundColor: !profileImage ? avatarBgColor : undefined,
                   color: avatarColor,
                   borderColor: avatarColor,
                   borderWidth: '2px'
                 }}
               >
-                {user?.firstName?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || "U"}
+                {profileImage ? (
+                  <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
+                ) : (
+                  user?.firstName?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || "U"
+                )}
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
@@ -100,6 +134,42 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
               <DropdownMenuLabel className="font-normal flex items-center gap-2">
                 <Paintbrush className="h-4 w-4" />
                 <span>Style de l'avatar</span>
+              </DropdownMenuLabel>
+              
+              {/* Option pour ajouter une photo de profil */}
+              <div className="p-2 grid grid-cols-2 gap-2">
+                <button
+                  onClick={triggerFileInput}
+                  className="flex flex-col items-center justify-center p-2 border border-gray-200 rounded-md hover:bg-gray-50 transition-colors text-xs"
+                >
+                  <Camera size={18} className="mb-1" />
+                  Ajouter photo
+                </button>
+                
+                {profileImage && (
+                  <button
+                    onClick={removeProfileImage}
+                    className="flex flex-col items-center justify-center p-2 border border-gray-200 rounded-md hover:bg-gray-50 transition-colors text-xs"
+                  >
+                    <Upload size={18} className="mb-1" />
+                    Supprimer
+                  </button>
+                )}
+                
+                <input 
+                  type="file" 
+                  ref={fileInputRef} 
+                  onChange={handleProfileImageChange} 
+                  className="hidden" 
+                  accept="image/*"
+                />
+              </div>
+              
+              <DropdownMenuSeparator />
+              
+              {/* Palette de couleurs pour l'avatar */}
+              <DropdownMenuLabel className="font-normal">
+                Couleurs de l'avatar
               </DropdownMenuLabel>
               <div className="p-2 grid grid-cols-4 gap-1">
                 {colorOptions.map((option, index) => (

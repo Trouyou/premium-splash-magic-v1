@@ -14,12 +14,19 @@ export const UserSummary: React.FC = () => {
     engagementScore: 85
   };
 
+  // Get profile image from localStorage if available
+  const profileImage = localStorage.getItem('profileImage');
+
   return (
     <Card className="p-6 bg-white">
       <div className="flex items-center gap-6">
         {/* Profile Picture */}
-        <div className="w-20 h-20 rounded-full bg-[#EDE6D6] flex items-center justify-center text-[#9C1B1A] text-2xl font-medium border-2 border-[#9C1B1A]">
-          {user?.firstName?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || "U"}
+        <div className="w-20 h-20 rounded-full bg-[#EDE6D6] flex items-center justify-center text-[#9C1B1A] text-2xl font-medium border-2 border-[#9C1B1A] overflow-hidden">
+          {profileImage ? (
+            <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
+          ) : (
+            user?.firstName?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || "U"
+          )}
         </div>
 
         {/* User Info */}
