@@ -36,7 +36,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             <OptimizedImage 
               src="/lovable-uploads/c1be783b-9b2b-44ce-9e6c-deea409157bd.png"
               alt="Eatly"
-              className="h-10 w-auto object-contain transform-gpu"
+              className="h-12 w-auto object-contain transform-gpu"
               fallbackSrc="/placeholder.svg"
             />
           </div>
