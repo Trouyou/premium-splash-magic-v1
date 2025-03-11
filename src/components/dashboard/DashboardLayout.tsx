@@ -32,11 +32,11 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
         isDarkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"
       )}>
         <div className="flex items-center justify-between w-full max-w-screen-lg mx-auto">
-          <div className="flex items-center justify-center h-16 w-24 relative">
+          <div className="flex items-center justify-center h-16 w-32 relative">
             <OptimizedImage 
               src="/lovable-uploads/c1be783b-9b2b-44ce-9e6c-deea409157bd.png"
               alt="Eatly"
-              className="h-12 w-auto object-contain transform-gpu"
+              className="h-16 w-auto object-contain transform-gpu"
               fallbackSrc="/placeholder.svg"
             />
           </div>
