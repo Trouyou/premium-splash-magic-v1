@@ -23,7 +23,7 @@ export const simulateSignIn = (
     fullName: `Utilisateur ${providerKey.charAt(0).toUpperCase() + providerKey.slice(1)}`,
     imageUrl: `https://ui-avatars.com/api/?name=Utilisateur+${providerKey.charAt(0).toUpperCase() + providerKey.slice(1)}&background=9C1B1A&color=fff`,
     provider: providerKey,
-    loggedInAt: new Date().toISOString() // Ajouter l'horodatage pour les nouveaux utilisateurs
+    loggedInAt: new Date().toISOString()
   };
   
   // Mise à jour de l'horodatage pour les utilisateurs existants
@@ -37,12 +37,14 @@ export const simulateSignIn = (
   // Afficher un message de confirmation
   showAuthConfirmationToast('Connexion simulée réussie (Mode prévisualisation)');
   
-  // Exécuter le callback avec l'utilisateur simulé
+  // Exécuter le callback avec l'utilisateur simulé et rediriger vers le dashboard
   if (typeof callback === 'function') {
     setTimeout(() => {
       callback(user);
+      window.location.href = '/dashboard';
     }, 800);
   }
   
   return user;
 };
+
