@@ -64,22 +64,22 @@ const ConsentDialog: React.FC<ConsentDialogProps> = ({ onAccept, onDecline }) =>
           <Shield className="h-12 w-12 text-[#D11B19]" />
         </div>
 
-        <h2 className="font-['Playfair_Display'] text-2xl text-center text-[#D11B19] mb-4">
+        <h2 className="font-playfair text-2xl text-center text-[#D11B19] mb-4">
           Protection de vos données
         </h2>
 
         <div className="space-y-4 text-[#4A5568] mb-5">
-          <p className="text-center font-medium text-[15px]">
+          <p className="text-center font-avantgarde font-medium text-[15px]">
             Êtes-vous d'accord pour partager vos données avec Eatly afin d'affiner la personnalisation proposée ?
           </p>
           
-          <p className="text-center text-sm">
+          <p className="text-center font-avantgarde text-sm">
             Eatly utilise vos préférences alimentaires pour vous proposer des recommandations personnalisées 
             et améliorer votre expérience culinaire.
           </p>
           
           <div className="text-center text-sm py-2 px-3 bg-[#F9F5EB] rounded-md border border-[#EDE6D6]">
-            <p className="flex items-center justify-center gap-1">
+            <p className="flex items-center justify-center gap-1 font-avantgarde">
               <span>
                 <strong>Vous pouvez modifier ces préférences à tout moment</strong> depuis{' '}
                 <button 
@@ -94,7 +94,7 @@ const ConsentDialog: React.FC<ConsentDialogProps> = ({ onAccept, onDecline }) =>
           </div>
           
           <div className="text-center text-sm py-2">
-            <p className="text-[#4A5568]">
+            <p className="text-[#4A5568] font-avantgarde">
               En continuant, vous acceptez nos{" "}
               <button 
                 onClick={() => openLegalPage('/conditions-utilisation.html')}
@@ -116,7 +116,7 @@ const ConsentDialog: React.FC<ConsentDialogProps> = ({ onAccept, onDecline }) =>
         <div className="flex flex-col gap-3 mt-4">
           <Button
             onClick={handleAccept}
-            className="w-full bg-[#D11B19] hover:bg-[#B01816] text-white font-medium"
+            className="w-full bg-[#D11B19] hover:bg-[#B01816] text-white font-avantgarde font-medium"
           >
             Accepter
           </Button>
@@ -124,7 +124,7 @@ const ConsentDialog: React.FC<ConsentDialogProps> = ({ onAccept, onDecline }) =>
           <Button
             onClick={handleDecline}
             variant="outline"
-            className="w-full text-[#4A5568] hover:text-[#D11B19] hover:border-[#D11B19]"
+            className="w-full text-[#4A5568] hover:text-[#D11B19] hover:border-[#D11B19] font-avantgarde"
           >
             Refuser
           </Button>
