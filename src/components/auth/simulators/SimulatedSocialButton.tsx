@@ -1,11 +1,8 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
-  isPreviewEnvironment, 
-  simulateSignIn
-} from '@/utils/auth-simulator';
+import { isPreviewEnvironment, simulateSignIn } from '@/utils/auth-simulator';
 import { useToast } from '@/hooks/use-toast';
-import { SignInResource } from '@clerk/types';
 import { Button } from '@/components/ui/button';
 
 interface SocialAuthProvider {
@@ -16,7 +13,7 @@ interface SocialAuthProvider {
 
 interface SimulatedSocialButtonProps {
   provider: SocialAuthProvider;
-  onSuccess?: (result: SignInResource) => void;
+  onSuccess?: (result: any) => void;
   onError?: (error: Error) => void;
 }
 
@@ -41,13 +38,12 @@ export const SimulatedSocialButton: React.FC<SimulatedSocialButtonProps> = ({
           
           toast({
             title: "Connexion réussie",
-            description: `Bienvenue ${result.firstName} (simulation)`,
+            description: `Bienvenue ${result.email?.split('@')[0]} (simulation)`,
           });
           
           if (typeof onSuccess === 'function') {
             onSuccess(result);
           } else {
-            // Redirection par défaut
             navigate("/");
           }
         },

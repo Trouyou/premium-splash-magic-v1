@@ -1,4 +1,3 @@
-
 import { Recipe } from '../types';
 
 // Format cooking time with appropriate icon
@@ -41,4 +40,22 @@ export const getNutrientLabel = (recipe: Recipe) => {
   if (recipe.protein && recipe.protein > 20) return `🔥 ${recipe.protein}g protéines`;
   if (recipe.calories && recipe.calories < 300) return `✨ ${recipe.calories} calories`;
   return '';
+};
+
+// Format minutes in human readable format
+export const formatMinutes = (minutes: number): string => {
+  return formatCookingTime(minutes);
+};
+
+// Format difficulty level
+export const formatDifficulty = (difficulty?: string): string => {
+  if (!difficulty) return 'Difficulté non spécifiée';
+  
+  const difficultyMap: Record<string, string> = {
+    easy: 'Facile',
+    medium: 'Intermédiaire',
+    hard: 'Difficile'
+  };
+  
+  return difficultyMap[difficulty.toLowerCase()] || difficulty;
 };

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import SocialButton from './SocialButton';
 import { useAuth } from '@/context/AuthContext';
@@ -6,6 +5,12 @@ import { isPreviewEnvironment } from '@/utils/auth-simulator';
 import { SimulatedSocialButton } from '@/components/auth/AuthSimulator';
 import { useToast } from '@/hooks/use-toast';
 import { translateErrorMessage } from '@/utils/error-translator';
+
+interface SocialAuthProvider {
+  id: string;
+  name: string;
+  icon: React.ReactNode;
+}
 
 const SocialLoginSection = () => {
   const [error, setError] = useState('');
@@ -102,28 +107,40 @@ const SocialLoginSection = () => {
 
   const inPreviewMode = isPreviewEnvironment();
 
+  const appleSocialProvider: SocialAuthProvider = {
+    id: 'oauth_apple',
+    name: 'Apple',
+    icon: <AppleLogo />
+  };
+
+  const googleSocialProvider: SocialAuthProvider = {
+    id: 'oauth_google',
+    name: 'Google',
+    icon: <GoogleLogo />
+  };
+
+  const facebookSocialProvider: SocialAuthProvider = {
+    id: 'oauth_facebook',
+    name: 'Facebook',
+    icon: <FacebookLogo />
+  };
+
   return (
     <div className="space-y-3 mb-6">
       {inPreviewMode ? (
         <>
           <SimulatedSocialButton 
-            icon={<AppleLogo />} 
-            provider="oauth_apple"
-            providerName="Apple"
+            provider={appleSocialProvider}
             disabled={isLoading}
           />
           
           <SimulatedSocialButton 
-            icon={<GoogleLogo />} 
-            provider="oauth_google"
-            providerName="Google"
+            provider={googleSocialProvider}
             disabled={isLoading}
           />
           
           <SimulatedSocialButton 
-            icon={<FacebookLogo />} 
-            provider="oauth_facebook"
-            providerName="Facebook"
+            provider={facebookSocialProvider}
             disabled={isLoading}
           />
         </>
