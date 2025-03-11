@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Search, Filter, ChevronDown, Clock, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { RecipeCard } from '@/components/onboarding/recipe/RecipeCard';
+import RecipeCard from '@/components/onboarding/recipe/RecipeCard';
 import { mockRecipes } from '@/components/onboarding/recipe/data/mockRecipes';
 import { RecipeFilterOptions } from '@/components/onboarding/recipe/types';
 

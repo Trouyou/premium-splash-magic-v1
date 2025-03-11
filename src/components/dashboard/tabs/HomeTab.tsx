@@ -1,9 +1,8 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Sun, Cloud, Droplet, Thermometer, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { RecipeCard } from '@/components/onboarding/recipe/RecipeCard';
+import RecipeCard from '@/components/onboarding/recipe/RecipeCard';
 import { mockRecipes } from '@/components/onboarding/recipe/data/mockRecipes';
 
 const HomeTab = () => {
