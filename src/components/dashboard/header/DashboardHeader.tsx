@@ -32,19 +32,6 @@ const DashboardHeader = () => {
           Découvrez vos recommandations personnalisées du jour
         </motion.p>
       </div>
-      
-      <motion.div 
-        className="absolute top-0 right-0 w-32 h-32 md:w-48 md:h-48 opacity-10"
-        initial={{ scale: 0.8, opacity: 0 }}
-        animate={{ scale: 1, opacity: 0.1 }}
-        transition={{ duration: 0.8, delay: 0.4 }}
-      >
-        <img 
-          src="/lovable-uploads/bae62a19-a42c-4047-8b4c-c9ce60746ff3.png"
-          alt=""
-          className="w-full h-full object-cover"
-        />
-      </motion.div>
     </motion.div>
   );
 };
