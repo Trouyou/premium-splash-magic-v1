@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff } from 'lucide-react';
@@ -7,15 +6,13 @@ import { isPreviewEnvironment } from '@/utils/auth-simulator';
 import { SimulatedEmailAuth } from '@/components/auth/AuthSimulator';
 import { PreviewModeBanner } from '@/components/auth/AuthSimulator';
 import { translateErrorMessage, setupFormValidation, defaultErrorMessages } from '@/utils/error-messages';
-import { useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
-  const { signInWithEmail, isLoading, error, isAuthenticated, hasCompletedOnboarding } = useAuth();
-  const navigate = useNavigate();
+  const { signInWithEmail, isLoading, error } = useAuth();
 
   const inPreviewMode = isPreviewEnvironment();
 
@@ -26,28 +23,12 @@ const LoginForm = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (email && password) {
-      try {
-        await signInWithEmail(email, password);
-        // La redirection sera gérée par le hook ci-dessous
-        if (rememberMe) {
-          localStorage.setItem('rememberedEmail', email);
-        }
-      } catch (err) {
-        // Erreur déjà gérée dans le hook
+      await signInWithEmail(email, password);
+      if (rememberMe) {
+        localStorage.setItem('rememberedEmail', email);
       }
     }
   };
-
-  // Effet pour gérer la redirection après connexion réussie
-  useEffect(() => {
-    if (!isLoading && !error && isAuthenticated) {
-      if (hasCompletedOnboarding) {
-        navigate('/dashboard');
-      } else {
-        navigate('/onboarding');
-      }
-    }
-  }, [isLoading, error, isAuthenticated, hasCompletedOnboarding, navigate]);
 
   if (inPreviewMode) {
     return (

@@ -60,7 +60,6 @@ export const useSignupForm = () => {
     
     try {
       if (inPreviewMode) {
-        // En mode simulation, créer un utilisateur et rediriger vers onboarding
         await simulateSignUp(email, password, firstName, lastName, birthdate);
         
         toast({
@@ -70,7 +69,6 @@ export const useSignupForm = () => {
         
         navigate('/onboarding');
       } else {
-        // En mode réel, s'inscrire et rediriger vers onboarding
         await signUp(email, password, firstName, lastName, birthdate);
         navigate('/onboarding');
       }

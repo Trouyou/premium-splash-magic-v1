@@ -3,37 +3,25 @@ import { useState, useEffect } from 'react';
 import { useAuthState } from './useAuthState';
 import { useAuthMethods } from './useAuthMethods';
 
+// Refactored AuthProvider hook to compose multiple smaller hooks
 export const useAuthProvider = () => {
-  const { isAuthenticated, isLoading, user } = useAuthState();
-  const { signInWithEmail, signInWithSocial, signUp, signOut, error } = useAuthMethods();
-  const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(false);
+  const authState = useAuthState();
+  const authMethods = useAuthMethods();
   
-  // Charger l'état d'onboarding depuis le localStorage au démarrage
-  useEffect(() => {
-    if (isAuthenticated && user) {
-      const storedStatus = localStorage.getItem(`onboarding_completed_${user.id}`);
-      setHasCompletedOnboarding(storedStatus === 'true');
-    }
-  }, [isAuthenticated, user]);
-  
-  // Fonction pour mettre à jour l'état d'onboarding
-  const updateOnboardingStatus = (value: boolean) => {
-    setHasCompletedOnboarding(value);
-    if (user) {
-      localStorage.setItem(`onboarding_completed_${user.id}`, value.toString());
-    }
-  };
-  
+  // Return combined state and methods
   return {
-    isAuthenticated,
-    isLoading,
-    user,
-    hasCompletedOnboarding,
-    signInWithEmail,
-    signInWithSocial,
-    signUp,
-    signOut,
-    error,
-    setHasCompletedOnboarding: updateOnboardingStatus
+    // Auth state
+    isAuthenticated: authState.isAuthenticated,
+    isLoading: authState.isLoading || authMethods.isLoading,
+    user: authState.user,
+    
+    // Auth methods
+    signInWithEmail: authMethods.signInWithEmail,
+    signInWithSocial: authMethods.signInWithSocial,
+    signUp: authMethods.signUp,
+    signOut: authMethods.signOut,
+    
+    // Error handling
+    error: authMethods.error
   };
 };
