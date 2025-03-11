@@ -142,7 +142,7 @@ export const OnboardingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       description: "Vos préférences ont été enregistrées avec succès.",
     });
     
-    navigate('/');
+    navigate('/dashboard');
   };
 
   const resetOnboarding = () => {
