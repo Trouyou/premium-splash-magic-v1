@@ -1,6 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import ConsentDialog from './ConsentDialog';
 import OptimizedImage from '../recipe/components/OptimizedImage';
 
@@ -11,6 +12,7 @@ interface FinalScreenProps {
 const FinalScreen: React.FC<FinalScreenProps> = ({ onComplete }) => {
   const [showConsent, setShowConsent] = useState(false);
   const [logoLoaded, setLogoLoaded] = useState(false);
+  const navigate = useNavigate();
   
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -22,10 +24,12 @@ const FinalScreen: React.FC<FinalScreenProps> = ({ onComplete }) => {
 
   const handleAcceptConsent = () => {
     onComplete();
+    navigate('/dashboard');
   };
 
   const handleDeclineConsent = () => {
     onComplete();
+    navigate('/dashboard');
   };
   
   const handleLogoLoad = () => {
