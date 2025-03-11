@@ -14,7 +14,7 @@ const LoginForm = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
-  const { signInWithEmail, isLoading, error, hasCompletedOnboarding } = useAuth();
+  const { signInWithEmail, isLoading, error, isAuthenticated, hasCompletedOnboarding } = useAuth();
   const navigate = useNavigate();
 
   const inPreviewMode = isPreviewEnvironment();
@@ -40,14 +40,14 @@ const LoginForm = () => {
 
   // Effet pour gérer la redirection après connexion réussie
   useEffect(() => {
-    if (!isLoading && !error && useAuth().isAuthenticated) {
+    if (!isLoading && !error && isAuthenticated) {
       if (hasCompletedOnboarding) {
         navigate('/dashboard');
       } else {
         navigate('/onboarding');
       }
     }
-  }, [isLoading, error, useAuth().isAuthenticated, hasCompletedOnboarding, navigate]);
+  }, [isLoading, error, isAuthenticated, hasCompletedOnboarding, navigate]);
 
   if (inPreviewMode) {
     return (
