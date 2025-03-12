@@ -16,6 +16,15 @@ const selectPopKeyframe = `
 }
 `;
 
+// Animation pour les applications de santé
+const healthAppKeyframe = `
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+`;
+
 const Onboarding: React.FC = () => {
   const { isAuthenticated, isLoading, user } = useAuth();
   const navigate = useNavigate();
@@ -52,6 +61,7 @@ const Onboarding: React.FC = () => {
   return (
     <OnboardingProvider>
       <style>{selectPopKeyframe}</style>
+      <style>{healthAppKeyframe}</style>
       <div className="min-h-screen bg-white overflow-x-hidden"> {/* Added overflow-x-hidden to prevent horizontal scrolling */}
         <Toaster />
         <OnboardingFlow />

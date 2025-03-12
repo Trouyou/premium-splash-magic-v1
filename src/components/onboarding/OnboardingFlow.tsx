@@ -11,6 +11,7 @@ import NutritionalGoalsScreen from './screens/NutritionalGoalsScreen';
 import KitchenEquipmentScreen from './screens/KitchenEquipmentScreen';
 import CookingTimeScreen from './screens/CookingTimeScreen';
 import FavoriteRecipesScreen from './screens/FavoriteRecipesScreen';
+import HealthAppsScreen from './screens/HealthAppsScreen';
 import FinalScreen from './screens/FinalScreen';
 
 const OnboardingFlow: React.FC = () => {
@@ -24,6 +25,7 @@ const OnboardingFlow: React.FC = () => {
     toggleFavoriteRecipe,
     setCookingTime,
     toggleNutritionalGoal,
+    toggleHealthApp,
     nextStep,
     prevStep,
     completeOnboarding
@@ -120,8 +122,22 @@ const OnboardingFlow: React.FC = () => {
       );
     }
     
-    // 7. Final screen
+    // 7. Health Apps screen (nouvelle étape)
     if (currentStep === 7) {
+      return (
+        <HealthAppsScreen
+          currentStep={currentStep}
+          totalSteps={totalSteps}
+          connectedApps={onboardingData.connectedHealthApps}
+          toggleHealthApp={toggleHealthApp}
+          onNext={nextStep}
+          onPrev={prevStep}
+        />
+      );
+    }
+    
+    // 8. Final screen
+    if (currentStep === 8) {
       return <FinalScreen onComplete={completeOnboarding} />;
     }
     

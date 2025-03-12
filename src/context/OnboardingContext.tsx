@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './AuthContext';
@@ -10,6 +11,7 @@ interface OnboardingData {
   cookingTime: string;
   nutritionalGoals: string[];
   favoriteRecipes: string[];
+  connectedHealthApps: string[];
   onboardingCompleted: boolean;
 }
 
@@ -23,6 +25,7 @@ interface OnboardingContextType {
   setCookingTime: (time: string) => void;
   toggleNutritionalGoal: (goal: string) => void;
   toggleFavoriteRecipe: (recipeId: string) => void;
+  toggleHealthApp: (appId: string) => void;
   nextStep: () => void;
   prevStep: () => void;
   completeOnboarding: () => void;
@@ -36,6 +39,7 @@ const defaultOnboardingData: OnboardingData = {
   cookingTime: 'standard',
   nutritionalGoals: [],
   favoriteRecipes: [],
+  connectedHealthApps: [],
   onboardingCompleted: false,
 };
 
@@ -44,7 +48,7 @@ const OnboardingContext = createContext<OnboardingContextType | undefined>(undef
 export const OnboardingProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [onboardingData, setOnboardingData] = useState<OnboardingData>(defaultOnboardingData);
   const [currentStep, setCurrentStep] = useState(1);
-  const totalSteps = 7;
+  const totalSteps = 8; // Mis à jour pour inclure l'étape des applications de santé
   const navigate = useNavigate();
   const { user } = useAuth();
   const { toast } = useToast();
@@ -117,6 +121,21 @@ export const OnboardingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     });
   };
 
+  const toggleHealthApp = (appId: string) => {
+    setOnboardingData(prev => {
+      const apps = [...prev.connectedHealthApps];
+      const index = apps.indexOf(appId);
+      
+      if (index === -1) {
+        apps.push(appId);
+      } else {
+        apps.splice(index, 1);
+      }
+      
+      return { ...prev, connectedHealthApps: apps };
+    });
+  };
+
   const nextStep = () => {
     if (currentStep < totalSteps) {
       setCurrentStep(prev => prev + 1);
@@ -165,6 +184,7 @@ export const OnboardingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         setCookingTime,
         toggleNutritionalGoal,
         toggleFavoriteRecipe,
+        toggleHealthApp,
         nextStep,
         prevStep,
         completeOnboarding,
