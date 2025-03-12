@@ -1,10 +1,11 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Apple, Activity, BarChart3, Heart, Watch } from 'lucide-react';
 import ProgressBar from '../ProgressBar';
 import NavigationButtons from '../NavigationButtons';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { healthApps, initiateHealthAppConnection } from '@/utils/healthApps';
 
 interface HealthAppsScreenProps {
   currentStep: number;
@@ -25,13 +26,13 @@ const HealthAppsScreen: React.FC<HealthAppsScreenProps> = ({
 }) => {
   const [hoveredApp, setHoveredApp] = useState<string | null>(null);
 
-  const healthApps = [
-    { id: 'apple_health', name: 'Apple Santé', icon: Apple, color: '#2A5D50' },
-    { id: 'strava', name: 'Strava', icon: Activity, color: '#3E4C59' },
-    { id: 'google_fit', name: 'Google Fit', icon: BarChart3, color: '#D67240' },
-    { id: 'fitbit', name: 'Fitbit', icon: Heart, color: '#1565C0' },
-    { id: 'garmin', name: 'Garmin', icon: Watch, color: '#006567' },
-  ];
+  const handleConnect = async (appId: string) => {
+    const app = healthApps.find(a => a.id === appId);
+    if (app) {
+      await initiateHealthAppConnection(app);
+      toggleHealthApp(appId);
+    }
+  };
 
   return (
     <div className="w-full max-w-4xl mx-auto px-4">
@@ -65,7 +66,7 @@ const HealthAppsScreen: React.FC<HealthAppsScreenProps> = ({
           return (
             <motion.div
               key={app.id}
-              className={`relative rounded-xl border p-4 flex flex-col items-center justify-center gap-3 cursor-pointer transition-all duration-300 ${
+              className={`relative rounded-xl border p-6 flex flex-col items-center justify-center gap-4 cursor-pointer transition-all duration-300 ${
                 isConnected ? 'border-2 shadow-md' : 'border hover:shadow-md'
               }`}
               style={{
@@ -73,43 +74,54 @@ const HealthAppsScreen: React.FC<HealthAppsScreenProps> = ({
                 transform: isHovered ? 'scale(1.03)' : 'scale(1)',
                 transition: 'all 0.2s ease-in-out',
               }}
-              onClick={() => toggleHealthApp(app.id)}
+              onClick={() => handleConnect(app.id)}
               onMouseEnter={() => setHoveredApp(app.id)}
               onMouseLeave={() => setHoveredApp(null)}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.98 }}
             >
-              <div 
-                className="w-14 h-14 rounded-full flex items-center justify-center" 
-                style={{ backgroundColor: `${app.color}20` }}
-              >
-                <app.icon 
-                  size={30} 
-                  style={{ color: app.color }} 
-                  className="transition-transform duration-300"
+              <div className="w-16 h-16 relative">
+                <img 
+                  src={app.logo} 
+                  alt={`${app.name} logo`}
+                  className="w-full h-full object-contain"
                 />
               </div>
               <div className="text-center">
-                <h3 className="font-medium text-gray-800">{app.name}</h3>
+                <h3 className="font-medium text-gray-800 mb-2">{app.name}</h3>
                 {isConnected ? (
-                  <Badge className="mt-1" style={{ backgroundColor: app.color }}>Connecté</Badge>
+                  <Badge className="mt-1" style={{ backgroundColor: app.color }}>
+                    Connecté
+                  </Badge>
                 ) : (
-                  <span className="text-sm text-gray-500">Cliquez pour connecter</span>
+                  <span className="text-sm text-gray-500">
+                    Cliquer pour connecter
+                  </span>
                 )}
               </div>
             </motion.div>
           );
         })}
       </motion.div>
-      
-      <NavigationButtons
-        onNext={onNext}
-        onPrev={onPrev}
-        isFirstStep={false}
-        isLastStep={false}
-        nextLabel="Continuer"
-        prevLabel="Précédent"
-      />
+
+      <div className="flex flex-col items-center gap-4">
+        <NavigationButtons
+          onNext={onNext}
+          onPrev={onPrev}
+          isFirstStep={false}
+          isLastStep={false}
+          nextLabel="Continuer"
+          prevLabel="Précédent"
+        />
+        
+        <Button
+          variant="ghost"
+          className="text-gray-500 hover:text-gray-700 transition-colors"
+          onClick={onNext}
+        >
+          Passer cette étape
+        </Button>
+      </div>
     </div>
   );
 };
