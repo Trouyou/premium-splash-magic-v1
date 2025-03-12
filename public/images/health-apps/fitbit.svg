@@ -1,6 +1,11 @@
 
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000">
-  <rect width="1000" height="1000" fill="#00B0B9"/>
-  <path d="M400 300h200v400H400z" fill="#FFF"/>
-  <circle cx="500" cy="500" r="50" fill="#00B0B9"/>
+  <rect width="1000" height="1000" fill="#FFFFFF"/>
+  <path d="M500 200C400 200 320 280 320 380C320 480 400 560 500 560C600 560 680 480 680 380C680 280 600 200 500 200Z" fill="#00B0B9"/>
+  <path d="M500 260C430 260 380 310 380 380C380 450 430 500 500 500C570 500 620 450 620 380C620 310 570 260 500 260Z" fill="#FFFFFF"/>
+  <path d="M500 310C460 310 430 340 430 380C430 420 460 450 500 450C540 450 570 420 570 380C570 340 540 310 500 310Z" fill="#00B0B9"/>
+  <circle cx="500" cy="650" r="40" fill="#00B0B9"/>
+  <circle cx="500" cy="750" r="40" fill="#00B0B9"/>
+  <circle cx="400" cy="700" r="40" fill="#00B0B9"/>
+  <circle cx="600" cy="700" r="40" fill="#00B0B9"/>
 </svg>
