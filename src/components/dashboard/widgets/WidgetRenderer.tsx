@@ -15,7 +15,6 @@ interface WidgetRendererProps {
   favoriteRecipes: Recipe[];
   allRecipes: Recipe[];
   onFavoriteToggle: (recipeId: string) => void;
-  onRemoveWidget: (id: string) => void;
   setActiveView?: (view: string) => void;
 }
 
@@ -25,7 +24,6 @@ const WidgetRenderer: React.FC<WidgetRendererProps> = ({
   favoriteRecipes,
   allRecipes,
   onFavoriteToggle,
-  onRemoveWidget,
   setActiveView
 }) => {
   switch (widget.type) {
@@ -37,7 +35,6 @@ const WidgetRenderer: React.FC<WidgetRendererProps> = ({
           recipes={trendingRecipes}
           favoriteRecipes={favoriteRecipes}
           onFavoriteToggle={onFavoriteToggle}
-          onRemove={onRemoveWidget}
         />
       );
     case 'bob':
@@ -45,7 +42,6 @@ const WidgetRenderer: React.FC<WidgetRendererProps> = ({
         <BobWidget
           key={widget.id}
           id={widget.id}
-          onRemove={onRemoveWidget}
         />
       );
     case 'orders':
@@ -53,7 +49,6 @@ const WidgetRenderer: React.FC<WidgetRendererProps> = ({
         <OrdersWidget
           key={widget.id}
           id={widget.id}
-          onRemove={onRemoveWidget}
           setActiveView={setActiveView}
         />
       );
@@ -65,7 +60,6 @@ const WidgetRenderer: React.FC<WidgetRendererProps> = ({
           recipes={allRecipes}
           favoriteRecipes={favoriteRecipes}
           onFavoriteToggle={onFavoriteToggle}
-          onRemove={onRemoveWidget}
           setActiveView={setActiveView}
         />
       );
@@ -74,7 +68,6 @@ const WidgetRenderer: React.FC<WidgetRendererProps> = ({
         <NutritionWidget
           key={widget.id}
           id={widget.id}
-          onRemove={onRemoveWidget}
         />
       );
     case 'tips':
@@ -82,7 +75,6 @@ const WidgetRenderer: React.FC<WidgetRendererProps> = ({
         <TipsWidget
           key={widget.id}
           id={widget.id}
-          onRemove={onRemoveWidget}
         />
       );
     default:

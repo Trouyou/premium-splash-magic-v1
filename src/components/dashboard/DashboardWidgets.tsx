@@ -1,12 +1,10 @@
 
 import React, { useMemo } from 'react';
-import { DndContext, closestCenter } from '@dnd-kit/core';
+import { DndContext, closestCenter, useSensor, useSensors, PointerSensor } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { Recipe } from '@/components/onboarding/recipe/types';
 import { mockRecipes } from '@/components/onboarding/recipe/data/mockRecipes';
 import { useWidgetsState } from './widgets/useWidgetsState';
-import WidgetMenu from './widgets/WidgetMenu';
-import EmptyDashboard from './widgets/EmptyDashboard';
 import WidgetRenderer from './widgets/WidgetRenderer';
 
 interface DashboardWidgetsProps {
@@ -24,9 +22,7 @@ const DashboardWidgets: React.FC<DashboardWidgetsProps> = ({
     userWidgets,
     activeId,
     handleDragStart,
-    handleDragEnd,
-    addWidget,
-    removeWidget
+    handleDragEnd
   } = useWidgetsState();
   
   // Generate trending recipes for demo
@@ -36,15 +32,23 @@ const DashboardWidgets: React.FC<DashboardWidgetsProps> = ({
       .slice(0, 4);
   }, []);
   
+  // Configure sensors for drag and drop
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    })
+  );
+  
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-playfair">Tableau de bord</h2>
-        <WidgetMenu onAddWidget={addWidget} />
       </div>
       
       <DndContext
-        sensors={[]}
+        sensors={sensors}
         collisionDetection={closestCenter}
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
@@ -53,7 +57,7 @@ const DashboardWidgets: React.FC<DashboardWidgetsProps> = ({
           items={userWidgets.map(w => w.id)}
           strategy={verticalListSortingStrategy}
         >
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
             {userWidgets.map((widget) => (
               <WidgetRenderer
                 key={widget.id}
@@ -62,17 +66,12 @@ const DashboardWidgets: React.FC<DashboardWidgetsProps> = ({
                 favoriteRecipes={favoriteRecipes}
                 allRecipes={mockRecipes}
                 onFavoriteToggle={toggleFavorite}
-                onRemoveWidget={removeWidget}
                 setActiveView={setActiveView}
               />
             ))}
           </div>
         </SortableContext>
       </DndContext>
-      
-      {userWidgets.length === 0 && (
-        <EmptyDashboard onAddWidget={addWidget} />
-      )}
     </div>
   );
 };

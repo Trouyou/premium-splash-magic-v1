@@ -6,11 +6,14 @@ import { arrayMove } from '@dnd-kit/sortable';
 import { DragEndEvent, DragStartEvent } from '@dnd-kit/core';
 
 export const useWidgetsState = () => {
-  // State to track the user's selected widgets
+  // State to track the user's widgets with all available widgets displayed by default
   const [userWidgets, setUserWidgets] = useState<UserWidget[]>([
     { id: 'trending-1', type: 'trending' },
     { id: 'bob-1', type: 'bob' },
     { id: 'favorites-1', type: 'favorites' },
+    { id: 'orders-1', type: 'orders' },
+    { id: 'nutrition-1', type: 'nutrition' },
+    { id: 'tips-1', type: 'tips' },
   ]);
   
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -40,40 +43,11 @@ export const useWidgetsState = () => {
       });
     }
   };
-  
-  // Add a new widget to the dashboard
-  const addWidget = (type: WidgetType) => {
-    const newWidget = {
-      id: `${type}-${Date.now()}`,
-      type,
-    };
-    
-    setUserWidgets((prev) => [...prev, newWidget]);
-    
-    toast({
-      title: "Widget ajouté",
-      description: `Le widget a été ajouté à votre tableau de bord.`,
-      duration: 2000,
-    });
-  };
-  
-  // Remove a widget from the dashboard
-  const removeWidget = (id: string) => {
-    setUserWidgets((prev) => prev.filter((widget) => widget.id !== id));
-    
-    toast({
-      title: "Widget supprimé",
-      description: "Le widget a été retiré de votre tableau de bord.",
-      duration: 2000,
-    });
-  };
 
   return {
     userWidgets,
     activeId,
     handleDragStart,
-    handleDragEnd,
-    addWidget,
-    removeWidget
+    handleDragEnd
   };
 };
