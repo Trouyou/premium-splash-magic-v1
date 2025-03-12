@@ -1,11 +1,12 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { Card } from '@/components/ui/card';
 import { Trophy, Target, Utensils } from 'lucide-react';
 
 export const UserSummary: React.FC = () => {
   const { user } = useAuth();
+  const [profileImage, setProfileImage] = useState<string | null>(null);
   
   // Mock statistics (to be replaced with real data)
   const userStats = {
@@ -14,8 +15,13 @@ export const UserSummary: React.FC = () => {
     engagementScore: 85
   };
 
-  // Get profile image from localStorage if available
-  const profileImage = localStorage.getItem('profileImage');
+  // Get profile image from localStorage
+  useEffect(() => {
+    const storedImage = localStorage.getItem('profileImage');
+    if (storedImage) {
+      setProfileImage(storedImage);
+    }
+  }, []);
 
   return (
     <Card className="p-6 bg-white">

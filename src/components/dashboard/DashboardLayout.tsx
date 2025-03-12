@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import TabNavigation from './navigation/TabNavigation';
 import DashboardTopBar from './header/DashboardTopBar';
@@ -19,7 +19,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   const [avatarColor, setAvatarColor] = useState('#9C1B1A');
   const [avatarBgColor, setAvatarBgColor] = useState('#EDE6D6');
   const [bobColor, setBobColor] = useState('#D11B19');
-  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [profileImage, setProfileImage] = useState<string | null>(
+    localStorage.getItem('profileImage')
+  );
 
   const handleAvatarColorChange = (bgColor: string, textColor: string) => {
     setAvatarBgColor(bgColor);
@@ -37,6 +39,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
       reader.onload = (e) => {
         const result = e.target?.result as string;
         setProfileImage(result);
+        localStorage.setItem('profileImage', result);
       };
       reader.readAsDataURL(file);
     }
@@ -44,6 +47,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
   const removeProfileImage = () => {
     setProfileImage(null);
+    localStorage.removeItem('profileImage');
   };
 
   return (
