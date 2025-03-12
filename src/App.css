@@ -6,3 +6,5 @@
 @import './styles/animations.css';
 @import './styles/auth-callback.css';
 @import './styles/animations/order-tracking.css';
+@import './styles/ios-optimizations.css';  /* Ajout des optimisations iOS */
+

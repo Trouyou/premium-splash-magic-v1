@@ -1,0 +1,113 @@
+
+/* iOS/Safari specific optimizations */
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Prevent rubber band effect on body */
+html, body {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior-y: none;
+}
+
+/* Main scrollable container */
+.ios-scroll-container {
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* iOS-style buttons */
+.ios-button {
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transform: translateZ(0);
+  will-change: transform;
+  transition: transform 0.15s ease-out;
+}
+
+.ios-button:active {
+  transform: scale(0.96);
+}
+
+/* iOS-style modals */
+.ios-modal {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-radius: 10px 10px 0 0;
+  transform: translateZ(0);
+  will-change: transform;
+  -webkit-transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+}
+
+/* Enhanced touch targets for iOS */
+.ios-touch-target {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 12px;
+}
+
+/* iOS-style list items */
+.ios-list-item {
+  transform: translateZ(0);
+  will-change: transform;
+  padding: 16px;
+  margin: 0;
+  background: white;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s ease;
+}
+
+.ios-list-item:active {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Fix for vh units on iOS */
+.ios-vh-fix {
+  height: 100%;
+  height: -webkit-fill-available;
+}
+
+/* Optimized image rendering */
+.ios-image {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* iOS-style smooth scrolling */
+@supports (-webkit-overflow-scrolling: touch) {
+  .ios-smooth-scroll {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+}
+
+/* Optimizations for iOS inputs */
+input, textarea {
+  -webkit-appearance: none;
+  border-radius: 0;
+}
+
+/* Fix for iOS momentum scrolling */
+.ios-momentum-scroll {
+  -webkit-overflow-scrolling: touch;
+  overflow-y: scroll;
+  overscroll-behavior-y: contain;
+}

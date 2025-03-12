@@ -1,7 +1,8 @@
-
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useOnboarding } from '@/context/OnboardingContext';
+import { useIsIOS } from '@/hooks/use-ios-detection';
+import { slideUpVariants } from '@/utils/ios-animations';
 
 // Import screens
 import WelcomeScreen from './screens/WelcomeScreen';
@@ -30,6 +31,8 @@ const OnboardingFlow: React.FC = () => {
     prevStep,
     completeOnboarding
   } = useOnboarding();
+
+  const isIOS = useIsIOS();
 
   const renderScreen = () => {
     // Welcome screen (step 0)
@@ -144,22 +147,16 @@ const OnboardingFlow: React.FC = () => {
     return null;
   };
 
-  const getSlideDirection = (index: number) => {
-    if (index < currentStep) return -1; // Slide left
-    if (index > currentStep) return 1; // Slide right
-    return 0; // No slide
-  };
-  
   return (
-    <div className="min-h-screen bg-white overflow-hidden">
-      <div className="w-full max-w-4xl mx-auto py-8 px-4">
+    <div className={`min-h-screen bg-white ${isIOS ? 'ios-vh-fix ios-momentum-scroll' : ''}`}>
+      <div className={`w-full max-w-4xl mx-auto py-8 px-4 ${isIOS ? 'ios-scroll-container' : ''}`}>
         <AnimatePresence mode="wait">
           <motion.div
             key={currentStep}
-            initial={{ opacity: 0, x: getSlideDirection(currentStep) * 100 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: getSlideDirection(currentStep) * -100 }}
-            transition={{ duration: 0.35, ease: [0.4, 0.0, 0.2, 1] }}
+            variants={isIOS ? slideUpVariants : undefined}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
             className="w-full"
           >
             {renderScreen()}
